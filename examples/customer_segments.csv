@@ -1,0 +1,15 @@
+dimension,value,count
+age,25-34,180
+age,35-44,260
+age,45-54,210
+gender,male,470
+gender,female,180
+income,$50k-$75k,190
+income,$75k-$100k,240
+income,$100k+,220
+scenario,Home Backup,300
+scenario,Outdoor Recreation,220
+scenario,Preparedness,130
+decision_factor,Reliability,280
+decision_factor,Runtime,210
+decision_factor,Price,160

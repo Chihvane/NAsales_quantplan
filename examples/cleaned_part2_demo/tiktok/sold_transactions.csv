@@ -1,0 +1,4 @@
+platform,sold_id,listing_id,canonical_sku,sold_at,transaction_price,shipping_fee,units,seller_type
+TikTok Shop,proxy-TT-GEN1800,TT-GEN1800,TT-GEN1800,2025-11-30,449.00,0,18,brand_owner
+TikTok Shop,proxy-TT-GEN1700,TT-GEN1700,TT-GEN1700,2025-11-30,399.00,0,17,brand_owner
+TikTok Shop,proxy-TT-GEN2400,TT-GEN2400,TT-GEN2400,2025-11-30,589.00,0,23,brand_owner

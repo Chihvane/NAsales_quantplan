@@ -1,0 +1,9 @@
+canonical_sku,brand,category_path,title,attribute_tokens
+GEN-2200-DUAL,VoltEdge,Generators > Portable Generators,VoltEdge 2200W Dual Fuel Portable Generator,dual_fuel|inverter|quiet|electric_start|co_sensor
+GEN-2000-QUIET,VoltEdge,Generators > Portable Generators,VoltEdge 2000W Quiet Inverter Generator,inverter|quiet|parallel_ready|compact
+GEN-2500-INVERTER,EverTrail,Generators > Portable Generators,EverTrail 2500W Inverter Generator,dual_fuel|inverter|electric_start|wheel_kit
+GEN-1800-BASIC,EverTrail,Generators > Portable Generators,EverTrail 1800W Camp Generator,compact|budget|manual_start
+GEN-3000-REMOTE,NorthPeak,Generators > Portable Generators,NorthPeak 3000W Remote Start Generator,dual_fuel|remote_start|electric_start|wheel_kit|co_sensor
+GEN-2300-QUIET,NorthPeak,Generators > Portable Generators,NorthPeak 2300W Quiet Generator,inverter|quiet|co_sensor|parallel_ready
+GEN-2100-CO,StormSafe,Generators > Portable Generators,StormSafe 2100W CO Sensor Generator,co_sensor|electric_start|compact|portable
+GEN-1700-CAMP,StormSafe,Generators > Portable Generators,StormSafe 1700W Budget Generator,budget|manual_start|compact|portable

@@ -1,0 +1,6 @@
+route_id,origin,destination,shipping_mode,incoterm,quote_basis,cost_value,currency,lead_time_days,volatility_score,quote_date
+R001,Ningbo,Los Angeles,sea_fcl,FOB,per_unit,28,USD,24,0.18,2026-03-01
+R002,Shenzhen,Los Angeles,sea_lcl,EXW,per_unit,41,USD,28,0.24,2026-03-01
+R003,Shanghai,Dallas,sea_fcl,FOB,per_unit,34,USD,29,0.17,2026-03-02
+R004,Shenzhen,Los Angeles,air,EXW,per_unit,96,USD,8,0.11,2026-03-02
+R005,Shanghai,Ontario,parcel_ddp,DDP,per_unit,58,USD,22,0.2,2026-03-03

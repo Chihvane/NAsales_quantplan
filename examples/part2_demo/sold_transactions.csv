@@ -1,0 +1,24 @@
+platform,sold_id,listing_id,canonical_sku,sold_at,transaction_price,shipping_fee,units,seller_type
+Amazon,S1,L1,GEN-2200-DUAL,2025-09-12,639,0,18,brand_owner
+Amazon,S2,L1,GEN-2200-DUAL,2025-10-13,625,0,22,brand_owner
+Amazon,S3,L1,GEN-2200-DUAL,2025-11-14,615,0,25,brand_owner
+eBay,S4,L2,GEN-2000-QUIET,2025-09-15,579,25,11,reseller
+eBay,S5,L2,GEN-2000-QUIET,2025-10-12,565,20,13,reseller
+eBay,S6,L2,GEN-2000-QUIET,2025-11-10,555,20,16,reseller
+Amazon,S7,L3,GEN-2500-INVERTER,2025-09-11,689,0,14,brand_owner
+Amazon,S8,L3,GEN-2500-INVERTER,2025-10-17,679,0,13,brand_owner
+Amazon,S9,L3,GEN-2500-INVERTER,2025-11-09,669,0,9,brand_owner
+TikTok Shop,S10,L4,GEN-1800-BASIC,2025-09-16,449,15,10,reseller
+TikTok Shop,S11,L4,GEN-1800-BASIC,2025-10-19,439,15,8,reseller
+Amazon,S12,L5,GEN-3000-REMOTE,2025-09-08,849,0,15,brand_owner
+Amazon,S13,L5,GEN-3000-REMOTE,2025-10-14,839,0,17,brand_owner
+Amazon,S14,L5,GEN-3000-REMOTE,2025-11-20,829,0,19,brand_owner
+eBay,S15,L6,GEN-2300-QUIET,2025-09-06,619,20,8,reseller
+eBay,S16,L6,GEN-2300-QUIET,2025-10-18,609,20,7,reseller
+eBay,S17,L6,GEN-2300-QUIET,2025-11-21,599,20,5,reseller
+Amazon,S18,L7,GEN-2100-CO,2025-09-07,659,0,13,brand_owner
+Amazon,S19,L7,GEN-2100-CO,2025-10-16,649,0,15,brand_owner
+Amazon,S20,L7,GEN-2100-CO,2025-11-15,639,0,18,brand_owner
+TikTok Shop,S21,L8,GEN-1700-CAMP,2025-09-05,409,10,7,reseller
+TikTok Shop,S22,L8,GEN-1700-CAMP,2025-10-08,399,10,6,reseller
+TikTok Shop,S23,L8,GEN-1700-CAMP,2025-11-11,389,10,4,reseller

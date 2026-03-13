@@ -1,0 +1,24 @@
+platform,listing_id,canonical_sku,brand,seller_id,captured_at,list_price,sale_price,currency,shipping_fee,rating_avg,review_count,sold_count_window,sales_rank,active_flag,seller_type,fulfillment_type
+Amazon,L1,GEN-2200-DUAL,VoltEdge,VE1,2025-09-01,699,649,USD,0,4.6,210,84,22,true,brand_owner,FBA
+Amazon,L1,GEN-2200-DUAL,VoltEdge,VE1,2025-10-01,699,629,USD,0,4.6,240,95,18,true,brand_owner,FBA
+Amazon,L1,GEN-2200-DUAL,VoltEdge,VE1,2025-11-01,699,619,USD,0,4.7,272,105,14,true,brand_owner,FBA
+eBay,L2,GEN-2000-QUIET,VoltEdge,VE2,2025-09-01,629,589,USD,25,4.4,98,54,35,true,reseller,merchant_fulfilled
+eBay,L2,GEN-2000-QUIET,VoltEdge,VE2,2025-10-01,629,569,USD,20,4.4,112,60,30,true,reseller,merchant_fulfilled
+eBay,L2,GEN-2000-QUIET,VoltEdge,VE2,2025-11-01,629,559,USD,20,4.5,130,68,26,true,reseller,merchant_fulfilled
+Amazon,L3,GEN-2500-INVERTER,EverTrail,ET1,2025-09-01,749,699,USD,0,4.3,176,62,28,true,brand_owner,FBA
+Amazon,L3,GEN-2500-INVERTER,EverTrail,ET1,2025-10-01,749,689,USD,0,4.2,193,58,31,true,brand_owner,FBA
+Amazon,L3,GEN-2500-INVERTER,EverTrail,ET1,2025-11-01,749,679,USD,0,4.1,205,49,40,false,brand_owner,FBA
+TikTok Shop,L4,GEN-1800-BASIC,EverTrail,ET2,2025-09-01,499,459,USD,15,4.1,66,45,48,true,reseller,seller_fulfilled
+TikTok Shop,L4,GEN-1800-BASIC,EverTrail,ET2,2025-10-01,499,449,USD,15,4.0,72,40,55,true,reseller,seller_fulfilled
+Amazon,L5,GEN-3000-REMOTE,NorthPeak,NP1,2025-09-01,899,859,USD,0,4.7,188,72,20,true,brand_owner,FBA
+Amazon,L5,GEN-3000-REMOTE,NorthPeak,NP1,2025-10-01,899,849,USD,0,4.7,220,80,16,true,brand_owner,FBA
+Amazon,L5,GEN-3000-REMOTE,NorthPeak,NP1,2025-11-01,899,839,USD,0,4.8,250,88,12,true,brand_owner,FBA
+eBay,L6,GEN-2300-QUIET,NorthPeak,NP2,2025-09-01,679,629,USD,20,4.2,80,36,42,true,reseller,merchant_fulfilled
+eBay,L6,GEN-2300-QUIET,NorthPeak,NP2,2025-10-01,679,619,USD,20,4.1,88,34,46,true,reseller,merchant_fulfilled
+eBay,L6,GEN-2300-QUIET,NorthPeak,NP2,2025-11-01,679,609,USD,20,3.9,94,28,58,false,reseller,merchant_fulfilled
+Amazon,L7,GEN-2100-CO,StormSafe,SS1,2025-09-01,719,669,USD,0,4.5,132,58,29,true,brand_owner,FBA
+Amazon,L7,GEN-2100-CO,StormSafe,SS1,2025-10-01,719,659,USD,0,4.5,150,64,24,true,brand_owner,FBA
+Amazon,L7,GEN-2100-CO,StormSafe,SS1,2025-11-01,719,649,USD,0,4.6,171,70,19,true,brand_owner,FBA
+TikTok Shop,L8,GEN-1700-CAMP,StormSafe,SS2,2025-09-01,459,419,USD,10,3.9,52,31,63,true,reseller,seller_fulfilled
+TikTok Shop,L8,GEN-1700-CAMP,StormSafe,SS2,2025-10-01,459,409,USD,10,3.8,57,28,70,true,reseller,seller_fulfilled
+TikTok Shop,L8,GEN-1700-CAMP,StormSafe,SS2,2025-11-01,459,399,USD,10,3.6,60,19,88,false,reseller,seller_fulfilled

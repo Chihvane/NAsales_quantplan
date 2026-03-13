@@ -1,0 +1,70 @@
+{
+  "generated_at": "2026-03-13 00:20:45",
+  "report_pdf": "/Users/zhiwenxiang/Documents/Playground/北美市场量化报告/artifacts/final_report/reports/all-backtests-report.pdf",
+  "reports_dir": "/Users/zhiwenxiang/Documents/Playground/北美市场量化报告/artifacts/final_report/reports",
+  "visualizations_dir": "/Users/zhiwenxiang/Documents/Playground/北美市场量化报告/artifacts/final_report/visualizations",
+  "data_dir": "/Users/zhiwenxiang/Documents/Playground/北美市场量化报告/artifacts/final_report/data",
+  "bundles": [
+    {
+      "slug": "part1_demo",
+      "name": "第一部分市场机会回测演示",
+      "report_data_dir": "/Users/zhiwenxiang/Documents/Playground/北美市场量化报告/artifacts/final_report/data/part1_demo",
+      "visualization_dir": "/Users/zhiwenxiang/Documents/Playground/北美市场量化报告/artifacts/final_report/visualizations/part1_demo",
+      "visualization_files": [
+        "/Users/zhiwenxiang/Documents/Playground/北美市场量化报告/artifacts/final_report/visualizations/part1_demo/backtest_curve.svg",
+        "/Users/zhiwenxiang/Documents/Playground/北美市场量化报告/artifacts/final_report/visualizations/part1_demo/market_demand_trend.svg",
+        "/Users/zhiwenxiang/Documents/Playground/北美市场量化报告/artifacts/final_report/visualizations/part1_demo/listed_price_band_share.svg",
+        "/Users/zhiwenxiang/Documents/Playground/北美市场量化报告/artifacts/final_report/visualizations/part1_demo/channel_structure.svg"
+      ],
+      "data_files": [
+        "/Users/zhiwenxiang/Documents/Playground/北美市场量化报告/artifacts/final_report/data/part1_demo/backtest_summary.json",
+        "/Users/zhiwenxiang/Documents/Playground/北美市场量化报告/artifacts/final_report/data/part1_demo/market_opportunity_panel.csv",
+        "/Users/zhiwenxiang/Documents/Playground/北美市场量化报告/artifacts/final_report/data/part1_demo/part1_report.json",
+        "/Users/zhiwenxiang/Documents/Playground/北美市场量化报告/artifacts/final_report/data/part1_demo/monthly_returns.csv"
+      ]
+    },
+    {
+      "slug": "part2_demo",
+      "name": "第二部分竞争结构回测演示",
+      "report_data_dir": "/Users/zhiwenxiang/Documents/Playground/北美市场量化报告/artifacts/final_report/data/part2_demo",
+      "visualization_dir": "/Users/zhiwenxiang/Documents/Playground/北美市场量化报告/artifacts/final_report/visualizations/part2_demo",
+      "visualization_files": [
+        "/Users/zhiwenxiang/Documents/Playground/北美市场量化报告/artifacts/final_report/visualizations/part2_demo/part2_backtest_curve.svg",
+        "/Users/zhiwenxiang/Documents/Playground/北美市场量化报告/artifacts/final_report/visualizations/part2_demo/top_sku_share.svg",
+        "/Users/zhiwenxiang/Documents/Playground/北美市场量化报告/artifacts/final_report/visualizations/part2_demo/sweet_spot_band.svg",
+        "/Users/zhiwenxiang/Documents/Playground/北美市场量化报告/artifacts/final_report/visualizations/part2_demo/negative_theme_intensity.svg",
+        "/Users/zhiwenxiang/Documents/Playground/北美市场量化报告/artifacts/final_report/visualizations/part2_demo/listing_survival_curve.svg"
+      ],
+      "data_files": [
+        "/Users/zhiwenxiang/Documents/Playground/北美市场量化报告/artifacts/final_report/data/part2_demo/part2_backtest_summary.json",
+        "/Users/zhiwenxiang/Documents/Playground/北美市场量化报告/artifacts/final_report/data/part2_demo/part2_competition_panel.csv",
+        "/Users/zhiwenxiang/Documents/Playground/北美市场量化报告/artifacts/final_report/data/part2_demo/part2_report.json",
+        "/Users/zhiwenxiang/Documents/Playground/北美市场量化报告/artifacts/final_report/data/part2_demo/monthly_returns.csv"
+      ]
+    },
+    {
+      "slug": "github_amazon_open_sample",
+      "name": "GitHub Amazon 开源样本",
+      "report_data_dir": "/Users/zhiwenxiang/Documents/Playground/北美市场量化报告/artifacts/final_report/data/github_amazon_open_sample",
+      "visualization_dir": "/Users/zhiwenxiang/Documents/Playground/北美市场量化报告/artifacts/final_report/visualizations/github_amazon_open_sample",
+      "visualization_files": [
+        "/Users/zhiwenxiang/Documents/Playground/北美市场量化报告/artifacts/final_report/visualizations/github_amazon_open_sample/part2_backtest_curve.svg",
+        "/Users/zhiwenxiang/Documents/Playground/北美市场量化报告/artifacts/final_report/visualizations/github_amazon_open_sample/top_sku_share.svg",
+        "/Users/zhiwenxiang/Documents/Playground/北美市场量化报告/artifacts/final_report/visualizations/github_amazon_open_sample/sweet_spot_band.svg",
+        "/Users/zhiwenxiang/Documents/Playground/北美市场量化报告/artifacts/final_report/visualizations/github_amazon_open_sample/negative_theme_intensity.svg",
+        "/Users/zhiwenxiang/Documents/Playground/北美市场量化报告/artifacts/final_report/visualizations/github_amazon_open_sample/listing_survival_curve.svg"
+      ],
+      "data_files": [
+        "/Users/zhiwenxiang/Documents/Playground/北美市场量化报告/artifacts/final_report/data/github_amazon_open_sample/part2_backtest_summary.json",
+        "/Users/zhiwenxiang/Documents/Playground/北美市场量化报告/artifacts/final_report/data/github_amazon_open_sample/part2_backtest_monthly_returns.csv",
+        "/Users/zhiwenxiang/Documents/Playground/北美市场量化报告/artifacts/final_report/data/github_amazon_open_sample/github_part2_panel.csv",
+        "/Users/zhiwenxiang/Documents/Playground/北美市场量化报告/artifacts/final_report/data/github_amazon_open_sample/report.json",
+        "/Users/zhiwenxiang/Documents/Playground/北美市场量化报告/artifacts/final_report/data/github_amazon_open_sample/listing_snapshots.csv",
+        "/Users/zhiwenxiang/Documents/Playground/北美市场量化报告/artifacts/final_report/data/github_amazon_open_sample/sold_transactions.csv",
+        "/Users/zhiwenxiang/Documents/Playground/北美市场量化报告/artifacts/final_report/data/github_amazon_open_sample/product_catalog.csv",
+        "/Users/zhiwenxiang/Documents/Playground/北美市场量化报告/artifacts/final_report/data/github_amazon_open_sample/reviews.csv",
+        "/Users/zhiwenxiang/Documents/Playground/北美市场量化报告/artifacts/final_report/data/github_amazon_open_sample/source_manifest.json"
+      ]
+    }
+  ]
+}

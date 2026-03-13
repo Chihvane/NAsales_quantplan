@@ -1,0 +1,7 @@
+Vendor ID,Vendor Name,Company Type,Province,Direct Factory,OEM Service,ODM Service,Product Line,MOQ,Sample Lead Time (Days),Production Lead Time (Days),Capacity Score,Compliance Score
+S001,Fujian Powertek,Factory,Fujian,Yes,Yes,No,portable_generators,200,7,24,4.4,4.1
+S002,Zhejiang GridWorks,Manufacturer,Zhejiang,Yes,Yes,Yes,portable_generators,300,10,30,4.8,4.5
+S003,Guangdong Crossborder,Trading Company,Guangdong,No,No,No,portable_generators,100,5,18,3.7,3.8
+S004,Jiangsu ReadyStock,Wholesaler,Jiangsu,No,No,No,portable_generators,50,3,12,3.1,2.9
+S005,Chongqing EngineLab,Factory,Chongqing,Yes,Yes,No,portable_generators,500,12,35,4.3,4.0
+S006,Shenzhen Global Source,Trader,Guangdong,No,No,Yes,portable_generators,150,6,20,3.9,3.7

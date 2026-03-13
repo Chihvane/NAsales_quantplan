@@ -1,0 +1,6 @@
+Shipment No,Vendor ID,Shipping Method,ETD,ETA,Customs Release,Warehouse Received,Sellable Date,Delay Days,Issue Type
+SH001,S001,sea_fcl,2025-10-01,2025-10-24,2025-10-26,2025-10-29,2025-10-31,0,
+SH002,S002,sea_fcl,2025-10-10,2025-11-02,2025-11-05,2025-11-09,2025-11-12,2,customs_delay
+SH003,S003,sea_lcl,2025-10-15,2025-11-11,2025-11-13,2025-11-17,2025-11-19,1,port_congestion
+SH004,S005,sea_fcl,2025-11-05,2025-11-29,2025-11-30,2025-12-03,2025-12-05,0,
+SH005,S006,air,2025-11-12,2025-11-20,2025-11-22,2025-11-24,2025-11-25,3,document_retry

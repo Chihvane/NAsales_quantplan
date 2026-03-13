@@ -1,0 +1,9 @@
+month,next_month,selected_categories,strategy_return,benchmark_return,excess_return
+2023-05,2023-08,Health & Household|Automotive,-0.7801,-0.0521,-0.728
+2023-10,2024-01,Tools & Home Improvement|Home & Kitchen,1.2898,0.943,0.3467
+2024-01,2024-02,Tools & Home Improvement|Home & Kitchen,0.6755,0.1666,0.5089
+2024-02,2024-03,Automotive|Patio,0.555,0.2247,0.3303
+2024-03,2024-04,Toys & Games|Arts,0.7102,0.0707,0.6395
+2024-04,2024-05,Toys & Games|Home & Kitchen,-0.7801,-0.6614,-0.1187
+2024-05,2024-06,Electronics|Sports & Outdoors,0.4657,0.0377,0.428
+2024-06,2024-07,Arts|Tools & Home Improvement,-0.5762,-0.0392,-0.537

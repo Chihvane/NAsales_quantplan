@@ -1,0 +1,7 @@
+supplier_id,supplier_name,supplier_type,region,factory_flag,oem_flag,odm_flag,main_category,moq,sample_days,production_days,capacity_score,compliance_support_score
+S001,Fujian Powertek,factory,Fujian,true,true,false,portable_generators,200,7,0,4.4,4.1
+S002,Zhejiang GridWorks,factory,Zhejiang,true,true,true,portable_generators,300,10,0,4.8,4.5
+S003,Guangdong Crossborder,trader,Guangdong,false,false,false,portable_generators,100,5,0,3.7,3.8
+S004,Jiangsu ReadyStock,wholesaler,Jiangsu,false,false,false,portable_generators,50,3,0,3.1,2.9
+S005,Chongqing EngineLab,factory,Chongqing,true,true,false,portable_generators,500,12,0,4.3,4.0
+S006,Shenzhen Global Source,trader,Guangdong,false,false,true,portable_generators,150,6,0,3.9,3.7

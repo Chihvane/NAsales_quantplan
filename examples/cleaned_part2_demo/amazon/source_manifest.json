@@ -1,0 +1,6 @@
+{
+  "platform": "Amazon",
+  "transaction_mode": "proxy_monthly_sales",
+  "capture_date": "2025-11-30",
+  "rows_in": 3
+}

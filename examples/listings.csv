@@ -1,0 +1,9 @@
+sku_id,platform,brand,list_price,monthly_sales_estimate,rating,review_count
+GEN-001,Amazon,BrandA,399,320,4.6,1520
+GEN-002,Amazon,BrandA,449,280,4.7,1330
+GEN-003,Amazon,BrandB,289,410,4.5,1840
+GEN-004,eBay,BrandC,219,140,4.3,320
+GEN-005,Amazon,WhiteLabelX,169,360,4.1,510
+GEN-006,TikTok Shop,WhiteLabelY,129,230,4.2,180
+GEN-007,Walmart,BrandB,349,190,4.4,670
+GEN-008,Amazon,PremiumD,599,95,4.8,430

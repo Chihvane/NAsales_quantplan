@@ -1,0 +1,4 @@
+platform,listing_id,canonical_sku,brand,seller_id,captured_at,list_price,sale_price,currency,shipping_fee,rating_avg,review_count,sold_count_window,sales_rank,active_flag,seller_type,fulfillment_type
+TikTok Shop,TT-GEN1800,TT-GEN1800,EverTrail Deals,ET-TT-1,2025-11-30,498.89,449.00,USD,0,4.1,72,18,0,true,brand_owner,seller_fulfilled
+TikTok Shop,TT-GEN1700,TT-GEN1700,StormSafe Clearance,SS-TT-2,2025-11-30,458.62,399.00,USD,0,3.8,57,17,0,true,brand_owner,seller_fulfilled
+TikTok Shop,TT-GEN2400,TT-GEN2400,TrailVolt Shop,TV-TT-3,2025-11-30,692.94,589.00,USD,0,4.5,94,23,0,true,brand_owner,seller_fulfilled

@@ -1,0 +1,4 @@
+platform,sold_id,listing_id,canonical_sku,sold_at,transaction_price,shipping_fee,units,seller_type
+Amazon,proxy-B0GEN2200,B0GEN2200,B0GEN2200,2025-11-30,629.00,0,95,brand_owner
+Amazon,proxy-B0GEN3000,B0GEN3000,B0GEN3000,2025-11-30,839.00,0,88,brand_owner
+Amazon,proxy-B0GEN2100,B0GEN2100,B0GEN2100,2025-11-30,649.00,0,70,brand_owner

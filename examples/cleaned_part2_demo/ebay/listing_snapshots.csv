@@ -1,0 +1,5 @@
+platform,listing_id,canonical_sku,brand,seller_id,captured_at,list_price,sale_price,currency,shipping_fee,rating_avg,review_count,sold_count_window,sales_rank,active_flag,seller_type,fulfillment_type
+eBay,EB-GEN2000,EB-GEN2000,VoltEdge,PowerGear Outlet,2025-10-12,629.00,565.00,USD,20.00,0,0,13,0,false,reseller,merchant_fulfilled
+eBay,EB-GEN2000,EB-GEN2000,VoltEdge,PowerGear Outlet,2025-11-10,629.00,555.00,USD,20.00,0,0,16,0,false,reseller,merchant_fulfilled
+eBay,EB-GEN2300,EB-GEN2300,NorthPeak,GeneratorDeals,2025-10-18,679.00,609.00,USD,20.00,0,0,7,0,false,reseller,merchant_fulfilled
+eBay,EB-GEN2300,EB-GEN2300,NorthPeak,GeneratorDeals,2025-11-21,679.00,599.00,USD,20.00,0,0,5,0,false,reseller,merchant_fulfilled

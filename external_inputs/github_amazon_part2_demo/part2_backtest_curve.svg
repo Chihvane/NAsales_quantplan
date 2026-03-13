@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="540" viewBox="0 0 960 540">
+  <rect width="100%" height="100%" fill="#f8fafc" />
+  <text x="80" y="32" font-size="24" font-family="Arial, sans-serif" fill="#102a43">Backtest Cumulative Return</text>
+  <line x1="80" y1="60" x2="80" y2="470" stroke="#7b8794" stroke-width="1.5" />
+  <line x1="80" y1="470" x2="920" y2="470" stroke="#7b8794" stroke-width="1.5" />
+  <polyline fill="none" stroke="#1f77b4" stroke-width="3" points="80.0,439.5 200.0,400.2 320.0,353.1 440.0,288.2 560.0,159.1 680.0,401.6 800.0,369.8 920.0,427.5" />
+  <polyline fill="none" stroke="#ef8354" stroke-width="3" points="80.0,338.6 200.0,214.7 320.0,172.2 440.0,105.3 560.0,79.5 680.0,337.8 800.0,332.8 920.0,338.2" />
+  <text x="770" y="80" font-size="12" fill="#1f77b4">Strategy</text>
+  <text x="770" y="100" font-size="12" fill="#ef8354">Benchmark</text>
+  <text x="80.0" y="515" text-anchor="middle" font-size="12" fill="#5f6b7a">2023-05</text><text x="200.0" y="515" text-anchor="middle" font-size="12" fill="#5f6b7a">2023-10</text><text x="320.0" y="515" text-anchor="middle" font-size="12" fill="#5f6b7a">2024-01</text><text x="440.0" y="515" text-anchor="middle" font-size="12" fill="#5f6b7a">2024-02</text><text x="560.0" y="515" text-anchor="middle" font-size="12" fill="#5f6b7a">2024-03</text><text x="680.0" y="515" text-anchor="middle" font-size="12" fill="#5f6b7a">2024-04</text><text x="800.0" y="515" text-anchor="middle" font-size="12" fill="#5f6b7a">2024-05</text><text x="920.0" y="515" text-anchor="middle" font-size="12" fill="#5f6b7a">2024-06</text>
+</svg>

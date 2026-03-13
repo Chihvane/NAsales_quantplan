@@ -1,0 +1,627 @@
+{
+  "metadata": {
+    "section_structure": {
+      "1.1": {
+        "title": "市场现状与需求概览",
+        "required_tables": [
+          "search_trends",
+          "region_demand"
+        ],
+        "metric_ids": [
+          "demand_growth_rate",
+          "seasonality_index",
+          "regional_demand_share"
+        ]
+      },
+      "1.2": {
+        "title": "客户画像分析",
+        "required_tables": [
+          "customer_segments"
+        ],
+        "metric_ids": [
+          "customer_distribution"
+        ]
+      },
+      "1.3": {
+        "title": "市场规模分析",
+        "required_tables": [
+          "listings"
+        ],
+        "metric_ids": [
+          "bottom_up_market_size",
+          "top_down_market_size",
+          "market_hhi"
+        ]
+      },
+      "1.4": {
+        "title": "购买渠道分析",
+        "required_tables": [
+          "channels"
+        ],
+        "metric_ids": [
+          "channel_share",
+          "channel_conversion_rate"
+        ]
+      },
+      "1.5": {
+        "title": "货架商品价格分析",
+        "required_tables": [
+          "listings"
+        ],
+        "metric_ids": [
+          "listed_price_bands",
+          "brand_premium"
+        ]
+      },
+      "1.6": {
+        "title": "实际成交价格分析",
+        "required_tables": [
+          "transactions"
+        ],
+        "metric_ids": [
+          "average_transaction_price",
+          "average_discount_rate",
+          "price_elasticity"
+        ]
+      }
+    },
+    "metric_specs": [
+      {
+        "section_id": "1.1",
+        "metric_id": "demand_growth_rate",
+        "label": "需求增长率",
+        "required_tables": [
+          "search_trends"
+        ],
+        "formula": "(末期兴趣值 - 初期兴趣值) / 初期兴趣值",
+        "output_note": "用于判断需求增长、平稳或下滑。"
+      },
+      {
+        "section_id": "1.1",
+        "metric_id": "seasonality_index",
+        "label": "季节性指数",
+        "required_tables": [
+          "search_trends"
+        ],
+        "formula": "月均兴趣值 / 全期均值 * 100",
+        "output_note": "高于 120 视为旺季，低于 80 视为淡季。"
+      },
+      {
+        "section_id": "1.1",
+        "metric_id": "regional_demand_share",
+        "label": "区域需求占比",
+        "required_tables": [
+          "region_demand"
+        ],
+        "formula": "区域需求分值 / 全区域需求分值合计",
+        "output_note": "用于找出重点州、省或区域。"
+      },
+      {
+        "section_id": "1.2",
+        "metric_id": "customer_distribution",
+        "label": "客户分布",
+        "required_tables": [
+          "customer_segments"
+        ],
+        "formula": "各维度 count / 该维度总 count",
+        "output_note": "统一支持年龄、性别、收入、场景、决策因素等维度。"
+      },
+      {
+        "section_id": "1.3",
+        "metric_id": "bottom_up_market_size",
+        "label": "自下而上市场规模",
+        "required_tables": [
+          "listings"
+        ],
+        "formula": "样本月 GMV / 样本覆盖率 * 12",
+        "output_note": "用于估算平台口径的年度市场规模。"
+      },
+      {
+        "section_id": "1.3",
+        "metric_id": "top_down_market_size",
+        "label": "自上而下市场规模",
+        "required_tables": [],
+        "formula": "SAM = TAM * 线上渗透率 * 可服务比例；SOM = SAM * 目标份额",
+        "output_note": "用于形成 TAM、SAM、SOM 三层估算。"
+      },
+      {
+        "section_id": "1.3",
+        "metric_id": "market_hhi",
+        "label": "市场集中度 HHI",
+        "required_tables": [
+          "listings"
+        ],
+        "formula": "sum(品牌收入份额^2) * 10000",
+        "output_note": "用于判断市场分散度和进入难度。"
+      },
+      {
+        "section_id": "1.4",
+        "metric_id": "channel_share",
+        "label": "渠道收入占比",
+        "required_tables": [
+          "channels"
+        ],
+        "formula": "单渠道收入 / 全渠道收入",
+        "output_note": "用于识别成交主渠道。"
+      },
+      {
+        "section_id": "1.4",
+        "metric_id": "channel_conversion_rate",
+        "label": "渠道转化率",
+        "required_tables": [
+          "channels"
+        ],
+        "formula": "订单数 / 访问量",
+        "output_note": "用于比较平台成交效率。"
+      },
+      {
+        "section_id": "1.5",
+        "metric_id": "listed_price_bands",
+        "label": "货架价格带分布",
+        "required_tables": [
+          "listings"
+        ],
+        "formula": "按价格分布四分位数划分价格带，并结合 IQR 异常值处理统计 SKU 占比",
+        "output_note": "用于识别红海价格带与潜在空白带。"
+      },
+      {
+        "section_id": "1.5",
+        "metric_id": "brand_premium",
+        "label": "品牌溢价系数",
+        "required_tables": [
+          "listings"
+        ],
+        "formula": "品牌价格中位数 / 类目价格中位数 - 1",
+        "output_note": "用于判断品牌溢价能力。"
+      },
+      {
+        "section_id": "1.6",
+        "metric_id": "average_transaction_price",
+        "label": "平均实际成交价",
+        "required_tables": [
+          "transactions"
+        ],
+        "formula": "sum(成交价 * 销量) / sum(销量)",
+        "output_note": "用于识别真实支付区间。"
+      },
+      {
+        "section_id": "1.6",
+        "metric_id": "average_discount_rate",
+        "label": "平均折扣率",
+        "required_tables": [
+          "transactions"
+        ],
+        "formula": "sum((挂牌价-成交价) / 挂牌价 * 销量) / sum(销量)",
+        "output_note": "用于判断市场折扣深度。"
+      },
+      {
+        "section_id": "1.6",
+        "metric_id": "price_elasticity",
+        "label": "价格弹性系数",
+        "required_tables": [
+          "transactions"
+        ],
+        "formula": "使用 midpoint method: |销量变化率 / 价格变化率|",
+        "output_note": "用于判断品类是否适合以促销驱动销量。"
+      }
+    ]
+  },
+  "sections": {
+    "1.1": {
+      "title": "市场现状与需求概览",
+      "metrics": {
+        "trend": {},
+        "seasonality_index": {},
+        "regional_share": {}
+      }
+    },
+    "1.2": {
+      "title": "客户画像分析",
+      "metrics": {}
+    },
+    "1.3": {
+      "title": "市场规模分析",
+      "metrics": {
+        "top_down": {
+          "tam": 95000000.0,
+          "online_market": 45600000.0,
+          "sam": 26448000.0,
+          "serviceable_import_market": 26448000.0,
+          "som": 793440.0
+        },
+        "bottom_up": {
+          "sample_monthly_gmv": 7408789.11,
+          "estimated_total_monthly_gmv": 26459961.11,
+          "estimated_annual_market_size": 317519533.29,
+          "weighted_average_list_price": 60.43,
+          "median_list_price": 75.87,
+          "brand_market_share": {
+            "MXC H": 0.6305,
+            "TOY-house": 0.1639,
+            "SongmaysaTOYS": 0.0837,
+            "TOY-houise": 0.0211,
+            "Mstr Hack Shop": 0.021,
+            "KORSONTHi": 0.0153,
+            "Bigdoll4u": 0.0138,
+            "KM Toys": 0.0128,
+            "happyshop6688": 0.0127,
+            "Yao Fashoin": 0.0086,
+            "timekey": 0.0081,
+            "Cookie house": 0.0025,
+            "YUE ZHI YU fashion": 0.0022,
+            "hug toys": 0.001,
+            "ChompooButoyshop2": 0.0005,
+            "Chobkorreview": 0.0005,
+            "Mystery Toys": 0.0004,
+            "แม่ค้าชื่อนุชค่ะ": 0.0004,
+            "One Nice Stand": 0.0003,
+            "Dreamever": 0.0003,
+            "LABUBU clothes": 0.0002,
+            "soodshopo": 0.0001,
+            "LamsriGSSHOP": 0.0001,
+            "hubeishengxiaoxianfuzhuangpu": 0.0,
+            "Easy shop go": 0.0,
+            "Onepiece8": 0.0,
+            "Koocase": 0.0,
+            "Ace choice shop": 0.0,
+            "Yuedun Shop": 0.0,
+            "Blinkooz": 0.0,
+            "HelloIDea": 0.0,
+            "WANGWEIKAN": 0.0,
+            "HEXIAOTING": 0.0,
+            "BHbowygShop": 0.0,
+            "oslual": 0.0,
+            "taiguo-wanju-79": 0.0,
+            "croadcashop": 0.0,
+            "Qwert153": 0.0,
+            "suizhoushijurongdianzishangwuyouxiangongsi96": 0.0,
+            "KAREN'S STORE": 0.0,
+            "Hongjumbox": 0.0,
+            "xu guang": 0.0,
+            "taiguo shop7": 0.0,
+            "Phineacas": 0.0,
+            "dsgfghjnnn": 0.0,
+            "Junyou Shop": 0.0
+          },
+          "platform_market_share": {
+            "TikTok Shop": 1.0
+          },
+          "top3_concentration_ratio": 0.8781,
+          "top5_concentration_ratio": 0.9202,
+          "hhi": 4332.3,
+          "concentration_level": "highly_concentrated",
+          "sample_coverage": 0.28
+        },
+        "triangulation": {
+          "top_down_vs_bottom_up_gap_ratio": 11.0054
+        }
+      }
+    },
+    "1.4": {
+      "title": "购买渠道分析",
+      "metrics": {
+        "totals": {
+          "revenue": 7408789.11,
+          "visits": 0,
+          "orders": 122603,
+          "overall_conversion_rate": 0.0,
+          "overall_average_order_value": 60.43
+        },
+        "channels": [
+          {
+            "channel": "TikTok Shop",
+            "visits": 0,
+            "orders": 122603,
+            "revenue": 7408789.11,
+            "ad_spend": 0.0,
+            "traffic_share": 0.0,
+            "order_share": 1.0,
+            "revenue_share": 1.0,
+            "conversion_rate": null,
+            "average_order_value": 60.43,
+            "revenue_per_visit": null,
+            "roas": null,
+            "cost_per_order": null
+          }
+        ]
+      }
+    },
+    "1.5": {
+      "title": "货架商品价格分析",
+      "metrics": {
+        "price_summary": {
+          "min_price": 8.0,
+          "p10_price": 8.8,
+          "q1_price": 38.17,
+          "median_price": 75.87,
+          "q3_price": 423.75,
+          "p90_price": 1060.0,
+          "max_price": 8615.0,
+          "average_price": 540.63
+        },
+        "outlier_analysis": {
+          "method": "tukey_iqr_fences_1.5_3.0",
+          "fences": {
+            "lower_inner": -540.19,
+            "upper_inner": 1002.11,
+            "lower_outer": -1118.55,
+            "upper_outer": 1580.47
+          },
+          "counts": {
+            "mild_count": 0,
+            "extreme_count": 6
+          }
+        },
+        "price_band_share": {
+          "budget": 0.25,
+          "mass": 0.2,
+          "premium": 0.3333,
+          "upper_mid": 0.2167
+        },
+        "brand_premium": {
+          "Phineacas": 112.5495,
+          "TOY-houise": 57.732,
+          "TOY-house": 50.1269,
+          "Chobkorreview": 23.3706,
+          "Hongjumbox": 20.0887,
+          "KM Toys": 12.1804,
+          "YUE ZHI YU fashion": 10.8492,
+          "SongmaysaTOYS": 10.8492,
+          "KORSONTHi": 9.7948,
+          "Mstr Hack Shop": 8.8721,
+          "ChompooButoyshop2": 7.2641,
+          "hug toys": 5.5902,
+          "soodshopo": 4.9312,
+          "Mystery Toys": 4.4699,
+          "taiguo shop7": 4.1246,
+          "suizhoushijurongdianzishangwuyouxiangongsi96": 3.4827,
+          "Qwert153": 1.532,
+          "oslual": 1.1616,
+          "Junyou Shop": 1.0635,
+          "Yuedun Shop": 0.8955,
+          "Bigdoll4u": 0.6476,
+          "xu guang": 0.4161,
+          "LABUBU clothes": 0.3764,
+          "LamsriGSSHOP": 0.3049,
+          "BHbowygShop": 0.1335,
+          "dsgfghjnnn": 0.0113,
+          "แม่ค้าชื่อนุชค่ะ": -0.0115,
+          "timekey": -0.0779,
+          "croadcashop": -0.1037,
+          "Easy shop go": -0.2355,
+          "KAREN'S STORE": -0.2577,
+          "Dreamever": -0.3014,
+          "happyshop6688": -0.3594,
+          "Ace choice shop": -0.3643,
+          "taiguo-wanju-79": -0.4165,
+          "WANGWEIKAN": -0.422,
+          "MXC H": -0.4332,
+          "Blinkooz": -0.4662,
+          "Cookie house": -0.486,
+          "HelloIDea": -0.5295,
+          "One Nice Stand": -0.5295,
+          "HEXIAOTING": -0.5649,
+          "Koocase": -0.6099,
+          "Yao Fashoin": -0.7258,
+          "Onepiece8": -0.8814,
+          "hubeishengxiaoxianfuzhuangpu": -0.884
+        },
+        "price_rating_correlation": 0.0966
+      }
+    },
+    "1.6": {
+      "title": "实际成交价格分析",
+      "metrics": {
+        "average_list_price": 206.94,
+        "average_actual_price": 60.43,
+        "median_actual_price": 53.0,
+        "price_realization_rate": 0.292,
+        "average_discount_rate": 0.7574,
+        "transaction_price_band_share": {
+          "budget": 0.0002,
+          "mass": 0.9572,
+          "premium": 0.0124,
+          "upper_mid": 0.0302
+        },
+        "outlier_analysis": {
+          "method": "tukey_iqr_fences_1.5_3.0",
+          "fences": {
+            "lower_inner": -903.25,
+            "upper_inner": 1545.15,
+            "lower_outer": -1821.4,
+            "upper_outer": 2463.3
+          },
+          "counts": {
+            "mild_count": 2,
+            "extreme_count": 2
+          }
+        },
+        "elasticity_method": "midpoint_absolute",
+        "average_price_elasticity": 0.0,
+        "elasticity_consistency_ratio": 0.0,
+        "elasticity_by_sku": {},
+        "elasticity_pairs": []
+      }
+    }
+  },
+  "uncertainty": {
+    "market_size": {
+      "annual_market_size": {
+        "point_estimate": 317519533.29,
+        "ci_lower": 40934528.98,
+        "ci_upper": 754905729.51,
+        "iterations": 400,
+        "alpha": 0.05
+      },
+      "weighted_average_list_price": {
+        "point_estimate": 60.43,
+        "ci_lower": 43.19,
+        "ci_upper": 522.88,
+        "iterations": 400,
+        "alpha": 0.05
+      }
+    },
+    "transactions": {
+      "average_actual_price": {
+        "point_estimate": 60.43,
+        "ci_lower": 43.14,
+        "ci_upper": 584.14,
+        "iterations": 400,
+        "alpha": 0.05
+      },
+      "average_discount_rate": {
+        "point_estimate": 0.7574,
+        "ci_lower": 0.5138,
+        "ci_upper": 0.7682,
+        "iterations": 400,
+        "alpha": 0.05
+      },
+      "average_price_elasticity": {
+        "point_estimate": 0.0,
+        "ci_lower": 0.0,
+        "ci_upper": 0.0,
+        "iterations": 400,
+        "alpha": 0.05
+      }
+    },
+    "listed_price_median": {
+      "statistic": "median",
+      "point_estimate": 75.865,
+      "ci_lower": 48.3,
+      "ci_upper": 115.65,
+      "iterations": 500,
+      "alpha": 0.05
+    }
+  },
+  "validation": {
+    "summary": {
+      "pass_count": 6,
+      "review_count": 3,
+      "fail_count": 0
+    },
+    "checks": [
+      {
+        "check_id": "google_trends_relative_scale",
+        "status": "review",
+        "source": {
+          "label": "Google Trends Help",
+          "url": "https://support.google.com/trends/answer/4365533"
+        },
+        "method": "Demand metrics use Google Trends style 0-100 relative index values in one comparison window.",
+        "evidence": {
+          "min_interest": 0,
+          "max_interest": 0,
+          "missing_input": true
+        }
+      },
+      {
+        "check_id": "regional_share_integrity",
+        "status": "review",
+        "source": {
+          "label": "Google Trends Help",
+          "url": "https://support.google.com/trends/answer/4365533"
+        },
+        "method": "Regional demand shares should reconcile back to 100% of the modeled regional demand pool.",
+        "evidence": {
+          "regional_share_sum": 0,
+          "missing_input": true
+        }
+      },
+      {
+        "check_id": "market_concentration_thresholds",
+        "status": "pass",
+        "source": {
+          "label": "U.S. DOJ and FTC Merger Guidelines",
+          "url": "https://www.justice.gov/atr/merger-guidelines"
+        },
+        "method": "Market concentration classification uses current DOJ/FTC HHI thresholds.",
+        "evidence": {
+          "hhi": 4332.3,
+          "expected_level": "highly_concentrated",
+          "reported_level": "highly_concentrated"
+        }
+      },
+      {
+        "check_id": "market_size_triangulation_gap",
+        "status": "review",
+        "source": {
+          "label": "Umbrex - How to Estimate Market Size using Bottom-Up Analysis",
+          "url": "https://umbrex.com/resources/market-sizing-playbook/how-to-estimate-market-size/how-to-estimate-market-size-using-bottom-up-analysis/"
+        },
+        "method": "Top-down and bottom-up estimates are triangulated; gaps above 15% require review rather than blind acceptance.",
+        "evidence": {
+          "top_down_sam": 26448000.0,
+          "bottom_up_annual_market_size": 317519533.29,
+          "gap_ratio": 11.0054
+        }
+      },
+      {
+        "check_id": "market_size_dual_method_presence",
+        "status": "pass",
+        "source": {
+          "label": "HolonIQ - Market Sizing 101",
+          "url": "https://www.holoniq.com/notes/market-sizing-101"
+        },
+        "method": "Market sizing keeps both top-down and bottom-up estimates instead of relying on one side only.",
+        "evidence": {
+          "has_top_down": true,
+          "has_bottom_up": true
+        }
+      },
+      {
+        "check_id": "conversion_rate_formula",
+        "status": "pass",
+        "source": {
+          "label": "Google Ads Help - About conversion tracking",
+          "url": "https://support.google.com/google-ads/answer/1722022"
+        },
+        "method": "Conversion rate is modeled as orders divided by visits/interactions.",
+        "evidence": {
+          "channel": "TikTok Shop",
+          "conversion_rate": null,
+          "missing_input": true
+        }
+      },
+      {
+        "check_id": "roas_formula",
+        "status": "pass",
+        "source": {
+          "label": "Google Ads Help - About target ROAS bidding",
+          "url": "https://support.google.com/google-ads/answer/6268637"
+        },
+        "method": "ROAS is modeled as revenue divided by ad spend.",
+        "evidence": {
+          "channel": "TikTok Shop",
+          "roas": null,
+          "missing_input": true
+        }
+      },
+      {
+        "check_id": "price_outlier_method",
+        "status": "pass",
+        "source": {
+          "label": "NIST/SEMATECH e-Handbook of Statistical Methods",
+          "url": "https://www.itl.nist.gov/div898/handbook/prc/section1/prc16.htm"
+        },
+        "method": "Price outlier handling uses IQR/Tukey fences before distribution analysis.",
+        "evidence": {
+          "listed_price_method": "tukey_iqr_fences_1.5_3.0",
+          "transaction_price_method": "tukey_iqr_fences_1.5_3.0"
+        }
+      },
+      {
+        "check_id": "price_elasticity_method",
+        "status": "pass",
+        "source": {
+          "label": "OpenStax - Price Elasticity of Demand and Price Elasticity of Supply",
+          "url": "https://openstax.org/books/principles-economics-3e/pages/5-1-price-elasticity-of-demand-and-price-elasticity-of-supply"
+        },
+        "method": "Price elasticity uses the midpoint method to reduce base-point bias.",
+        "evidence": {
+          "elasticity_method": "midpoint_absolute",
+          "elasticity_consistency_ratio": 0.0
+        }
+      }
+    ]
+  }
+}

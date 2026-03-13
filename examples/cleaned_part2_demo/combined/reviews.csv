@@ -1,0 +1,21 @@
+platform,canonical_sku,review_id,review_date,rating,review_text
+Amazon,B0GEN2200,B0GEN2200-R1,2025-11-30,4.7,quiet startup and reliable power output
+Amazon,B0GEN2200,B0GEN2200-R2,2025-11-30,4.7,easy setup and solid value
+Amazon,B0GEN3000,B0GEN3000-R1,2025-11-30,4.8,premium feel and smooth start
+Amazon,B0GEN3000,B0GEN3000-R2,2025-11-30,4.8,excellent power and very quiet
+Amazon,B0GEN2100,B0GEN2100-R1,2025-11-30,4.6,reliable portable unit
+Amazon,B0GEN2100,B0GEN2100-R2,2025-11-30,4.6,great value and compact size
+eBay,EB-GEN2000,EB-GEN2000-R1,2025-10-12,0,late shipping and scratched panel
+eBay,EB-GEN2000,EB-GEN2000-R2,2025-10-12,0,solid value after setup
+eBay,EB-GEN2000,EB-GEN2000-R1,2025-11-10,0,good value but box damaged
+eBay,EB-GEN2000,EB-GEN2000-R2,2025-11-10,0,easy start after first fuel fill
+eBay,EB-GEN2300,EB-GEN2300-R1,2025-10-18,0,noisy under load
+eBay,EB-GEN2300,EB-GEN2300-R2,2025-10-18,0,shipping was late
+eBay,EB-GEN2300,EB-GEN2300-R1,2025-11-21,0,fit and finish are poor
+eBay,EB-GEN2300,EB-GEN2300-R2,2025-11-21,0,performance feels weak
+TikTok Shop,TT-GEN1800,TT-GEN1800-R1,2025-11-30,4.1,portable budget option
+TikTok Shop,TT-GEN1800,TT-GEN1800-R2,2025-11-30,4.1,manual start is hard
+TikTok Shop,TT-GEN1700,TT-GEN1700-R1,2025-11-30,3.8,cheap handle and weak power
+TikTok Shop,TT-GEN1700,TT-GEN1700-R2,2025-11-30,3.8,damaged packaging on arrival
+TikTok Shop,TT-GEN2400,TT-GEN2400-R1,2025-11-30,4.5,easy setup and strong value
+TikTok Shop,TT-GEN2400,TT-GEN2400-R2,2025-11-30,4.5,quiet operation for camping

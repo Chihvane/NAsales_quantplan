@@ -1,0 +1,893 @@
+{
+  "metadata": {
+    "section_structure": {
+      "2.1": {
+        "title": "在售商品与成交结构",
+        "required_tables": [
+          "listing_snapshots",
+          "sold_transactions"
+        ],
+        "metric_ids": [
+          "sku_gmv_leaderboard"
+        ]
+      },
+      "2.2": {
+        "title": "成交价格带与折扣深度",
+        "required_tables": [
+          "listing_snapshots",
+          "sold_transactions"
+        ],
+        "metric_ids": [
+          "realized_price_distribution"
+        ]
+      },
+      "2.3": {
+        "title": "价格-评分价值矩阵",
+        "required_tables": [
+          "listing_snapshots",
+          "sold_transactions"
+        ],
+        "metric_ids": [
+          "price_rating_matrix"
+        ]
+      },
+      "2.4": {
+        "title": "属性画像与白空间机会",
+        "required_tables": [
+          "product_catalog",
+          "sold_transactions"
+        ],
+        "metric_ids": [
+          "attribute_outperformance"
+        ]
+      },
+      "2.5": {
+        "title": "评论情绪与痛点主题",
+        "required_tables": [
+          "reviews"
+        ],
+        "metric_ids": [
+          "review_sentiment_topics"
+        ]
+      },
+      "2.6": {
+        "title": "货架动态与生存分析",
+        "required_tables": [
+          "listing_snapshots"
+        ],
+        "metric_ids": [
+          "listing_survival_dynamics"
+        ]
+      }
+    },
+    "metric_specs": [
+      {
+        "section_id": "2.1",
+        "metric_id": "sku_gmv_leaderboard",
+        "label": "平台 Top SKU / 品牌成交结构",
+        "required_tables": [
+          "listing_snapshots",
+          "sold_transactions"
+        ],
+        "formula": "GMV = sum((成交价 + 运费) * 销量)，并计算 Top SKU/Top Brand 份额与集中度",
+        "output_note": "用于识别哪个 SKU、品牌、平台真正拿走成交。"
+      },
+      {
+        "section_id": "2.2",
+        "metric_id": "realized_price_distribution",
+        "label": "实际成交价格分布与甜蜜带",
+        "required_tables": [
+          "listing_snapshots",
+          "sold_transactions"
+        ],
+        "formula": "对 realized price = 成交价 + 运费 计算分位数，并以销量加权价格带识别 sweet spot",
+        "output_note": "用于识别最容易成交的价格带和折扣深度。"
+      },
+      {
+        "section_id": "2.3",
+        "metric_id": "price_rating_matrix",
+        "label": "价格-评分价值矩阵",
+        "required_tables": [
+          "listing_snapshots",
+          "sold_transactions"
+        ],
+        "formula": "将 SKU 映射到价格四分位 × 评分桶，比较 SKU 密度与销量占比",
+        "output_note": "用于识别高价值集群和高风险定价集群。"
+      },
+      {
+        "section_id": "2.4",
+        "metric_id": "attribute_outperformance",
+        "label": "属性画像与白空间机会",
+        "required_tables": [
+          "product_catalog",
+          "sold_transactions"
+        ],
+        "formula": "属性 outperformance = 属性 GMV 占比 - 属性 SKU 占比",
+        "output_note": "用于识别供给相对少但成交贡献更高的属性组合。"
+      },
+      {
+        "section_id": "2.5",
+        "metric_id": "review_sentiment_topics",
+        "label": "评论情绪与负面主题强度",
+        "required_tables": [
+          "reviews"
+        ],
+        "formula": "规则情绪分类 + 主题词典统计，pain_point_intensity = 负面主题提及率 × 负面情绪权重",
+        "output_note": "用于量化痛点而不是只看星级均值。"
+      },
+      {
+        "section_id": "2.6",
+        "metric_id": "listing_survival_dynamics",
+        "label": "货架动态与生存分析",
+        "required_tables": [
+          "listing_snapshots"
+        ],
+        "formula": "基于首末观察时间与退出事件构造 survival curve，并计算 entry/exit velocity",
+        "output_note": "用于衡量 SKU 是否稳定留在货架上。"
+      }
+    ]
+  },
+  "sections": {
+    "2.1": {
+      "title": "在售商品与成交结构",
+      "metrics": {
+        "total_gmv": 231732.0,
+        "total_units": 352,
+        "platform_mix": {
+          "Amazon": 0.7725,
+          "TikTok Shop": 0.1226,
+          "eBay": 0.1049
+        },
+        "top_skus": [
+          {
+            "canonical_sku": "B0GEN3000",
+            "brand": "NorthPeak",
+            "platform": "Amazon",
+            "gmv": 73832.0,
+            "units": 88,
+            "gmv_share": 0.3186
+          },
+          {
+            "canonical_sku": "B0GEN2200",
+            "brand": "VoltEdge",
+            "platform": "Amazon",
+            "gmv": 59755.0,
+            "units": 95,
+            "gmv_share": 0.2579
+          },
+          {
+            "canonical_sku": "B0GEN2100",
+            "brand": "StormSafe",
+            "platform": "Amazon",
+            "gmv": 45430.0,
+            "units": 70,
+            "gmv_share": 0.196
+          },
+          {
+            "canonical_sku": "EB-GEN2000",
+            "brand": "VoltEdge",
+            "platform": "eBay",
+            "gmv": 16805.0,
+            "units": 29,
+            "gmv_share": 0.0725
+          },
+          {
+            "canonical_sku": "TT-GEN2400",
+            "brand": "TrailVolt Shop",
+            "platform": "TikTok Shop",
+            "gmv": 13547.0,
+            "units": 23,
+            "gmv_share": 0.0585
+          }
+        ],
+        "top_brands": [
+          {
+            "brand": "NorthPeak",
+            "gmv": 81330.0,
+            "gmv_share": 0.351
+          },
+          {
+            "brand": "VoltEdge",
+            "gmv": 76560.0,
+            "gmv_share": 0.3304
+          },
+          {
+            "brand": "StormSafe",
+            "gmv": 45430.0,
+            "gmv_share": 0.196
+          },
+          {
+            "brand": "TrailVolt Shop",
+            "gmv": 13547.0,
+            "gmv_share": 0.0585
+          },
+          {
+            "brand": "EverTrail Deals",
+            "gmv": 8082.0,
+            "gmv_share": 0.0349
+          }
+        ],
+        "top_sku_share": 0.9035,
+        "brand_hhi": 2762.54,
+        "brand_concentration_level": "highly_concentrated",
+        "brand_cr4": 0.9359,
+        "quantity_observation_mode": "observed_transactions",
+        "data_quality": {
+          "sku_count": 8,
+          "brand_count": 6,
+          "platform_count": 3
+        }
+      }
+    },
+    "2.2": {
+      "title": "成交价格带与折扣深度",
+      "metrics": {
+        "price_distribution": {
+          "min": 399.0,
+          "p10": 444.0,
+          "q1": 577.5,
+          "median": 604.0,
+          "q3": 629.0,
+          "p90": 668.0,
+          "max": 839.0,
+          "average": 596.2
+        },
+        "outlier_analysis": {
+          "method": "tukey_iqr_fences_1.5_3.0",
+          "fences": {
+            "lower_inner": 500.25,
+            "upper_inner": 706.25,
+            "lower_outer": 423.0,
+            "upper_outer": 783.5
+          },
+          "outliers": {
+            "mild_count": 1,
+            "extreme_count": 2
+          }
+        },
+        "price_band_share": {
+          "$399-$472": 0.0994,
+          "$472-$546": 0.0,
+          "$546-$619": 0.1477,
+          "$619-$692": 0.5028,
+          "$692-$766": 0.0,
+          "$766-$839": 0.25
+        },
+        "sweet_spot_band": {
+          "label": "$619-$692",
+          "share": 0.5028
+        },
+        "average_realized_price": 658.33,
+        "median_realized_price": 604.0,
+        "discount_depth": {
+          "weighted_average_discount_rate": 0.121,
+          "median_discount_rate_by_seller_type": {
+            "brand_owner": 0.13,
+            "reseller": 0.1104
+          }
+        }
+      }
+    },
+    "2.3": {
+      "title": "价格-评分价值矩阵",
+      "metrics": {
+        "matrix": [
+          {
+            "price_bucket": "budget",
+            "rating_bucket": "4_0_to_4_3",
+            "sku_count": 1,
+            "units": 18,
+            "sku_share": 0.125,
+            "unit_share": 0.0511,
+            "average_price": 449.0,
+            "average_rating": 4.1,
+            "value_gap": -0.0739
+          },
+          {
+            "price_bucket": "budget",
+            "rating_bucket": "lt_4_0",
+            "sku_count": 1,
+            "units": 17,
+            "sku_share": 0.125,
+            "unit_share": 0.0483,
+            "average_price": 399.0,
+            "average_rating": 3.8,
+            "value_gap": -0.0767
+          },
+          {
+            "price_bucket": "mass",
+            "rating_bucket": "4_3_to_4_6",
+            "sku_count": 1,
+            "units": 23,
+            "sku_share": 0.125,
+            "unit_share": 0.0653,
+            "average_price": 589.0,
+            "average_rating": 4.5,
+            "value_gap": -0.0597
+          },
+          {
+            "price_bucket": "mass",
+            "rating_bucket": "lt_4_0",
+            "sku_count": 1,
+            "units": 29,
+            "sku_share": 0.125,
+            "unit_share": 0.0824,
+            "average_price": 555.0,
+            "average_rating": 0.0,
+            "value_gap": -0.0426
+          },
+          {
+            "price_bucket": "premium",
+            "rating_bucket": "gte_4_6",
+            "sku_count": 2,
+            "units": 158,
+            "sku_share": 0.25,
+            "unit_share": 0.4489,
+            "average_price": 744.0,
+            "average_rating": 4.7,
+            "value_gap": 0.1989
+          },
+          {
+            "price_bucket": "upper_mid",
+            "rating_bucket": "gte_4_6",
+            "sku_count": 1,
+            "units": 95,
+            "sku_share": 0.125,
+            "unit_share": 0.2699,
+            "average_price": 629.0,
+            "average_rating": 4.7,
+            "value_gap": 0.1449
+          },
+          {
+            "price_bucket": "upper_mid",
+            "rating_bucket": "lt_4_0",
+            "sku_count": 1,
+            "units": 12,
+            "sku_share": 0.125,
+            "unit_share": 0.0341,
+            "average_price": 599.0,
+            "average_rating": 0.0,
+            "value_gap": -0.0909
+          }
+        ],
+        "strong_value_clusters": [
+          {
+            "price_bucket": "premium",
+            "rating_bucket": "gte_4_6",
+            "sku_count": 2,
+            "units": 158,
+            "sku_share": 0.25,
+            "unit_share": 0.4489,
+            "average_price": 744.0,
+            "average_rating": 4.7,
+            "value_gap": 0.1989
+          },
+          {
+            "price_bucket": "upper_mid",
+            "rating_bucket": "gte_4_6",
+            "sku_count": 1,
+            "units": 95,
+            "sku_share": 0.125,
+            "unit_share": 0.2699,
+            "average_price": 629.0,
+            "average_rating": 4.7,
+            "value_gap": 0.1449
+          }
+        ],
+        "risk_clusters": [
+          {
+            "price_bucket": "upper_mid",
+            "rating_bucket": "lt_4_0",
+            "sku_count": 1,
+            "units": 12,
+            "sku_share": 0.125,
+            "unit_share": 0.0341,
+            "average_price": 599.0,
+            "average_rating": 0.0,
+            "value_gap": -0.0909
+          }
+        ]
+      }
+    },
+    "2.4": {
+      "title": "属性画像与白空间机会",
+      "metrics": {
+        "top_attributes": [
+          {
+            "attribute": "electric_start",
+            "sku_count": 3,
+            "sku_share": 0.375,
+            "gmv_share": 0.7725,
+            "outperformance": 0.3975
+          },
+          {
+            "attribute": "co_sensor",
+            "sku_count": 4,
+            "sku_share": 0.5,
+            "gmv_share": 0.8049,
+            "outperformance": 0.3049
+          },
+          {
+            "attribute": "dual_fuel",
+            "sku_count": 3,
+            "sku_share": 0.375,
+            "gmv_share": 0.6349,
+            "outperformance": 0.2599
+          },
+          {
+            "attribute": "remote_start",
+            "sku_count": 1,
+            "sku_share": 0.125,
+            "gmv_share": 0.3186,
+            "outperformance": 0.1936
+          },
+          {
+            "attribute": "wheel_kit",
+            "sku_count": 1,
+            "sku_share": 0.125,
+            "gmv_share": 0.3186,
+            "outperformance": 0.1936
+          },
+          {
+            "attribute": "inverter",
+            "sku_count": 4,
+            "sku_share": 0.5,
+            "gmv_share": 0.4212,
+            "outperformance": -0.0788
+          },
+          {
+            "attribute": "quiet",
+            "sku_count": 4,
+            "sku_share": 0.5,
+            "gmv_share": 0.4212,
+            "outperformance": -0.0788
+          },
+          {
+            "attribute": "parallel_ready",
+            "sku_count": 2,
+            "sku_share": 0.25,
+            "gmv_share": 0.1049,
+            "outperformance": -0.1451
+          },
+          {
+            "attribute": "compact",
+            "sku_count": 4,
+            "sku_share": 0.5,
+            "gmv_share": 0.3327,
+            "outperformance": -0.1673
+          },
+          {
+            "attribute": "portable",
+            "sku_count": 4,
+            "sku_share": 0.5,
+            "gmv_share": 0.3187,
+            "outperformance": -0.1813
+          }
+        ],
+        "whitespace_opportunities": [
+          {
+            "attribute": "electric_start",
+            "sku_count": 3,
+            "sku_share": 0.375,
+            "gmv_share": 0.7725,
+            "outperformance": 0.3975
+          },
+          {
+            "attribute": "co_sensor",
+            "sku_count": 4,
+            "sku_share": 0.5,
+            "gmv_share": 0.8049,
+            "outperformance": 0.3049
+          },
+          {
+            "attribute": "dual_fuel",
+            "sku_count": 3,
+            "sku_share": 0.375,
+            "gmv_share": 0.6349,
+            "outperformance": 0.2599
+          },
+          {
+            "attribute": "remote_start",
+            "sku_count": 1,
+            "sku_share": 0.125,
+            "gmv_share": 0.3186,
+            "outperformance": 0.1936
+          },
+          {
+            "attribute": "wheel_kit",
+            "sku_count": 1,
+            "sku_share": 0.125,
+            "gmv_share": 0.3186,
+            "outperformance": 0.1936
+          }
+        ],
+        "brand_feature_coverage": [
+          {
+            "brand": "EverTrail Deals",
+            "sku_count": 1,
+            "coverage": {
+              "electric_start": 0.0,
+              "co_sensor": 0.0,
+              "dual_fuel": 0.0,
+              "remote_start": 0.0,
+              "wheel_kit": 0.0,
+              "inverter": 0.0
+            }
+          },
+          {
+            "brand": "NorthPeak",
+            "sku_count": 2,
+            "coverage": {
+              "electric_start": 0.5,
+              "co_sensor": 1.0,
+              "dual_fuel": 0.5,
+              "remote_start": 0.5,
+              "wheel_kit": 0.5,
+              "inverter": 0.5
+            }
+          },
+          {
+            "brand": "StormSafe",
+            "sku_count": 1,
+            "coverage": {
+              "electric_start": 1.0,
+              "co_sensor": 1.0,
+              "dual_fuel": 0.0,
+              "remote_start": 0.0,
+              "wheel_kit": 0.0,
+              "inverter": 0.0
+            }
+          },
+          {
+            "brand": "StormSafe Clearance",
+            "sku_count": 1,
+            "coverage": {
+              "electric_start": 0.0,
+              "co_sensor": 0.0,
+              "dual_fuel": 0.0,
+              "remote_start": 0.0,
+              "wheel_kit": 0.0,
+              "inverter": 0.0
+            }
+          },
+          {
+            "brand": "TrailVolt Shop",
+            "sku_count": 1,
+            "coverage": {
+              "electric_start": 0.0,
+              "co_sensor": 0.0,
+              "dual_fuel": 1.0,
+              "remote_start": 0.0,
+              "wheel_kit": 0.0,
+              "inverter": 1.0
+            }
+          },
+          {
+            "brand": "VoltEdge",
+            "sku_count": 2,
+            "coverage": {
+              "electric_start": 0.5,
+              "co_sensor": 0.5,
+              "dual_fuel": 0.5,
+              "remote_start": 0.0,
+              "wheel_kit": 0.0,
+              "inverter": 1.0
+            }
+          }
+        ]
+      }
+    },
+    "2.5": {
+      "title": "评论情绪与痛点主题",
+      "metrics": {
+        "sentiment_mix": {
+          "positive": 0.5,
+          "neutral": 0.1,
+          "negative": 0.4
+        },
+        "top_negative_themes": [
+          {
+            "theme": "quality_issue",
+            "count": 4,
+            "share_of_negative_reviews": 0.5
+          },
+          {
+            "theme": "shipping_damage",
+            "count": 4,
+            "share_of_negative_reviews": 0.5
+          },
+          {
+            "theme": "value_for_money",
+            "count": 1,
+            "share_of_negative_reviews": 0.125
+          },
+          {
+            "theme": "power_performance",
+            "count": 1,
+            "share_of_negative_reviews": 0.125
+          },
+          {
+            "theme": "fitment_mismatch",
+            "count": 1,
+            "share_of_negative_reviews": 0.125
+          }
+        ],
+        "top_positive_themes": [
+          {
+            "theme": "ease_of_use",
+            "count": 7,
+            "share_of_positive_reviews": 0.7
+          },
+          {
+            "theme": "value_for_money",
+            "count": 4,
+            "share_of_positive_reviews": 0.4
+          },
+          {
+            "theme": "power_performance",
+            "count": 3,
+            "share_of_positive_reviews": 0.3
+          }
+        ],
+        "pain_points": [
+          {
+            "theme": "quality_issue",
+            "count": 4,
+            "intensity": 0.6
+          },
+          {
+            "theme": "shipping_damage",
+            "count": 4,
+            "intensity": 0.5
+          },
+          {
+            "theme": "value_for_money",
+            "count": 1,
+            "intensity": 0.1
+          },
+          {
+            "theme": "power_performance",
+            "count": 1,
+            "intensity": 0.15
+          },
+          {
+            "theme": "fitment_mismatch",
+            "count": 1,
+            "intensity": 0.15
+          }
+        ],
+        "review_count": 20
+      }
+    },
+    "2.6": {
+      "title": "货架动态与生存分析",
+      "metrics": {
+        "listing_count": 8,
+        "median_lifetime_days": 32.5,
+        "active_rate": 0.75,
+        "survival_curve": [
+          {
+            "day": 0,
+            "survival_rate": 1.0,
+            "at_risk": 8,
+            "deaths": 0,
+            "censored": 0
+          },
+          {
+            "day": 1,
+            "survival_rate": 1.0,
+            "at_risk": 8,
+            "deaths": 0,
+            "censored": 6
+          },
+          {
+            "day": 30,
+            "survival_rate": 0.5,
+            "at_risk": 2,
+            "deaths": 1,
+            "censored": 0
+          },
+          {
+            "day": 35,
+            "survival_rate": 0.0,
+            "at_risk": 1,
+            "deaths": 1,
+            "censored": 0
+          }
+        ],
+        "entry_exit_velocity": [
+          {
+            "week": "2025-W41",
+            "entries": 1,
+            "exits": 0,
+            "net_change": 1
+          },
+          {
+            "week": "2025-W42",
+            "entries": 1,
+            "exits": 0,
+            "net_change": 1
+          },
+          {
+            "week": "2025-W46",
+            "entries": 0,
+            "exits": 1,
+            "net_change": -1
+          },
+          {
+            "week": "2025-W47",
+            "entries": 0,
+            "exits": 1,
+            "net_change": -1
+          },
+          {
+            "week": "2025-W48",
+            "entries": 6,
+            "exits": 0,
+            "net_change": 6
+          }
+        ],
+        "price_band_exit_risk": {
+          "budget": 0.0,
+          "mass": 0.5,
+          "premium": 0.0,
+          "upper_mid": 0.5
+        }
+      }
+    }
+  },
+  "uncertainty": {
+    "market_structure": {
+      "top_sku_share": {
+        "point_estimate": 0.9035,
+        "ci_lower": 0.9209,
+        "ci_upper": 1.0001,
+        "iterations": 400,
+        "alpha": 0.05
+      }
+    },
+    "price": {
+      "median_realized_price": {
+        "statistic": "median",
+        "point_estimate": 604.0,
+        "ci_lower": 533.625,
+        "ci_upper": 639.0,
+        "iterations": 400,
+        "alpha": 0.05
+      }
+    },
+    "reviews": {
+      "negative_review_rate": {
+        "point_estimate": 0.4,
+        "ci_lower": 0.2,
+        "ci_upper": 0.6,
+        "iterations": 400,
+        "alpha": 0.05
+      }
+    },
+    "listing_dynamics": {
+      "median_lifetime_days": {
+        "statistic": "median",
+        "point_estimate": 1.0,
+        "ci_lower": 1.0,
+        "ci_upper": 30.0,
+        "iterations": 400,
+        "alpha": 0.05
+      }
+    }
+  },
+  "validation": {
+    "summary": {
+      "pass_count": 8,
+      "review_count": 0,
+      "fail_count": 0
+    },
+    "checks": [
+      {
+        "check_id": "platform_mix_integrity",
+        "status": "pass",
+        "source": {
+          "label": "Part 2 GMV Accounting",
+          "url": ""
+        },
+        "method": "Platform GMV shares should reconcile back to 100% of observed GMV.",
+        "evidence": {
+          "platform_share_sum": 1.0,
+          "missing_input": false
+        }
+      },
+      {
+        "check_id": "brand_concentration_thresholds",
+        "status": "pass",
+        "source": {
+          "label": "Part 2 GMV Accounting",
+          "url": ""
+        },
+        "method": "Brand concentration level should match HHI threshold classification.",
+        "evidence": {
+          "brand_hhi": 2762.54,
+          "expected_level": "highly_concentrated",
+          "reported_level": "highly_concentrated"
+        }
+      },
+      {
+        "check_id": "sweet_spot_consistency",
+        "status": "pass",
+        "source": {
+          "label": "Part 2 Price Distribution and Sweet Spot",
+          "url": ""
+        },
+        "method": "Sweet spot band should match the highest weighted price-band share.",
+        "evidence": {
+          "reported_sweet_spot": "$619-$692",
+          "max_share_band": "$619-$692",
+          "missing_input": false
+        }
+      },
+      {
+        "check_id": "discount_rate_range",
+        "status": "pass",
+        "source": {
+          "label": "Part 2 Price Distribution and Sweet Spot",
+          "url": ""
+        },
+        "method": "Weighted average discount rate should stay within a 0-1 range.",
+        "evidence": {
+          "weighted_average_discount_rate": 0.121
+        }
+      },
+      {
+        "check_id": "attribute_outperformance_range",
+        "status": "pass",
+        "source": {
+          "label": "Part 2 Attribute Outperformance",
+          "url": ""
+        },
+        "method": "Attribute outperformance is a share delta and should remain between -1 and 1.",
+        "evidence": {
+          "attribute_count": 10,
+          "missing_input": false
+        }
+      },
+      {
+        "check_id": "sentiment_mix_integrity",
+        "status": "pass",
+        "source": {
+          "label": "Part 2 Review Sentiment",
+          "url": ""
+        },
+        "method": "Positive, neutral, and negative review shares should approximately reconcile to 100%.",
+        "evidence": {
+          "sentiment_share_sum": 1.0,
+          "missing_input": false
+        }
+      },
+      {
+        "check_id": "survival_curve_monotonicity",
+        "status": "pass",
+        "source": {
+          "label": "Part 2 Listing Survival",
+          "url": ""
+        },
+        "method": "Kaplan-Meier style survival estimates should be non-increasing over time.",
+        "evidence": {
+          "curve_points": 4,
+          "missing_input": false
+        }
+      },
+      {
+        "check_id": "exit_risk_range",
+        "status": "pass",
+        "source": {
+          "label": "Part 2 Listing Survival",
+          "url": ""
+        },
+        "method": "Price-band exit risk is a rate and should remain within a 0-1 range.",
+        "evidence": {
+          "band_count": 4,
+          "missing_input": false
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,5267 @@
+{
+  "metadata": {
+    "section_structure": {
+      "2.1": {
+        "title": "在售商品与成交结构",
+        "required_tables": [
+          "listing_snapshots",
+          "sold_transactions"
+        ],
+        "metric_ids": [
+          "sku_gmv_leaderboard"
+        ]
+      },
+      "2.2": {
+        "title": "成交价格带与折扣深度",
+        "required_tables": [
+          "listing_snapshots",
+          "sold_transactions"
+        ],
+        "metric_ids": [
+          "realized_price_distribution"
+        ]
+      },
+      "2.3": {
+        "title": "价格-评分价值矩阵",
+        "required_tables": [
+          "listing_snapshots",
+          "sold_transactions"
+        ],
+        "metric_ids": [
+          "price_rating_matrix"
+        ]
+      },
+      "2.4": {
+        "title": "属性画像与白空间机会",
+        "required_tables": [
+          "product_catalog",
+          "sold_transactions"
+        ],
+        "metric_ids": [
+          "attribute_outperformance"
+        ]
+      },
+      "2.5": {
+        "title": "评论情绪与痛点主题",
+        "required_tables": [
+          "reviews"
+        ],
+        "metric_ids": [
+          "review_sentiment_topics"
+        ]
+      },
+      "2.6": {
+        "title": "货架动态与生存分析",
+        "required_tables": [
+          "listing_snapshots"
+        ],
+        "metric_ids": [
+          "listing_survival_dynamics"
+        ]
+      }
+    },
+    "metric_specs": [
+      {
+        "section_id": "2.1",
+        "metric_id": "sku_gmv_leaderboard",
+        "label": "平台 Top SKU / 品牌成交结构",
+        "required_tables": [
+          "listing_snapshots",
+          "sold_transactions"
+        ],
+        "formula": "GMV = sum((成交价 + 运费) * 销量)，并计算 Top SKU/Top Brand 份额与集中度",
+        "output_note": "用于识别哪个 SKU、品牌、平台真正拿走成交。"
+      },
+      {
+        "section_id": "2.2",
+        "metric_id": "realized_price_distribution",
+        "label": "实际成交价格分布与甜蜜带",
+        "required_tables": [
+          "listing_snapshots",
+          "sold_transactions"
+        ],
+        "formula": "对 realized price = 成交价 + 运费 计算分位数，并以销量加权价格带识别 sweet spot",
+        "output_note": "用于识别最容易成交的价格带和折扣深度。"
+      },
+      {
+        "section_id": "2.3",
+        "metric_id": "price_rating_matrix",
+        "label": "价格-评分价值矩阵",
+        "required_tables": [
+          "listing_snapshots",
+          "sold_transactions"
+        ],
+        "formula": "将 SKU 映射到价格四分位 × 评分桶，比较 SKU 密度与销量占比",
+        "output_note": "用于识别高价值集群和高风险定价集群。"
+      },
+      {
+        "section_id": "2.4",
+        "metric_id": "attribute_outperformance",
+        "label": "属性画像与白空间机会",
+        "required_tables": [
+          "product_catalog",
+          "sold_transactions"
+        ],
+        "formula": "属性 outperformance = 属性 GMV 占比 - 属性 SKU 占比",
+        "output_note": "用于识别供给相对少但成交贡献更高的属性组合。"
+      },
+      {
+        "section_id": "2.5",
+        "metric_id": "review_sentiment_topics",
+        "label": "评论情绪与负面主题强度",
+        "required_tables": [
+          "reviews"
+        ],
+        "formula": "规则情绪分类 + 主题词典统计，pain_point_intensity = 负面主题提及率 × 负面情绪权重",
+        "output_note": "用于量化痛点而不是只看星级均值。"
+      },
+      {
+        "section_id": "2.6",
+        "metric_id": "listing_survival_dynamics",
+        "label": "货架动态与生存分析",
+        "required_tables": [
+          "listing_snapshots"
+        ],
+        "formula": "基于首末观察时间与退出事件构造 survival curve，并计算 entry/exit velocity",
+        "output_note": "用于衡量 SKU 是否稳定留在货架上。"
+      }
+    ]
+  },
+  "sections": {
+    "2.1": {
+      "title": "在售商品与成交结构",
+      "metrics": {
+        "total_gmv": 8013422.21,
+        "total_units": 147892,
+        "platform_mix": {
+          "Amazon": 1.0
+        },
+        "top_skus": [
+          {
+            "canonical_sku": "B00WMMMHNM",
+            "brand": "Seresto",
+            "platform": "Amazon",
+            "gmv": 1030000.0,
+            "units": 10000,
+            "gmv_share": 0.1285
+          },
+          {
+            "canonical_sku": "B0B25H9G4K",
+            "brand": "Set Wet",
+            "platform": "Amazon",
+            "gmv": 300662.0,
+            "units": 478,
+            "gmv_share": 0.0375
+          },
+          {
+            "canonical_sku": "B0CDFN6TKH",
+            "brand": "Joy Pebble",
+            "platform": "Amazon",
+            "gmv": 198593.38,
+            "units": 662,
+            "gmv_share": 0.0248
+          },
+          {
+            "canonical_sku": "B0CGDF3Z4G",
+            "brand": "Comfort",
+            "platform": "Amazon",
+            "gmv": 190190.0,
+            "units": 247,
+            "gmv_share": 0.0237
+          },
+          {
+            "canonical_sku": "B07K7FQGVJ",
+            "brand": "GBC",
+            "platform": "Amazon",
+            "gmv": 180908.0,
+            "units": 52,
+            "gmv_share": 0.0226
+          }
+        ],
+        "top_brands": [
+          {
+            "brand": "Seresto",
+            "gmv": 1030000.0,
+            "gmv_share": 0.1285
+          },
+          {
+            "brand": "Set Wet",
+            "gmv": 300662.0,
+            "gmv_share": 0.0375
+          },
+          {
+            "brand": "Joy Pebble",
+            "gmv": 198593.38,
+            "gmv_share": 0.0248
+          },
+          {
+            "brand": "Comfort",
+            "gmv": 190190.0,
+            "gmv_share": 0.0237
+          },
+          {
+            "brand": "GBC",
+            "gmv": 180908.0,
+            "gmv_share": 0.0226
+          }
+        ],
+        "top_sku_share": 0.2371,
+        "brand_hhi": 232.13,
+        "brand_concentration_level": "unconcentrated",
+        "brand_cr4": 0.2145,
+        "quantity_observation_mode": "observed_transactions",
+        "data_quality": {
+          "sku_count": 999,
+          "brand_count": 895,
+          "platform_count": 1
+        }
+      }
+    },
+    "2.2": {
+      "title": "成交价格带与折扣深度",
+      "metrics": {
+        "price_distribution": {
+          "min": 0.0,
+          "p10": 4.4,
+          "q1": 11.51,
+          "median": 24.36,
+          "q3": 57.97,
+          "p90": 137.31,
+          "max": 3479.0,
+          "average": 61.79
+        },
+        "outlier_analysis": {
+          "method": "tukey_iqr_fences_1.5_3.0",
+          "fences": {
+            "lower_inner": -58.18,
+            "upper_inner": 127.66,
+            "lower_outer": -127.87,
+            "upper_outer": 197.35
+          },
+          "outliers": {
+            "mild_count": 50,
+            "extreme_count": 61
+          }
+        },
+        "price_band_share": {
+          "$0-$580": 0.9907,
+          "$580-$1160": 0.009,
+          "$1160-$1740": 0.0,
+          "$1740-$2319": 0.0,
+          "$2319-$2899": 0.0,
+          "$2899-$3479": 0.0004
+        },
+        "sweet_spot_band": {
+          "label": "$0-$580",
+          "share": 0.9907
+        },
+        "average_realized_price": 54.18,
+        "median_realized_price": 24.36,
+        "discount_depth": {
+          "weighted_average_discount_rate": 0.1928,
+          "median_discount_rate_by_seller_type": {
+            "reseller": 0.1431,
+            "brand_owner": 0.0955
+          }
+        }
+      }
+    },
+    "2.3": {
+      "title": "价格-评分价值矩阵",
+      "metrics": {
+        "matrix": [
+          {
+            "price_bucket": "budget",
+            "rating_bucket": "4_0_to_4_3",
+            "sku_count": 30,
+            "units": 4203,
+            "sku_share": 0.03,
+            "unit_share": 0.0284,
+            "average_price": 5.48,
+            "average_rating": 4.12,
+            "value_gap": -0.0016
+          },
+          {
+            "price_bucket": "budget",
+            "rating_bucket": "4_3_to_4_6",
+            "sku_count": 107,
+            "units": 18372,
+            "sku_share": 0.107,
+            "unit_share": 0.1242,
+            "average_price": 5.78,
+            "average_rating": 4.42,
+            "value_gap": 0.0172
+          },
+          {
+            "price_bucket": "budget",
+            "rating_bucket": "gte_4_6",
+            "sku_count": 100,
+            "units": 20421,
+            "sku_share": 0.1,
+            "unit_share": 0.1381,
+            "average_price": 6.38,
+            "average_rating": 4.69,
+            "value_gap": 0.0381
+          },
+          {
+            "price_bucket": "budget",
+            "rating_bucket": "lt_4_0",
+            "sku_count": 13,
+            "units": 1289,
+            "sku_share": 0.013,
+            "unit_share": 0.0087,
+            "average_price": 6.02,
+            "average_rating": 3.62,
+            "value_gap": -0.0043
+          },
+          {
+            "price_bucket": "mass",
+            "rating_bucket": "4_0_to_4_3",
+            "sku_count": 34,
+            "units": 3322,
+            "sku_share": 0.034,
+            "unit_share": 0.0225,
+            "average_price": 18.42,
+            "average_rating": 4.11,
+            "value_gap": -0.0115
+          },
+          {
+            "price_bucket": "mass",
+            "rating_bucket": "4_3_to_4_6",
+            "sku_count": 99,
+            "units": 11868,
+            "sku_share": 0.099,
+            "unit_share": 0.0802,
+            "average_price": 17.57,
+            "average_rating": 4.39,
+            "value_gap": -0.0188
+          },
+          {
+            "price_bucket": "mass",
+            "rating_bucket": "gte_4_6",
+            "sku_count": 101,
+            "units": 21079,
+            "sku_share": 0.101,
+            "unit_share": 0.1425,
+            "average_price": 16.74,
+            "average_rating": 4.67,
+            "value_gap": 0.0415
+          },
+          {
+            "price_bucket": "mass",
+            "rating_bucket": "lt_4_0",
+            "sku_count": 16,
+            "units": 1760,
+            "sku_share": 0.016,
+            "unit_share": 0.0119,
+            "average_price": 17.62,
+            "average_rating": 3.66,
+            "value_gap": -0.0041
+          },
+          {
+            "price_bucket": "premium",
+            "rating_bucket": "4_0_to_4_3",
+            "sku_count": 54,
+            "units": 5712,
+            "sku_share": 0.054,
+            "unit_share": 0.0386,
+            "average_price": 206.66,
+            "average_rating": 4.12,
+            "value_gap": -0.0154
+          },
+          {
+            "price_bucket": "premium",
+            "rating_bucket": "4_3_to_4_6",
+            "sku_count": 91,
+            "units": 19739,
+            "sku_share": 0.091,
+            "unit_share": 0.1335,
+            "average_price": 148.78,
+            "average_rating": 4.4,
+            "value_gap": 0.0425
+          },
+          {
+            "price_bucket": "premium",
+            "rating_bucket": "gte_4_6",
+            "sku_count": 75,
+            "units": 8334,
+            "sku_share": 0.075,
+            "unit_share": 0.0564,
+            "average_price": 198.13,
+            "average_rating": 4.69,
+            "value_gap": -0.0186
+          },
+          {
+            "price_bucket": "premium",
+            "rating_bucket": "lt_4_0",
+            "sku_count": 30,
+            "units": 2505,
+            "sku_share": 0.03,
+            "unit_share": 0.0169,
+            "average_price": 238.29,
+            "average_rating": 3.65,
+            "value_gap": -0.0131
+          },
+          {
+            "price_bucket": "upper_mid",
+            "rating_bucket": "4_0_to_4_3",
+            "sku_count": 40,
+            "units": 5360,
+            "sku_share": 0.04,
+            "unit_share": 0.0362,
+            "average_price": 38.7,
+            "average_rating": 4.13,
+            "value_gap": -0.0038
+          },
+          {
+            "price_bucket": "upper_mid",
+            "rating_bucket": "4_3_to_4_6",
+            "sku_count": 100,
+            "units": 12298,
+            "sku_share": 0.1,
+            "unit_share": 0.0832,
+            "average_price": 37.7,
+            "average_rating": 4.41,
+            "value_gap": -0.0168
+          },
+          {
+            "price_bucket": "upper_mid",
+            "rating_bucket": "gte_4_6",
+            "sku_count": 91,
+            "units": 10417,
+            "sku_share": 0.091,
+            "unit_share": 0.0704,
+            "average_price": 35.64,
+            "average_rating": 4.67,
+            "value_gap": -0.0206
+          },
+          {
+            "price_bucket": "upper_mid",
+            "rating_bucket": "lt_4_0",
+            "sku_count": 19,
+            "units": 1213,
+            "sku_share": 0.019,
+            "unit_share": 0.0082,
+            "average_price": 35.62,
+            "average_rating": 3.68,
+            "value_gap": -0.0108
+          }
+        ],
+        "strong_value_clusters": [
+          {
+            "price_bucket": "premium",
+            "rating_bucket": "4_3_to_4_6",
+            "sku_count": 91,
+            "units": 19739,
+            "sku_share": 0.091,
+            "unit_share": 0.1335,
+            "average_price": 148.78,
+            "average_rating": 4.4,
+            "value_gap": 0.0425
+          },
+          {
+            "price_bucket": "mass",
+            "rating_bucket": "gte_4_6",
+            "sku_count": 101,
+            "units": 21079,
+            "sku_share": 0.101,
+            "unit_share": 0.1425,
+            "average_price": 16.74,
+            "average_rating": 4.67,
+            "value_gap": 0.0415
+          },
+          {
+            "price_bucket": "budget",
+            "rating_bucket": "gte_4_6",
+            "sku_count": 100,
+            "units": 20421,
+            "sku_share": 0.1,
+            "unit_share": 0.1381,
+            "average_price": 6.38,
+            "average_rating": 4.69,
+            "value_gap": 0.0381
+          }
+        ],
+        "risk_clusters": [
+          {
+            "price_bucket": "upper_mid",
+            "rating_bucket": "gte_4_6",
+            "sku_count": 91,
+            "units": 10417,
+            "sku_share": 0.091,
+            "unit_share": 0.0704,
+            "average_price": 35.64,
+            "average_rating": 4.67,
+            "value_gap": -0.0206
+          },
+          {
+            "price_bucket": "premium",
+            "rating_bucket": "gte_4_6",
+            "sku_count": 75,
+            "units": 8334,
+            "sku_share": 0.075,
+            "unit_share": 0.0564,
+            "average_price": 198.13,
+            "average_rating": 4.69,
+            "value_gap": -0.0186
+          },
+          {
+            "price_bucket": "upper_mid",
+            "rating_bucket": "4_3_to_4_6",
+            "sku_count": 100,
+            "units": 12298,
+            "sku_share": 0.1,
+            "unit_share": 0.0832,
+            "average_price": 37.7,
+            "average_rating": 4.41,
+            "value_gap": -0.0168
+          }
+        ]
+      }
+    },
+    "2.4": {
+      "title": "属性画像与白空间机会",
+      "metrics": {
+        "top_attributes": [
+          {
+            "attribute": "quiet",
+            "sku_count": 20,
+            "sku_share": 0.02,
+            "gmv_share": 0.0378,
+            "outperformance": 0.0178
+          },
+          {
+            "attribute": "led",
+            "sku_count": 184,
+            "sku_share": 0.184,
+            "gmv_share": 0.188,
+            "outperformance": 0.004
+          },
+          {
+            "attribute": "parallel_ready",
+            "sku_count": 4,
+            "sku_share": 0.004,
+            "gmv_share": 0.0038,
+            "outperformance": -0.0002
+          },
+          {
+            "attribute": "quick_release",
+            "sku_count": 3,
+            "sku_share": 0.003,
+            "gmv_share": 0.0025,
+            "outperformance": -0.0005
+          },
+          {
+            "attribute": "budget",
+            "sku_count": 1,
+            "sku_share": 0.001,
+            "gmv_share": 0.0002,
+            "outperformance": -0.0008
+          },
+          {
+            "attribute": "portable",
+            "sku_count": 48,
+            "sku_share": 0.048,
+            "gmv_share": 0.0471,
+            "outperformance": -0.0009
+          },
+          {
+            "attribute": "compact",
+            "sku_count": 43,
+            "sku_share": 0.043,
+            "gmv_share": 0.0404,
+            "outperformance": -0.0026
+          },
+          {
+            "attribute": "fitment",
+            "sku_count": 8,
+            "sku_share": 0.008,
+            "gmv_share": 0.005,
+            "outperformance": -0.003
+          },
+          {
+            "attribute": "waterproof",
+            "sku_count": 61,
+            "sku_share": 0.061,
+            "gmv_share": 0.0579,
+            "outperformance": -0.0031
+          },
+          {
+            "attribute": "leather",
+            "sku_count": 38,
+            "sku_share": 0.038,
+            "gmv_share": 0.0185,
+            "outperformance": -0.0195
+          }
+        ],
+        "whitespace_opportunities": [],
+        "brand_feature_coverage": [
+          {
+            "brand": "3D MAXpider",
+            "sku_count": 2,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "A-Premium",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "ALLOSUN",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "ALPS Mountaineering",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "AMGSH",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "ASLONG",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "AT-A-GLANCE",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "Accutire",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "AiBOB",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "Aiyazhi",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 1.0
+            }
+          },
+          {
+            "brand": "Allewie",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "Allsop",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "Allstar Innovations",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "Ancor",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "Anziner",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "Aothia",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "AsterOutdoor",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "AstroAI",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "Awlstar",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "BAMBOOTRAY",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "BDK",
+            "sku_count": 3,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "BEWISHOME",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "BIDEN",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "BIEAMA",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 1.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "BLACKSTONE",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 1.0
+            }
+          },
+          {
+            "brand": "BOSCH",
+            "sku_count": 3,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "BUGANI",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 1.0
+            }
+          },
+          {
+            "brand": "BainGesk",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "Barcaloo",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "Batianda",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "Bedsure",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "BestEquip",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "Bluemoon Homes",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "Bocasal",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "Braun",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "Brentwood",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "Brindle",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 1.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "Buttons Galore and More",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "Buyer Star",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "Bzlaha",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "CIVIVI",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "CLUCI",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "COCOMOON",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "COMOWARE",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "CRYSULLY",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "CXK",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "CaseBuy",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "Casio",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "Champion Sports",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "Chrome Pro",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "CleanEspresso",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "ClosetMaid",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "Coleman",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "Convenience Concepts",
+            "sku_count": 2,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "Cook N Home",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "Creality",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "Curyidy",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "D.B.Z.",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "DEWALT",
+            "sku_count": 2,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.5,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "DORBOKER",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "DRAGONtail Tenkara",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "DUMOS",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "DecorRack",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "Delanie",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 1.0
+            }
+          },
+          {
+            "brand": "Dingo",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "Dr. Scholl's Shoes",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "DuraSafe Cases",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "ELYKEN",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "EMINTA",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "ENFBAH",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "ESRICH",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "ETUDE",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "EURO TOOL",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "Ensenior",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "Exemplary Gardens",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "Extreme Max",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "F-32",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "FANMATS",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "FBLFOBELI",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "FOGG",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "FORCA",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "FORTSTRONG",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "FTL",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "Fabbay",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 1.0
+            }
+          },
+          {
+            "brand": "FantasyDay",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "Fauevav",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "Fetiwilso",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "Fiebing's",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "Flash Furniture",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "Frieling",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 1.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "Fringe Studio",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "GBC",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 1.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "GE",
+            "sku_count": 2,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.5,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "GEDORE",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "GEEKRIA",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 1.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "GENORTH",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "GESUM",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 1.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "GHKWXUE",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 1.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "GIHETKUT",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "GOTRUTH",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "GPATIO",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "GPX",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 1.0
+            }
+          },
+          {
+            "brand": "GU Energy",
+            "sku_count": 2,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 1.0
+            }
+          },
+          {
+            "brand": "Gator",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "Gazigo",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "GearIT",
+            "sku_count": 3,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.3333,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "Generic",
+            "sku_count": 2,
+            "coverage": {
+              "quiet": 0.5,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "Georgia-Pacific",
+            "sku_count": 3,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.3333,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "Glo Minerals",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "Golden Rabbit",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "Gowithwind",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 1.0
+            }
+          },
+          {
+            "brand": "Greenworks",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 1.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "Groupe SEB",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "H HESHECEIN",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "HAVLULAND",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "HELENA HI IRIS",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 1.0
+            }
+          },
+          {
+            "brand": "HEWYIOS",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "HIVE ALIVE",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "HOMEK",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "HOMY CASA",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "HYPERLITE",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 1.0
+            }
+          },
+          {
+            "brand": "Hard-to-Find Fastener",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "Hickory Hardware",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "Homeweeks",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 1.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "Honeywell Safety Products, USA",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "Host",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "HouseAid",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "Hunter Fan Company",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 1.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "Hydro Flask",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "Hyomdeck",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "IDZO",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "IOGEAR",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "IPLUSO",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "IRWIN",
+            "sku_count": 3,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.3333,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "ISLE Surf and SUP",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "Innova",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "Iqimott",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 1.0
+            }
+          },
+          {
+            "brand": "JAM Paper",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "JASEN",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "JBL",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 1.0
+            }
+          },
+          {
+            "brand": "JINGCHENGMEI",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "JONATHAN Y",
+            "sku_count": 2,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.5,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "JOYSTAR",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "JUNSYOUNG",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "Jayefo",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "Jetec",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "Joy Pebble",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "KERDOM",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "KGORGE",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "KHLJJU",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "KINOWJI",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 1.0
+            }
+          },
+          {
+            "brand": "KIRKAS",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "KMC",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 1.0
+            }
+          },
+          {
+            "brand": "KOAKOMI",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 1.0
+            }
+          },
+          {
+            "brand": "Kaxiida",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "Kelty",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 1.0
+            }
+          },
+          {
+            "brand": "Kingston Brass",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "Kobo",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "Koolertron",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 1.0
+            }
+          },
+          {
+            "brand": "LEGO",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "LETTON",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 1.0
+            }
+          },
+          {
+            "brand": "LIINCCRA",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 1.0
+            }
+          },
+          {
+            "brand": "LIMICAR",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "LIYERA",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "LOCAME",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "LOVSPATIO",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 1.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "La Flora Organics",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "Level Home Inc",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "Ltinist",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "Lutron",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "Lybuorze",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "M",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "M MAKETHEONE",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "M-AUTO",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "MAIWO",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 1.0
+            }
+          },
+          {
+            "brand": "MITZONE",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "MOJIOO",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "MOJOSCEND",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "MOSIYEEF",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "MTM",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "MUMI",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "MYBAGZING",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "MYPIN",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "Magpul",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "Margal",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "MasterPieces",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "Mead",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "Melissa & Doug",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "Micro Kickboard",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "Millers Forge",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "Minnetonka",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "MitoVilla",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "MoMyofdy",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "Modoker",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "Mudder",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "MusiBady",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 1.0
+            }
+          },
+          {
+            "brand": "Mustaches",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "NICETOWN",
+            "sku_count": 2,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.5,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "NIID",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 1.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "NIUTRIP",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "NXT NXTRND",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "Naanle",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 1.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "Native Union",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "Natural Factors",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "Naturalizer",
+            "sku_count": 2,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "Nature's Way",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "Neewer",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 1.0
+            }
+          },
+          {
+            "brand": "Novsix",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "O2COOL",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 1.0
+            }
+          },
+          {
+            "brand": "OFBAND",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "OImaster",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "OLIGHT",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "Ohuhu",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "Onateel",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "OneTigris",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 1.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "Oopsu",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "OwnMy",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 1.0
+            }
+          },
+          {
+            "brand": "PILOT",
+            "sku_count": 2,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.5,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "POWERTEC",
+            "sku_count": 2,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "PULAIXIN",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "PUROFLO",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "Park Tool",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "Pathson",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "Power Stop",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "PowerA",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "PrelerDIY",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 1.0
+            }
+          },
+          {
+            "brand": "Prepac",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "Presentime",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 1.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "Presto",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "Pure Country Weavers",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "QBLEEV",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "Qaeoity",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 1.0
+            }
+          },
+          {
+            "brand": "Qlvily",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "Quincry",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "Quip",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "R-Go Tools",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 1.0
+            }
+          },
+          {
+            "brand": "RENWENA",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "ROYMADE",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "RSVP International",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "Razer",
+            "sku_count": 2,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.5,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "Re Play",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "Resin TEAK",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "Restlrious",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "Ringside",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "RoomMates",
+            "sku_count": 2,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.5,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "Rubbermaid Commercial Products",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 1.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "S H STOCK HARBOR",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "SAYONEYES",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "SCITOO",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 1.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "SIMPLGIRL",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 1.0
+            }
+          },
+          {
+            "brand": "SLOGENTO",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "SMARTSTANDARD",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "SOFTKISS",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "SOLE",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "SOLEDI",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "SPYPOINT",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "Safco",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "Safco Products",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "Satthwa",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "Schiff",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "Scubapro",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "SeaVees",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "Seagate",
+            "sku_count": 2,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.5
+            }
+          },
+          {
+            "brand": "Simple Deluxe",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 1.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 1.0
+            }
+          },
+          {
+            "brand": "Simple Designs",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "Skechers",
+            "sku_count": 11,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.3636,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "Slice",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "Sloggers",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "Smead",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "Smith",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "Sony",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 1.0
+            }
+          },
+          {
+            "brand": "Sotiff",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "SparkSettings",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 1.0
+            }
+          },
+          {
+            "brand": "Spectra Premium",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "Sperry",
+            "sku_count": 3,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "Stahlwille",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "Steve Madden",
+            "sku_count": 2,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "Streetwise Security",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "Superun",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 1.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 1.0
+            }
+          },
+          {
+            "brand": "Swingline",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "TFROCO",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "TI-TOO",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "TICONN",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 1.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "TOMORO",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "TORRO",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "TRQ",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "TUMOVO",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "TUOB",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 1.0
+            }
+          },
+          {
+            "brand": "TWINSLUXES",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "Techion",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "The Step",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "Timberland",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "Tornado",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 1.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "Towallmark",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "Trend",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "Twinkle Star",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "UUCOVERS",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "UULMBUJ",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "UorMe",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 1.0
+            }
+          },
+          {
+            "brand": "VESAFE",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "VEVOR",
+            "sku_count": 5,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.2,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.2
+            }
+          },
+          {
+            "brand": "VISDOLL",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "VIVOHOME",
+            "sku_count": 2,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 1.0
+            }
+          },
+          {
+            "brand": "Vearter",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "VersionTECH.",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "Vesgantti",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "Volkano",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 1.0
+            }
+          },
+          {
+            "brand": "WILSON",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.0,
+              "parallel_ready": 1.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "WINGBO",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 1.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "WOW! STUFF",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "Wagner",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 1.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "Wearable4U",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "Wenew",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 1.0
+            }
+          },
+          {
+            "brand": "WhiteFang",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 1.0
+            }
+          },
+          {
+            "brand": "Wired Whisk",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "Wolverine",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "Wyocks",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 1.0
+            }
+          },
+          {
+            "brand": "XWQHJW",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "YABER",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 1.0
+            }
+          },
+          {
+            "brand": "YORWHIN",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "YSAGi",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "YSCare",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 1.0
+            }
+          },
+          {
+            "brand": "YSSOA",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 1.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "Yes4All",
+            "sku_count": 2,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "YiHICO",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "ZAFLY",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "ZRRHOO",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "Zak Designs",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "Zeerkeer",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 1.0
+            }
+          },
+          {
+            "brand": "ZeroPone",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "Zevnico",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "adidas",
+            "sku_count": 5,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.2,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "be studied",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "crysting",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 1.0
+            }
+          },
+          {
+            "brand": "defean",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "elago",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "harrrrd",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "iGrow",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 1.0
+            }
+          },
+          {
+            "brand": "item4ever",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 1.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "kmucutie",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "seceles",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "thermomate",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 0.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          },
+          {
+            "brand": "wusoda",
+            "sku_count": 1,
+            "coverage": {
+              "quiet": 1.0,
+              "led": 0.0,
+              "parallel_ready": 0.0,
+              "quick_release": 0.0,
+              "budget": 0.0,
+              "portable": 0.0
+            }
+          }
+        ]
+      }
+    },
+    "2.5": {
+      "title": "评论情绪与痛点主题",
+      "metrics": {
+        "sentiment_mix": {
+          "positive": 0.6804,
+          "neutral": 0.2772,
+          "negative": 0.0423
+        },
+        "top_negative_themes": [
+          {
+            "theme": "quality_issue",
+            "count": 25,
+            "share_of_negative_reviews": 0.5952
+          },
+          {
+            "theme": "value_for_money",
+            "count": 16,
+            "share_of_negative_reviews": 0.381
+          },
+          {
+            "theme": "shipping_damage",
+            "count": 14,
+            "share_of_negative_reviews": 0.3333
+          },
+          {
+            "theme": "fitment_mismatch",
+            "count": 10,
+            "share_of_negative_reviews": 0.2381
+          },
+          {
+            "theme": "ease_of_use",
+            "count": 9,
+            "share_of_negative_reviews": 0.2143
+          }
+        ],
+        "top_positive_themes": [
+          {
+            "theme": "ease_of_use",
+            "count": 231,
+            "share_of_positive_reviews": 0.3422
+          },
+          {
+            "theme": "value_for_money",
+            "count": 191,
+            "share_of_positive_reviews": 0.283
+          },
+          {
+            "theme": "fitment_mismatch",
+            "count": 170,
+            "share_of_positive_reviews": 0.2519
+          },
+          {
+            "theme": "shipping_damage",
+            "count": 125,
+            "share_of_positive_reviews": 0.1852
+          },
+          {
+            "theme": "quality_issue",
+            "count": 76,
+            "share_of_positive_reviews": 0.1126
+          }
+        ],
+        "pain_points": [
+          {
+            "theme": "quality_issue",
+            "count": 25,
+            "intensity": 0.0625
+          },
+          {
+            "theme": "value_for_money",
+            "count": 16,
+            "intensity": 0.0393
+          },
+          {
+            "theme": "shipping_damage",
+            "count": 14,
+            "intensity": 0.0393
+          },
+          {
+            "theme": "fitment_mismatch",
+            "count": 10,
+            "intensity": 0.0242
+          },
+          {
+            "theme": "ease_of_use",
+            "count": 9,
+            "intensity": 0.0232
+          }
+        ],
+        "review_count": 992
+      }
+    },
+    "2.6": {
+      "title": "货架动态与生存分析",
+      "metrics": {
+        "listing_count": 1000,
+        "median_lifetime_days": 1,
+        "active_rate": 0.001,
+        "survival_curve": [
+          {
+            "day": 0,
+            "survival_rate": 1.0,
+            "at_risk": 1000,
+            "deaths": 0,
+            "censored": 0
+          },
+          {
+            "day": 1,
+            "survival_rate": 0.001,
+            "at_risk": 1000,
+            "deaths": 999,
+            "censored": 1
+          }
+        ],
+        "entry_exit_velocity": [
+          {
+            "week": "2022-W36",
+            "entries": 4,
+            "exits": 4,
+            "net_change": 0
+          },
+          {
+            "week": "2022-W37",
+            "entries": 29,
+            "exits": 29,
+            "net_change": 0
+          },
+          {
+            "week": "2022-W38",
+            "entries": 34,
+            "exits": 34,
+            "net_change": 0
+          },
+          {
+            "week": "2022-W39",
+            "entries": 17,
+            "exits": 17,
+            "net_change": 0
+          },
+          {
+            "week": "2022-W40",
+            "entries": 11,
+            "exits": 11,
+            "net_change": 0
+          },
+          {
+            "week": "2022-W41",
+            "entries": 23,
+            "exits": 23,
+            "net_change": 0
+          },
+          {
+            "week": "2022-W42",
+            "entries": 7,
+            "exits": 7,
+            "net_change": 0
+          },
+          {
+            "week": "2022-W43",
+            "entries": 4,
+            "exits": 4,
+            "net_change": 0
+          },
+          {
+            "week": "2023-W17",
+            "entries": 3,
+            "exits": 3,
+            "net_change": 0
+          },
+          {
+            "week": "2023-W18",
+            "entries": 4,
+            "exits": 4,
+            "net_change": 0
+          },
+          {
+            "week": "2023-W19",
+            "entries": 4,
+            "exits": 4,
+            "net_change": 0
+          },
+          {
+            "week": "2023-W20",
+            "entries": 16,
+            "exits": 16,
+            "net_change": 0
+          },
+          {
+            "week": "2023-W21",
+            "entries": 11,
+            "exits": 11,
+            "net_change": 0
+          },
+          {
+            "week": "2023-W22",
+            "entries": 7,
+            "exits": 7,
+            "net_change": 0
+          },
+          {
+            "week": "2023-W31",
+            "entries": 84,
+            "exits": 84,
+            "net_change": 0
+          },
+          {
+            "week": "2023-W32",
+            "entries": 99,
+            "exits": 99,
+            "net_change": 0
+          },
+          {
+            "week": "2023-W33",
+            "entries": 71,
+            "exits": 71,
+            "net_change": 0
+          },
+          {
+            "week": "2023-W34",
+            "entries": 73,
+            "exits": 73,
+            "net_change": 0
+          },
+          {
+            "week": "2023-W36",
+            "entries": 22,
+            "exits": 22,
+            "net_change": 0
+          },
+          {
+            "week": "2023-W37",
+            "entries": 25,
+            "exits": 25,
+            "net_change": 0
+          },
+          {
+            "week": "2023-W40",
+            "entries": 31,
+            "exits": 31,
+            "net_change": 0
+          },
+          {
+            "week": "2023-W41",
+            "entries": 11,
+            "exits": 11,
+            "net_change": 0
+          },
+          {
+            "week": "2023-W42",
+            "entries": 20,
+            "exits": 20,
+            "net_change": 0
+          },
+          {
+            "week": "2023-W43",
+            "entries": 7,
+            "exits": 7,
+            "net_change": 0
+          },
+          {
+            "week": "2023-W46",
+            "entries": 10,
+            "exits": 10,
+            "net_change": 0
+          },
+          {
+            "week": "2024-W02",
+            "entries": 1,
+            "exits": 1,
+            "net_change": 0
+          },
+          {
+            "week": "2024-W03",
+            "entries": 86,
+            "exits": 86,
+            "net_change": 0
+          },
+          {
+            "week": "2024-W04",
+            "entries": 1,
+            "exits": 1,
+            "net_change": 0
+          },
+          {
+            "week": "2024-W05",
+            "entries": 21,
+            "exits": 21,
+            "net_change": 0
+          },
+          {
+            "week": "2024-W07",
+            "entries": 5,
+            "exits": 5,
+            "net_change": 0
+          },
+          {
+            "week": "2024-W08",
+            "entries": 5,
+            "exits": 5,
+            "net_change": 0
+          },
+          {
+            "week": "2024-W09",
+            "entries": 16,
+            "exits": 16,
+            "net_change": 0
+          },
+          {
+            "week": "2024-W11",
+            "entries": 21,
+            "exits": 21,
+            "net_change": 0
+          },
+          {
+            "week": "2024-W14",
+            "entries": 13,
+            "exits": 13,
+            "net_change": 0
+          },
+          {
+            "week": "2024-W16",
+            "entries": 15,
+            "exits": 15,
+            "net_change": 0
+          },
+          {
+            "week": "2024-W17",
+            "entries": 3,
+            "exits": 3,
+            "net_change": 0
+          },
+          {
+            "week": "2024-W18",
+            "entries": 41,
+            "exits": 41,
+            "net_change": 0
+          },
+          {
+            "week": "2024-W19",
+            "entries": 1,
+            "exits": 1,
+            "net_change": 0
+          },
+          {
+            "week": "2024-W20",
+            "entries": 38,
+            "exits": 38,
+            "net_change": 0
+          },
+          {
+            "week": "2024-W22",
+            "entries": 16,
+            "exits": 16,
+            "net_change": 0
+          },
+          {
+            "week": "2024-W23",
+            "entries": 2,
+            "exits": 2,
+            "net_change": 0
+          },
+          {
+            "week": "2024-W24",
+            "entries": 36,
+            "exits": 36,
+            "net_change": 0
+          },
+          {
+            "week": "2024-W26",
+            "entries": 15,
+            "exits": 15,
+            "net_change": 0
+          },
+          {
+            "week": "2024-W27",
+            "entries": 1,
+            "exits": 1,
+            "net_change": 0
+          },
+          {
+            "week": "2024-W28",
+            "entries": 36,
+            "exits": 35,
+            "net_change": 1
+          }
+        ],
+        "price_band_exit_risk": {
+          "budget": 0.996,
+          "mass": 1.0,
+          "premium": 1.0,
+          "upper_mid": 1.0
+        }
+      }
+    }
+  },
+  "uncertainty": {
+    "market_structure": {
+      "top_sku_share": {
+        "point_estimate": 0.2371,
+        "ci_lower": 0.1627,
+        "ci_upper": 0.4689,
+        "iterations": 400,
+        "alpha": 0.05
+      }
+    },
+    "price": {
+      "median_realized_price": {
+        "statistic": "median",
+        "point_estimate": 24.36,
+        "ci_lower": 22.17,
+        "ci_upper": 26.19,
+        "iterations": 400,
+        "alpha": 0.05
+      }
+    },
+    "reviews": {
+      "negative_review_rate": {
+        "point_estimate": 0.0423,
+        "ci_lower": 0.0302,
+        "ci_upper": 0.0544,
+        "iterations": 400,
+        "alpha": 0.05
+      }
+    },
+    "listing_dynamics": {
+      "median_lifetime_days": {
+        "statistic": "median",
+        "point_estimate": 1.0,
+        "ci_lower": 1.0,
+        "ci_upper": 1.0,
+        "iterations": 400,
+        "alpha": 0.05
+      }
+    }
+  },
+  "validation": {
+    "summary": {
+      "pass_count": 8,
+      "review_count": 0,
+      "fail_count": 0
+    },
+    "checks": [
+      {
+        "check_id": "platform_mix_integrity",
+        "status": "pass",
+        "source": {
+          "label": "Part 2 GMV Accounting",
+          "url": ""
+        },
+        "method": "Platform GMV shares should reconcile back to 100% of observed GMV.",
+        "evidence": {
+          "platform_share_sum": 1.0,
+          "missing_input": false
+        }
+      },
+      {
+        "check_id": "brand_concentration_thresholds",
+        "status": "pass",
+        "source": {
+          "label": "Part 2 GMV Accounting",
+          "url": ""
+        },
+        "method": "Brand concentration level should match HHI threshold classification.",
+        "evidence": {
+          "brand_hhi": 232.13,
+          "expected_level": "unconcentrated",
+          "reported_level": "unconcentrated"
+        }
+      },
+      {
+        "check_id": "sweet_spot_consistency",
+        "status": "pass",
+        "source": {
+          "label": "Part 2 Price Distribution and Sweet Spot",
+          "url": ""
+        },
+        "method": "Sweet spot band should match the highest weighted price-band share.",
+        "evidence": {
+          "reported_sweet_spot": "$0-$580",
+          "max_share_band": "$0-$580",
+          "missing_input": false
+        }
+      },
+      {
+        "check_id": "discount_rate_range",
+        "status": "pass",
+        "source": {
+          "label": "Part 2 Price Distribution and Sweet Spot",
+          "url": ""
+        },
+        "method": "Weighted average discount rate should stay within a 0-1 range.",
+        "evidence": {
+          "weighted_average_discount_rate": 0.1928
+        }
+      },
+      {
+        "check_id": "attribute_outperformance_range",
+        "status": "pass",
+        "source": {
+          "label": "Part 2 Attribute Outperformance",
+          "url": ""
+        },
+        "method": "Attribute outperformance is a share delta and should remain between -1 and 1.",
+        "evidence": {
+          "attribute_count": 10,
+          "missing_input": false
+        }
+      },
+      {
+        "check_id": "sentiment_mix_integrity",
+        "status": "pass",
+        "source": {
+          "label": "Part 2 Review Sentiment",
+          "url": ""
+        },
+        "method": "Positive, neutral, and negative review shares should approximately reconcile to 100%.",
+        "evidence": {
+          "sentiment_share_sum": 0.9999,
+          "missing_input": false
+        }
+      },
+      {
+        "check_id": "survival_curve_monotonicity",
+        "status": "pass",
+        "source": {
+          "label": "Part 2 Listing Survival",
+          "url": ""
+        },
+        "method": "Kaplan-Meier style survival estimates should be non-increasing over time.",
+        "evidence": {
+          "curve_points": 2,
+          "missing_input": false
+        }
+      },
+      {
+        "check_id": "exit_risk_range",
+        "status": "pass",
+        "source": {
+          "label": "Part 2 Listing Survival",
+          "url": ""
+        },
+        "method": "Price-band exit risk is a rate and should remain within a 0-1 range.",
+        "evidence": {
+          "band_count": 4,
+          "missing_input": false
+        }
+      }
+    ]
+  }
+}

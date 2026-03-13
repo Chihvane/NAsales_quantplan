@@ -1,0 +1,4 @@
+canonical_sku,brand,category_path,title,attribute_tokens
+B0GEN2200,VoltEdge,Generators > Portable Generators,VoltEdge 2200W Dual Fuel Quiet Inverter Generator,dual_fuel|inverter|quiet|electric_start|co_sensor
+B0GEN3000,NorthPeak,Generators > Portable Generators,NorthPeak 3000W Remote Start Dual Fuel Generator,dual_fuel|electric_start|remote_start|co_sensor|wheel_kit
+B0GEN2100,StormSafe,Generators > Portable Generators,StormSafe 2100W CO Sensor Portable Generator,electric_start|co_sensor|portable|compact

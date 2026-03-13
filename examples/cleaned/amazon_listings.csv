@@ -1,0 +1,4 @@
+sku_id,platform,brand,list_price,monthly_sales_estimate,rating,review_count
+B0AMZ001,Amazon,BrandA,399.00,320,4.6,1520
+B0AMZ002,Amazon,BrandB,289.00,410,4.5,1840
+B0AMZ003,Amazon,WhiteLabelX,169.00,360,4.1,510

@@ -1,0 +1,835 @@
+{
+  "metadata": {
+    "section_structure": {
+      "3.1": {
+        "title": "中国供应端结构分析",
+        "required_tables": [
+          "suppliers"
+        ],
+        "metric_ids": [
+          "supply_structure"
+        ]
+      },
+      "3.2": {
+        "title": "国内采购与报价策略分析",
+        "required_tables": [
+          "rfq_quotes",
+          "suppliers"
+        ],
+        "metric_ids": [
+          "rfq_quote_structure"
+        ]
+      },
+      "3.3": {
+        "title": "合规、认证与准入门槛分析",
+        "required_tables": [
+          "compliance_requirements"
+        ],
+        "metric_ids": [
+          "compliance_gating"
+        ]
+      },
+      "3.4": {
+        "title": "出口路径与物流履约分析",
+        "required_tables": [
+          "logistics_quotes",
+          "shipment_events"
+        ],
+        "metric_ids": [
+          "logistics_route_efficiency"
+        ]
+      },
+      "3.5": {
+        "title": "到岸成本与利润安全边际分析",
+        "required_tables": [
+          "rfq_quotes",
+          "logistics_quotes",
+          "compliance_requirements",
+          "tariff_tax"
+        ],
+        "metric_ids": [
+          "landed_cost_margin"
+        ]
+      },
+      "3.6": {
+        "title": "风险矩阵与应对策略",
+        "required_tables": [
+          "suppliers",
+          "compliance_requirements",
+          "logistics_quotes",
+          "shipment_events"
+        ],
+        "metric_ids": [
+          "risk_matrix"
+        ]
+      },
+      "3.7": {
+        "title": "推荐进入路径与首批执行方案",
+        "required_tables": [
+          "rfq_quotes",
+          "logistics_quotes",
+          "suppliers"
+        ],
+        "metric_ids": [
+          "entry_strategy"
+        ]
+      }
+    },
+    "metric_specs": [
+      {
+        "section_id": "3.1",
+        "metric_id": "supply_structure",
+        "label": "供应端成熟度与结构",
+        "required_tables": [
+          "suppliers"
+        ],
+        "formula": "统计供应商数量、类型占比、产业带占比、MOQ、打样周期、量产周期与能力评分。",
+        "output_note": "用于判断该品类在中国是否属于成熟供应链品类。"
+      },
+      {
+        "section_id": "3.2",
+        "metric_id": "rfq_quote_structure",
+        "label": "RFQ 报价结构与 MOQ 曲线",
+        "required_tables": [
+          "rfq_quotes",
+          "suppliers"
+        ],
+        "formula": "quoted_unit_cost = 单价 + 包装 + 定制 + 样品费/MOQ + 模具费/MOQ；再按 Incoterm 与 MOQ 分组统计。",
+        "output_note": "用于识别采购主流价带、条款差异与工厂/贸易商价差。"
+      },
+      {
+        "section_id": "3.3",
+        "metric_id": "compliance_gating",
+        "label": "合规门槛与认证成本",
+        "required_tables": [
+          "compliance_requirements"
+        ],
+        "formula": "统计 mandatory 要求数量、关键路径天数、总成本与高风险项占比。",
+        "output_note": "用于判断货能否顺利进入北美并完成平台上架。"
+      },
+      {
+        "section_id": "3.4",
+        "metric_id": "logistics_route_efficiency",
+        "label": "出口路径与物流效率",
+        "required_tables": [
+          "logistics_quotes",
+          "shipment_events"
+        ],
+        "formula": "基于 cost、lead_time、volatility 构建 route_score，并计算实际交期、准时率与清关延迟率。",
+        "output_note": "用于识别试单期和稳定补货期的推荐路径。"
+      },
+      {
+        "section_id": "3.5",
+        "metric_id": "landed_cost_margin",
+        "label": "到岸成本与利润安全边际",
+        "required_tables": [
+          "rfq_quotes",
+          "logistics_quotes",
+          "tariff_tax",
+          "compliance_requirements"
+        ],
+        "formula": "sellable_cost = landed_cost + working_capital + return_reserve；net_margin = 售价 - 渠道费 - 营销费 - sellable_cost。",
+        "output_note": "用于判断该品类是否具备中国供应链落地优势。"
+      },
+      {
+        "section_id": "3.6",
+        "metric_id": "risk_matrix",
+        "label": "风险矩阵与优先级",
+        "required_tables": [
+          "suppliers",
+          "compliance_requirements",
+          "logistics_quotes",
+          "shipment_events"
+        ],
+        "formula": "综合供应、合规、物流、关税和利润安全边际构造 severity_score。",
+        "output_note": "用于形成高优先级风险和对应 mitigation 动作。"
+      },
+      {
+        "section_id": "3.7",
+        "metric_id": "entry_strategy",
+        "label": "推荐进入路径与首批执行方案",
+        "required_tables": [
+          "rfq_quotes",
+          "logistics_quotes",
+          "suppliers"
+        ],
+        "formula": "基于最佳成本情景、风险分数与供应成熟度输出 recommendation 与 first batch plan。",
+        "output_note": "用于形成首批试单和 90 天执行建议。"
+      }
+    ],
+    "assumptions": {
+      "target_market": "US",
+      "target_sell_price": 699.0,
+      "target_order_units": 500,
+      "channel_fee_rate": 0.15,
+      "marketing_fee_rate": 0.08,
+      "return_rate": 0.04,
+      "return_cost_per_unit": 24.0,
+      "working_capital_rate": 0.02
+    }
+  },
+  "sections": {
+    "3.1": {
+      "title": "中国供应端结构分析",
+      "metrics": {
+        "supplier_count": 6,
+        "supplier_type_share": {
+          "factory": 0.5,
+          "trader": 0.3333,
+          "wholesaler": 0.1667
+        },
+        "regional_share": {
+          "Guangdong": 0.3333,
+          "Fujian": 0.1667,
+          "Zhejiang": 0.1667,
+          "Jiangsu": 0.1667,
+          "Chongqing": 0.1667
+        },
+        "factory_share": 0.5,
+        "oem_share": 0.5,
+        "odm_share": 0.3333,
+        "average_moq": 216.67,
+        "median_sample_days": 6.5,
+        "median_production_days": 22.0,
+        "average_capacity_score": 4.03,
+        "average_compliance_support_score": 3.83,
+        "supply_maturity_score": 0.7757,
+        "supply_maturity_level": "high"
+      }
+    },
+    "3.2": {
+      "title": "国内采购与报价策略分析",
+      "metrics": {
+        "incoterm_median_quoted_cost": {
+          "DDP": 317.1,
+          "EXW": 290.8,
+          "FOB": 266.02
+        },
+        "supplier_type_median_quoted_cost": {
+          "factory": 271.6,
+          "trader": 293.0,
+          "wholesaler": 325.6
+        },
+        "factory_vs_trade_cost_gap": 0.0788,
+        "price_dispersion_ratio": 0.2394,
+        "best_quotes": [
+          {
+            "supplier_id": "S001",
+            "supplier_name": "Fujian Powertek",
+            "supplier_type": "factory",
+            "incoterm": "FOB",
+            "moq_tier": 500,
+            "quoted_unit_cost": 262.7
+          },
+          {
+            "supplier_id": "S005",
+            "supplier_name": "Chongqing EngineLab",
+            "supplier_type": "factory",
+            "incoterm": "FOB",
+            "moq_tier": 500,
+            "quoted_unit_cost": 266.02
+          },
+          {
+            "supplier_id": "S002",
+            "supplier_name": "Zhejiang GridWorks",
+            "supplier_type": "factory",
+            "incoterm": "FOB",
+            "moq_tier": 300,
+            "quoted_unit_cost": 271.6
+          },
+          {
+            "supplier_id": "S001",
+            "supplier_name": "Fujian Powertek",
+            "supplier_type": "factory",
+            "incoterm": "EXW",
+            "moq_tier": 200,
+            "quoted_unit_cost": 276.25
+          },
+          {
+            "supplier_id": "S006",
+            "supplier_name": "Shenzhen Global Source",
+            "supplier_type": "trader",
+            "incoterm": "EXW",
+            "moq_tier": 150,
+            "quoted_unit_cost": 290.8
+          }
+        ],
+        "moq_curve": [
+          {
+            "moq_tier": 50,
+            "average_quoted_unit_cost": 325.6
+          },
+          {
+            "moq_tier": 100,
+            "average_quoted_unit_cost": 295.2
+          },
+          {
+            "moq_tier": 150,
+            "average_quoted_unit_cost": 290.8
+          },
+          {
+            "moq_tier": 200,
+            "average_quoted_unit_cost": 276.25
+          },
+          {
+            "moq_tier": 300,
+            "average_quoted_unit_cost": 290.1
+          },
+          {
+            "moq_tier": 500,
+            "average_quoted_unit_cost": 264.36
+          }
+        ]
+      }
+    },
+    "3.3": {
+      "title": "合规、认证与准入门槛分析",
+      "metrics": {
+        "target_market": "US",
+        "requirement_count": 5,
+        "mandatory_requirement_count": 3,
+        "mandatory_estimated_cost": 22300.0,
+        "mandatory_estimated_days": 60,
+        "mandatory_cost_per_unit": 44.6,
+        "high_risk_mandatory_share": 0.6667,
+        "risk_distribution": {
+          "high": 0.4,
+          "medium": 0.6
+        },
+        "gating_requirements": [
+          {
+            "requirement_name": "EPA small SI engine",
+            "requirement_type": "emissions",
+            "estimated_cost": 12000.0,
+            "estimated_days": 60,
+            "risk_level": "high"
+          },
+          {
+            "requirement_name": "ETL / UL equivalent electrical safety",
+            "requirement_type": "safety",
+            "estimated_cost": 9500.0,
+            "estimated_days": 45,
+            "risk_level": "high"
+          },
+          {
+            "requirement_name": "carton label and warning manual",
+            "requirement_type": "labeling",
+            "estimated_cost": 800.0,
+            "estimated_days": 10,
+            "risk_level": "medium"
+          }
+        ]
+      }
+    },
+    "3.4": {
+      "title": "出口路径与物流履约分析",
+      "metrics": {
+        "route_count": 5,
+        "shipping_mode_mix": {
+          "sea_fcl": 0.4,
+          "sea_lcl": 0.2,
+          "air": 0.2,
+          "parcel_ddp": 0.2
+        },
+        "best_routes": [
+          {
+            "route_id": "R001",
+            "origin": "Ningbo",
+            "destination": "Los Angeles",
+            "shipping_mode": "sea_fcl",
+            "incoterm": "FOB",
+            "cost_value": 28.0,
+            "lead_time_days": 24,
+            "volatility_score": 0.18,
+            "route_score": 0.6256
+          },
+          {
+            "route_id": "R004",
+            "origin": "Shenzhen",
+            "destination": "Los Angeles",
+            "shipping_mode": "air",
+            "incoterm": "EXW",
+            "cost_value": 96.0,
+            "lead_time_days": 8,
+            "volatility_score": 0.11,
+            "route_score": 0.55
+          },
+          {
+            "route_id": "R003",
+            "origin": "Shanghai",
+            "destination": "Dallas",
+            "shipping_mode": "sea_fcl",
+            "incoterm": "FOB",
+            "cost_value": 34.0,
+            "lead_time_days": 29,
+            "volatility_score": 0.17,
+            "route_score": 0.518
+          },
+          {
+            "route_id": "R005",
+            "origin": "Shanghai",
+            "destination": "Ontario",
+            "shipping_mode": "parcel_ddp",
+            "incoterm": "DDP",
+            "cost_value": 58.0,
+            "lead_time_days": 22,
+            "volatility_score": 0.2,
+            "route_score": 0.4297
+          },
+          {
+            "route_id": "R002",
+            "origin": "Shenzhen",
+            "destination": "Los Angeles",
+            "shipping_mode": "sea_lcl",
+            "incoterm": "EXW",
+            "cost_value": 41.0,
+            "lead_time_days": 28,
+            "volatility_score": 0.24,
+            "route_score": 0.3806
+          }
+        ],
+        "average_actual_lead_time_days": 28.2,
+        "median_actual_lead_time_days": 30,
+        "delay_rate": 0.6,
+        "on_time_rate": 0.4,
+        "customs_delay_rate": 0.2
+      }
+    },
+    "3.5": {
+      "title": "到岸成本与利润安全边际分析",
+      "metrics": {
+        "target_sell_price": 699.0,
+        "target_order_units": 500,
+        "tariff_total_rate": 0.1,
+        "scenarios_evaluated": 14,
+        "best_scenario": {
+          "supplier_id": "S001",
+          "supplier_name": "Fujian Powertek",
+          "supplier_type": "factory",
+          "incoterm": "FOB",
+          "shipping_mode": "sea_fcl",
+          "route_id": "R001",
+          "moq_tier": 500,
+          "procurement_cost": 262.7,
+          "compliance_cost": 44.6,
+          "logistics_cost": 28.0,
+          "duty_cost": 26.27,
+          "fees_cost": 10.5,
+          "landed_cost": 372.07,
+          "working_capital_cost": 7.44,
+          "return_reserve": 0.96,
+          "sellable_cost": 380.47,
+          "channel_fee": 104.85,
+          "marketing_fee": 55.92,
+          "net_margin": 157.76,
+          "net_margin_rate": 0.2257,
+          "break_even_price": 494.12
+        },
+        "top_scenarios": [
+          {
+            "supplier_id": "S001",
+            "supplier_name": "Fujian Powertek",
+            "supplier_type": "factory",
+            "incoterm": "FOB",
+            "shipping_mode": "sea_fcl",
+            "route_id": "R001",
+            "moq_tier": 500,
+            "procurement_cost": 262.7,
+            "compliance_cost": 44.6,
+            "logistics_cost": 28.0,
+            "duty_cost": 26.27,
+            "fees_cost": 10.5,
+            "landed_cost": 372.07,
+            "working_capital_cost": 7.44,
+            "return_reserve": 0.96,
+            "sellable_cost": 380.47,
+            "channel_fee": 104.85,
+            "marketing_fee": 55.92,
+            "net_margin": 157.76,
+            "net_margin_rate": 0.2257,
+            "break_even_price": 494.12
+          },
+          {
+            "supplier_id": "S005",
+            "supplier_name": "Chongqing EngineLab",
+            "supplier_type": "factory",
+            "incoterm": "FOB",
+            "shipping_mode": "sea_fcl",
+            "route_id": "R001",
+            "moq_tier": 500,
+            "procurement_cost": 266.02,
+            "compliance_cost": 44.6,
+            "logistics_cost": 28.0,
+            "duty_cost": 26.6,
+            "fees_cost": 10.5,
+            "landed_cost": 375.72,
+            "working_capital_cost": 7.51,
+            "return_reserve": 0.96,
+            "sellable_cost": 384.2,
+            "channel_fee": 104.85,
+            "marketing_fee": 55.92,
+            "net_margin": 154.03,
+            "net_margin_rate": 0.2204,
+            "break_even_price": 498.96
+          },
+          {
+            "supplier_id": "S002",
+            "supplier_name": "Zhejiang GridWorks",
+            "supplier_type": "factory",
+            "incoterm": "DDP",
+            "shipping_mode": "included_in_quote",
+            "route_id": "included",
+            "moq_tier": 300,
+            "procurement_cost": 308.6,
+            "compliance_cost": 44.6,
+            "logistics_cost": 0.0,
+            "duty_cost": 0.0,
+            "fees_cost": 24.69,
+            "landed_cost": 377.89,
+            "working_capital_cost": 7.56,
+            "return_reserve": 0.96,
+            "sellable_cost": 386.41,
+            "channel_fee": 104.85,
+            "marketing_fee": 55.92,
+            "net_margin": 151.82,
+            "net_margin_rate": 0.2172,
+            "break_even_price": 501.83
+          },
+          {
+            "supplier_id": "S001",
+            "supplier_name": "Fujian Powertek",
+            "supplier_type": "factory",
+            "incoterm": "FOB",
+            "shipping_mode": "sea_fcl",
+            "route_id": "R003",
+            "moq_tier": 500,
+            "procurement_cost": 262.7,
+            "compliance_cost": 44.6,
+            "logistics_cost": 34.0,
+            "duty_cost": 26.27,
+            "fees_cost": 10.5,
+            "landed_cost": 378.07,
+            "working_capital_cost": 7.56,
+            "return_reserve": 0.96,
+            "sellable_cost": 386.59,
+            "channel_fee": 104.85,
+            "marketing_fee": 55.92,
+            "net_margin": 151.64,
+            "net_margin_rate": 0.2169,
+            "break_even_price": 502.07
+          },
+          {
+            "supplier_id": "S005",
+            "supplier_name": "Chongqing EngineLab",
+            "supplier_type": "factory",
+            "incoterm": "FOB",
+            "shipping_mode": "sea_fcl",
+            "route_id": "R003",
+            "moq_tier": 500,
+            "procurement_cost": 266.02,
+            "compliance_cost": 44.6,
+            "logistics_cost": 34.0,
+            "duty_cost": 26.6,
+            "fees_cost": 10.5,
+            "landed_cost": 381.72,
+            "working_capital_cost": 7.63,
+            "return_reserve": 0.96,
+            "sellable_cost": 390.32,
+            "channel_fee": 104.85,
+            "marketing_fee": 55.92,
+            "net_margin": 147.91,
+            "net_margin_rate": 0.2116,
+            "break_even_price": 506.9
+          }
+        ],
+        "margin_safety_level": "low",
+        "cost_breakdown": {
+          "procurement_cost": 262.7,
+          "compliance_cost": 44.6,
+          "logistics_cost": 28.0,
+          "duty_cost": 26.27,
+          "fees_cost": 10.5,
+          "working_capital_cost": 7.44,
+          "return_reserve": 0.96
+        },
+        "break_even_price": 494.12,
+        "monte_carlo": {
+          "iterations": 1200,
+          "seed": 42,
+          "loss_probability": 0.0,
+          "margin_below_15pct_probability": 0.0217,
+          "expected_net_margin": 132.38,
+          "expected_net_margin_rate": 0.193,
+          "percentile_bands": {
+            "landed_cost": {
+              "p10": 371.815,
+              "p50": 381.2742,
+              "p90": 392.8049
+            },
+            "sellable_cost": {
+              "p10": 381.2475,
+              "p50": 391.2353,
+              "p90": 402.8796
+            },
+            "net_margin": {
+              "p10": 111.2192,
+              "p50": 133.1402,
+              "p90": 152.8459
+            },
+            "net_margin_rate": {
+              "p10": 0.166,
+              "p50": 0.1943,
+              "p90": 0.2192
+            },
+            "break_even_price": {
+              "p10": 495.9055,
+              "p50": 511.0688,
+              "p90": 528.8775
+            }
+          }
+        }
+      }
+    },
+    "3.6": {
+      "title": "风险矩阵与应对策略",
+      "metrics": {
+        "overall_risk_score": 0.3534,
+        "overall_risk_level": "low",
+        "priority_risks": [
+          {
+            "risk_name": "合规与认证风险",
+            "severity_score": 0.6667,
+            "risk_level": "medium",
+            "mitigation": "先锁定必需认证路径，再决定首批试单节奏。"
+          },
+          {
+            "risk_name": "关税政策风险",
+            "severity_score": 0.4,
+            "risk_level": "low",
+            "mitigation": "将税率变化纳入月度复核并保留 DDP 备选方案。"
+          },
+          {
+            "risk_name": "物流交付风险",
+            "severity_score": 0.39,
+            "risk_level": "low",
+            "mitigation": "试单期保留安全库存并同步准备备选航线。"
+          },
+          {
+            "risk_name": "供应商执行风险",
+            "severity_score": 0.2133,
+            "risk_level": "low",
+            "mitigation": "优先选择工厂直采并保留至少两家可替代供应商。"
+          },
+          {
+            "risk_name": "利润安全边际风险",
+            "severity_score": 0.0972,
+            "risk_level": "low",
+            "mitigation": "先以小批量验证实际转化和退货，再放大备货规模。"
+          }
+        ]
+      }
+    },
+    "3.7": {
+      "title": "推荐进入路径与首批执行方案",
+      "metrics": {
+        "recommendation": "recommended_entry",
+        "recommended_supplier": {
+          "supplier_id": "S001",
+          "supplier_name": "Fujian Powertek",
+          "supplier_type": "factory"
+        },
+        "recommended_path": {
+          "incoterm": "FOB",
+          "shipping_mode": "sea_fcl",
+          "route_id": "R001",
+          "moq_tier": 500
+        },
+        "first_batch_units": 500,
+        "target_break_even_price": 494.12,
+        "next_90_day_actions": [
+          "完成必需认证的时间表与预算锁定。",
+          "与首选供应商完成样品确认和首批 MOQ 谈判。",
+          "按推荐物流路径跑一票试单并记录完整 shipment events。"
+        ]
+      }
+    }
+  },
+  "uncertainty": {
+    "best_landed_cost": {
+      "point_estimate": 372.07,
+      "ci_lower": 372.07,
+      "ci_upper": 382.22,
+      "iterations": 400,
+      "alpha": 0.05
+    },
+    "best_net_margin": {
+      "point_estimate": 157.76,
+      "ci_lower": 147.4,
+      "ci_upper": 157.76,
+      "iterations": 400,
+      "alpha": 0.05
+    },
+    "best_net_margin_rate": {
+      "point_estimate": 0.2257,
+      "ci_lower": 0.2109,
+      "ci_upper": 0.2257,
+      "iterations": 400,
+      "alpha": 0.05
+    },
+    "monte_carlo": {
+      "iterations": 1200,
+      "seed": 42,
+      "loss_probability": 0.0,
+      "margin_below_15pct_probability": 0.0217,
+      "expected_net_margin": 132.38,
+      "expected_net_margin_rate": 0.193,
+      "percentile_bands": {
+        "landed_cost": {
+          "p10": 371.815,
+          "p50": 381.2742,
+          "p90": 392.8049
+        },
+        "sellable_cost": {
+          "p10": 381.2475,
+          "p50": 391.2353,
+          "p90": 402.8796
+        },
+        "net_margin": {
+          "p10": 111.2192,
+          "p50": 133.1402,
+          "p90": 152.8459
+        },
+        "net_margin_rate": {
+          "p10": 0.166,
+          "p50": 0.1943,
+          "p90": 0.2192
+        },
+        "break_even_price": {
+          "p10": 495.9055,
+          "p50": 511.0688,
+          "p90": 528.8775
+        }
+      }
+    }
+  },
+  "validation": {
+    "summary": {
+      "pass_count": 8,
+      "review_count": 0,
+      "fail_count": 0
+    },
+    "checks": [
+      {
+        "check_id": "supplier_type_share_integrity",
+        "status": "pass",
+        "source": {
+          "label": "Part 3 Supply Structure",
+          "url": ""
+        },
+        "method": "Supplier type shares should reconcile back to the full supplier pool.",
+        "evidence": {
+          "supplier_share_sum": 1.0,
+          "missing_input": false
+        }
+      },
+      {
+        "check_id": "moq_curve_order",
+        "status": "pass",
+        "source": {
+          "label": "Part 3 Quote Structure",
+          "url": ""
+        },
+        "method": "MOQ tiers should be sorted ascending before interpreting the quote curve.",
+        "evidence": {
+          "curve_points": 6,
+          "missing_input": false
+        }
+      },
+      {
+        "check_id": "compliance_risk_distribution_integrity",
+        "status": "pass",
+        "source": {
+          "label": "Part 3 Compliance Gating",
+          "url": ""
+        },
+        "method": "Compliance risk distribution should approximately sum to 100% of tracked requirements.",
+        "evidence": {
+          "risk_share_sum": 1.0,
+          "missing_input": false
+        }
+      },
+      {
+        "check_id": "route_score_order_and_delay_range",
+        "status": "pass",
+        "source": {
+          "label": "Part 3 Logistics Execution",
+          "url": ""
+        },
+        "method": "Recommended routes should be sorted by route_score, and delay rate must stay within a 0-1 range.",
+        "evidence": {
+          "route_count": 5,
+          "delay_rate": 0.6,
+          "missing_input": false
+        }
+      },
+      {
+        "check_id": "landed_cost_margin_range",
+        "status": "pass",
+        "source": {
+          "label": "Part 3 Landed Cost",
+          "url": ""
+        },
+        "method": "Best-scenario landed cost should not exceed the modeled sell price, and net margin rate must remain within a valid range.",
+        "evidence": {
+          "landed_cost": 372.07,
+          "sell_price": 699.0,
+          "net_margin_rate": 0.2257,
+          "missing_input": false
+        }
+      },
+      {
+        "check_id": "monte_carlo_percentile_order",
+        "status": "pass",
+        "source": {
+          "label": "Part 3 Landed Cost",
+          "url": ""
+        },
+        "method": "Monte Carlo percentile bands should be monotonic and scenario loss probability must stay within a 0-1 range.",
+        "evidence": {
+          "percentile_bands": {
+            "p10": 0.166,
+            "p50": 0.1943,
+            "p90": 0.2192
+          },
+          "loss_probability": 0.0,
+          "missing_input": false
+        }
+      },
+      {
+        "check_id": "risk_score_range",
+        "status": "pass",
+        "source": {
+          "label": "Part 3 Landed Cost",
+          "url": ""
+        },
+        "method": "Risk severity scores are normalized to a 0-1 range.",
+        "evidence": {
+          "risk_count": 5,
+          "missing_input": false
+        }
+      },
+      {
+        "check_id": "entry_recommendation_enum",
+        "status": "pass",
+        "source": {
+          "label": "Part 3 Landed Cost",
+          "url": ""
+        },
+        "method": "Entry recommendation should map to the fixed recommendation enum.",
+        "evidence": {
+          "recommendation": "recommended_entry"
+        }
+      }
+    ]
+  }
+}

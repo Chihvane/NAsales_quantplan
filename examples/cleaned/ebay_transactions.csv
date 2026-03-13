@@ -1,0 +1,4 @@
+sku_id,platform,date,list_price,actual_price,units
+EBY-001,eBay,2025-06-01,219.00,205.00,62
+EBY-001,eBay,2025-11-25,219.00,189.00,86
+EBY-002,eBay,2025-11-25,349.00,299.00,118

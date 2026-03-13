@@ -1,0 +1,5 @@
+platform,sold_id,listing_id,canonical_sku,sold_at,transaction_price,shipping_fee,units,seller_type
+eBay,EB-GEN2000-2025-10-12,EB-GEN2000,EB-GEN2000,2025-10-12,565.00,20.00,13,reseller
+eBay,EB-GEN2000-2025-11-10,EB-GEN2000,EB-GEN2000,2025-11-10,555.00,20.00,16,reseller
+eBay,EB-GEN2300-2025-10-18,EB-GEN2300,EB-GEN2300,2025-10-18,609.00,20.00,7,reseller
+eBay,EB-GEN2300-2025-11-21,EB-GEN2300,EB-GEN2300,2025-11-21,599.00,20.00,5,reseller

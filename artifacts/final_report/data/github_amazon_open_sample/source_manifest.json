@@ -1,0 +1,11 @@
+{
+  "platform": "Amazon",
+  "transaction_mode": "bought_past_month_plus_rank_calibrated_proxy",
+  "capture_date": "2026-03-12",
+  "rows_in": 1000,
+  "rank_sales_curve": {
+    "sample_size": 204,
+    "intercept": 7.7071,
+    "slope": -0.2999
+  }
+}

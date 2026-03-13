@@ -1,0 +1,5 @@
+{
+  "platform": "eBay",
+  "transaction_mode": "observed_transactions",
+  "rows_in": 4
+}

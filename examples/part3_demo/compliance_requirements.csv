@@ -1,0 +1,6 @@
+market,category,requirement_type,requirement_name,mandatory_flag,estimated_cost,estimated_days,risk_level,notes
+US,portable_generators,emissions,EPA small SI engine,1,12000,60,high,gasoline engine certificate required
+US,portable_generators,safety,ETL / UL equivalent electrical safety,1,9500,45,high,retail and platform acceptance
+US,portable_generators,labeling,carton label and warning manual,1,800,10,medium,include bilingual compliance marks
+US,portable_generators,market_access,California Prop 65 review,0,1200,7,medium,depends on materials disclosure
+US,portable_generators,ip,patent and trademark screening,0,1500,12,medium,screen recoil handle and housing design

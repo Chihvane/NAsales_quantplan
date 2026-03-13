@@ -1,0 +1,9 @@
+supplier_id,sku_version,incoterm,moq_tier,unit_price,sample_fee,tooling_fee,packaging_cost,customization_cost,currency,quote_date
+S001,gen_2200w,EXW,200,258,150,500,9,6,USD,2026-03-01
+S001,gen_2200w,FOB,500,248,150,700,9,4,USD,2026-03-01
+S002,gen_2200w,FOB,300,255,180,900,8,5,USD,2026-03-02
+S002,gen_2200w,DDP,300,292,180,900,8,5,USD,2026-03-02
+S003,gen_2200w,EXW,100,279,120,400,7,4,USD,2026-03-03
+S004,gen_2200w,DDP,50,318,80,0,6,0,USD,2026-03-03
+S005,gen_2200w,FOB,500,250,160,850,10,4,USD,2026-03-04
+S006,gen_2200w,EXW,150,274,120,450,8,5,USD,2026-03-04
