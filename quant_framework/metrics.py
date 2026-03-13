@@ -13,20 +13,24 @@ from .models import (
     SearchTrendRecord,
     TransactionRecord,
 )
+from .stats_utils import (
+    clip as _common_clip,
+    percentile as _common_percentile,
+    round_mapping as _common_round_mapping,
+    safe_divide as _common_safe_divide,
+)
 
 
 def _safe_divide(numerator: float, denominator: float, default: float = 0.0) -> float:
-    if denominator == 0:
-        return default
-    return numerator / denominator
+    return _common_safe_divide(numerator, denominator, default=default)
 
 
 def _round_dict(values: dict[str, float], digits: int = 4) -> dict[str, float]:
-    return {key: round(value, digits) for key, value in values.items()}
+    return _common_round_mapping(values, digits)
 
 
 def _clip(value: float, lower: float, upper: float) -> float:
-    return max(lower, min(value, upper))
+    return _common_clip(value, lower, upper)
 
 
 def _month_bucket(month_value: str) -> str:
@@ -36,19 +40,7 @@ def _month_bucket(month_value: str) -> str:
 
 
 def _percentile(values: list[float], percentile: float) -> float:
-    if not values:
-        return 0.0
-    ordered = sorted(values)
-    if len(ordered) == 1:
-        return ordered[0]
-
-    position = (len(ordered) - 1) * (percentile / 100)
-    lower_index = int(position)
-    upper_index = min(lower_index + 1, len(ordered) - 1)
-    fraction = position - lower_index
-    lower_value = ordered[lower_index]
-    upper_value = ordered[upper_index]
-    return lower_value + (upper_value - lower_value) * fraction
+    return _common_percentile(values, percentile)
 
 
 def _moving_average(series: dict[str, float], window: int) -> dict[str, float]:

@@ -10,6 +10,8 @@ from .models import (
     MarketSizeAssumptions,
     Part2Assumptions,
     Part2Dataset,
+    Part4Assumptions,
+    Part4Dataset,
     Part3Assumptions,
     Part3Dataset,
     ReviewRecord,
@@ -24,21 +26,9 @@ from .part2_metrics import (
 )
 from .part3_metrics import compute_landed_cost_metrics
 from .part3_simulation import run_landed_cost_monte_carlo
-
-
-def _percentile(values: list[float], percentile: float) -> float:
-    if not values:
-        return 0.0
-    ordered = sorted(values)
-    if len(ordered) == 1:
-        return ordered[0]
-    position = (len(ordered) - 1) * (percentile / 100)
-    lower_index = int(position)
-    upper_index = min(lower_index + 1, len(ordered) - 1)
-    fraction = position - lower_index
-    lower_value = ordered[lower_index]
-    upper_value = ordered[upper_index]
-    return lower_value + (upper_value - lower_value) * fraction
+from .part4_metrics import compute_channel_pnl_rows
+from .part4_simulation import run_part4_roi_monte_carlo
+from .stats_utils import percentile as _percentile
 
 
 def _bootstrap_values(
@@ -368,4 +358,52 @@ def build_part3_uncertainty_snapshot(
             "alpha": alpha,
         },
         "monte_carlo": monte_carlo,
+    }
+
+
+def build_part4_uncertainty_snapshot(
+    dataset: Part4Dataset,
+    assumptions: Part4Assumptions,
+    iterations: int = 1200,
+    alpha: float = 0.05,
+    seed: int = 42,
+) -> dict:
+    channel_rows = compute_channel_pnl_rows(dataset, assumptions)
+    if not channel_rows:
+        return {}
+
+    monte_carlo = run_part4_roi_monte_carlo(
+        channel_rows,
+        assumptions,
+        iterations=iterations,
+        seed=seed,
+    )
+    margin_rates = [row.get("contribution_margin_rate", 0.0) for row in channel_rows]
+    payback_periods = [row.get("payback_period_months", 0.0) for row in channel_rows if row.get("payback_period_months", 0.0) > 0]
+    repeat_rates = [row.get("repeat_rate", 0.0) for row in channel_rows]
+    return {
+        "channel_margin_rate": _bootstrap_values(
+            margin_rates,
+            statistic="mean",
+            iterations=max(iterations // 3, 400),
+            alpha=alpha,
+            seed=seed,
+        ),
+        "channel_payback_period": _bootstrap_values(
+            payback_periods,
+            statistic="median",
+            iterations=max(iterations // 3, 400),
+            alpha=alpha,
+            seed=seed,
+        )
+        if payback_periods
+        else {},
+        "channel_repeat_rate": _bootstrap_values(
+            repeat_rates,
+            statistic="mean",
+            iterations=max(iterations // 3, 400),
+            alpha=alpha,
+            seed=seed,
+        ),
+        "roi_monte_carlo": monte_carlo,
     }

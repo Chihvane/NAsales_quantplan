@@ -1,5 +1,16 @@
 {
   "metadata": {
+    "report_id": "part2_quant_report",
+    "report_version": "2026.03",
+    "generated_at": "2026-03-13T13:26:24.444861+00:00",
+    "section_order": [
+      "2.1",
+      "2.2",
+      "2.3",
+      "2.4",
+      "2.5",
+      "2.6"
+    ],
     "section_structure": {
       "2.1": {
         "title": "在售商品与成交结构",
@@ -9,7 +20,11 @@
         ],
         "metric_ids": [
           "sku_gmv_leaderboard"
-        ]
+        ],
+        "quality_targets": {
+          "listing_snapshots": 20,
+          "sold_transactions": 20
+        }
       },
       "2.2": {
         "title": "成交价格带与折扣深度",
@@ -19,7 +34,11 @@
         ],
         "metric_ids": [
           "realized_price_distribution"
-        ]
+        ],
+        "quality_targets": {
+          "listing_snapshots": 20,
+          "sold_transactions": 20
+        }
       },
       "2.3": {
         "title": "价格-评分价值矩阵",
@@ -29,7 +48,11 @@
         ],
         "metric_ids": [
           "price_rating_matrix"
-        ]
+        ],
+        "quality_targets": {
+          "listing_snapshots": 20,
+          "sold_transactions": 20
+        }
       },
       "2.4": {
         "title": "属性画像与白空间机会",
@@ -39,7 +62,11 @@
         ],
         "metric_ids": [
           "attribute_outperformance"
-        ]
+        ],
+        "quality_targets": {
+          "product_catalog": 8,
+          "sold_transactions": 20
+        }
       },
       "2.5": {
         "title": "评论情绪与痛点主题",
@@ -48,7 +75,10 @@
         ],
         "metric_ids": [
           "review_sentiment_topics"
-        ]
+        ],
+        "quality_targets": {
+          "reviews": 16
+        }
       },
       "2.6": {
         "title": "货架动态与生存分析",
@@ -57,7 +87,10 @@
         ],
         "metric_ids": [
           "listing_survival_dynamics"
-        ]
+        ],
+        "quality_targets": {
+          "listing_snapshots": 20
+        }
       }
     },
     "metric_specs": [
@@ -125,11 +158,149 @@
         "formula": "基于首末观察时间与退出事件构造 survival curve，并计算 entry/exit velocity",
         "output_note": "用于衡量 SKU 是否稳定留在货架上。"
       }
+    ],
+    "assumptions": {
+      "leaderboard_size": 5,
+      "sweet_spot_bins": 6,
+      "whitespace_threshold": 0.05,
+      "min_theme_mentions": 1,
+      "min_attribute_support": 2
+    },
+    "table_inventory": {
+      "listing_snapshots": {
+        "record_count": 23,
+        "available": true
+      },
+      "sold_transactions": {
+        "record_count": 23,
+        "available": true
+      },
+      "product_catalog": {
+        "record_count": 8,
+        "available": true
+      },
+      "reviews": {
+        "record_count": 20,
+        "available": true
+      }
+    }
+  },
+  "overview": {
+    "section_count": 6,
+    "average_confidence_score": 1.0,
+    "confidence_mix": {
+      "high": 6,
+      "medium": 0,
+      "low": 0
+    },
+    "headline_metrics": [
+      {
+        "key": "total_gmv",
+        "label": "总 GMV",
+        "value": 188988.0,
+        "unit": "USD"
+      },
+      {
+        "key": "top_sku_share",
+        "label": "Top SKU 份额",
+        "value": 0.8526,
+        "unit": "ratio"
+      },
+      {
+        "key": "sweet_spot_band",
+        "label": "成交甜蜜带",
+        "value": "$662-$689",
+        "unit": "band"
+      },
+      {
+        "key": "negative_review_rate",
+        "label": "负评占比",
+        "value": 0.4,
+        "unit": "ratio"
+      },
+      {
+        "key": "median_lifetime_days",
+        "label": "货架中位生存期",
+        "value": 62.0,
+        "unit": "days"
+      }
+    ],
+    "decision_summary": {
+      "decision_signal": "promising",
+      "decision_score": 0.6513,
+      "scorecard": {
+        "structure_headroom": {
+          "score": 0.3305,
+          "level": "low"
+        },
+        "pricing_fit": {
+          "score": 0.849,
+          "level": "high"
+        },
+        "whitespace_depth": {
+          "score": 1.0,
+          "level": "high"
+        },
+        "shelf_stability": {
+          "score": 0.4256,
+          "level": "low"
+        }
+      },
+      "key_findings": [
+        "当前总 GMV 为 188,988 USD，Top SKU 份额为 85.3%。",
+        "主成交甜蜜带位于 $662-$689，价格实现率约 90.5%。",
+        "当前最强白空间属性为 electric_start，货架中位生存期为 62 天。"
+      ],
+      "risk_flags": [
+        "成交过度集中在少数 SKU，上新后进入头部难度较高。",
+        "负评占比较高，质量或履约痛点可能拖累新品转化。"
+      ],
+      "recommended_next_step": "进入 Part 3，围绕甜蜜带和白空间属性做 RFQ 与 landed cost 验证。"
+    },
+    "decision_signal": "promising",
+    "decision_score": 0.6513,
+    "validation_summary": {
+      "pass_count": 9,
+      "review_count": 0,
+      "fail_count": 0
+    },
+    "uncertainty_keys": [
+      "market_structure",
+      "price",
+      "reviews",
+      "listing_dynamics"
     ]
   },
   "sections": {
     "2.1": {
+      "id": "2.1",
       "title": "在售商品与成交结构",
+      "required_tables": [
+        "listing_snapshots",
+        "sold_transactions"
+      ],
+      "metric_ids": [
+        "sku_gmv_leaderboard"
+      ],
+      "data_quality": {
+        "record_counts": {
+          "listing_snapshots": 23,
+          "sold_transactions": 23
+        },
+        "available_tables": [
+          "listing_snapshots",
+          "sold_transactions"
+        ],
+        "missing_tables": [],
+        "completeness_ratio": 1.0,
+        "richness_ratio": 1.0,
+        "quality_score": 1.0,
+        "quality_level": "high"
+      },
+      "confidence": {
+        "score": 1.0,
+        "level": "high"
+      },
       "metrics": {
         "total_gmv": 188988.0,
         "total_units": 293,
@@ -227,7 +398,34 @@
       }
     },
     "2.2": {
+      "id": "2.2",
       "title": "成交价格带与折扣深度",
+      "required_tables": [
+        "listing_snapshots",
+        "sold_transactions"
+      ],
+      "metric_ids": [
+        "realized_price_distribution"
+      ],
+      "data_quality": {
+        "record_counts": {
+          "listing_snapshots": 23,
+          "sold_transactions": 23
+        },
+        "available_tables": [
+          "listing_snapshots",
+          "sold_transactions"
+        ],
+        "missing_tables": [],
+        "completeness_ratio": 1.0,
+        "richness_ratio": 1.0,
+        "quality_score": 1.0,
+        "quality_level": "high"
+      },
+      "confidence": {
+        "score": 1.0,
+        "level": "high"
+      },
       "metrics": {
         "price_distribution": {
           "min": 399.0,
@@ -277,7 +475,34 @@
       }
     },
     "2.3": {
+      "id": "2.3",
       "title": "价格-评分价值矩阵",
+      "required_tables": [
+        "listing_snapshots",
+        "sold_transactions"
+      ],
+      "metric_ids": [
+        "price_rating_matrix"
+      ],
+      "data_quality": {
+        "record_counts": {
+          "listing_snapshots": 23,
+          "sold_transactions": 23
+        },
+        "available_tables": [
+          "listing_snapshots",
+          "sold_transactions"
+        ],
+        "missing_tables": [],
+        "completeness_ratio": 1.0,
+        "richness_ratio": 1.0,
+        "quality_score": 1.0,
+        "quality_level": "high"
+      },
+      "confidence": {
+        "score": 1.0,
+        "level": "high"
+      },
       "metrics": {
         "matrix": [
           {
@@ -413,7 +638,34 @@
       }
     },
     "2.4": {
+      "id": "2.4",
       "title": "属性画像与白空间机会",
+      "required_tables": [
+        "product_catalog",
+        "sold_transactions"
+      ],
+      "metric_ids": [
+        "attribute_outperformance"
+      ],
+      "data_quality": {
+        "record_counts": {
+          "product_catalog": 8,
+          "sold_transactions": 23
+        },
+        "available_tables": [
+          "product_catalog",
+          "sold_transactions"
+        ],
+        "missing_tables": [],
+        "completeness_ratio": 1.0,
+        "richness_ratio": 1.0,
+        "quality_score": 1.0,
+        "quality_level": "high"
+      },
+      "confidence": {
+        "score": 1.0,
+        "level": "high"
+      },
       "metrics": {
         "top_attributes": [
           {
@@ -584,7 +836,31 @@
       }
     },
     "2.5": {
+      "id": "2.5",
       "title": "评论情绪与痛点主题",
+      "required_tables": [
+        "reviews"
+      ],
+      "metric_ids": [
+        "review_sentiment_topics"
+      ],
+      "data_quality": {
+        "record_counts": {
+          "reviews": 20
+        },
+        "available_tables": [
+          "reviews"
+        ],
+        "missing_tables": [],
+        "completeness_ratio": 1.0,
+        "richness_ratio": 1.0,
+        "quality_score": 1.0,
+        "quality_level": "high"
+      },
+      "confidence": {
+        "score": 1.0,
+        "level": "high"
+      },
       "metrics": {
         "sentiment_mix": {
           "positive": 0.55,
@@ -681,7 +957,31 @@
       }
     },
     "2.6": {
+      "id": "2.6",
       "title": "货架动态与生存分析",
+      "required_tables": [
+        "listing_snapshots"
+      ],
+      "metric_ids": [
+        "listing_survival_dynamics"
+      ],
+      "data_quality": {
+        "record_counts": {
+          "listing_snapshots": 23
+        },
+        "available_tables": [
+          "listing_snapshots"
+        ],
+        "missing_tables": [],
+        "completeness_ratio": 1.0,
+        "richness_ratio": 1.0,
+        "quality_score": 1.0,
+        "quality_level": "high"
+      },
+      "confidence": {
+        "score": 1.0,
+        "level": "high"
+      },
       "metrics": {
         "listing_count": 8,
         "median_lifetime_days": 62.0,

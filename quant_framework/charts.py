@@ -362,12 +362,24 @@ def generate_part3_chart_assets(report: dict, output_dir: str | Path) -> dict[st
         .get("percentile_bands", {})
         .get("net_margin_rate", {})
     )
+    sensitivity_rows = (
+        report.get("sections", {})
+        .get("3.5", {})
+        .get("metrics", {})
+        .get("monte_carlo", {})
+        .get("sensitivity", [])
+    )
+    sensitivity_series = {
+        row["driver"]: abs(row["downside_impact"])
+        for row in sensitivity_rows[:6]
+    }
 
     supplier_path = output_dir / "supplier_type_share.svg"
     incoterm_path = output_dir / "incoterm_median_cost.svg"
     cost_path = output_dir / "landed_cost_breakdown.svg"
     risk_path = output_dir / "risk_priority.svg"
     monte_carlo_path = output_dir / "monte_carlo_margin_band.svg"
+    sensitivity_path = output_dir / "monte_carlo_sensitivity.svg"
 
     _render_horizontal_bar_chart(
         supplier_share_series,
@@ -399,6 +411,12 @@ def generate_part3_chart_assets(report: dict, output_dir: str | Path) -> dict[st
         monte_carlo_path,
         as_percent=True,
     )
+    _render_horizontal_bar_chart(
+        sensitivity_series,
+        "Monte Carlo Sensitivity",
+        sensitivity_path,
+        as_percent=False,
+    )
 
     return {
         "supplier_share_chart": str(supplier_path),
@@ -406,4 +424,71 @@ def generate_part3_chart_assets(report: dict, output_dir: str | Path) -> dict[st
         "landed_cost_chart": str(cost_path),
         "risk_chart": str(risk_path),
         "monte_carlo_chart": str(monte_carlo_path),
+        "sensitivity_chart": str(sensitivity_path),
+    }
+
+
+def generate_part4_chart_assets(report: dict, output_dir: str | Path) -> dict[str, str]:
+    output_dir = Path(output_dir)
+    output_dir.mkdir(parents=True, exist_ok=True)
+
+    channel_margin_series = {
+        row["channel"]: row["contribution_margin_rate"]
+        for row in report.get("sections", {}).get("4.5", {}).get("metrics", {}).get("channel_pnl", [])
+    }
+    traffic_source_series = (
+        report.get("sections", {})
+        .get("4.4", {})
+        .get("metrics", {})
+        .get("traffic_source_sessions_share", {})
+    )
+    payback_series = {
+        row["channel"]: row["payback_period_months"]
+        for row in report.get("sections", {}).get("4.5", {}).get("metrics", {}).get("channel_pnl", [])
+    }
+    roi_band_series = {
+        channel: metrics.get("roi", {}).get("p50", 0.0)
+        for channel, metrics in report.get("sections", {})
+        .get("4.5", {})
+        .get("metrics", {})
+        .get("monte_carlo", {})
+        .get("channels", {})
+        .items()
+    }
+
+    margin_path = output_dir / "channel_contribution_margin.svg"
+    traffic_path = output_dir / "traffic_source_mix.svg"
+    payback_path = output_dir / "channel_payback_period.svg"
+    roi_band_path = output_dir / "roi_band.svg"
+
+    _render_horizontal_bar_chart(
+        channel_margin_series,
+        "Channel Contribution Margin",
+        margin_path,
+        as_percent=True,
+    )
+    _render_vertical_bar_chart(
+        traffic_source_series,
+        "Traffic Source Session Share",
+        traffic_path,
+        as_percent=True,
+    )
+    _render_horizontal_bar_chart(
+        payback_series,
+        "Channel Payback Period (Months)",
+        payback_path,
+        as_percent=False,
+    )
+    _render_horizontal_bar_chart(
+        roi_band_series,
+        "Monte Carlo ROI P50",
+        roi_band_path,
+        as_percent=False,
+    )
+
+    return {
+        "channel_margin_chart": str(margin_path),
+        "traffic_source_chart": str(traffic_path),
+        "channel_payback_chart": str(payback_path),
+        "roi_band_chart": str(roi_band_path),
     }

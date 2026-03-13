@@ -1,9 +1,9 @@
-supplier_id,sku_version,incoterm,moq_tier,unit_price,sample_fee,tooling_fee,packaging_cost,customization_cost,currency,quote_date
-S001,gen_2200w,EXW,200,258,150,500,9,6,USD,2026-03-01
-S001,gen_2200w,FOB,500,248,150,700,9,4,USD,2026-03-01
-S002,gen_2200w,FOB,300,255,180,900,8,5,USD,2026-03-02
-S002,gen_2200w,DDP,300,292,180,900,8,5,USD,2026-03-02
-S003,gen_2200w,EXW,100,279,120,400,7,4,USD,2026-03-03
-S004,gen_2200w,DDP,50,318,80,0,6,0,USD,2026-03-03
-S005,gen_2200w,FOB,500,250,160,850,10,4,USD,2026-03-04
-S006,gen_2200w,EXW,150,274,120,450,8,5,USD,2026-03-04
+supplier_id,sku_version,incoterm,moq_tier,unit_price,sample_fee,tooling_fee,packaging_cost,customization_cost,currency,quote_date,quote_id,product_spec_key,price_breaks_json,lead_time_days,payment_terms,certifications_list,quote_valid_until,source_confidence,captured_at,included_items
+S001,gen_2200w,EXW,200,258,150,500,9,6,USD,2026-03-01,Q001,gen_2200w_std,"[{""moq"":200,""unit_price"":258},{""moq"":500,""unit_price"":249}]",28,"30% deposit,70% before shipment","ETL,FCC",2026-04-15,0.86,2026-03-01,"unit_price,packaging,customization,tooling,sample"
+S001,gen_2200w,FOB,500,248,150,700,9,4,USD,2026-03-01,Q002,gen_2200w_std,"[{""moq"":500,""unit_price"":248},{""moq"":1000,""unit_price"":241}]",32,"30% deposit,70% before shipment","ETL,FCC",2026-04-15,0.88,2026-03-01,"unit_price,packaging,customization,tooling,sample"
+S002,gen_2200w,FOB,300,255,180,900,8,5,USD,2026-03-02,Q003,gen_2200w_premium,"[{""moq"":300,""unit_price"":255},{""moq"":600,""unit_price"":247}]",30,"20% deposit,80% against copy B/L","ETL,FCC,CSA",2026-04-20,0.91,2026-03-02,"unit_price,packaging,customization,tooling,sample"
+S002,gen_2200w,DDP,300,292,180,900,8,5,USD,2026-03-02,Q004,gen_2200w_premium,"[{""moq"":300,""unit_price"":292},{""moq"":600,""unit_price"":286}]",30,"20% deposit,80% against copy B/L","ETL,FCC,CSA",2026-04-20,0.82,2026-03-02,"unit_price,packaging,customization,tooling,sample,freight,duty"
+S003,gen_2200w,EXW,100,279,120,400,7,4,USD,2026-03-03,Q005,gen_2200w_entry,"[{""moq"":100,""unit_price"":279},{""moq"":300,""unit_price"":271}]",25,"50% deposit,50% before shipment",ETL,2026-04-18,0.74,2026-03-03,"unit_price,packaging,customization,tooling,sample"
+S004,gen_2200w,DDP,50,318,80,0,6,0,USD,2026-03-03,Q006,gen_2200w_entry,"[{""moq"":50,""unit_price"":318},{""moq"":120,""unit_price"":309}]",18,100% before shipment,,2026-03-28,0.61,2026-03-03,"unit_price,packaging,freight,duty"
+S005,gen_2200w,FOB,500,250,160,850,10,4,USD,2026-03-04,Q007,gen_2200w_std,"[{""moq"":500,""unit_price"":250},{""moq"":800,""unit_price"":244}]",33,"30% deposit,70% before shipment","ETL,FCC",2026-04-22,0.84,2026-03-04,"unit_price,packaging,customization,tooling,sample"
+S006,gen_2200w,EXW,150,274,120,450,8,5,USD,2026-03-04,Q008,gen_2200w_entry,"[{""moq"":150,""unit_price"":274},{""moq"":400,""unit_price"":266}]",26,"50% deposit,50% before shipment",FCC,2026-04-10,0.73,2026-03-04,"unit_price,packaging,customization,tooling,sample"

@@ -1,5 +1,16 @@
 {
   "metadata": {
+    "report_id": "part1_quant_report",
+    "report_version": "2026.03",
+    "generated_at": "2026-03-13T13:26:24.436950+00:00",
+    "section_order": [
+      "1.1",
+      "1.2",
+      "1.3",
+      "1.4",
+      "1.5",
+      "1.6"
+    ],
     "section_structure": {
       "1.1": {
         "title": "市场现状与需求概览",
@@ -11,7 +22,11 @@
           "demand_growth_rate",
           "seasonality_index",
           "regional_demand_share"
-        ]
+        ],
+        "quality_targets": {
+          "search_trends": 12,
+          "region_demand": 5
+        }
       },
       "1.2": {
         "title": "客户画像分析",
@@ -20,7 +35,10 @@
         ],
         "metric_ids": [
           "customer_distribution"
-        ]
+        ],
+        "quality_targets": {
+          "customer_segments": 12
+        }
       },
       "1.3": {
         "title": "市场规模分析",
@@ -31,7 +49,10 @@
           "bottom_up_market_size",
           "top_down_market_size",
           "market_hhi"
-        ]
+        ],
+        "quality_targets": {
+          "listings": 8
+        }
       },
       "1.4": {
         "title": "购买渠道分析",
@@ -41,7 +62,10 @@
         "metric_ids": [
           "channel_share",
           "channel_conversion_rate"
-        ]
+        ],
+        "quality_targets": {
+          "channels": 4
+        }
       },
       "1.5": {
         "title": "货架商品价格分析",
@@ -51,7 +75,10 @@
         "metric_ids": [
           "listed_price_bands",
           "brand_premium"
-        ]
+        ],
+        "quality_targets": {
+          "listings": 8
+        }
       },
       "1.6": {
         "title": "实际成交价格分析",
@@ -62,7 +89,10 @@
           "average_transaction_price",
           "average_discount_rate",
           "price_elasticity"
-        ]
+        ],
+        "quality_targets": {
+          "transactions": 12
+        }
       }
     },
     "metric_specs": [
@@ -204,11 +234,157 @@
         "formula": "使用 midpoint method: |销量变化率 / 价格变化率|",
         "output_note": "用于判断品类是否适合以促销驱动销量。"
       }
+    ],
+    "assumptions": {
+      "tam": 95000000.0,
+      "online_penetration": 0.48,
+      "importable_share": 0.58,
+      "target_capture_share": 0.03,
+      "sample_coverage": 0.28
+    },
+    "table_inventory": {
+      "search_trends": {
+        "record_count": 12,
+        "available": true
+      },
+      "region_demand": {
+        "record_count": 7,
+        "available": true
+      },
+      "customer_segments": {
+        "record_count": 14,
+        "available": true
+      },
+      "listings": {
+        "record_count": 8,
+        "available": true
+      },
+      "transactions": {
+        "record_count": 16,
+        "available": true
+      },
+      "channels": {
+        "record_count": 5,
+        "available": true
+      }
+    }
+  },
+  "overview": {
+    "section_count": 6,
+    "average_confidence_score": 1.0,
+    "confidence_mix": {
+      "high": 6,
+      "medium": 0,
+      "low": 0
+    },
+    "headline_metrics": [
+      {
+        "key": "sam",
+        "label": "SAM",
+        "value": 26448000.0,
+        "unit": "USD"
+      },
+      {
+        "key": "bottom_up_market_size",
+        "label": "Bottom-Up 年化市场规模",
+        "value": 26195035.71,
+        "unit": "USD"
+      },
+      {
+        "key": "triangulation_gap_ratio",
+        "label": "双口径偏差",
+        "value": 0.0096,
+        "unit": "ratio"
+      },
+      {
+        "key": "top_channel",
+        "label": "主成交渠道",
+        "value": "Amazon",
+        "unit": "channel"
+      },
+      {
+        "key": "average_actual_price",
+        "label": "平均实际成交价",
+        "value": 271.69,
+        "unit": "USD"
+      }
+    ],
+    "decision_summary": {
+      "decision_signal": "attractive",
+      "decision_score": 0.7803,
+      "scorecard": {
+        "demand_strength": {
+          "score": 0.9098,
+          "level": "high"
+        },
+        "market_accessibility": {
+          "score": 0.5548,
+          "level": "medium"
+        },
+        "channel_efficiency": {
+          "score": 0.8911,
+          "level": "high"
+        },
+        "pricing_power": {
+          "score": 0.725,
+          "level": "medium"
+        }
+      },
+      "key_findings": [
+        "需求端当前 CAGR 为 16.8%，重点区域集中在 Texas。",
+        "市场年化规模约 26,195,036 USD，集中度为 highly_concentrated。",
+        "当前主成交渠道为 Amazon，平均实际成交价为 271.69 USD。"
+      ],
+      "risk_flags": [
+        "市场集中度较高，头部品牌挤压明显。"
+      ],
+      "recommended_next_step": "进入 Part 2，继续做 SKU 结构、价格甜蜜带和白空间扫描。"
+    },
+    "decision_signal": "attractive",
+    "decision_score": 0.7803,
+    "validation_summary": {
+      "pass_count": 10,
+      "review_count": 0,
+      "fail_count": 0
+    },
+    "uncertainty_keys": [
+      "market_size",
+      "transactions",
+      "listed_price_median"
     ]
   },
   "sections": {
     "1.1": {
+      "id": "1.1",
       "title": "市场现状与需求概览",
+      "required_tables": [
+        "search_trends",
+        "region_demand"
+      ],
+      "metric_ids": [
+        "demand_growth_rate",
+        "seasonality_index",
+        "regional_demand_share"
+      ],
+      "data_quality": {
+        "record_counts": {
+          "search_trends": 12,
+          "region_demand": 7
+        },
+        "available_tables": [
+          "search_trends",
+          "region_demand"
+        ],
+        "missing_tables": [],
+        "completeness_ratio": 1.0,
+        "richness_ratio": 1.0,
+        "quality_score": 1.0,
+        "quality_level": "high"
+      },
+      "confidence": {
+        "score": 1.0,
+        "level": "high"
+      },
       "metrics": {
         "trend": {
           "monthly_average_interest": {
@@ -283,7 +459,31 @@
       }
     },
     "1.2": {
+      "id": "1.2",
       "title": "客户画像分析",
+      "required_tables": [
+        "customer_segments"
+      ],
+      "metric_ids": [
+        "customer_distribution"
+      ],
+      "data_quality": {
+        "record_counts": {
+          "customer_segments": 14
+        },
+        "available_tables": [
+          "customer_segments"
+        ],
+        "missing_tables": [],
+        "completeness_ratio": 1.0,
+        "richness_ratio": 1.0,
+        "quality_score": 1.0,
+        "quality_level": "high"
+      },
+      "confidence": {
+        "score": 1.0,
+        "level": "high"
+      },
       "metrics": {
         "age": {
           "distribution": [
@@ -398,7 +598,33 @@
       }
     },
     "1.3": {
+      "id": "1.3",
       "title": "市场规模分析",
+      "required_tables": [
+        "listings"
+      ],
+      "metric_ids": [
+        "bottom_up_market_size",
+        "top_down_market_size",
+        "market_hhi"
+      ],
+      "data_quality": {
+        "record_counts": {
+          "listings": 8
+        },
+        "available_tables": [
+          "listings"
+        ],
+        "missing_tables": [],
+        "completeness_ratio": 1.0,
+        "richness_ratio": 1.0,
+        "quality_score": 1.0,
+        "quality_level": "high"
+      },
+      "confidence": {
+        "score": 1.0,
+        "level": "high"
+      },
       "metrics": {
         "top_down": {
           "tam": 95000000.0,
@@ -450,7 +676,32 @@
       }
     },
     "1.4": {
+      "id": "1.4",
       "title": "购买渠道分析",
+      "required_tables": [
+        "channels"
+      ],
+      "metric_ids": [
+        "channel_share",
+        "channel_conversion_rate"
+      ],
+      "data_quality": {
+        "record_counts": {
+          "channels": 5
+        },
+        "available_tables": [
+          "channels"
+        ],
+        "missing_tables": [],
+        "completeness_ratio": 1.0,
+        "richness_ratio": 1.0,
+        "quality_score": 1.0,
+        "quality_level": "high"
+      },
+      "confidence": {
+        "score": 1.0,
+        "level": "high"
+      },
       "metrics": {
         "totals": {
           "revenue": 7584000.0,
@@ -551,7 +802,32 @@
       }
     },
     "1.5": {
+      "id": "1.5",
       "title": "货架商品价格分析",
+      "required_tables": [
+        "listings"
+      ],
+      "metric_ids": [
+        "listed_price_bands",
+        "brand_premium"
+      ],
+      "data_quality": {
+        "record_counts": {
+          "listings": 8
+        },
+        "available_tables": [
+          "listings"
+        ],
+        "missing_tables": [],
+        "completeness_ratio": 1.0,
+        "richness_ratio": 1.0,
+        "quality_score": 1.0,
+        "quality_level": "high"
+      },
+      "confidence": {
+        "score": 1.0,
+        "level": "high"
+      },
       "metrics": {
         "price_summary": {
           "min_price": 129.0,
@@ -601,7 +877,33 @@
       }
     },
     "1.6": {
+      "id": "1.6",
       "title": "实际成交价格分析",
+      "required_tables": [
+        "transactions"
+      ],
+      "metric_ids": [
+        "average_transaction_price",
+        "average_discount_rate",
+        "price_elasticity"
+      ],
+      "data_quality": {
+        "record_counts": {
+          "transactions": 16
+        },
+        "available_tables": [
+          "transactions"
+        ],
+        "missing_tables": [],
+        "completeness_ratio": 1.0,
+        "richness_ratio": 1.0,
+        "quality_score": 1.0,
+        "quality_level": "high"
+      },
+      "confidence": {
+        "score": 1.0,
+        "level": "high"
+      },
       "metrics": {
         "total_units": 1985,
         "total_gmv": 539297.0,

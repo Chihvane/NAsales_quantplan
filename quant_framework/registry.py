@@ -237,3 +237,123 @@ PART3_METRICS: tuple[MetricSpec, ...] = (
         output_note="用于形成首批试单和 90 天执行建议。",
     ),
 )
+
+
+PART4_METRICS: tuple[MetricSpec, ...] = (
+    MetricSpec(
+        section_id="4.1",
+        metric_id="dtc_feasibility",
+        label="独立站模式可行性",
+        required_tables=("traffic_sessions", "marketing_spend", "customer_cohorts", "landed_cost_scenarios"),
+        formula="基于 DTC 渠道流量漏斗、获客成本、复购率、贡献毛利和回本周期综合构建 DTC fit score。",
+        output_note="用于判断独立站是否适合作为首发或品牌沉淀渠道。",
+    ),
+    MetricSpec(
+        section_id="4.2",
+        metric_id="platform_channel_fit",
+        label="平台电商模式可行性",
+        required_tables=("sold_transactions", "traffic_sessions", "marketing_spend", "channel_rate_cards", "landed_cost_scenarios"),
+        formula="按渠道输出 GMV、转化率、CAC、贡献毛利、退货率和回本周期，并形成平台适配度得分。",
+        output_note="用于比较 Amazon、TikTok Shop、eBay、Walmart 等平台的优先级。",
+    ),
+    MetricSpec(
+        section_id="4.3",
+        metric_id="b2b_channel_viability",
+        label="线下经销与 ToB 模式",
+        required_tables=("b2b_accounts", "landed_cost_scenarios", "sold_transactions"),
+        formula="基于经销折扣、返利、账期和订单目标计算 B2B 单位利润、现金占用和渠道价值。",
+        output_note="用于判断经销模式是否适合作为补充渠道或主攻渠道。",
+    ),
+    MetricSpec(
+        section_id="4.4",
+        metric_id="traffic_structure",
+        label="曝光、获客与流量结构",
+        required_tables=("traffic_sessions", "marketing_spend"),
+        formula="按 traffic source 汇总曝光、点击、会话、加购、结账和订单，计算漏斗转化及 paid/owned 结构。",
+        output_note="用于判断流量获取是否可持续且是否过度依赖付费流量。",
+    ),
+    MetricSpec(
+        section_id="4.5",
+        metric_id="roi_unit_economics",
+        label="转化效率与 ROI 模型",
+        required_tables=("sold_transactions", "marketing_spend", "returns_claims", "inventory_positions", "landed_cost_scenarios", "channel_rate_cards"),
+        formula="按渠道级 P&L 汇总收入、到岸成本、平台费、履约费、营销费、退货与库存成本，计算 ROI 与 payback。",
+        output_note="用于识别哪个渠道最赚钱、风险是否在可控区间内。",
+    ),
+    MetricSpec(
+        section_id="4.6",
+        metric_id="operating_readiness",
+        label="运营门槛与组织能力",
+        required_tables=("experiment_registry", "returns_claims", "inventory_positions", "traffic_sessions"),
+        formula="基于实验覆盖、库存周转、退货争议、付费流量依赖和渠道复杂度构建 readiness score。",
+        output_note="用于判断团队是否具备承接该渠道组合的能力。",
+    ),
+    MetricSpec(
+        section_id="4.7",
+        metric_id="entry_plan",
+        label="推荐进入路径与 90 天执行方案",
+        required_tables=("landed_cost_scenarios", "traffic_sessions", "marketing_spend", "b2b_accounts", "experiment_registry"),
+        formula="综合门禁、渠道适配、ROI 风险带和团队 readiness 输出 Go/No-Go、主次渠道和预算节奏。",
+        output_note="用于形成可执行的分阶段进入建议。",
+    ),
+)
+
+
+PART5_METRICS: tuple[MetricSpec, ...] = (
+    MetricSpec(
+        section_id="5.1",
+        metric_id="operating_goals_gates",
+        label="运营目标与门禁指标",
+        required_tables=("kpi_daily_snapshots", "sold_transactions", "returns_claims"),
+        formula="按日经营快照与渠道利润、退款、争议、库存信号计算 operating_health_score 与 gate breach rate。",
+        output_note="用于判断当前项目处于健康、观察还是暂停状态。",
+    ),
+    MetricSpec(
+        section_id="5.2",
+        metric_id="data_monitoring_system",
+        label="数据体系与持续监控",
+        required_tables=("kpi_daily_snapshots", "marketing_spend", "traffic_sessions", "policy_change_log"),
+        formula="基于表覆盖、刷新延迟、费率版本覆盖和政策监控完整度计算 data_coverage_score。",
+        output_note="用于判断上线后经营数据是否足以支持稳定决策。",
+    ),
+    MetricSpec(
+        section_id="5.3",
+        metric_id="growth_loop",
+        label="获客、转化与留存增长",
+        required_tables=("traffic_sessions", "marketing_spend", "customer_cohorts", "kpi_daily_snapshots"),
+        formula="按流量来源、漏斗、复购和收入趋势计算 growth_leverage_score。",
+        output_note="用于判断增长动作是否可复制而不是只靠一次性投放。",
+    ),
+    MetricSpec(
+        section_id="5.4",
+        metric_id="pricing_profit_protection",
+        label="定价、促销与利润保护",
+        required_tables=("pricing_actions", "sold_transactions", "kpi_daily_snapshots"),
+        formula="跟踪价格动作、促销占比、价格实现率与利润地板 breach 数量，计算 promo_dependency_score。",
+        output_note="用于识别价格战、促销依赖和利润侵蚀。",
+    ),
+    MetricSpec(
+        section_id="5.5",
+        metric_id="inventory_cash_control",
+        label="履约、库存与现金周转",
+        required_tables=("inventory_positions", "reorder_plan", "cash_flow_snapshots"),
+        formula="基于 days of cover、reorder readiness、inventory cash lock 与 payable/receivable 构建库存现金控制评分。",
+        output_note="用于判断业务放量后会不会被库存和现金流拖垮。",
+    ),
+    MetricSpec(
+        section_id="5.6",
+        metric_id="experimentation_system",
+        label="增量实验与持续优化",
+        required_tables=("experiment_registry", "traffic_sessions"),
+        formula="统计实验覆盖率、测试速度、MDE 可达性和样本量建议，输出 causal_confidence_score。",
+        output_note="用于判断优化动作是否能被系统化验证。",
+    ),
+    MetricSpec(
+        section_id="5.7",
+        metric_id="risk_scale_loop",
+        label="风险监控、复盘与扩张节奏",
+        required_tables=("policy_change_log", "kpi_daily_snapshots", "cash_flow_snapshots", "returns_claims"),
+        formula="综合 alerts、预算燃烧率、库存与实验 readiness 输出 scale_readiness_score 和 expansion gate。",
+        output_note="用于形成继续投放、试点维持或回滚的经营建议。",
+    ),
+)

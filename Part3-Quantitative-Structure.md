@@ -20,6 +20,8 @@ The current implementation uses six canonical CSV tables:
   - `supplier_id, supplier_name, supplier_type, region, factory_flag, oem_flag, odm_flag, main_category, moq, sample_days, production_days, capacity_score, compliance_support_score`
 - `rfq_quotes.csv`
   - `supplier_id, sku_version, incoterm, moq_tier, unit_price, sample_fee, tooling_fee, packaging_cost, customization_cost, currency, quote_date`
+  - optional reliability fields:
+    `quote_id, product_spec_key, price_breaks_json, lead_time_days, payment_terms, certifications_list, quote_valid_until, source_confidence, captured_at, included_items`
 - `compliance_requirements.csv`
   - `market, category, requirement_type, requirement_name, mandatory_flag, estimated_cost, estimated_days, risk_level, notes`
 - `logistics_quotes.csv`
@@ -28,6 +30,8 @@ The current implementation uses six canonical CSV tables:
   - `market, hs_code, base_duty_rate, additional_duty_rate, brokerage_fee, port_fee, effective_date`
 - `shipment_events.csv`
   - `shipment_id, supplier_id, shipping_mode, etd, eta, customs_release_date, warehouse_received_date, sellable_date, delay_days, issue_type`
+  - optional event details:
+    `node, delay_reason, cost_component`
 
 ## Section Structure
 
@@ -36,11 +40,16 @@ The current implementation uses six canonical CSV tables:
   - regional share
   - factory / OEM / ODM share
   - average MOQ and lead time
+  - sample quota attainment and representativeness flags
+  - sample confidence score
   - supply maturity score
 - `3.2 国内采购与报价策略分析`
   - incoterm median quoted cost
   - factory vs trader price gap
   - MOQ quote curve
+  - supplier quote coverage
+  - quote quality and confidence
+  - supplier × incoterm coverage matrix
   - best quote leaderboard
 - `3.3 合规、认证与准入门槛分析`
   - mandatory requirement count
@@ -53,12 +62,16 @@ The current implementation uses six canonical CSV tables:
   - shipping mode mix
   - average actual lead time
   - on-time rate / customs delay rate
+  - linehaul / customs / inbound / shelf-ready stage distributions
+  - process map steps
 - `3.5 到岸成本与利润安全边际分析`
   - landed cost by scenario
   - best scenario breakdown
+  - cost components by Incoterm responsibility boundary
+  - scenario confidence and assumption gaps
   - break-even price
   - margin safety level
-  - Monte Carlo margin band
+  - Monte Carlo margin band and driver sensitivity
 - `3.6 风险矩阵与应对策略`
   - priority risks
   - severity score
@@ -82,6 +95,16 @@ Part 3 currently uses these assumptions:
 - `return_rate`
 - `return_cost_per_unit`
 - `working_capital_rate`
+
+## Reliability Layer
+
+Part 3 is no longer a single-point cost calculator. The current implementation adds:
+
+- supplier sample adequacy against a recommended quota (`factory 5 / trader 3 / wholesaler 2`)
+- RFQ confidence scoring using source confidence, freshness, validity window, and included-item completeness
+- stage-level lead-time distributions from shipment events
+- landed-cost assumption flags for components not separately sourced yet
+- Monte Carlo percentile bands plus deterministic driver sensitivity
 
 ## Report Builder
 
@@ -133,5 +156,6 @@ The demo writes:
 - `landed_cost_breakdown.svg`
 - `risk_priority.svg`
 - `monte_carlo_margin_band.svg`
+- `monte_carlo_sensitivity.svg`
 
 to [examples/output_part3](/Users/zhiwenxiang/Documents/Playground/北美市场量化报告/examples/output_part3).

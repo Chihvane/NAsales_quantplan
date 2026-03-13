@@ -3,21 +3,35 @@ from __future__ import annotations
 from pathlib import Path
 
 from .models import (
+    B2BAccountRecord,
+    CashFlowSnapshotRecord,
     ChannelRecord,
+    ChannelRateCardRecord,
     ComplianceRequirementRecord,
+    CustomerCohortRecord,
     CustomerSegmentRecord,
+    ExperimentRecord,
+    InventoryPositionRecord,
+    KPIDailySnapshotRecord,
+    LandedCostScenarioRecord,
     ListingRecord,
     ListingSnapshotRecord,
     LogisticsQuoteRecord,
+    MarketingSpendRecord,
+    PolicyChangeLogRecord,
+    PricingActionRecord,
     RFQQuoteRecord,
     ProductCatalogRecord,
     RegionDemandRecord,
+    ReorderPlanRecord,
     ReviewRecord,
+    ReturnClaimRecord,
     SearchTrendRecord,
     ShipmentEventRecord,
     SoldTransactionRecord,
     SupplierRecord,
     TariffTaxRecord,
+    TrafficSessionRecord,
     TransactionRecord,
 )
 from .io_utils import read_csv_rows
@@ -213,6 +227,16 @@ def load_rfq_quotes(path: str | Path) -> list[RFQQuoteRecord]:
             customization_cost=float(row.get("customization_cost", 0) or 0),
             currency=row.get("currency", "USD"),
             quote_date=row.get("quote_date", ""),
+            quote_id=row.get("quote_id", ""),
+            product_spec_key=row.get("product_spec_key", ""),
+            price_breaks_json=row.get("price_breaks_json", ""),
+            lead_time_days=int(row.get("lead_time_days", 0) or 0),
+            payment_terms=row.get("payment_terms", ""),
+            certifications_list=row.get("certifications_list", ""),
+            quote_valid_until=row.get("quote_valid_until", ""),
+            source_confidence=float(row.get("source_confidence", 0) or 0),
+            captured_at=row.get("captured_at", ""),
+            included_items=row.get("included_items", ""),
         )
         for row in _read_csv(path)
     ]
@@ -282,6 +306,236 @@ def load_shipment_events(path: str | Path) -> list[ShipmentEventRecord]:
             sellable_date=row["sellable_date"],
             delay_days=int(row.get("delay_days", 0) or 0),
             issue_type=row.get("issue_type", ""),
+            node=row.get("node", ""),
+            delay_reason=row.get("delay_reason", ""),
+            cost_component=float(row.get("cost_component", 0) or 0),
+        )
+        for row in _read_csv(path)
+    ]
+
+
+def load_landed_cost_scenarios(path: str | Path) -> list[LandedCostScenarioRecord]:
+    return [
+        LandedCostScenarioRecord(
+            scenario_id=row["scenario_id"],
+            canonical_sku=row["canonical_sku"],
+            channel=row["channel"],
+            mode=row.get("mode", ""),
+            landed_cost_p10=float(row.get("landed_cost_p10", 0) or 0),
+            landed_cost_p50=float(row.get("landed_cost_p50", 0) or 0),
+            landed_cost_p90=float(row.get("landed_cost_p90", 0) or 0),
+            sell_price=float(row.get("sell_price", 0) or 0),
+            working_capital_cost=float(row.get("working_capital_cost", 0) or 0),
+            return_reserve=float(row.get("return_reserve", 0) or 0),
+            scenario_confidence_score=float(row.get("scenario_confidence_score", 0) or 0),
+        )
+        for row in _read_csv(path)
+    ]
+
+
+def load_channel_rate_cards(path: str | Path) -> list[ChannelRateCardRecord]:
+    return [
+        ChannelRateCardRecord(
+            channel=row["channel"],
+            fee_type=row["fee_type"],
+            fee_basis=row["fee_basis"],
+            fee_rate=float(row.get("fee_rate", 0) or 0),
+            fixed_fee=float(row.get("fixed_fee", 0) or 0),
+            effective_date=row.get("effective_date", ""),
+            source_ref=row.get("source_ref", ""),
+            notes=row.get("notes", ""),
+        )
+        for row in _read_csv(path)
+    ]
+
+
+def load_marketing_spend(path: str | Path) -> list[MarketingSpendRecord]:
+    return [
+        MarketingSpendRecord(
+            date=row["date"],
+            channel=row["channel"],
+            campaign_id=row.get("campaign_id", ""),
+            traffic_source=row.get("traffic_source", ""),
+            spend=float(row.get("spend", 0) or 0),
+            impressions=int(row.get("impressions", 0) or 0),
+            clicks=int(row.get("clicks", 0) or 0),
+            attributed_orders=int(row.get("attributed_orders", 0) or 0),
+            attributed_revenue=float(row.get("attributed_revenue", 0) or 0),
+        )
+        for row in _read_csv(path)
+    ]
+
+
+def load_traffic_sessions(path: str | Path) -> list[TrafficSessionRecord]:
+    return [
+        TrafficSessionRecord(
+            date=row["date"],
+            channel=row["channel"],
+            traffic_source=row.get("traffic_source", ""),
+            sessions=int(row.get("sessions", 0) or 0),
+            product_page_views=int(row.get("product_page_views", 0) or 0),
+            add_to_cart=int(row.get("add_to_cart", 0) or 0),
+            checkout_start=int(row.get("checkout_start", 0) or 0),
+            orders=int(row.get("orders", 0) or 0),
+        )
+        for row in _read_csv(path)
+    ]
+
+
+def load_returns_claims(path: str | Path) -> list[ReturnClaimRecord]:
+    return [
+        ReturnClaimRecord(
+            date=row["date"],
+            channel=row["channel"],
+            order_id=row["order_id"],
+            sku_id=row["sku_id"],
+            return_flag=_parse_bool(row.get("return_flag", False)),
+            refund_amount=float(row.get("refund_amount", 0) or 0),
+            return_reason=row.get("return_reason", ""),
+            claim_cost=float(row.get("claim_cost", 0) or 0),
+            dispute_flag=_parse_bool(row.get("dispute_flag", False)),
+        )
+        for row in _read_csv(path)
+    ]
+
+
+def load_customer_cohorts(path: str | Path) -> list[CustomerCohortRecord]:
+    return [
+        CustomerCohortRecord(
+            cohort_month=row["cohort_month"],
+            channel=row["channel"],
+            customers=int(row.get("customers", 0) or 0),
+            repeat_customers=int(row.get("repeat_customers", 0) or 0),
+            repeat_orders=int(row.get("repeat_orders", 0) or 0),
+            repeat_revenue=float(row.get("repeat_revenue", 0) or 0),
+        )
+        for row in _read_csv(path)
+    ]
+
+
+def load_inventory_positions(path: str | Path) -> list[InventoryPositionRecord]:
+    return [
+        InventoryPositionRecord(
+            date=row["date"],
+            channel=row["channel"],
+            warehouse=row.get("warehouse", ""),
+            sku_id=row["sku_id"],
+            on_hand_units=int(row.get("on_hand_units", 0) or 0),
+            inbound_units=int(row.get("inbound_units", 0) or 0),
+            sell_through_units=int(row.get("sell_through_units", 0) or 0),
+            storage_cost=float(row.get("storage_cost", 0) or 0),
+        )
+        for row in _read_csv(path)
+    ]
+
+
+def load_experiment_registry(path: str | Path) -> list[ExperimentRecord]:
+    return [
+        ExperimentRecord(
+            experiment_id=row["experiment_id"],
+            channel=row["channel"],
+            hypothesis=row.get("hypothesis", ""),
+            start_date=row.get("start_date", ""),
+            end_date=row.get("end_date", ""),
+            primary_metric=row.get("primary_metric", ""),
+            mde=float(row.get("mde", 0) or 0),
+            split_ratio=float(row.get("split_ratio", 0) or 0),
+            stop_rule=row.get("stop_rule", ""),
+            status=row.get("status", ""),
+        )
+        for row in _read_csv(path)
+    ]
+
+
+def load_b2b_accounts(path: str | Path) -> list[B2BAccountRecord]:
+    return [
+        B2BAccountRecord(
+            account_id=row["account_id"],
+            account_type=row.get("account_type", ""),
+            region=row.get("region", ""),
+            discount_rate=float(row.get("discount_rate", 0) or 0),
+            payment_terms_days=int(row.get("payment_terms_days", 0) or 0),
+            rebate_rate=float(row.get("rebate_rate", 0) or 0),
+            annual_target=float(row.get("annual_target", 0) or 0),
+        )
+        for row in _read_csv(path)
+    ]
+
+
+def load_kpi_daily_snapshots(path: str | Path) -> list[KPIDailySnapshotRecord]:
+    return [
+        KPIDailySnapshotRecord(
+            date=row["date"],
+            channel=row["channel"],
+            revenue=float(row.get("revenue", 0) or 0),
+            contribution_profit=float(row.get("contribution_profit", 0) or 0),
+            ad_spend=float(row.get("ad_spend", 0) or 0),
+            refunds=float(row.get("refunds", 0) or 0),
+            disputes=int(row.get("disputes", 0) or 0),
+            inventory_value=float(row.get("inventory_value", 0) or 0),
+            operating_status=row.get("operating_status", ""),
+        )
+        for row in _read_csv(path)
+    ]
+
+
+def load_pricing_actions(path: str | Path) -> list[PricingActionRecord]:
+    return [
+        PricingActionRecord(
+            date=row["date"],
+            channel=row["channel"],
+            sku_id=row["sku_id"],
+            action_type=row.get("action_type", ""),
+            old_price=float(row.get("old_price", 0) or 0),
+            new_price=float(row.get("new_price", 0) or 0),
+            promo_flag=_parse_bool(row.get("promo_flag", False)),
+            bundle_flag=_parse_bool(row.get("bundle_flag", False)),
+            owner=row.get("owner", ""),
+        )
+        for row in _read_csv(path)
+    ]
+
+
+def load_reorder_plan(path: str | Path) -> list[ReorderPlanRecord]:
+    return [
+        ReorderPlanRecord(
+            date=row["date"],
+            sku_id=row["sku_id"],
+            warehouse=row.get("warehouse", ""),
+            reorder_point=int(row.get("reorder_point", 0) or 0),
+            safety_stock=int(row.get("safety_stock", 0) or 0),
+            target_cover_days=float(row.get("target_cover_days", 0) or 0),
+            planned_units=int(row.get("planned_units", 0) or 0),
+            eta=row.get("eta", ""),
+        )
+        for row in _read_csv(path)
+    ]
+
+
+def load_policy_change_log(path: str | Path) -> list[PolicyChangeLogRecord]:
+    return [
+        PolicyChangeLogRecord(
+            platform=row["platform"],
+            policy_type=row.get("policy_type", ""),
+            effective_date=row.get("effective_date", ""),
+            source_url=row.get("source_url", ""),
+            impact_level=row.get("impact_level", ""),
+            change_summary=row.get("change_summary", ""),
+        )
+        for row in _read_csv(path)
+    ]
+
+
+def load_cash_flow_snapshots(path: str | Path) -> list[CashFlowSnapshotRecord]:
+    return [
+        CashFlowSnapshotRecord(
+            date=row["date"],
+            channel=row["channel"],
+            receivable=float(row.get("receivable", 0) or 0),
+            payable=float(row.get("payable", 0) or 0),
+            inventory_cash_lock=float(row.get("inventory_cash_lock", 0) or 0),
+            ad_cash_out=float(row.get("ad_cash_out", 0) or 0),
+            refund_cash_out=float(row.get("refund_cash_out", 0) or 0),
         )
         for row in _read_csv(path)
     ]

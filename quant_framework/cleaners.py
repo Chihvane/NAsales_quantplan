@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 import re
 from datetime import date
 from math import exp, log
@@ -113,6 +114,16 @@ PART3_RFQ_FIELDS = [
     "customization_cost",
     "currency",
     "quote_date",
+    "quote_id",
+    "product_spec_key",
+    "price_breaks_json",
+    "lead_time_days",
+    "payment_terms",
+    "certifications_list",
+    "quote_valid_until",
+    "source_confidence",
+    "captured_at",
+    "included_items",
 ]
 
 PART3_COMPLIANCE_FIELDS = [
@@ -162,6 +173,9 @@ PART3_SHIPMENT_FIELDS = [
     "sellable_date",
     "delay_days",
     "issue_type",
+    "node",
+    "delay_reason",
+    "cost_component",
 ]
 
 ATTRIBUTE_KEYWORDS = {
@@ -229,6 +243,17 @@ def _clean_percent(value: str) -> float:
     if not cleaned:
         return 0.0
     return float(cleaned) / 100
+
+
+def _clean_confidence_score(value: str, default: float = 0.72) -> str:
+    cleaned = re.sub(r"[^0-9.\-]+", "", value or "")
+    if not cleaned:
+        return f"{default:.2f}"
+    numeric = float(cleaned)
+    if numeric > 1:
+        numeric /= 100
+    numeric = max(0.0, min(1.0, numeric))
+    return f"{numeric:.2f}"
 
 
 def _bool_flag(value: str, default: str = "true") -> str:
@@ -1002,26 +1027,67 @@ def normalize_part3_rfq_export(
     raw_rows = _read_csv(raw_path)
     normalized_rows = []
 
-    for row in raw_rows:
+    for index, row in enumerate(raw_rows, start=1):
         supplier_id = _supplier_id_from_row(row)
         sku_version = _lookup(row, ("sku version", "model", "sku", "product model"))
         if not supplier_id or not sku_version:
             continue
+        moq_tier = _clean_int(_lookup(row, ("moq", "moq tier", "min order qty", "quantity")))
+        unit_price = _clean_currency(_lookup(row, ("unit price", "quote price", "price", "quoted unit price")))
+        sample_fee = _clean_currency(_lookup(row, ("sample fee", "sample charge", "sample cost")))
+        tooling_fee = _clean_currency(_lookup(row, ("tooling fee", "tooling cost", "mold fee", "mould fee")))
+        packaging_cost = _clean_currency(_lookup(row, ("packaging cost", "packing cost", "package cost")))
+        customization_cost = _clean_currency(
+            _lookup(row, ("customization cost", "custom logo cost", "custom cost", "branding cost"))
+        )
+        included_items = _lookup(row, ("included items", "quote included items", "included scope"))
+        if not included_items:
+            inferred_items = ["unit_price"]
+            if packaging_cost not in {"", "0", "0.0"}:
+                inferred_items.append("packaging")
+            if customization_cost not in {"", "0", "0.0"}:
+                inferred_items.append("customization")
+            if tooling_fee not in {"", "0", "0.0"}:
+                inferred_items.append("tooling")
+            if sample_fee not in {"", "0", "0.0"}:
+                inferred_items.append("sample")
+            included_items = ",".join(inferred_items)
+        price_breaks = _lookup(row, ("price breaks", "price ladder", "tiers json", "price breaks json"))
+        if not price_breaks:
+            price_breaks = json.dumps(
+                [{"moq": int(moq_tier or 0), "unit_price": float(unit_price or 0)}],
+                ensure_ascii=False,
+            )
         normalized_rows.append(
             {
                 "supplier_id": supplier_id,
                 "sku_version": sku_version,
                 "incoterm": _normalize_incoterm(_lookup(row, ("incoterm", "trade term", "trade terms"))),
-                "moq_tier": _clean_int(_lookup(row, ("moq", "moq tier", "min order qty", "quantity"))),
-                "unit_price": _clean_currency(_lookup(row, ("unit price", "quote price", "price", "quoted unit price"))),
-                "sample_fee": _clean_currency(_lookup(row, ("sample fee", "sample charge", "sample cost"))),
-                "tooling_fee": _clean_currency(_lookup(row, ("tooling fee", "tooling cost", "mold fee", "mould fee"))),
-                "packaging_cost": _clean_currency(_lookup(row, ("packaging cost", "packing cost", "package cost"))),
-                "customization_cost": _clean_currency(
-                    _lookup(row, ("customization cost", "custom logo cost", "custom cost", "branding cost"))
-                ),
+                "moq_tier": moq_tier,
+                "unit_price": unit_price,
+                "sample_fee": sample_fee,
+                "tooling_fee": tooling_fee,
+                "packaging_cost": packaging_cost,
+                "customization_cost": customization_cost,
                 "currency": _lookup(row, ("currency",)) or "USD",
                 "quote_date": _lookup(row, ("quote date", "date", "quoted at")) or date.today().isoformat(),
+                "quote_id": _lookup(row, ("quote id", "rfq id", "id")) or f"Q{index:04d}",
+                "product_spec_key": _lookup(row, ("product spec key", "spec key", "product spec")) or sku_version,
+                "price_breaks_json": price_breaks,
+                "lead_time_days": _clean_int(_lookup(row, ("lead time days", "quote lead time", "lead time"))),
+                "payment_terms": _lookup(row, ("payment terms", "payment term", "payment")) or "",
+                "certifications_list": _lookup(
+                    row,
+                    ("certifications", "certifications list", "certificates", "existing certs"),
+                ) or "",
+                "quote_valid_until": _lookup(row, ("quote valid until", "valid until", "expiry date")) or "",
+                "source_confidence": _clean_confidence_score(
+                    _lookup(row, ("source confidence", "confidence", "quote confidence"))
+                ),
+                "captured_at": _lookup(row, ("captured at", "captured date", "created at"))
+                or _lookup(row, ("quote date", "date", "quoted at"))
+                or date.today().isoformat(),
+                "included_items": included_items,
             }
         )
 
@@ -1170,6 +1236,13 @@ def normalize_part3_shipment_export(
                 "sellable_date": _lookup(row, ("sellable date", "live date", "available date")),
                 "delay_days": _clean_int(_lookup(row, ("delay days", "delay", "lateness days"))),
                 "issue_type": _lookup(row, ("issue type", "issue", "problem")) or "",
+                "node": _lookup(row, ("node", "current node", "shipment node")) or "",
+                "delay_reason": _lookup(row, ("delay reason", "reason", "delay cause"))
+                or _lookup(row, ("issue type", "issue", "problem"))
+                or "",
+                "cost_component": _clean_currency(
+                    _lookup(row, ("cost component", "extra cost", "exception cost"))
+                ),
             }
         )
 

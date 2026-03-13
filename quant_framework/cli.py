@@ -8,6 +8,7 @@ from .charts import (
     generate_part1_chart_assets,
     generate_part2_chart_assets,
     generate_part3_chart_assets,
+    generate_part4_chart_assets,
 )
 from .backtest import (
     build_part2_backtest_panel_from_directory,
@@ -37,10 +38,11 @@ from .cleaners import (
     normalize_tiktok_channels_export,
 )
 from .io_utils import write_json
-from .models import MarketSizeAssumptions, Part2Assumptions, Part3Assumptions
+from .models import MarketSizeAssumptions, Part2Assumptions, Part3Assumptions, Part4Assumptions
 from .part1 import build_part1_quant_report
 from .part2 import build_part2_quant_report
 from .part3 import build_part3_quant_report
+from .part4 import build_part4_quant_report
 from .part2_pipeline import (
     DEFAULT_PART2_ASSUMPTIONS,
     build_part2_dataset_from_directory,
@@ -49,7 +51,12 @@ from .part3_pipeline import (
     DEFAULT_PART3_ASSUMPTIONS,
     build_part3_dataset_from_directory,
 )
+from .part4_pipeline import (
+    DEFAULT_PART4_ASSUMPTIONS,
+    build_part4_dataset_from_directory,
+)
 from .pipeline import DEFAULT_ASSUMPTIONS, build_dataset_from_directory
+from .reporting import build_cli_summary
 
 
 def _assumptions_from_args(args: argparse.Namespace) -> MarketSizeAssumptions:
@@ -176,14 +183,61 @@ def _add_part3_assumption_args(parser: argparse.ArgumentParser) -> None:
     )
 
 
+def _part4_assumptions_from_args(args: argparse.Namespace) -> Part4Assumptions:
+    return Part4Assumptions(
+        target_payback_months=args.target_payback_months,
+        max_loss_probability=args.max_loss_probability,
+        min_contribution_margin_rate=args.min_contribution_margin_rate,
+        target_repeat_rate=args.target_repeat_rate,
+        target_inventory_days=args.target_inventory_days,
+        risk_penalty_lambda=args.risk_penalty_lambda,
+        minimum_experiment_days=args.minimum_experiment_days,
+    )
+
+
+def _add_part4_assumption_args(parser: argparse.ArgumentParser) -> None:
+    parser.add_argument(
+        "--target-payback-months",
+        type=float,
+        default=DEFAULT_PART4_ASSUMPTIONS.target_payback_months,
+    )
+    parser.add_argument(
+        "--max-loss-probability",
+        type=float,
+        default=DEFAULT_PART4_ASSUMPTIONS.max_loss_probability,
+    )
+    parser.add_argument(
+        "--min-contribution-margin-rate",
+        type=float,
+        default=DEFAULT_PART4_ASSUMPTIONS.min_contribution_margin_rate,
+    )
+    parser.add_argument(
+        "--target-repeat-rate",
+        type=float,
+        default=DEFAULT_PART4_ASSUMPTIONS.target_repeat_rate,
+    )
+    parser.add_argument(
+        "--target-inventory-days",
+        type=float,
+        default=DEFAULT_PART4_ASSUMPTIONS.target_inventory_days,
+    )
+    parser.add_argument(
+        "--risk-penalty-lambda",
+        type=float,
+        default=DEFAULT_PART4_ASSUMPTIONS.risk_penalty_lambda,
+    )
+    parser.add_argument(
+        "--minimum-experiment-days",
+        type=int,
+        default=DEFAULT_PART4_ASSUMPTIONS.minimum_experiment_days,
+    )
+
+
 def _handle_report(args: argparse.Namespace) -> int:
     dataset = build_dataset_from_directory(args.data_dir)
     assumptions = _assumptions_from_args(args)
     report = build_part1_quant_report(dataset, assumptions)
-    summary = {
-        "validation": report.get("validation", {}).get("summary", {}),
-        "sections": list(report.get("sections", {}).keys()),
-    }
+    summary = build_cli_summary(report)
     if args.output_json:
         report_path = write_json(args.output_json, report)
         summary["report_json"] = str(report_path)
@@ -209,10 +263,7 @@ def _handle_part2_report(args: argparse.Namespace) -> int:
     dataset = build_part2_dataset_from_directory(args.data_dir)
     assumptions = _part2_assumptions_from_args(args)
     report = build_part2_quant_report(dataset, assumptions)
-    summary = {
-        "validation": report.get("validation", {}).get("summary", {}),
-        "sections": list(report.get("sections", {}).keys()),
-    }
+    summary = build_cli_summary(report)
     if args.output_json:
         report_path = write_json(args.output_json, report)
         summary["report_json"] = str(report_path)
@@ -238,10 +289,7 @@ def _handle_part3_report(args: argparse.Namespace) -> int:
     dataset = build_part3_dataset_from_directory(args.data_dir)
     assumptions = _part3_assumptions_from_args(args)
     report = build_part3_quant_report(dataset, assumptions)
-    summary = {
-        "validation": report.get("validation", {}).get("summary", {}),
-        "sections": list(report.get("sections", {}).keys()),
-    }
+    summary = build_cli_summary(report)
     if args.output_json:
         report_path = write_json(args.output_json, report)
         summary["report_json"] = str(report_path)
@@ -259,6 +307,32 @@ def _handle_part3_charts(args: argparse.Namespace) -> int:
     if args.report_json:
         write_json(args.report_json, report)
     chart_paths = generate_part3_chart_assets(report, args.output_dir)
+    print(json.dumps(chart_paths, ensure_ascii=False, indent=2))
+    return 0
+
+
+def _handle_part4_report(args: argparse.Namespace) -> int:
+    dataset = build_part4_dataset_from_directory(args.data_dir)
+    assumptions = _part4_assumptions_from_args(args)
+    report = build_part4_quant_report(dataset, assumptions)
+    summary = build_cli_summary(report)
+    if args.output_json:
+        report_path = write_json(args.output_json, report)
+        summary["report_json"] = str(report_path)
+    if args.print_report or not args.output_json:
+        print(json.dumps(report, ensure_ascii=False, indent=2))
+    else:
+        print(json.dumps(summary, ensure_ascii=False, indent=2))
+    return 0
+
+
+def _handle_part4_charts(args: argparse.Namespace) -> int:
+    dataset = build_part4_dataset_from_directory(args.data_dir)
+    assumptions = _part4_assumptions_from_args(args)
+    report = build_part4_quant_report(dataset, assumptions)
+    if args.report_json:
+        write_json(args.report_json, report)
+    chart_paths = generate_part4_chart_assets(report, args.output_dir)
     print(json.dumps(chart_paths, ensure_ascii=False, indent=2))
     return 0
 
@@ -470,6 +544,30 @@ def build_parser() -> argparse.ArgumentParser:
     part3_charts_parser.add_argument("--report-json")
     _add_part3_assumption_args(part3_charts_parser)
     part3_charts_parser.set_defaults(func=_handle_part3_charts)
+
+    part4_report_parser = subparsers.add_parser(
+        "report-part4",
+        help="Build the Part 4 quantitative report",
+    )
+    part4_report_parser.add_argument("--data-dir", required=True)
+    part4_report_parser.add_argument("--output-json")
+    part4_report_parser.add_argument(
+        "--print-report",
+        action="store_true",
+        help="Print the full report JSON to stdout even when --output-json is provided",
+    )
+    _add_part4_assumption_args(part4_report_parser)
+    part4_report_parser.set_defaults(func=_handle_part4_report)
+
+    part4_charts_parser = subparsers.add_parser(
+        "charts-part4",
+        help="Generate SVG charts for Part 4",
+    )
+    part4_charts_parser.add_argument("--data-dir", required=True)
+    part4_charts_parser.add_argument("--output-dir", required=True)
+    part4_charts_parser.add_argument("--report-json")
+    _add_part4_assumption_args(part4_charts_parser)
+    part4_charts_parser.set_defaults(func=_handle_part4_charts)
 
     clean_parser = subparsers.add_parser("clean", help="Normalize raw platform export data")
     clean_parser.add_argument(

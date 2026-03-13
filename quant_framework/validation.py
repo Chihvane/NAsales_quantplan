@@ -493,6 +493,21 @@ def build_part3_methodology_validation(report: dict) -> dict:
         }
     )
 
+    quota_attainment = section_31.get("sample_adequacy", {}).get("quota_attainment_ratio")
+    quota_ok = quota_attainment is not None and 0.0 <= quota_attainment <= 1.0
+    checks.append(
+        {
+            "check_id": "supplier_sampling_quota_range",
+            "status": _status(quota_ok, review=quota_attainment is None),
+            "source": PART3_SOURCE_REFERENCES["supply_structure"],
+            "method": "Supplier sampling quota attainment is normalized to a 0-1 range for cross-category comparability.",
+            "evidence": {
+                "quota_attainment_ratio": quota_attainment,
+                "missing_input": quota_attainment is None,
+            },
+        }
+    )
+
     moq_curve = section_32.get("moq_curve", [])
     moq_curve_sorted = all(
         moq_curve[index]["moq_tier"] >= moq_curve[index - 1]["moq_tier"]
@@ -507,6 +522,22 @@ def build_part3_methodology_validation(report: dict) -> dict:
             "evidence": {
                 "curve_points": len(moq_curve),
                 "missing_input": not bool(moq_curve),
+            },
+        }
+    )
+
+    quote_quality = section_32.get("quote_quality", {})
+    average_quote_confidence = quote_quality.get("average_quote_confidence")
+    quote_confidence_ok = average_quote_confidence is not None and 0.0 <= average_quote_confidence <= 1.0
+    checks.append(
+        {
+            "check_id": "quote_confidence_range",
+            "status": _status(quote_confidence_ok, review=average_quote_confidence is None),
+            "source": PART3_SOURCE_REFERENCES["quote_structure"],
+            "method": "Quote confidence is normalized to 0-1 so low-transparency RFQs do not look equivalent to verified quotes.",
+            "evidence": {
+                "average_quote_confidence": average_quote_confidence,
+                "missing_input": average_quote_confidence is None,
             },
         }
     )
@@ -547,6 +578,21 @@ def build_part3_methodology_validation(report: dict) -> dict:
         }
     )
 
+    process_map_steps = section_34.get("process_map_steps", [])
+    process_map_ok = len(process_map_steps) >= 5
+    checks.append(
+        {
+            "check_id": "process_map_completeness",
+            "status": _status(process_map_ok, review=not process_map_steps),
+            "source": PART3_SOURCE_REFERENCES["logistics_execution"],
+            "method": "The export process map should retain the main nodes from supplier confirmation through warehouse availability.",
+            "evidence": {
+                "step_count": len(process_map_steps),
+                "missing_input": not bool(process_map_steps),
+            },
+        }
+    )
+
     best_scenario = section_35.get("best_scenario", {})
     monte_carlo = section_35.get("monte_carlo", {})
     margin_rate = best_scenario.get("net_margin_rate")
@@ -565,6 +611,21 @@ def build_part3_methodology_validation(report: dict) -> dict:
                 "sell_price": sell_price,
                 "net_margin_rate": margin_rate,
                 "missing_input": not bool(best_scenario),
+            },
+        }
+    )
+
+    scenario_confidence = best_scenario.get("scenario_confidence_score")
+    scenario_confidence_ok = scenario_confidence is not None and 0.0 <= scenario_confidence <= 1.0
+    checks.append(
+        {
+            "check_id": "scenario_confidence_range",
+            "status": _status(scenario_confidence_ok, review=scenario_confidence is None),
+            "source": PART3_SOURCE_REFERENCES["landed_cost"],
+            "method": "Scenario confidence stays on a 0-1 scale so margin conclusions can be interpreted with source-quality context.",
+            "evidence": {
+                "scenario_confidence_score": scenario_confidence,
+                "missing_input": scenario_confidence is None,
             },
         }
     )
@@ -616,6 +677,191 @@ def build_part3_methodology_validation(report: dict) -> dict:
             "method": "Entry recommendation should map to the fixed recommendation enum.",
             "evidence": {
                 "recommendation": recommendation,
+            },
+        }
+    )
+
+    pass_count = sum(1 for check in checks if check["status"] == "pass")
+    review_count = sum(1 for check in checks if check["status"] == "review")
+    fail_count = sum(1 for check in checks if check["status"] == "fail")
+
+    return {
+        "summary": {
+            "pass_count": pass_count,
+            "review_count": review_count,
+            "fail_count": fail_count,
+        },
+        "checks": checks,
+    }
+
+
+PART4_SOURCE_REFERENCES = {
+    "channel_pnl": {
+        "label": "Part 4 Channel P&L",
+        "url": "",
+    },
+    "traffic_funnel": {
+        "label": "Part 4 Traffic Funnel",
+        "url": "",
+    },
+    "roi_simulation": {
+        "label": "Part 4 ROI Monte Carlo",
+        "url": "",
+    },
+    "go_no_go": {
+        "label": "Part 4 Go No-Go Gates",
+        "url": "",
+    },
+}
+
+
+def build_part4_methodology_validation(report: dict) -> dict:
+    section_44 = report["sections"]["4.4"]["metrics"]
+    section_45 = report["sections"]["4.5"]["metrics"]
+    section_46 = report["sections"]["4.6"]["metrics"]
+    section_47 = report["sections"]["4.7"]["metrics"]
+
+    checks = []
+
+    source_share = section_44.get("traffic_source_sessions_share", {})
+    share_sum = sum(source_share.values())
+    checks.append(
+        {
+            "check_id": "traffic_source_share_integrity",
+            "status": _status(abs(share_sum - 1.0) <= 0.02, review=not source_share),
+            "source": PART4_SOURCE_REFERENCES["traffic_funnel"],
+            "method": "Traffic source session shares should reconcile back to 100% of observed traffic.",
+            "evidence": {
+                "source_share_sum": round(share_sum, 4),
+                "missing_input": not bool(source_share),
+            },
+        }
+    )
+
+    paid_vs_owned = section_44.get("paid_vs_owned", {})
+    paid_owned_sum = sum(paid_vs_owned.values())
+    checks.append(
+        {
+            "check_id": "paid_owned_mix_integrity",
+            "status": _status(abs(paid_owned_sum - 1.0) <= 0.02, review=not paid_vs_owned),
+            "source": PART4_SOURCE_REFERENCES["traffic_funnel"],
+            "method": "Paid, owned, and other traffic shares should approximately sum to 100%.",
+            "evidence": {
+                "paid_owned_sum": round(paid_owned_sum, 4),
+                "missing_input": not bool(paid_vs_owned),
+            },
+        }
+    )
+
+    funnel = section_44.get("funnel", {})
+    funnel_rates = [
+        funnel.get("page_view_rate"),
+        funnel.get("add_to_cart_rate"),
+        funnel.get("checkout_start_rate"),
+        funnel.get("checkout_completion_rate"),
+    ]
+    funnel_ok = all(rate is not None and 0.0 <= rate <= 1.0 for rate in funnel_rates)
+    checks.append(
+        {
+            "check_id": "traffic_funnel_rate_range",
+            "status": _status(funnel_ok, review=not funnel),
+            "source": PART4_SOURCE_REFERENCES["traffic_funnel"],
+            "method": "Funnel conversion rates must remain within a 0-1 range.",
+            "evidence": {
+                "funnel": funnel,
+                "missing_input": not bool(funnel),
+            },
+        }
+    )
+
+    channel_pnl = section_45.get("channel_pnl", [])
+    margin_ok = all(-1.0 <= row.get("contribution_margin_rate", 0.0) <= 1.0 for row in channel_pnl)
+    payback_ok = all(row.get("payback_period_months", 0.0) >= 0.0 for row in channel_pnl)
+    checks.append(
+        {
+            "check_id": "channel_margin_and_payback_range",
+            "status": _status(margin_ok and payback_ok, review=not channel_pnl),
+            "source": PART4_SOURCE_REFERENCES["channel_pnl"],
+            "method": "Contribution margin should stay within a valid range and payback should not be negative.",
+            "evidence": {
+                "channel_count": len(channel_pnl),
+                "missing_input": not bool(channel_pnl),
+            },
+        }
+    )
+
+    fee_version_ok = all(row.get("fee_version_count", 0) > 0 for row in channel_pnl)
+    checks.append(
+        {
+            "check_id": "fee_version_coverage",
+            "status": _status(fee_version_ok, review=not channel_pnl),
+            "source": PART4_SOURCE_REFERENCES["channel_pnl"],
+            "method": "Each active channel should have at least one effective fee version in the rate-card table.",
+            "evidence": {
+                "channels_missing_fee_versions": [
+                    row.get("channel")
+                    for row in channel_pnl
+                    if row.get("fee_version_count", 0) <= 0
+                ],
+                "missing_input": not bool(channel_pnl),
+            },
+        }
+    )
+
+    monte_carlo = section_45.get("monte_carlo", {})
+    overall_band = monte_carlo.get("overall", {}).get("contribution_margin_rate", {})
+    monte_carlo_ok = (
+        overall_band.get("p10", 0.0)
+        <= overall_band.get("p50", 0.0)
+        <= overall_band.get("p90", 0.0)
+    ) if overall_band else False
+    loss_probability = monte_carlo.get("overall", {}).get("loss_probability")
+    checks.append(
+        {
+            "check_id": "roi_monte_carlo_monotonicity",
+            "status": _status(
+                monte_carlo_ok and (loss_probability is None or 0.0 <= loss_probability <= 1.0),
+                review=not overall_band,
+            ),
+            "source": PART4_SOURCE_REFERENCES["roi_simulation"],
+            "method": "Monte Carlo percentile bands should be monotonic and loss probability must stay within a 0-1 range.",
+            "evidence": {
+                "overall_band": overall_band,
+                "loss_probability": loss_probability,
+                "missing_input": not bool(overall_band),
+            },
+        }
+    )
+
+    readiness_score = section_46.get("readiness_score")
+    checks.append(
+        {
+            "check_id": "readiness_score_range",
+            "status": _status(readiness_score is not None and 0.0 <= readiness_score <= 1.0, review=readiness_score is None),
+            "source": PART4_SOURCE_REFERENCES["go_no_go"],
+            "method": "Readiness score is normalized to 0-1 to align operational gating across categories.",
+            "evidence": {
+                "readiness_score": readiness_score,
+            },
+        }
+    )
+
+    gate_results = section_47.get("gate_results", {})
+    gate_ok = bool(gate_results) and all(isinstance(value, bool) for value in gate_results.values())
+    recommendation = section_47.get("recommendation")
+    recommendation_ok = recommendation in {"go", "pilot_first", "no_go"}
+    budget_allocation = section_47.get("budget_allocation", {})
+    budget_sum = sum(budget_allocation.values())
+    checks.append(
+        {
+            "check_id": "go_no_go_gate_integrity",
+            "status": _status(gate_ok and recommendation_ok and budget_sum <= 1.01, review=not gate_results),
+            "source": PART4_SOURCE_REFERENCES["go_no_go"],
+            "method": "Go/No-Go gates should remain boolean, recommendation must use the fixed enum, and budget shares should not exceed 100%.",
+            "evidence": {
+                "recommendation": recommendation,
+                "budget_sum": round(budget_sum, 4),
+                "missing_input": not bool(gate_results),
             },
         }
     )

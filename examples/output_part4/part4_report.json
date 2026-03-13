@@ -1,0 +1,2049 @@
+{
+  "metadata": {
+    "report_id": "part4_quant_report",
+    "report_version": "2026.03",
+    "generated_at": "2026-03-13T13:19:22.320922+00:00",
+    "section_order": [
+      "4.1",
+      "4.2",
+      "4.3",
+      "4.4",
+      "4.5",
+      "4.6",
+      "4.7"
+    ],
+    "section_structure": {
+      "4.1": {
+        "title": "独立站模式可行性分析",
+        "required_tables": [
+          "traffic_sessions",
+          "marketing_spend",
+          "customer_cohorts",
+          "landed_cost_scenarios"
+        ],
+        "metric_ids": [
+          "dtc_feasibility"
+        ],
+        "quality_targets": {
+          "traffic_sessions": 8,
+          "marketing_spend": 8,
+          "customer_cohorts": 4,
+          "landed_cost_scenarios": 6
+        }
+      },
+      "4.2": {
+        "title": "平台电商模式可行性分析",
+        "required_tables": [
+          "sold_transactions",
+          "traffic_sessions",
+          "marketing_spend",
+          "channel_rate_cards",
+          "landed_cost_scenarios"
+        ],
+        "metric_ids": [
+          "platform_channel_fit"
+        ],
+        "quality_targets": {
+          "sold_transactions": 10,
+          "traffic_sessions": 8,
+          "marketing_spend": 8,
+          "channel_rate_cards": 10,
+          "landed_cost_scenarios": 6
+        }
+      },
+      "4.3": {
+        "title": "线下经销商与 ToB 模式分析",
+        "required_tables": [
+          "b2b_accounts",
+          "landed_cost_scenarios",
+          "sold_transactions"
+        ],
+        "metric_ids": [
+          "b2b_channel_viability"
+        ],
+        "quality_targets": {
+          "b2b_accounts": 3,
+          "landed_cost_scenarios": 2,
+          "sold_transactions": 10
+        }
+      },
+      "4.4": {
+        "title": "曝光、获客与流量结构分析",
+        "required_tables": [
+          "traffic_sessions",
+          "marketing_spend"
+        ],
+        "metric_ids": [
+          "traffic_structure"
+        ],
+        "quality_targets": {
+          "traffic_sessions": 8,
+          "marketing_spend": 8
+        }
+      },
+      "4.5": {
+        "title": "转化效率与 ROI 模型分析",
+        "required_tables": [
+          "sold_transactions",
+          "marketing_spend",
+          "returns_claims",
+          "inventory_positions",
+          "landed_cost_scenarios",
+          "channel_rate_cards"
+        ],
+        "metric_ids": [
+          "roi_unit_economics"
+        ],
+        "quality_targets": {
+          "sold_transactions": 10,
+          "marketing_spend": 8,
+          "returns_claims": 6,
+          "inventory_positions": 8,
+          "landed_cost_scenarios": 6,
+          "channel_rate_cards": 10
+        }
+      },
+      "4.6": {
+        "title": "运营门槛与组织能力要求分析",
+        "required_tables": [
+          "experiment_registry",
+          "returns_claims",
+          "inventory_positions",
+          "traffic_sessions"
+        ],
+        "metric_ids": [
+          "operating_readiness"
+        ],
+        "quality_targets": {
+          "experiment_registry": 4,
+          "returns_claims": 6,
+          "inventory_positions": 8,
+          "traffic_sessions": 8
+        }
+      },
+      "4.7": {
+        "title": "推荐进入路径与 90 天销售执行方案",
+        "required_tables": [
+          "landed_cost_scenarios",
+          "traffic_sessions",
+          "marketing_spend",
+          "b2b_accounts",
+          "experiment_registry"
+        ],
+        "metric_ids": [
+          "entry_plan"
+        ],
+        "quality_targets": {
+          "landed_cost_scenarios": 6,
+          "traffic_sessions": 8,
+          "marketing_spend": 8,
+          "b2b_accounts": 3,
+          "experiment_registry": 4
+        }
+      }
+    },
+    "metric_specs": [
+      {
+        "section_id": "4.1",
+        "metric_id": "dtc_feasibility",
+        "label": "独立站模式可行性",
+        "required_tables": [
+          "traffic_sessions",
+          "marketing_spend",
+          "customer_cohorts",
+          "landed_cost_scenarios"
+        ],
+        "formula": "基于 DTC 渠道流量漏斗、获客成本、复购率、贡献毛利和回本周期综合构建 DTC fit score。",
+        "output_note": "用于判断独立站是否适合作为首发或品牌沉淀渠道。"
+      },
+      {
+        "section_id": "4.2",
+        "metric_id": "platform_channel_fit",
+        "label": "平台电商模式可行性",
+        "required_tables": [
+          "sold_transactions",
+          "traffic_sessions",
+          "marketing_spend",
+          "channel_rate_cards",
+          "landed_cost_scenarios"
+        ],
+        "formula": "按渠道输出 GMV、转化率、CAC、贡献毛利、退货率和回本周期，并形成平台适配度得分。",
+        "output_note": "用于比较 Amazon、TikTok Shop、eBay、Walmart 等平台的优先级。"
+      },
+      {
+        "section_id": "4.3",
+        "metric_id": "b2b_channel_viability",
+        "label": "线下经销与 ToB 模式",
+        "required_tables": [
+          "b2b_accounts",
+          "landed_cost_scenarios",
+          "sold_transactions"
+        ],
+        "formula": "基于经销折扣、返利、账期和订单目标计算 B2B 单位利润、现金占用和渠道价值。",
+        "output_note": "用于判断经销模式是否适合作为补充渠道或主攻渠道。"
+      },
+      {
+        "section_id": "4.4",
+        "metric_id": "traffic_structure",
+        "label": "曝光、获客与流量结构",
+        "required_tables": [
+          "traffic_sessions",
+          "marketing_spend"
+        ],
+        "formula": "按 traffic source 汇总曝光、点击、会话、加购、结账和订单，计算漏斗转化及 paid/owned 结构。",
+        "output_note": "用于判断流量获取是否可持续且是否过度依赖付费流量。"
+      },
+      {
+        "section_id": "4.5",
+        "metric_id": "roi_unit_economics",
+        "label": "转化效率与 ROI 模型",
+        "required_tables": [
+          "sold_transactions",
+          "marketing_spend",
+          "returns_claims",
+          "inventory_positions",
+          "landed_cost_scenarios",
+          "channel_rate_cards"
+        ],
+        "formula": "按渠道级 P&L 汇总收入、到岸成本、平台费、履约费、营销费、退货与库存成本，计算 ROI 与 payback。",
+        "output_note": "用于识别哪个渠道最赚钱、风险是否在可控区间内。"
+      },
+      {
+        "section_id": "4.6",
+        "metric_id": "operating_readiness",
+        "label": "运营门槛与组织能力",
+        "required_tables": [
+          "experiment_registry",
+          "returns_claims",
+          "inventory_positions",
+          "traffic_sessions"
+        ],
+        "formula": "基于实验覆盖、库存周转、退货争议、付费流量依赖和渠道复杂度构建 readiness score。",
+        "output_note": "用于判断团队是否具备承接该渠道组合的能力。"
+      },
+      {
+        "section_id": "4.7",
+        "metric_id": "entry_plan",
+        "label": "推荐进入路径与 90 天执行方案",
+        "required_tables": [
+          "landed_cost_scenarios",
+          "traffic_sessions",
+          "marketing_spend",
+          "b2b_accounts",
+          "experiment_registry"
+        ],
+        "formula": "综合门禁、渠道适配、ROI 风险带和团队 readiness 输出 Go/No-Go、主次渠道和预算节奏。",
+        "output_note": "用于形成可执行的分阶段进入建议。"
+      }
+    ],
+    "assumptions": {
+      "target_payback_months": 6.0,
+      "max_loss_probability": 0.25,
+      "min_contribution_margin_rate": 0.08,
+      "target_repeat_rate": 0.18,
+      "target_inventory_days": 45.0,
+      "risk_penalty_lambda": 0.4,
+      "minimum_experiment_days": 7
+    },
+    "table_inventory": {
+      "listing_snapshots": {
+        "record_count": 12,
+        "available": true
+      },
+      "sold_transactions": {
+        "record_count": 12,
+        "available": true
+      },
+      "product_catalog": {
+        "record_count": 2,
+        "available": true
+      },
+      "landed_cost_scenarios": {
+        "record_count": 12,
+        "available": true
+      },
+      "channel_rate_cards": {
+        "record_count": 18,
+        "available": true
+      },
+      "marketing_spend": {
+        "record_count": 12,
+        "available": true
+      },
+      "traffic_sessions": {
+        "record_count": 14,
+        "available": true
+      },
+      "returns_claims": {
+        "record_count": 8,
+        "available": true
+      },
+      "customer_cohorts": {
+        "record_count": 6,
+        "available": true
+      },
+      "inventory_positions": {
+        "record_count": 12,
+        "available": true
+      },
+      "experiment_registry": {
+        "record_count": 6,
+        "available": true
+      },
+      "b2b_accounts": {
+        "record_count": 3,
+        "available": true
+      }
+    }
+  },
+  "overview": {
+    "section_count": 7,
+    "average_confidence_score": 1.0,
+    "confidence_mix": {
+      "high": 7,
+      "medium": 0,
+      "low": 0
+    },
+    "headline_metrics": [
+      {
+        "key": "recommendation",
+        "label": "进入建议",
+        "value": "go",
+        "unit": "enum"
+      },
+      {
+        "key": "primary_channel",
+        "label": "主攻渠道",
+        "value": "B2B",
+        "unit": "channel"
+      },
+      {
+        "key": "best_platform",
+        "label": "最佳平台",
+        "value": "TikTok Shop",
+        "unit": "channel"
+      },
+      {
+        "key": "blended_margin_rate",
+        "label": "综合贡献毛利率",
+        "value": 0.1716,
+        "unit": "ratio"
+      },
+      {
+        "key": "loss_probability",
+        "label": "总体亏损概率",
+        "value": 0.0,
+        "unit": "ratio"
+      },
+      {
+        "key": "readiness_score",
+        "label": "组织承接分",
+        "value": 0.5368,
+        "unit": "score"
+      }
+    ],
+    "validation_summary": {
+      "pass_count": 8,
+      "review_count": 0,
+      "fail_count": 0
+    },
+    "uncertainty_keys": [
+      "channel_margin_rate",
+      "channel_payback_period",
+      "channel_repeat_rate",
+      "roi_monte_carlo"
+    ]
+  },
+  "sections": {
+    "4.1": {
+      "id": "4.1",
+      "title": "独立站模式可行性分析",
+      "required_tables": [
+        "traffic_sessions",
+        "marketing_spend",
+        "customer_cohorts",
+        "landed_cost_scenarios"
+      ],
+      "metric_ids": [
+        "dtc_feasibility"
+      ],
+      "data_quality": {
+        "record_counts": {
+          "traffic_sessions": 14,
+          "marketing_spend": 12,
+          "customer_cohorts": 6,
+          "landed_cost_scenarios": 12
+        },
+        "available_tables": [
+          "traffic_sessions",
+          "marketing_spend",
+          "customer_cohorts",
+          "landed_cost_scenarios"
+        ],
+        "missing_tables": [],
+        "completeness_ratio": 1.0,
+        "richness_ratio": 1.0,
+        "quality_score": 1.0,
+        "quality_level": "high"
+      },
+      "confidence": {
+        "score": 1.0,
+        "level": "high"
+      },
+      "metrics": {
+        "dtc_channels": [
+          {
+            "channel": "DTC",
+            "channel_family": "dtc",
+            "impressions": 498000,
+            "clicks": 13400,
+            "sessions": 15200,
+            "product_page_views": 10730,
+            "add_to_cart": 1375,
+            "checkout_start": 672,
+            "orders": 2,
+            "units": 21,
+            "revenue": 14619.0,
+            "avg_sell_price": 696.14,
+            "aov": 7309.5,
+            "landed_cost_total": 7500.0,
+            "landed_cost_unit_p10": 342.71,
+            "landed_cost_unit_p50": 357.14,
+            "landed_cost_unit_p90": 378.0,
+            "channel_fees_total": 409.93,
+            "fulfillment_cost_total": 378.0,
+            "payment_cost_total": 350.86,
+            "storage_cost_total": 146.0,
+            "acquisition_cost_total": 3320.0,
+            "refund_and_return_total": 1440.0,
+            "contribution_profit": 1074.21,
+            "contribution_margin_rate": 0.0735,
+            "roi": 0.0793,
+            "conversion_rate": 0.0001,
+            "page_view_rate": 0.7059,
+            "add_to_cart_rate": 0.1281,
+            "checkout_start_rate": 0.4887,
+            "checkout_completion_rate": 0.003,
+            "cac": 1660.0,
+            "repeat_rate": 0.2833,
+            "ltv": 743.0,
+            "payback_period_months": 2.41,
+            "return_rate": 1.0,
+            "dispute_rate": 0.0,
+            "avg_inventory_units": 26.0,
+            "inventory_days": 30.0,
+            "scenario_confidence_score": 0.86,
+            "fee_version_count": 3,
+            "latest_fee_effective_date": "2026-01-01"
+          }
+        ],
+        "revenue": 14619.0,
+        "sessions": 15200,
+        "orders": 2,
+        "conversion_rate": 0.0001,
+        "weighted_repeat_rate": 0.2833,
+        "weighted_contribution_margin_rate": 0.0735,
+        "weighted_payback_period_months": 2.41,
+        "brandability_score": 1.0,
+        "dtc_fit_score": 0.7143,
+        "fit_level": "medium"
+      }
+    },
+    "4.2": {
+      "id": "4.2",
+      "title": "平台电商模式可行性分析",
+      "required_tables": [
+        "sold_transactions",
+        "traffic_sessions",
+        "marketing_spend",
+        "channel_rate_cards",
+        "landed_cost_scenarios"
+      ],
+      "metric_ids": [
+        "platform_channel_fit"
+      ],
+      "data_quality": {
+        "record_counts": {
+          "sold_transactions": 12,
+          "traffic_sessions": 14,
+          "marketing_spend": 12,
+          "channel_rate_cards": 18,
+          "landed_cost_scenarios": 12
+        },
+        "available_tables": [
+          "sold_transactions",
+          "traffic_sessions",
+          "marketing_spend",
+          "channel_rate_cards",
+          "landed_cost_scenarios"
+        ],
+        "missing_tables": [],
+        "completeness_ratio": 1.0,
+        "richness_ratio": 1.0,
+        "quality_score": 1.0,
+        "quality_level": "high"
+      },
+      "confidence": {
+        "score": 1.0,
+        "level": "high"
+      },
+      "metrics": {
+        "platforms": [
+          {
+            "channel": "TikTok Shop",
+            "channel_family": "platform",
+            "impressions": 420000,
+            "clicks": 11000,
+            "sessions": 13200,
+            "product_page_views": 10220,
+            "add_to_cart": 1278,
+            "checkout_start": 614,
+            "orders": 2,
+            "units": 27,
+            "revenue": 18003.0,
+            "avg_sell_price": 666.78,
+            "aov": 9001.5,
+            "landed_cost_total": 9777.0,
+            "landed_cost_unit_p10": 346.11,
+            "landed_cost_unit_p50": 362.11,
+            "landed_cost_unit_p90": 386.56,
+            "channel_fees_total": 1440.24,
+            "fulfillment_cost_total": 540.0,
+            "payment_cost_total": 396.07,
+            "storage_cost_total": 174.0,
+            "acquisition_cost_total": 1700.0,
+            "refund_and_return_total": 713.0,
+            "contribution_profit": 3262.69,
+            "contribution_margin_rate": 0.1812,
+            "roi": 0.2213,
+            "conversion_rate": 0.0002,
+            "page_view_rate": 0.7742,
+            "add_to_cart_rate": 0.125,
+            "checkout_start_rate": 0.4804,
+            "checkout_completion_rate": 0.0033,
+            "cac": 850.0,
+            "repeat_rate": 0.1375,
+            "ltv": 1916.83,
+            "payback_period_months": 0.46,
+            "return_rate": 0.5,
+            "dispute_rate": 0.0,
+            "avg_inventory_units": 31.5,
+            "inventory_days": 29.8,
+            "scenario_confidence_score": 0.82,
+            "fee_version_count": 3,
+            "latest_fee_effective_date": "2026-01-01",
+            "platform_fit_score": 1.0
+          },
+          {
+            "channel": "Walmart",
+            "channel_family": "platform",
+            "impressions": 122000,
+            "clicks": 3600,
+            "sessions": 4600,
+            "product_page_views": 3520,
+            "add_to_cart": 408,
+            "checkout_start": 196,
+            "orders": 2,
+            "units": 19,
+            "revenue": 12651.0,
+            "avg_sell_price": 665.84,
+            "aov": 6325.5,
+            "landed_cost_total": 6850.0,
+            "landed_cost_unit_p10": 346.53,
+            "landed_cost_unit_p50": 360.53,
+            "landed_cost_unit_p90": 382.53,
+            "channel_fees_total": 1771.14,
+            "fulfillment_cost_total": 456.0,
+            "payment_cost_total": 0.0,
+            "storage_cost_total": 175.6,
+            "acquisition_cost_total": 960.0,
+            "refund_and_return_total": 668.0,
+            "contribution_profit": 1770.26,
+            "contribution_margin_rate": 0.1399,
+            "roi": 0.1627,
+            "conversion_rate": 0.0004,
+            "page_view_rate": 0.7652,
+            "add_to_cart_rate": 0.1159,
+            "checkout_start_rate": 0.4804,
+            "checkout_completion_rate": 0.0102,
+            "cac": 480.0,
+            "repeat_rate": 0.1146,
+            "ltv": 1004.99,
+            "payback_period_months": 0.49,
+            "return_rate": 0.5,
+            "dispute_rate": 0.0,
+            "avg_inventory_units": 24.0,
+            "inventory_days": 30.0,
+            "scenario_confidence_score": 0.8,
+            "fee_version_count": 3,
+            "latest_fee_effective_date": "2026-01-01",
+            "platform_fit_score": 0.884
+          },
+          {
+            "channel": "Amazon",
+            "channel_family": "platform",
+            "impressions": 310000,
+            "clicks": 9200,
+            "sessions": 10800,
+            "product_page_views": 9120,
+            "add_to_cart": 1230,
+            "checkout_start": 656,
+            "orders": 2,
+            "units": 42,
+            "revenue": 28398.0,
+            "avg_sell_price": 676.14,
+            "aov": 14199.0,
+            "landed_cost_total": 15252.0,
+            "landed_cost_unit_p10": 347.71,
+            "landed_cost_unit_p50": 363.14,
+            "landed_cost_unit_p90": 384.57,
+            "channel_fees_total": 4259.7,
+            "fulfillment_cost_total": 1218.0,
+            "payment_cost_total": 0.0,
+            "storage_cost_total": 311.0,
+            "acquisition_cost_total": 2100.0,
+            "refund_and_return_total": 1400.0,
+            "contribution_profit": 3857.3,
+            "contribution_margin_rate": 0.1358,
+            "roi": 0.1572,
+            "conversion_rate": 0.0002,
+            "page_view_rate": 0.8444,
+            "add_to_cart_rate": 0.1349,
+            "checkout_start_rate": 0.5333,
+            "checkout_completion_rate": 0.003,
+            "cac": 1050.0,
+            "repeat_rate": 0.14,
+            "ltv": 2256.52,
+            "payback_period_months": 0.48,
+            "return_rate": 1.0,
+            "dispute_rate": 0.0,
+            "avg_inventory_units": 42.5,
+            "inventory_days": 26.03,
+            "scenario_confidence_score": 0.89,
+            "fee_version_count": 3,
+            "latest_fee_effective_date": "2026-01-01",
+            "platform_fit_score": 0.8634
+          },
+          {
+            "channel": "eBay",
+            "channel_family": "platform",
+            "impressions": 95000,
+            "clicks": 3100,
+            "sessions": 3480,
+            "product_page_views": 2500,
+            "add_to_cart": 300,
+            "checkout_start": 148,
+            "orders": 2,
+            "units": 15,
+            "revenue": 10045.0,
+            "avg_sell_price": 669.67,
+            "aov": 5022.5,
+            "landed_cost_total": 5410.0,
+            "landed_cost_unit_p10": 345.67,
+            "landed_cost_unit_p50": 360.67,
+            "landed_cost_unit_p90": 384.13,
+            "channel_fees_total": 1305.85,
+            "fulfillment_cost_total": 330.0,
+            "payment_cost_total": 301.95,
+            "storage_cost_total": 90.0,
+            "acquisition_cost_total": 780.0,
+            "refund_and_return_total": 655.0,
+            "contribution_profit": 1172.2,
+            "contribution_margin_rate": 0.1167,
+            "roi": 0.1321,
+            "conversion_rate": 0.0006,
+            "page_view_rate": 0.7184,
+            "add_to_cart_rate": 0.12,
+            "checkout_start_rate": 0.4933,
+            "checkout_completion_rate": 0.0135,
+            "cac": 390.0,
+            "repeat_rate": 0.1,
+            "ltv": 659.36,
+            "payback_period_months": 0.6,
+            "return_rate": 0.5,
+            "dispute_rate": 0.5,
+            "avg_inventory_units": 17.0,
+            "inventory_days": 27.67,
+            "scenario_confidence_score": 0.78,
+            "fee_version_count": 3,
+            "latest_fee_effective_date": "2026-01-01",
+            "platform_fit_score": 0.7648
+          }
+        ],
+        "best_platform": "TikTok Shop",
+        "best_platform_fit_score": 1.0,
+        "platform_count": 4,
+        "weighted_platform_margin_rate": 0.1456
+      }
+    },
+    "4.3": {
+      "id": "4.3",
+      "title": "线下经销商与 ToB 模式分析",
+      "required_tables": [
+        "b2b_accounts",
+        "landed_cost_scenarios",
+        "sold_transactions"
+      ],
+      "metric_ids": [
+        "b2b_channel_viability"
+      ],
+      "data_quality": {
+        "record_counts": {
+          "b2b_accounts": 3,
+          "landed_cost_scenarios": 12,
+          "sold_transactions": 12
+        },
+        "available_tables": [
+          "b2b_accounts",
+          "landed_cost_scenarios",
+          "sold_transactions"
+        ],
+        "missing_tables": [],
+        "completeness_ratio": 1.0,
+        "richness_ratio": 1.0,
+        "quality_score": 1.0,
+        "quality_level": "high"
+      },
+      "confidence": {
+        "score": 1.0,
+        "level": "high"
+      },
+      "metrics": {
+        "account_count": 3,
+        "annual_target_total": 194000.0,
+        "weighted_payment_terms_days": 34.11,
+        "weighted_discount_rate": 0.1435,
+        "weighted_rebate_rate": 0.0196,
+        "b2b_channels": [
+          {
+            "channel": "B2B",
+            "channel_family": "b2b",
+            "impressions": 18000,
+            "clicks": 420,
+            "sessions": 380,
+            "product_page_views": 316,
+            "add_to_cart": 59,
+            "checkout_start": 29,
+            "orders": 2,
+            "units": 36,
+            "revenue": 21484.0,
+            "avg_sell_price": 596.78,
+            "aov": 10742.0,
+            "landed_cost_total": 12264.0,
+            "landed_cost_unit_p10": 327.22,
+            "landed_cost_unit_p50": 340.67,
+            "landed_cost_unit_p90": 360.11,
+            "channel_fees_total": 751.94,
+            "fulfillment_cost_total": 432.0,
+            "payment_cost_total": 0.0,
+            "storage_cost_total": 113.0,
+            "acquisition_cost_total": 420.0,
+            "refund_and_return_total": 591.0,
+            "contribution_profit": 6912.06,
+            "contribution_margin_rate": 0.3217,
+            "roi": 0.4743,
+            "conversion_rate": 0.0053,
+            "page_view_rate": 0.8316,
+            "add_to_cart_rate": 0.1867,
+            "checkout_start_rate": 0.4915,
+            "checkout_completion_rate": 0.069,
+            "cac": 210.0,
+            "repeat_rate": 0.3333,
+            "ltv": 5184.05,
+            "payback_period_months": 0.05,
+            "return_rate": 0.5,
+            "dispute_rate": 0.0,
+            "avg_inventory_units": 36.0,
+            "inventory_days": 34.62,
+            "scenario_confidence_score": 0.76,
+            "fee_version_count": 3,
+            "latest_fee_effective_date": "2026-01-01"
+          }
+        ],
+        "b2b_margin_rate": 0.3217,
+        "margin_gap_vs_best_direct_channel": 0.1405,
+        "b2b_viability_score": 0.5694,
+        "viability_level": "medium"
+      }
+    },
+    "4.4": {
+      "id": "4.4",
+      "title": "曝光、获客与流量结构分析",
+      "required_tables": [
+        "traffic_sessions",
+        "marketing_spend"
+      ],
+      "metric_ids": [
+        "traffic_structure"
+      ],
+      "data_quality": {
+        "record_counts": {
+          "traffic_sessions": 14,
+          "marketing_spend": 12
+        },
+        "available_tables": [
+          "traffic_sessions",
+          "marketing_spend"
+        ],
+        "missing_tables": [],
+        "completeness_ratio": 1.0,
+        "richness_ratio": 1.0,
+        "quality_score": 1.0,
+        "quality_level": "high"
+      },
+      "confidence": {
+        "score": 1.0,
+        "level": "high"
+      },
+      "metrics": {
+        "source_rows": [
+          {
+            "traffic_source": "tiktok_ads",
+            "source_family": "paid",
+            "sessions": 9800,
+            "session_share": 0.2056,
+            "orders": 11,
+            "order_share": 0.1429,
+            "spend": 1700.0,
+            "spend_share": 0.1832,
+            "impressions": 420000,
+            "clicks": 11000,
+            "ctr": 0.0262,
+            "cpc": 0.15,
+            "cpa": 154.55
+          },
+          {
+            "traffic_source": "amazon_ads",
+            "source_family": "paid",
+            "sessions": 8200,
+            "session_share": 0.1721,
+            "orders": 15,
+            "order_share": 0.1948,
+            "spend": 2100.0,
+            "spend_share": 0.2263,
+            "impressions": 310000,
+            "clicks": 9200,
+            "ctr": 0.0297,
+            "cpc": 0.23,
+            "cpa": 140.0
+          },
+          {
+            "traffic_source": "paid_search",
+            "source_family": "paid",
+            "sessions": 6200,
+            "session_share": 0.1301,
+            "orders": 8,
+            "order_share": 0.1039,
+            "spend": 1800.0,
+            "spend_share": 0.194,
+            "impressions": 220000,
+            "clicks": 6800,
+            "ctr": 0.0309,
+            "cpc": 0.26,
+            "cpa": 225.0
+          },
+          {
+            "traffic_source": "paid_social",
+            "source_family": "paid",
+            "sessions": 5100,
+            "session_share": 0.107,
+            "orders": 6,
+            "order_share": 0.0779,
+            "spend": 1400.0,
+            "spend_share": 0.1509,
+            "impressions": 260000,
+            "clicks": 5200,
+            "ctr": 0.02,
+            "cpc": 0.27,
+            "cpa": 233.33
+          },
+          {
+            "traffic_source": "organic_search",
+            "source_family": "owned",
+            "sessions": 4980,
+            "session_share": 0.1045,
+            "orders": 11,
+            "order_share": 0.1429,
+            "spend": 0.0,
+            "spend_share": 0.0,
+            "impressions": 0,
+            "clicks": 0,
+            "ctr": 0.0,
+            "cpc": 0.0,
+            "cpa": 0.0
+          },
+          {
+            "traffic_source": "organic_social",
+            "source_family": "owned",
+            "sessions": 3400,
+            "session_share": 0.0713,
+            "orders": 4,
+            "order_share": 0.0519,
+            "spend": 0.0,
+            "spend_share": 0.0,
+            "impressions": 0,
+            "clicks": 0,
+            "ctr": 0.0,
+            "cpc": 0.0,
+            "cpa": 0.0
+          },
+          {
+            "traffic_source": "walmart_ads",
+            "source_family": "paid",
+            "sessions": 3200,
+            "session_share": 0.0671,
+            "orders": 7,
+            "order_share": 0.0909,
+            "spend": 960.0,
+            "spend_share": 0.1034,
+            "impressions": 122000,
+            "clicks": 3600,
+            "ctr": 0.0295,
+            "cpc": 0.27,
+            "cpa": 137.14
+          },
+          {
+            "traffic_source": "direct",
+            "source_family": "owned",
+            "sessions": 2520,
+            "session_share": 0.0529,
+            "orders": 4,
+            "order_share": 0.0519,
+            "spend": 0.0,
+            "spend_share": 0.0,
+            "impressions": 0,
+            "clicks": 0,
+            "ctr": 0.0,
+            "cpc": 0.0,
+            "cpa": 0.0
+          },
+          {
+            "traffic_source": "ebay_promoted",
+            "source_family": "paid",
+            "sessions": 2500,
+            "session_share": 0.0525,
+            "orders": 5,
+            "order_share": 0.0649,
+            "spend": 780.0,
+            "spend_share": 0.0841,
+            "impressions": 95000,
+            "clicks": 3100,
+            "ctr": 0.0326,
+            "cpc": 0.25,
+            "cpa": 156.0
+          },
+          {
+            "traffic_source": "email",
+            "source_family": "owned",
+            "sessions": 1500,
+            "session_share": 0.0315,
+            "orders": 4,
+            "order_share": 0.0519,
+            "spend": 120.0,
+            "spend_share": 0.0129,
+            "impressions": 18000,
+            "clicks": 1400,
+            "ctr": 0.0778,
+            "cpc": 0.09,
+            "cpa": 30.0
+          },
+          {
+            "traffic_source": "affiliate",
+            "source_family": "paid",
+            "sessions": 260,
+            "session_share": 0.0055,
+            "orders": 2,
+            "order_share": 0.026,
+            "spend": 420.0,
+            "spend_share": 0.0453,
+            "impressions": 18000,
+            "clicks": 420,
+            "ctr": 0.0233,
+            "cpc": 1.0,
+            "cpa": 210.0
+          }
+        ],
+        "traffic_source_sessions_share": {
+          "tiktok_ads": 0.2056,
+          "amazon_ads": 0.1721,
+          "paid_search": 0.1301,
+          "paid_social": 0.107,
+          "organic_search": 0.1045,
+          "organic_social": 0.0713,
+          "walmart_ads": 0.0671,
+          "direct": 0.0529,
+          "ebay_promoted": 0.0525,
+          "email": 0.0315,
+          "affiliate": 0.0055
+        },
+        "paid_vs_owned": {
+          "paid": 0.7398,
+          "owned": 0.2602,
+          "other": 0.0
+        },
+        "funnel": {
+          "sessions": 47660,
+          "product_page_views": 36406,
+          "add_to_cart": 4650,
+          "checkout_start": 2315,
+          "orders": 12,
+          "page_view_rate": 0.7639,
+          "add_to_cart_rate": 0.1277,
+          "checkout_start_rate": 0.4978,
+          "checkout_completion_rate": 0.0052
+        }
+      }
+    },
+    "4.5": {
+      "id": "4.5",
+      "title": "转化效率与 ROI 模型分析",
+      "required_tables": [
+        "sold_transactions",
+        "marketing_spend",
+        "returns_claims",
+        "inventory_positions",
+        "landed_cost_scenarios",
+        "channel_rate_cards"
+      ],
+      "metric_ids": [
+        "roi_unit_economics"
+      ],
+      "data_quality": {
+        "record_counts": {
+          "sold_transactions": 12,
+          "marketing_spend": 12,
+          "returns_claims": 8,
+          "inventory_positions": 12,
+          "landed_cost_scenarios": 12,
+          "channel_rate_cards": 18
+        },
+        "available_tables": [
+          "sold_transactions",
+          "marketing_spend",
+          "returns_claims",
+          "inventory_positions",
+          "landed_cost_scenarios",
+          "channel_rate_cards"
+        ],
+        "missing_tables": [],
+        "completeness_ratio": 1.0,
+        "richness_ratio": 1.0,
+        "quality_score": 1.0,
+        "quality_level": "high"
+      },
+      "confidence": {
+        "score": 1.0,
+        "level": "high"
+      },
+      "metrics": {
+        "channel_pnl": [
+          {
+            "channel": "Amazon",
+            "channel_family": "platform",
+            "impressions": 310000,
+            "clicks": 9200,
+            "sessions": 10800,
+            "product_page_views": 9120,
+            "add_to_cart": 1230,
+            "checkout_start": 656,
+            "orders": 2,
+            "units": 42,
+            "revenue": 28398.0,
+            "avg_sell_price": 676.14,
+            "aov": 14199.0,
+            "landed_cost_total": 15252.0,
+            "landed_cost_unit_p10": 347.71,
+            "landed_cost_unit_p50": 363.14,
+            "landed_cost_unit_p90": 384.57,
+            "channel_fees_total": 4259.7,
+            "fulfillment_cost_total": 1218.0,
+            "payment_cost_total": 0.0,
+            "storage_cost_total": 311.0,
+            "acquisition_cost_total": 2100.0,
+            "refund_and_return_total": 1400.0,
+            "contribution_profit": 3857.3,
+            "contribution_margin_rate": 0.1358,
+            "roi": 0.1572,
+            "conversion_rate": 0.0002,
+            "page_view_rate": 0.8444,
+            "add_to_cart_rate": 0.1349,
+            "checkout_start_rate": 0.5333,
+            "checkout_completion_rate": 0.003,
+            "cac": 1050.0,
+            "repeat_rate": 0.14,
+            "ltv": 2256.52,
+            "payback_period_months": 0.48,
+            "return_rate": 1.0,
+            "dispute_rate": 0.0,
+            "avg_inventory_units": 42.5,
+            "inventory_days": 26.03,
+            "scenario_confidence_score": 0.89,
+            "fee_version_count": 3,
+            "latest_fee_effective_date": "2026-01-01"
+          },
+          {
+            "channel": "B2B",
+            "channel_family": "b2b",
+            "impressions": 18000,
+            "clicks": 420,
+            "sessions": 380,
+            "product_page_views": 316,
+            "add_to_cart": 59,
+            "checkout_start": 29,
+            "orders": 2,
+            "units": 36,
+            "revenue": 21484.0,
+            "avg_sell_price": 596.78,
+            "aov": 10742.0,
+            "landed_cost_total": 12264.0,
+            "landed_cost_unit_p10": 327.22,
+            "landed_cost_unit_p50": 340.67,
+            "landed_cost_unit_p90": 360.11,
+            "channel_fees_total": 751.94,
+            "fulfillment_cost_total": 432.0,
+            "payment_cost_total": 0.0,
+            "storage_cost_total": 113.0,
+            "acquisition_cost_total": 420.0,
+            "refund_and_return_total": 591.0,
+            "contribution_profit": 6912.06,
+            "contribution_margin_rate": 0.3217,
+            "roi": 0.4743,
+            "conversion_rate": 0.0053,
+            "page_view_rate": 0.8316,
+            "add_to_cart_rate": 0.1867,
+            "checkout_start_rate": 0.4915,
+            "checkout_completion_rate": 0.069,
+            "cac": 210.0,
+            "repeat_rate": 0.3333,
+            "ltv": 5184.05,
+            "payback_period_months": 0.05,
+            "return_rate": 0.5,
+            "dispute_rate": 0.0,
+            "avg_inventory_units": 36.0,
+            "inventory_days": 34.62,
+            "scenario_confidence_score": 0.76,
+            "fee_version_count": 3,
+            "latest_fee_effective_date": "2026-01-01"
+          },
+          {
+            "channel": "TikTok Shop",
+            "channel_family": "platform",
+            "impressions": 420000,
+            "clicks": 11000,
+            "sessions": 13200,
+            "product_page_views": 10220,
+            "add_to_cart": 1278,
+            "checkout_start": 614,
+            "orders": 2,
+            "units": 27,
+            "revenue": 18003.0,
+            "avg_sell_price": 666.78,
+            "aov": 9001.5,
+            "landed_cost_total": 9777.0,
+            "landed_cost_unit_p10": 346.11,
+            "landed_cost_unit_p50": 362.11,
+            "landed_cost_unit_p90": 386.56,
+            "channel_fees_total": 1440.24,
+            "fulfillment_cost_total": 540.0,
+            "payment_cost_total": 396.07,
+            "storage_cost_total": 174.0,
+            "acquisition_cost_total": 1700.0,
+            "refund_and_return_total": 713.0,
+            "contribution_profit": 3262.69,
+            "contribution_margin_rate": 0.1812,
+            "roi": 0.2213,
+            "conversion_rate": 0.0002,
+            "page_view_rate": 0.7742,
+            "add_to_cart_rate": 0.125,
+            "checkout_start_rate": 0.4804,
+            "checkout_completion_rate": 0.0033,
+            "cac": 850.0,
+            "repeat_rate": 0.1375,
+            "ltv": 1916.83,
+            "payback_period_months": 0.46,
+            "return_rate": 0.5,
+            "dispute_rate": 0.0,
+            "avg_inventory_units": 31.5,
+            "inventory_days": 29.8,
+            "scenario_confidence_score": 0.82,
+            "fee_version_count": 3,
+            "latest_fee_effective_date": "2026-01-01"
+          },
+          {
+            "channel": "DTC",
+            "channel_family": "dtc",
+            "impressions": 498000,
+            "clicks": 13400,
+            "sessions": 15200,
+            "product_page_views": 10730,
+            "add_to_cart": 1375,
+            "checkout_start": 672,
+            "orders": 2,
+            "units": 21,
+            "revenue": 14619.0,
+            "avg_sell_price": 696.14,
+            "aov": 7309.5,
+            "landed_cost_total": 7500.0,
+            "landed_cost_unit_p10": 342.71,
+            "landed_cost_unit_p50": 357.14,
+            "landed_cost_unit_p90": 378.0,
+            "channel_fees_total": 409.93,
+            "fulfillment_cost_total": 378.0,
+            "payment_cost_total": 350.86,
+            "storage_cost_total": 146.0,
+            "acquisition_cost_total": 3320.0,
+            "refund_and_return_total": 1440.0,
+            "contribution_profit": 1074.21,
+            "contribution_margin_rate": 0.0735,
+            "roi": 0.0793,
+            "conversion_rate": 0.0001,
+            "page_view_rate": 0.7059,
+            "add_to_cart_rate": 0.1281,
+            "checkout_start_rate": 0.4887,
+            "checkout_completion_rate": 0.003,
+            "cac": 1660.0,
+            "repeat_rate": 0.2833,
+            "ltv": 743.0,
+            "payback_period_months": 2.41,
+            "return_rate": 1.0,
+            "dispute_rate": 0.0,
+            "avg_inventory_units": 26.0,
+            "inventory_days": 30.0,
+            "scenario_confidence_score": 0.86,
+            "fee_version_count": 3,
+            "latest_fee_effective_date": "2026-01-01"
+          },
+          {
+            "channel": "Walmart",
+            "channel_family": "platform",
+            "impressions": 122000,
+            "clicks": 3600,
+            "sessions": 4600,
+            "product_page_views": 3520,
+            "add_to_cart": 408,
+            "checkout_start": 196,
+            "orders": 2,
+            "units": 19,
+            "revenue": 12651.0,
+            "avg_sell_price": 665.84,
+            "aov": 6325.5,
+            "landed_cost_total": 6850.0,
+            "landed_cost_unit_p10": 346.53,
+            "landed_cost_unit_p50": 360.53,
+            "landed_cost_unit_p90": 382.53,
+            "channel_fees_total": 1771.14,
+            "fulfillment_cost_total": 456.0,
+            "payment_cost_total": 0.0,
+            "storage_cost_total": 175.6,
+            "acquisition_cost_total": 960.0,
+            "refund_and_return_total": 668.0,
+            "contribution_profit": 1770.26,
+            "contribution_margin_rate": 0.1399,
+            "roi": 0.1627,
+            "conversion_rate": 0.0004,
+            "page_view_rate": 0.7652,
+            "add_to_cart_rate": 0.1159,
+            "checkout_start_rate": 0.4804,
+            "checkout_completion_rate": 0.0102,
+            "cac": 480.0,
+            "repeat_rate": 0.1146,
+            "ltv": 1004.99,
+            "payback_period_months": 0.49,
+            "return_rate": 0.5,
+            "dispute_rate": 0.0,
+            "avg_inventory_units": 24.0,
+            "inventory_days": 30.0,
+            "scenario_confidence_score": 0.8,
+            "fee_version_count": 3,
+            "latest_fee_effective_date": "2026-01-01"
+          },
+          {
+            "channel": "eBay",
+            "channel_family": "platform",
+            "impressions": 95000,
+            "clicks": 3100,
+            "sessions": 3480,
+            "product_page_views": 2500,
+            "add_to_cart": 300,
+            "checkout_start": 148,
+            "orders": 2,
+            "units": 15,
+            "revenue": 10045.0,
+            "avg_sell_price": 669.67,
+            "aov": 5022.5,
+            "landed_cost_total": 5410.0,
+            "landed_cost_unit_p10": 345.67,
+            "landed_cost_unit_p50": 360.67,
+            "landed_cost_unit_p90": 384.13,
+            "channel_fees_total": 1305.85,
+            "fulfillment_cost_total": 330.0,
+            "payment_cost_total": 301.95,
+            "storage_cost_total": 90.0,
+            "acquisition_cost_total": 780.0,
+            "refund_and_return_total": 655.0,
+            "contribution_profit": 1172.2,
+            "contribution_margin_rate": 0.1167,
+            "roi": 0.1321,
+            "conversion_rate": 0.0006,
+            "page_view_rate": 0.7184,
+            "add_to_cart_rate": 0.12,
+            "checkout_start_rate": 0.4933,
+            "checkout_completion_rate": 0.0135,
+            "cac": 390.0,
+            "repeat_rate": 0.1,
+            "ltv": 659.36,
+            "payback_period_months": 0.6,
+            "return_rate": 0.5,
+            "dispute_rate": 0.5,
+            "avg_inventory_units": 17.0,
+            "inventory_days": 27.67,
+            "scenario_confidence_score": 0.78,
+            "fee_version_count": 3,
+            "latest_fee_effective_date": "2026-01-01"
+          }
+        ],
+        "blended": {
+          "revenue": 105200.0,
+          "contribution_profit": 18048.72,
+          "contribution_margin_rate": 0.1716,
+          "acquisition_cost_total": 9280.0,
+          "roi": 1.9449
+        },
+        "best_channel": {
+          "channel": "B2B",
+          "contribution_margin_rate": 0.3217,
+          "roi": 0.4743,
+          "payback_period_months": 0.05
+        },
+        "monte_carlo": {
+          "iterations": 1200,
+          "seed": 42,
+          "overall": {
+            "roi": {
+              "p10": 0.1346,
+              "p50": 0.1713,
+              "p90": 0.2052
+            },
+            "contribution_margin_rate": {
+              "p10": 0.1186,
+              "p50": 0.1463,
+              "p90": 0.1703
+            },
+            "contribution_profit": {
+              "p10": 12217.9547,
+              "p50": 15369.7005,
+              "p90": 18352.3708
+            },
+            "loss_probability": 0.0,
+            "loss_probability_weighted_channels": 0.0465,
+            "target_payback_months": 6.0
+          },
+          "channels": {
+            "Amazon": {
+              "roi": {
+                "p10": 0.0446,
+                "p50": 0.119,
+                "p90": 0.2064
+              },
+              "contribution_margin_rate": {
+                "p10": 0.0427,
+                "p50": 0.1063,
+                "p90": 0.1711
+              },
+              "contribution_profit": {
+                "p10": 1142.4921,
+                "p50": 3004.3519,
+                "p90": 5192.6037
+              },
+              "loss_probability": 0.0167,
+              "base_margin_rate": 0.1358,
+              "base_roi": 0.1572
+            },
+            "B2B": {
+              "roi": {
+                "p10": 0.3307,
+                "p50": 0.4293,
+                "p90": 0.536
+              },
+              "contribution_margin_rate": {
+                "p10": 0.2485,
+                "p50": 0.3004,
+                "p90": 0.349
+              },
+              "contribution_profit": {
+                "p10": 5038.4048,
+                "p50": 6430.3691,
+                "p90": 7940.3304
+              },
+              "loss_probability": 0.0,
+              "base_margin_rate": 0.3217,
+              "base_roi": 0.4743
+            },
+            "TikTok Shop": {
+              "roi": {
+                "p10": 0.1002,
+                "p50": 0.1881,
+                "p90": 0.2786
+              },
+              "contribution_margin_rate": {
+                "p10": 0.0911,
+                "p50": 0.1583,
+                "p90": 0.2179
+              },
+              "contribution_profit": {
+                "p10": 1532.6928,
+                "p50": 2850.4944,
+                "p90": 4175.6409
+              },
+              "loss_probability": 0.0,
+              "base_margin_rate": 0.1812,
+              "base_roi": 0.2213
+            },
+            "DTC": {
+              "roi": {
+                "p10": -0.0352,
+                "p50": 0.0418,
+                "p90": 0.122
+              },
+              "contribution_margin_rate": {
+                "p10": -0.0365,
+                "p50": 0.0401,
+                "p90": 0.1087
+              },
+              "contribution_profit": {
+                "p10": -510.5929,
+                "p50": 594.085,
+                "p90": 1673.083
+              },
+              "loss_probability": 0.2608,
+              "base_margin_rate": 0.0735,
+              "base_roi": 0.0793
+            },
+            "Walmart": {
+              "roi": {
+                "p10": 0.0451,
+                "p50": 0.126,
+                "p90": 0.2057
+              },
+              "contribution_margin_rate": {
+                "p10": 0.0431,
+                "p50": 0.1119,
+                "p90": 0.1706
+              },
+              "contribution_profit": {
+                "p10": 515.4677,
+                "p50": 1426.7957,
+                "p90": 2278.0835
+              },
+              "loss_probability": 0.0125,
+              "base_margin_rate": 0.1399,
+              "base_roi": 0.1627
+            },
+            "eBay": {
+              "roi": {
+                "p10": 0.0211,
+                "p50": 0.0957,
+                "p90": 0.1782
+              },
+              "contribution_margin_rate": {
+                "p10": 0.0207,
+                "p50": 0.0874,
+                "p90": 0.1513
+              },
+              "contribution_profit": {
+                "p10": 191.9306,
+                "p50": 864.8853,
+                "p90": 1614.0927
+              },
+              "loss_probability": 0.045,
+              "base_margin_rate": 0.1167,
+              "base_roi": 0.1321
+            }
+          },
+          "sensitivity": [
+            {
+              "driver": "revenue",
+              "base_roi": 0.4743,
+              "base_margin_rate": 0.3217,
+              "downside_roi": 0.3269,
+              "downside_margin_rate": 0.2464,
+              "downside_impact": -0.0754,
+              "upside_roi": 0.5628,
+              "upside_margin_rate": 0.3601,
+              "upside_impact": 0.0384
+            },
+            {
+              "driver": "landed",
+              "base_roi": 0.4743,
+              "base_margin_rate": 0.3217,
+              "downside_roi": 0.3599,
+              "downside_margin_rate": 0.2646,
+              "downside_impact": -0.0571,
+              "upside_roi": 0.5391,
+              "upside_margin_rate": 0.3503,
+              "upside_impact": 0.0285
+            },
+            {
+              "driver": "refund",
+              "base_roi": 0.4743,
+              "base_margin_rate": 0.3217,
+              "downside_roi": 0.4566,
+              "downside_margin_rate": 0.3135,
+              "downside_impact": -0.0083,
+              "upside_roi": 0.4834,
+              "upside_margin_rate": 0.3259,
+              "upside_impact": 0.0041
+            },
+            {
+              "driver": "spend",
+              "base_roi": 0.4743,
+              "base_margin_rate": 0.3217,
+              "downside_roi": 0.4667,
+              "downside_margin_rate": 0.3182,
+              "downside_impact": -0.0035,
+              "upside_roi": 0.4786,
+              "upside_margin_rate": 0.3237,
+              "upside_impact": 0.002
+            },
+            {
+              "driver": "fee",
+              "base_roi": 0.4743,
+              "base_margin_rate": 0.3217,
+              "downside_roi": 0.4683,
+              "downside_margin_rate": 0.3189,
+              "downside_impact": -0.0028,
+              "upside_roi": 0.4774,
+              "upside_margin_rate": 0.3231,
+              "upside_impact": 0.0014
+            }
+          ]
+        }
+      }
+    },
+    "4.6": {
+      "id": "4.6",
+      "title": "运营门槛与组织能力要求分析",
+      "required_tables": [
+        "experiment_registry",
+        "returns_claims",
+        "inventory_positions",
+        "traffic_sessions"
+      ],
+      "metric_ids": [
+        "operating_readiness"
+      ],
+      "data_quality": {
+        "record_counts": {
+          "experiment_registry": 6,
+          "returns_claims": 8,
+          "inventory_positions": 12,
+          "traffic_sessions": 14
+        },
+        "available_tables": [
+          "experiment_registry",
+          "returns_claims",
+          "inventory_positions",
+          "traffic_sessions"
+        ],
+        "missing_tables": [],
+        "completeness_ratio": 1.0,
+        "richness_ratio": 1.0,
+        "quality_score": 1.0,
+        "quality_level": "high"
+      },
+      "confidence": {
+        "score": 1.0,
+        "level": "high"
+      },
+      "metrics": {
+        "experiment_summary": {
+          "coverage_ratio": 1.0,
+          "completed_count": 5,
+          "active_count": 1,
+          "minimum_duration_pass_rate": 1.0,
+          "channels_covered": [
+            "Amazon",
+            "DTC",
+            "TikTok Shop",
+            "Walmart",
+            "eBay"
+          ]
+        },
+        "paid_dependency_score": 0.7398,
+        "inventory_risk_score": 0.6597,
+        "service_risk_score": 1.0,
+        "readiness_score": 0.5368,
+        "readiness_level": "medium"
+      }
+    },
+    "4.7": {
+      "id": "4.7",
+      "title": "推荐进入路径与 90 天销售执行方案",
+      "required_tables": [
+        "landed_cost_scenarios",
+        "traffic_sessions",
+        "marketing_spend",
+        "b2b_accounts",
+        "experiment_registry"
+      ],
+      "metric_ids": [
+        "entry_plan"
+      ],
+      "data_quality": {
+        "record_counts": {
+          "landed_cost_scenarios": 12,
+          "traffic_sessions": 14,
+          "marketing_spend": 12,
+          "b2b_accounts": 3,
+          "experiment_registry": 6
+        },
+        "available_tables": [
+          "landed_cost_scenarios",
+          "traffic_sessions",
+          "marketing_spend",
+          "b2b_accounts",
+          "experiment_registry"
+        ],
+        "missing_tables": [],
+        "completeness_ratio": 1.0,
+        "richness_ratio": 1.0,
+        "quality_score": 1.0,
+        "quality_level": "high"
+      },
+      "confidence": {
+        "score": 1.0,
+        "level": "high"
+      },
+      "metrics": {
+        "gate_results": {
+          "margin_gate": true,
+          "payback_gate": true,
+          "loss_gate": true,
+          "repeat_gate": true,
+          "inventory_gate": true,
+          "readiness_gate": false
+        },
+        "recommendation": "go",
+        "primary_channel": "B2B",
+        "secondary_channels": [
+          "TikTok Shop",
+          "Walmart"
+        ],
+        "budget_allocation": {
+          "B2B": 0.4922,
+          "TikTok Shop": 0.2385,
+          "Walmart": 0.1694
+        },
+        "priority_channels": [
+          {
+            "channel": "B2B",
+            "channel_family": "b2b",
+            "priority_score": 0.195
+          },
+          {
+            "channel": "TikTok Shop",
+            "channel_family": "platform",
+            "priority_score": 0.0945
+          },
+          {
+            "channel": "Walmart",
+            "channel_family": "platform",
+            "priority_score": 0.0671
+          },
+          {
+            "channel": "eBay",
+            "channel_family": "platform",
+            "priority_score": 0.0396
+          },
+          {
+            "channel": "Amazon",
+            "channel_family": "platform",
+            "priority_score": -0.1325
+          }
+        ],
+        "top_risks": [
+          "readiness_gate"
+        ],
+        "ninety_day_plan": [
+          {
+            "phase": "Day 1-30",
+            "focus": "渠道试点与报价锁定",
+            "target": "B2B"
+          },
+          {
+            "phase": "Day 31-60",
+            "focus": "投放与页面实验",
+            "target": "提升转化与缩短回本周期"
+          },
+          {
+            "phase": "Day 61-90",
+            "focus": "扩 SKU / 扩渠道",
+            "target": "保留 ROI 达标渠道，淘汰低效率渠道"
+          }
+        ],
+        "dtc_fit_score": 0.7143,
+        "best_platform_fit_score": 1.0,
+        "b2b_viability_score": 0.5694,
+        "traffic_paid_share": 0.7398,
+        "readiness_score": 0.5368
+      }
+    }
+  },
+  "uncertainty": {
+    "channel_margin_rate": {
+      "statistic": "mean",
+      "point_estimate": 0.1615,
+      "ci_lower": 0.109,
+      "ci_upper": 0.2331,
+      "iterations": 400,
+      "alpha": 0.05
+    },
+    "channel_payback_period": {
+      "statistic": "median",
+      "point_estimate": 0.485,
+      "ci_lower": 0.255,
+      "ci_upper": 1.505,
+      "iterations": 400,
+      "alpha": 0.05
+    },
+    "channel_repeat_rate": {
+      "statistic": "mean",
+      "point_estimate": 0.1848,
+      "ci_lower": 0.1202,
+      "ci_upper": 0.2646,
+      "iterations": 400,
+      "alpha": 0.05
+    },
+    "roi_monte_carlo": {
+      "iterations": 1200,
+      "seed": 42,
+      "overall": {
+        "roi": {
+          "p10": 0.1346,
+          "p50": 0.1713,
+          "p90": 0.2052
+        },
+        "contribution_margin_rate": {
+          "p10": 0.1186,
+          "p50": 0.1463,
+          "p90": 0.1703
+        },
+        "contribution_profit": {
+          "p10": 12217.9547,
+          "p50": 15369.7005,
+          "p90": 18352.3708
+        },
+        "loss_probability": 0.0,
+        "loss_probability_weighted_channels": 0.0465,
+        "target_payback_months": 6.0
+      },
+      "channels": {
+        "Amazon": {
+          "roi": {
+            "p10": 0.0446,
+            "p50": 0.119,
+            "p90": 0.2064
+          },
+          "contribution_margin_rate": {
+            "p10": 0.0427,
+            "p50": 0.1063,
+            "p90": 0.1711
+          },
+          "contribution_profit": {
+            "p10": 1142.4921,
+            "p50": 3004.3519,
+            "p90": 5192.6037
+          },
+          "loss_probability": 0.0167,
+          "base_margin_rate": 0.1358,
+          "base_roi": 0.1572
+        },
+        "B2B": {
+          "roi": {
+            "p10": 0.3307,
+            "p50": 0.4293,
+            "p90": 0.536
+          },
+          "contribution_margin_rate": {
+            "p10": 0.2485,
+            "p50": 0.3004,
+            "p90": 0.349
+          },
+          "contribution_profit": {
+            "p10": 5038.4048,
+            "p50": 6430.3691,
+            "p90": 7940.3304
+          },
+          "loss_probability": 0.0,
+          "base_margin_rate": 0.3217,
+          "base_roi": 0.4743
+        },
+        "TikTok Shop": {
+          "roi": {
+            "p10": 0.1002,
+            "p50": 0.1881,
+            "p90": 0.2786
+          },
+          "contribution_margin_rate": {
+            "p10": 0.0911,
+            "p50": 0.1583,
+            "p90": 0.2179
+          },
+          "contribution_profit": {
+            "p10": 1532.6928,
+            "p50": 2850.4944,
+            "p90": 4175.6409
+          },
+          "loss_probability": 0.0,
+          "base_margin_rate": 0.1812,
+          "base_roi": 0.2213
+        },
+        "DTC": {
+          "roi": {
+            "p10": -0.0352,
+            "p50": 0.0418,
+            "p90": 0.122
+          },
+          "contribution_margin_rate": {
+            "p10": -0.0365,
+            "p50": 0.0401,
+            "p90": 0.1087
+          },
+          "contribution_profit": {
+            "p10": -510.5929,
+            "p50": 594.085,
+            "p90": 1673.083
+          },
+          "loss_probability": 0.2608,
+          "base_margin_rate": 0.0735,
+          "base_roi": 0.0793
+        },
+        "Walmart": {
+          "roi": {
+            "p10": 0.0451,
+            "p50": 0.126,
+            "p90": 0.2057
+          },
+          "contribution_margin_rate": {
+            "p10": 0.0431,
+            "p50": 0.1119,
+            "p90": 0.1706
+          },
+          "contribution_profit": {
+            "p10": 515.4677,
+            "p50": 1426.7957,
+            "p90": 2278.0835
+          },
+          "loss_probability": 0.0125,
+          "base_margin_rate": 0.1399,
+          "base_roi": 0.1627
+        },
+        "eBay": {
+          "roi": {
+            "p10": 0.0211,
+            "p50": 0.0957,
+            "p90": 0.1782
+          },
+          "contribution_margin_rate": {
+            "p10": 0.0207,
+            "p50": 0.0874,
+            "p90": 0.1513
+          },
+          "contribution_profit": {
+            "p10": 191.9306,
+            "p50": 864.8853,
+            "p90": 1614.0927
+          },
+          "loss_probability": 0.045,
+          "base_margin_rate": 0.1167,
+          "base_roi": 0.1321
+        }
+      },
+      "sensitivity": [
+        {
+          "driver": "revenue",
+          "base_roi": 0.4743,
+          "base_margin_rate": 0.3217,
+          "downside_roi": 0.3269,
+          "downside_margin_rate": 0.2464,
+          "downside_impact": -0.0754,
+          "upside_roi": 0.5628,
+          "upside_margin_rate": 0.3601,
+          "upside_impact": 0.0384
+        },
+        {
+          "driver": "landed",
+          "base_roi": 0.4743,
+          "base_margin_rate": 0.3217,
+          "downside_roi": 0.3599,
+          "downside_margin_rate": 0.2646,
+          "downside_impact": -0.0571,
+          "upside_roi": 0.5391,
+          "upside_margin_rate": 0.3503,
+          "upside_impact": 0.0285
+        },
+        {
+          "driver": "refund",
+          "base_roi": 0.4743,
+          "base_margin_rate": 0.3217,
+          "downside_roi": 0.4566,
+          "downside_margin_rate": 0.3135,
+          "downside_impact": -0.0083,
+          "upside_roi": 0.4834,
+          "upside_margin_rate": 0.3259,
+          "upside_impact": 0.0041
+        },
+        {
+          "driver": "spend",
+          "base_roi": 0.4743,
+          "base_margin_rate": 0.3217,
+          "downside_roi": 0.4667,
+          "downside_margin_rate": 0.3182,
+          "downside_impact": -0.0035,
+          "upside_roi": 0.4786,
+          "upside_margin_rate": 0.3237,
+          "upside_impact": 0.002
+        },
+        {
+          "driver": "fee",
+          "base_roi": 0.4743,
+          "base_margin_rate": 0.3217,
+          "downside_roi": 0.4683,
+          "downside_margin_rate": 0.3189,
+          "downside_impact": -0.0028,
+          "upside_roi": 0.4774,
+          "upside_margin_rate": 0.3231,
+          "upside_impact": 0.0014
+        }
+      ]
+    }
+  },
+  "validation": {
+    "summary": {
+      "pass_count": 8,
+      "review_count": 0,
+      "fail_count": 0
+    },
+    "checks": [
+      {
+        "check_id": "traffic_source_share_integrity",
+        "status": "pass",
+        "source": {
+          "label": "Part 4 Traffic Funnel",
+          "url": ""
+        },
+        "method": "Traffic source session shares should reconcile back to 100% of observed traffic.",
+        "evidence": {
+          "source_share_sum": 1.0001,
+          "missing_input": false
+        }
+      },
+      {
+        "check_id": "paid_owned_mix_integrity",
+        "status": "pass",
+        "source": {
+          "label": "Part 4 Traffic Funnel",
+          "url": ""
+        },
+        "method": "Paid, owned, and other traffic shares should approximately sum to 100%.",
+        "evidence": {
+          "paid_owned_sum": 1.0,
+          "missing_input": false
+        }
+      },
+      {
+        "check_id": "traffic_funnel_rate_range",
+        "status": "pass",
+        "source": {
+          "label": "Part 4 Traffic Funnel",
+          "url": ""
+        },
+        "method": "Funnel conversion rates must remain within a 0-1 range.",
+        "evidence": {
+          "funnel": {
+            "sessions": 47660,
+            "product_page_views": 36406,
+            "add_to_cart": 4650,
+            "checkout_start": 2315,
+            "orders": 12,
+            "page_view_rate": 0.7639,
+            "add_to_cart_rate": 0.1277,
+            "checkout_start_rate": 0.4978,
+            "checkout_completion_rate": 0.0052
+          },
+          "missing_input": false
+        }
+      },
+      {
+        "check_id": "channel_margin_and_payback_range",
+        "status": "pass",
+        "source": {
+          "label": "Part 4 Channel P&L",
+          "url": ""
+        },
+        "method": "Contribution margin should stay within a valid range and payback should not be negative.",
+        "evidence": {
+          "channel_count": 6,
+          "missing_input": false
+        }
+      },
+      {
+        "check_id": "fee_version_coverage",
+        "status": "pass",
+        "source": {
+          "label": "Part 4 Channel P&L",
+          "url": ""
+        },
+        "method": "Each active channel should have at least one effective fee version in the rate-card table.",
+        "evidence": {
+          "channels_missing_fee_versions": [],
+          "missing_input": false
+        }
+      },
+      {
+        "check_id": "roi_monte_carlo_monotonicity",
+        "status": "pass",
+        "source": {
+          "label": "Part 4 ROI Monte Carlo",
+          "url": ""
+        },
+        "method": "Monte Carlo percentile bands should be monotonic and loss probability must stay within a 0-1 range.",
+        "evidence": {
+          "overall_band": {
+            "p10": 0.1186,
+            "p50": 0.1463,
+            "p90": 0.1703
+          },
+          "loss_probability": 0.0,
+          "missing_input": false
+        }
+      },
+      {
+        "check_id": "readiness_score_range",
+        "status": "pass",
+        "source": {
+          "label": "Part 4 Go No-Go Gates",
+          "url": ""
+        },
+        "method": "Readiness score is normalized to 0-1 to align operational gating across categories.",
+        "evidence": {
+          "readiness_score": 0.5368
+        }
+      },
+      {
+        "check_id": "go_no_go_gate_integrity",
+        "status": "pass",
+        "source": {
+          "label": "Part 4 Go No-Go Gates",
+          "url": ""
+        },
+        "method": "Go/No-Go gates should remain boolean, recommendation must use the fixed enum, and budget shares should not exceed 100%.",
+        "evidence": {
+          "recommendation": "go",
+          "budget_sum": 0.9001,
+          "missing_input": false
+        }
+      }
+    ]
+  }
+}

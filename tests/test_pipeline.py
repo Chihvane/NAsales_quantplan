@@ -11,6 +11,7 @@ from quant_framework.charts import (
     generate_part1_chart_assets,
     generate_part2_chart_assets,
     generate_part3_chart_assets,
+    generate_part4_chart_assets,
 )
 from quant_framework.backtest import (
     build_part2_backtest_panel_from_directory,
@@ -39,6 +40,7 @@ from quant_framework.io_utils import read_csv_rows
 from quant_framework.part1 import build_part1_quant_report
 from quant_framework.part2 import build_part2_quant_report
 from quant_framework.part3 import build_part3_quant_report
+from quant_framework.part4 import build_part4_quant_report
 from quant_framework.part2_pipeline import (
     DEFAULT_PART2_ASSUMPTIONS,
     build_part2_dataset_from_directory,
@@ -47,6 +49,10 @@ from quant_framework.part3_pipeline import (
     DEFAULT_PART3_ASSUMPTIONS,
     build_part3_dataset_from_directory,
 )
+from quant_framework.part4_pipeline import (
+    DEFAULT_PART4_ASSUMPTIONS,
+    build_part4_dataset_from_directory,
+)
 from quant_framework.pipeline import DEFAULT_ASSUMPTIONS, build_dataset_from_directory
 
 
@@ -54,7 +60,29 @@ ROOT = Path(__file__).resolve().parents[1]
 EXAMPLES = ROOT / "examples"
 PART2_EXAMPLES = EXAMPLES / "part2_demo"
 PART3_EXAMPLES = EXAMPLES / "part3_demo"
+PART4_EXAMPLES = EXAMPLES / "part4_demo"
 EXTERNAL_INPUTS = ROOT / "external_inputs"
+
+
+def _assert_standard_report_contract(test_case: unittest.TestCase, report: dict) -> None:
+    test_case.assertIn("metadata", report)
+    test_case.assertIn("overview", report)
+    test_case.assertIn("sections", report)
+    test_case.assertIn("assumptions", report["metadata"])
+    test_case.assertIn("table_inventory", report["metadata"])
+    test_case.assertIn("validation_summary", report["overview"])
+    test_case.assertIn("headline_metrics", report["overview"])
+    test_case.assertIsInstance(report["overview"]["headline_metrics"], list)
+    for section_id, section_payload in report["sections"].items():
+        test_case.assertEqual(section_payload["id"], section_id)
+        test_case.assertIn("required_tables", section_payload)
+        test_case.assertIn("metric_ids", section_payload)
+        test_case.assertIn("data_quality", section_payload)
+        test_case.assertIn("confidence", section_payload)
+        test_case.assertIn("metrics", section_payload)
+        test_case.assertIn("record_counts", section_payload["data_quality"])
+        test_case.assertIn("quality_score", section_payload["data_quality"])
+        test_case.assertIn("score", section_payload["confidence"])
 
 
 class Part1PipelineTests(unittest.TestCase):
@@ -62,6 +90,7 @@ class Part1PipelineTests(unittest.TestCase):
         dataset = build_dataset_from_directory(EXAMPLES)
         report = build_part1_quant_report(dataset, DEFAULT_ASSUMPTIONS)
 
+        _assert_standard_report_contract(self, report)
         self.assertEqual(report["validation"]["summary"]["fail_count"], 0)
         self.assertEqual(report["validation"]["summary"]["review_count"], 0)
         self.assertLess(
@@ -70,6 +99,9 @@ class Part1PipelineTests(unittest.TestCase):
         )
         self.assertIn("uncertainty", report)
         self.assertIn("market_size", report["uncertainty"])
+        self.assertIn("decision_summary", report["overview"])
+        self.assertIn(report["overview"]["decision_signal"], {"attractive", "watchlist", "caution"})
+        self.assertEqual(len(report["overview"]["decision_summary"]["scorecard"]), 4)
         self.assertEqual(
             report["sections"]["1.3"]["metrics"]["bottom_up"]["concentration_level"],
             "highly_concentrated",
@@ -171,10 +203,14 @@ class Part2PipelineTests(unittest.TestCase):
         dataset = build_part2_dataset_from_directory(PART2_EXAMPLES)
         report = build_part2_quant_report(dataset, DEFAULT_PART2_ASSUMPTIONS)
 
+        _assert_standard_report_contract(self, report)
         self.assertEqual(report["validation"]["summary"]["fail_count"], 0)
         self.assertEqual(report["validation"]["summary"]["review_count"], 0)
         self.assertGreater(report["sections"]["2.1"]["metrics"]["total_gmv"], 0)
         self.assertIn("uncertainty", report)
+        self.assertIn("decision_summary", report["overview"])
+        self.assertIn(report["overview"]["decision_signal"], {"promising", "selective", "crowded"})
+        self.assertEqual(len(report["overview"]["decision_summary"]["scorecard"]), 4)
         self.assertGreater(
             report["sections"]["2.2"]["metrics"]["sweet_spot_band"]["share"],
             0,
@@ -336,10 +372,20 @@ class Part3PipelineTests(unittest.TestCase):
         dataset = build_part3_dataset_from_directory(PART3_EXAMPLES)
         report = build_part3_quant_report(dataset, DEFAULT_PART3_ASSUMPTIONS)
 
+        _assert_standard_report_contract(self, report)
         self.assertEqual(report["validation"]["summary"]["fail_count"], 0)
         self.assertEqual(report["validation"]["summary"]["review_count"], 0)
         self.assertIn("uncertainty", report)
+        self.assertIn("decision_summary", report["overview"])
+        self.assertIn(report["overview"]["decision_signal"], {"high_priority", "pilot_candidate", "hold"})
+        self.assertEqual(len(report["overview"]["decision_summary"]["scorecard"]), 4)
         self.assertIn("monte_carlo", report["sections"]["3.5"]["metrics"])
+        self.assertIn("sample_adequacy", report["sections"]["3.1"]["metrics"])
+        self.assertGreater(
+            report["sections"]["3.2"]["metrics"]["quote_quality"]["average_quote_confidence"],
+            0,
+        )
+        self.assertIn("stage_distribution", report["sections"]["3.4"]["metrics"])
         self.assertGreater(
             report["sections"]["3.5"]["metrics"]["best_scenario"]["landed_cost"],
             0,
@@ -351,6 +397,10 @@ class Part3PipelineTests(unittest.TestCase):
         self.assertGreater(
             report["sections"]["3.5"]["metrics"]["monte_carlo"]["iterations"],
             1000,
+        )
+        self.assertGreaterEqual(
+            len(report["sections"]["3.5"]["metrics"]["monte_carlo"]["sensitivity"]),
+            3,
         )
 
     def test_generate_part3_charts(self) -> None:
@@ -395,6 +445,7 @@ class Part3PipelineTests(unittest.TestCase):
             self.assertIn("validation", report)
             self.assertTrue((charts_dir / "supplier_type_share.svg").exists())
             self.assertTrue((charts_dir / "monte_carlo_margin_band.svg").exists())
+            self.assertTrue((charts_dir / "monte_carlo_sensitivity.svg").exists())
 
     def test_cli_clean_part3_command(self) -> None:
         with tempfile.TemporaryDirectory() as temp_dir:
@@ -454,8 +505,74 @@ class Part3PipelineTests(unittest.TestCase):
             self.assertEqual(supplier_rows[0]["supplier_type"], "factory")
             self.assertEqual(len(rfq_rows), 8)
             self.assertEqual(rfq_rows[0]["incoterm"], "EXW")
+            self.assertEqual(rfq_rows[0]["quote_id"], "Q001")
+            self.assertEqual(rfq_rows[0]["source_confidence"], "0.86")
             self.assertEqual(len(logistics_rows), 5)
             self.assertEqual(logistics_rows[0]["shipping_mode"], "sea_fcl")
+
+
+class Part4PipelineTests(unittest.TestCase):
+    def test_build_part4_report_from_examples(self) -> None:
+        dataset = build_part4_dataset_from_directory(PART4_EXAMPLES)
+        report = build_part4_quant_report(dataset, DEFAULT_PART4_ASSUMPTIONS)
+
+        _assert_standard_report_contract(self, report)
+        self.assertEqual(report["validation"]["summary"]["fail_count"], 0)
+        self.assertEqual(report["validation"]["summary"]["review_count"], 0)
+        self.assertIn("uncertainty", report)
+        self.assertIn("roi_monte_carlo", report["uncertainty"])
+        self.assertIn("monte_carlo", report["sections"]["4.5"]["metrics"])
+        self.assertGreater(
+            report["sections"]["4.5"]["metrics"]["blended"]["revenue"],
+            0,
+        )
+        self.assertIn(
+            report["sections"]["4.7"]["metrics"]["recommendation"],
+            {"go", "pilot_first", "no_go"},
+        )
+
+    def test_generate_part4_charts(self) -> None:
+        dataset = build_part4_dataset_from_directory(PART4_EXAMPLES)
+        report = build_part4_quant_report(dataset, DEFAULT_PART4_ASSUMPTIONS)
+
+        with tempfile.TemporaryDirectory() as temp_dir:
+            chart_paths = generate_part4_chart_assets(report, temp_dir)
+            for chart_path in chart_paths.values():
+                content = Path(chart_path).read_text(encoding="utf-8")
+                self.assertIn("<svg", content)
+
+    def test_cli_part4_report_and_chart_commands(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            temp_path = Path(temp_dir)
+            report_path = temp_path / "part4_report.json"
+            charts_dir = temp_path / "part4_charts"
+
+            with redirect_stdout(io.StringIO()):
+                report_exit_code = cli_main(
+                    [
+                        "report-part4",
+                        "--data-dir",
+                        str(PART4_EXAMPLES),
+                        "--output-json",
+                        str(report_path),
+                    ]
+                )
+                chart_exit_code = cli_main(
+                    [
+                        "charts-part4",
+                        "--data-dir",
+                        str(PART4_EXAMPLES),
+                        "--output-dir",
+                        str(charts_dir),
+                    ]
+                )
+
+            self.assertEqual(report_exit_code, 0)
+            self.assertEqual(chart_exit_code, 0)
+            report = json.loads(report_path.read_text(encoding="utf-8"))
+            self.assertIn("validation", report)
+            self.assertTrue((charts_dir / "channel_contribution_margin.svg").exists())
+            self.assertTrue((charts_dir / "roi_band.svg").exists())
 
 
 if __name__ == "__main__":
