@@ -1,0 +1,4 @@
+account_id,account_type,region,discount_rate,payment_terms_days,rebate_rate,annual_target
+ACC-001,regional_distributor,US-West,0.14,30,0.02,64000
+ACC-002,rv_dealer,US-South,0.12,21,0.01,48000
+ACC-003,hardware_chain,US-Midwest,0.16,45,0.025,82000

@@ -1,0 +1,30 @@
+schema_version: 1.0
+module: open_source_integrations
+integrations:
+  - slug: gx_core
+    package: great_expectations|gx
+    optional: true
+    purpose: data_quality_validation
+    outputs:
+      - validation_payload
+      - expectation_coverage
+  - slug: evidently
+    package: evidently
+    optional: true
+    purpose: drift_monitoring
+    outputs:
+      - drift_payload
+      - monitored_column_delta
+  - slug: mlflow
+    package: mlflow
+    optional: true
+    purpose: experiment_tracking
+    outputs:
+      - run_tracking_payload
+  - slug: optuna
+    package: optuna
+    optional: true
+    purpose: gate_and_strategy_optimization
+    outputs:
+      - optimization_result
+      - best_gate_params

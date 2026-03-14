@@ -1,0 +1,10 @@
+decision_record:
+  decision_id: DEC-0001
+  gate_id: GATE-MARKET-ENTRY
+  model_version: 3.0.0
+  capital_version: 3.0
+  risk_version: 3.0
+  portfolio_id: PF-0001
+  approved_by: strategy_committee
+  approved_at: 2026-03-14T12:00:00Z
+  hash_signature: ""

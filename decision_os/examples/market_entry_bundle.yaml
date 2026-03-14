@@ -1,0 +1,75 @@
+bundle:
+  bundle_id: EX-MARKET-ENTRY-001
+  schema_version: 1.0
+
+field:
+  field_id: F-SKU-LIST-PRICE-001
+  schema_version: 2.1
+  entity: SKU
+  data_type: float
+  unit: USD
+  source: amazon_sp_api.orders
+  update_frequency: daily
+  ref_key: dim_product.sku_id
+  confidence_level: A
+
+metric:
+  metric_id: M-GROSS-MARGIN-001
+  schema_version: 2.0
+  formula: "(net_price - landed_cost - platform_fee)"
+  depends_on:
+    - F-SKU-LIST-PRICE-001
+    - F-SKU-LANDED-COST-001
+    - F-CHANNEL-FEE-002
+  aggregation: sku_day
+
+factor:
+  factor_id: FAC-MARKET-ATTRACT-01
+  schema_version: 1.2
+  components:
+    - metric: M-TAM
+      weight: 0.25
+    - metric: M-CAGR
+      weight: 0.25
+    - metric: M-HHI
+      weight: -0.25
+    - metric: M-VOLATILITY
+      weight: -0.25
+  normalization: z_score
+
+model:
+  model_id: MOD-MONTE-CARLO-PROFIT-01
+  schema_version: 1.3
+  type: simulation
+  outputs:
+    profit_p50: 0.18
+    loss_probability: 0.12
+    expected_drawdown: 0.09
+    required_capital: 400000
+
+gate:
+  gate_id: GATE-MARKET-ENTRY-01
+  schema_version: 2.0
+  trigger:
+    conditions:
+      - source: metric
+        ref: profit_p50
+        operator: ">="
+        value: 0
+      - source: metric
+        ref: loss_probability
+        operator: "<="
+        value: 0.25
+      - source: factor
+        ref: FAC-MARKET-ATTRACT-01
+        operator: ">="
+        value: 0.5
+  capital_constraint:
+    lhs: required_capital
+    operator: "<="
+    rhs: capital_free
+  risk_budget:
+    lhs: expected_drawdown
+    operator: "<="
+    rhs: risk_limit
+  logic: AND

@@ -1,0 +1,13 @@
+date,channel,warehouse,sku_id,on_hand_units,inbound_units,sell_through_units,storage_cost
+2026-02-01,DTC,US-3PL,GEN-A,28,12,10,74
+2026-02-20,DTC,US-3PL,GEN-B,24,10,11,72
+2026-02-01,Amazon,Amazon-FBA,GEN-A,46,18,20,132
+2026-02-20,Amazon,Amazon-FBA,GEN-B,39,15,19,128
+2026-02-01,TikTok Shop,US-3PL,GEN-A,34,12,13,88
+2026-02-20,TikTok Shop,US-3PL,GEN-B,29,11,12,86
+2026-02-01,eBay,Self-Fulfill,GEN-A,18,8,7,46
+2026-02-20,eBay,Self-Fulfill,GEN-B,16,7,8,44
+2026-02-01,Walmart,WFS,GEN-A,26,10,9,78
+2026-02-20,Walmart,WFS,GEN-B,22,8,10,76
+2026-02-01,B2B,Dealer-DC,GEN-A,40,20,14,58
+2026-02-20,B2B,Dealer-DC,GEN-B,32,16,12,55

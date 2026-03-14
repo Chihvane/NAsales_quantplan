@@ -1,0 +1,14 @@
+factor:
+  factor_id: FAC-MARKET-ATTRACT
+  schema_version: 2.1
+  normalization_method: z_score
+  weighting_logic: weighted_sum
+  components:
+    - metric: M-TAM
+      weight: 0.25
+    - metric: M-CAGR
+      weight: 0.25
+    - metric: M-HHI
+      weight: -0.25
+    - metric: M-VOLATILITY
+      weight: -0.25

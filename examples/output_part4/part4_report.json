@@ -2,7 +2,7 @@
   "metadata": {
     "report_id": "part4_quant_report",
     "report_version": "2026.03",
-    "generated_at": "2026-03-13T13:19:22.320922+00:00",
+    "generated_at": "2026-03-13T16:50:05.006518+00:00",
     "section_order": [
       "4.1",
       "4.2",
@@ -29,7 +29,26 @@
           "marketing_spend": 8,
           "customer_cohorts": 4,
           "landed_cost_scenarios": 6
-        }
+        },
+        "analysis_grain": "channel x cohort window",
+        "entity_grain": "DTC",
+        "time_grain": "week / cohort month",
+        "channel_scope": [
+          "DTC"
+        ],
+        "master_data_refs": [
+          "mdm.channel",
+          "mdm.customer_segment",
+          "mdm.sku"
+        ],
+        "evidence_refs": [
+          "evidence.traffic_sessions",
+          "evidence.marketing_spend",
+          "evidence.customer_cohorts"
+        ],
+        "rule_refs": [
+          "gate.dtc_feasibility"
+        ]
       },
       "4.2": {
         "title": "平台电商模式可行性分析",
@@ -49,7 +68,29 @@
           "marketing_spend": 8,
           "channel_rate_cards": 10,
           "landed_cost_scenarios": 6
-        }
+        },
+        "analysis_grain": "channel x transaction window",
+        "entity_grain": "platform channel",
+        "time_grain": "week",
+        "channel_scope": [
+          "Amazon",
+          "TikTok Shop",
+          "eBay",
+          "Walmart"
+        ],
+        "master_data_refs": [
+          "mdm.channel",
+          "mdm.sku",
+          "mdm.price_metric"
+        ],
+        "evidence_refs": [
+          "evidence.sold_transactions",
+          "evidence.channel_rate_cards",
+          "evidence.marketing_spend"
+        ],
+        "rule_refs": [
+          "gate.platform_selection"
+        ]
       },
       "4.3": {
         "title": "线下经销商与 ToB 模式分析",
@@ -65,7 +106,25 @@
           "b2b_accounts": 3,
           "landed_cost_scenarios": 2,
           "sold_transactions": 10
-        }
+        },
+        "analysis_grain": "account x transaction window",
+        "entity_grain": "B2B account",
+        "time_grain": "week / quarter",
+        "channel_scope": [
+          "B2B"
+        ],
+        "master_data_refs": [
+          "mdm.channel",
+          "mdm.account",
+          "mdm.sku"
+        ],
+        "evidence_refs": [
+          "evidence.b2b_accounts",
+          "evidence.sold_transactions"
+        ],
+        "rule_refs": [
+          "gate.b2b_viability"
+        ]
       },
       "4.4": {
         "title": "曝光、获客与流量结构分析",
@@ -79,7 +138,29 @@
         "quality_targets": {
           "traffic_sessions": 8,
           "marketing_spend": 8
-        }
+        },
+        "analysis_grain": "channel x source",
+        "entity_grain": "channel x traffic source",
+        "time_grain": "day / week",
+        "channel_scope": [
+          "DTC",
+          "Amazon",
+          "TikTok Shop",
+          "eBay",
+          "Walmart",
+          "B2B"
+        ],
+        "master_data_refs": [
+          "mdm.channel",
+          "mdm.traffic_source"
+        ],
+        "evidence_refs": [
+          "evidence.traffic_sessions",
+          "evidence.marketing_spend"
+        ],
+        "rule_refs": [
+          "gate.traffic_efficiency"
+        ]
       },
       "4.5": {
         "title": "转化效率与 ROI 模型分析",
@@ -101,7 +182,33 @@
           "inventory_positions": 8,
           "landed_cost_scenarios": 6,
           "channel_rate_cards": 10
-        }
+        },
+        "analysis_grain": "channel x roi scenario",
+        "entity_grain": "channel",
+        "time_grain": "week",
+        "channel_scope": [
+          "DTC",
+          "Amazon",
+          "TikTok Shop",
+          "eBay",
+          "Walmart",
+          "B2B"
+        ],
+        "master_data_refs": [
+          "mdm.channel",
+          "mdm.price_metric",
+          "mdm.sku"
+        ],
+        "evidence_refs": [
+          "evidence.sold_transactions",
+          "evidence.channel_rate_cards",
+          "evidence.returns_claims"
+        ],
+        "rule_refs": [
+          "gate.margin_gate",
+          "gate.payback_gate",
+          "gate.loss_gate"
+        ]
       },
       "4.6": {
         "title": "运营门槛与组织能力要求分析",
@@ -119,7 +226,30 @@
           "returns_claims": 6,
           "inventory_positions": 8,
           "traffic_sessions": 8
-        }
+        },
+        "analysis_grain": "capability score",
+        "entity_grain": "channel operating model",
+        "time_grain": "planning window",
+        "channel_scope": [
+          "DTC",
+          "Amazon",
+          "TikTok Shop",
+          "eBay",
+          "Walmart",
+          "B2B"
+        ],
+        "master_data_refs": [
+          "mdm.channel",
+          "mdm.experiment_registry"
+        ],
+        "evidence_refs": [
+          "evidence.experiment_registry",
+          "evidence.inventory_positions",
+          "evidence.returns_claims"
+        ],
+        "rule_refs": [
+          "gate.readiness_gate"
+        ]
       },
       "4.7": {
         "title": "推荐进入路径与 90 天销售执行方案",
@@ -139,7 +269,35 @@
           "marketing_spend": 8,
           "b2b_accounts": 3,
           "experiment_registry": 4
-        }
+        },
+        "analysis_grain": "entry plan scenario",
+        "entity_grain": "channel portfolio",
+        "time_grain": "90-day plan",
+        "channel_scope": [
+          "DTC",
+          "Amazon",
+          "TikTok Shop",
+          "eBay",
+          "Walmart",
+          "B2B"
+        ],
+        "master_data_refs": [
+          "mdm.channel",
+          "mdm.sku",
+          "mdm.account"
+        ],
+        "evidence_refs": [
+          "evidence.landed_cost_scenarios",
+          "evidence.traffic_sessions",
+          "evidence.marketing_spend"
+        ],
+        "rule_refs": [
+          "gate.margin_gate",
+          "gate.payback_gate",
+          "gate.loss_gate",
+          "gate.readiness_gate"
+        ],
+        "gate_status_key": "recommendation"
       }
     },
     "metric_specs": [
@@ -304,6 +462,60 @@
       "medium": 0,
       "low": 0
     },
+    "connected_channel_scope": [
+      "Amazon",
+      "B2B",
+      "DTC",
+      "TikTok Shop",
+      "Walmart",
+      "eBay"
+    ],
+    "control_tower_binding": {
+      "master_data_ref_coverage_ratio": 1.0,
+      "evidence_ref_coverage_ratio": 1.0,
+      "rule_ref_coverage_ratio": 1.0,
+      "gate_status_mix": {
+        "pass": 1,
+        "review": 0,
+        "fail": 0,
+        "not_applicable": 6
+      }
+    },
+    "decision_summary": {
+      "decision_signal": "go",
+      "decision_score": 0.5898,
+      "scorecard": {
+        "channel_optionality": {
+          "score": 0.9045,
+          "level": "high"
+        },
+        "traffic_quality": {
+          "score": 0.0339,
+          "level": "low"
+        },
+        "unit_economics": {
+          "score": 0.779,
+          "level": "high"
+        },
+        "operating_readiness": {
+          "score": 0.3901,
+          "level": "low"
+        }
+      },
+      "key_findings": [
+        "当前推荐状态为 go，主攻渠道为 B2B。",
+        "最佳平台为 TikTok Shop，综合贡献毛利率约 17.2%。",
+        "组织承接分为 53.7%，总体亏损概率为 0.0%。"
+      ],
+      "risk_flags": [
+        "流量结构过度依赖付费流量，冷启动成本与放量波动都偏高。",
+        "组织承接能力不足，履约、实验或服务链路还不能稳定支持放量。",
+        "当前仍有未通过的进入门禁：readiness_gate。"
+      ],
+      "recommended_next_step": "按主攻渠道启动试点，并把预算、SKU 与库存控制在 90 天计划内。"
+    },
+    "decision_signal": "go",
+    "decision_score": 0.5898,
     "headline_metrics": [
       {
         "key": "recommendation",
@@ -367,6 +579,33 @@
       "metric_ids": [
         "dtc_feasibility"
       ],
+      "granularity": {
+        "analysis_grain": "channel x cohort window",
+        "entity_grain": "DTC",
+        "time_grain": "week / cohort month"
+      },
+      "channel_scope": [
+        "DTC"
+      ],
+      "master_data_ref": [
+        "mdm.channel",
+        "mdm.customer_segment",
+        "mdm.sku"
+      ],
+      "evidence_ref": [
+        "evidence.traffic_sessions",
+        "evidence.marketing_spend",
+        "evidence.customer_cohorts"
+      ],
+      "rule_ref": [
+        "gate.dtc_feasibility"
+      ],
+      "gate_result": {
+        "status": "not_applicable",
+        "source": "",
+        "raw_value": "",
+        "failed_items": []
+      },
       "data_quality": {
         "record_counts": {
           "traffic_sessions": 14,
@@ -462,6 +701,36 @@
       "metric_ids": [
         "platform_channel_fit"
       ],
+      "granularity": {
+        "analysis_grain": "channel x transaction window",
+        "entity_grain": "platform channel",
+        "time_grain": "week"
+      },
+      "channel_scope": [
+        "Amazon",
+        "TikTok Shop",
+        "eBay",
+        "Walmart"
+      ],
+      "master_data_ref": [
+        "mdm.channel",
+        "mdm.sku",
+        "mdm.price_metric"
+      ],
+      "evidence_ref": [
+        "evidence.sold_transactions",
+        "evidence.channel_rate_cards",
+        "evidence.marketing_spend"
+      ],
+      "rule_ref": [
+        "gate.platform_selection"
+      ],
+      "gate_result": {
+        "status": "not_applicable",
+        "source": "",
+        "raw_value": "",
+        "failed_items": []
+      },
       "data_quality": {
         "record_counts": {
           "sold_transactions": 12,
@@ -687,6 +956,32 @@
       "metric_ids": [
         "b2b_channel_viability"
       ],
+      "granularity": {
+        "analysis_grain": "account x transaction window",
+        "entity_grain": "B2B account",
+        "time_grain": "week / quarter"
+      },
+      "channel_scope": [
+        "B2B"
+      ],
+      "master_data_ref": [
+        "mdm.channel",
+        "mdm.account",
+        "mdm.sku"
+      ],
+      "evidence_ref": [
+        "evidence.b2b_accounts",
+        "evidence.sold_transactions"
+      ],
+      "rule_ref": [
+        "gate.b2b_viability"
+      ],
+      "gate_result": {
+        "status": "not_applicable",
+        "source": "",
+        "raw_value": "",
+        "failed_items": []
+      },
       "data_quality": {
         "record_counts": {
           "b2b_accounts": 3,
@@ -776,6 +1071,36 @@
       "metric_ids": [
         "traffic_structure"
       ],
+      "granularity": {
+        "analysis_grain": "channel x source",
+        "entity_grain": "channel x traffic source",
+        "time_grain": "day / week"
+      },
+      "channel_scope": [
+        "DTC",
+        "Amazon",
+        "TikTok Shop",
+        "eBay",
+        "Walmart",
+        "B2B"
+      ],
+      "master_data_ref": [
+        "mdm.channel",
+        "mdm.traffic_source"
+      ],
+      "evidence_ref": [
+        "evidence.traffic_sessions",
+        "evidence.marketing_spend"
+      ],
+      "rule_ref": [
+        "gate.traffic_efficiency"
+      ],
+      "gate_result": {
+        "status": "not_applicable",
+        "source": "",
+        "raw_value": "",
+        "failed_items": []
+      },
       "data_quality": {
         "record_counts": {
           "traffic_sessions": 14,
@@ -1008,6 +1333,40 @@
       "metric_ids": [
         "roi_unit_economics"
       ],
+      "granularity": {
+        "analysis_grain": "channel x roi scenario",
+        "entity_grain": "channel",
+        "time_grain": "week"
+      },
+      "channel_scope": [
+        "DTC",
+        "Amazon",
+        "TikTok Shop",
+        "eBay",
+        "Walmart",
+        "B2B"
+      ],
+      "master_data_ref": [
+        "mdm.channel",
+        "mdm.price_metric",
+        "mdm.sku"
+      ],
+      "evidence_ref": [
+        "evidence.sold_transactions",
+        "evidence.channel_rate_cards",
+        "evidence.returns_claims"
+      ],
+      "rule_ref": [
+        "gate.margin_gate",
+        "gate.payback_gate",
+        "gate.loss_gate"
+      ],
+      "gate_result": {
+        "status": "not_applicable",
+        "source": "",
+        "raw_value": "",
+        "failed_items": []
+      },
       "data_quality": {
         "record_counts": {
           "sold_transactions": 12,
@@ -1532,6 +1891,37 @@
       "metric_ids": [
         "operating_readiness"
       ],
+      "granularity": {
+        "analysis_grain": "capability score",
+        "entity_grain": "channel operating model",
+        "time_grain": "planning window"
+      },
+      "channel_scope": [
+        "DTC",
+        "Amazon",
+        "TikTok Shop",
+        "eBay",
+        "Walmart",
+        "B2B"
+      ],
+      "master_data_ref": [
+        "mdm.channel",
+        "mdm.experiment_registry"
+      ],
+      "evidence_ref": [
+        "evidence.experiment_registry",
+        "evidence.inventory_positions",
+        "evidence.returns_claims"
+      ],
+      "rule_ref": [
+        "gate.readiness_gate"
+      ],
+      "gate_result": {
+        "status": "not_applicable",
+        "source": "",
+        "raw_value": "",
+        "failed_items": []
+      },
       "data_quality": {
         "record_counts": {
           "experiment_registry": 6,
@@ -1589,6 +1979,41 @@
       "metric_ids": [
         "entry_plan"
       ],
+      "granularity": {
+        "analysis_grain": "entry plan scenario",
+        "entity_grain": "channel portfolio",
+        "time_grain": "90-day plan"
+      },
+      "channel_scope": [
+        "DTC",
+        "Amazon",
+        "TikTok Shop",
+        "eBay",
+        "Walmart",
+        "B2B"
+      ],
+      "master_data_ref": [
+        "mdm.channel",
+        "mdm.sku",
+        "mdm.account"
+      ],
+      "evidence_ref": [
+        "evidence.landed_cost_scenarios",
+        "evidence.traffic_sessions",
+        "evidence.marketing_spend"
+      ],
+      "rule_ref": [
+        "gate.margin_gate",
+        "gate.payback_gate",
+        "gate.loss_gate",
+        "gate.readiness_gate"
+      ],
+      "gate_result": {
+        "status": "pass",
+        "source": "recommendation",
+        "raw_value": "go",
+        "failed_items": []
+      },
       "data_quality": {
         "record_counts": {
           "landed_cost_scenarios": 12,

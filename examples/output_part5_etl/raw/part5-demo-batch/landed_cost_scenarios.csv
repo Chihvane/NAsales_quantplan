@@ -1,0 +1,13 @@
+scenario_id,canonical_sku,channel,mode,landed_cost_p10,landed_cost_p50,landed_cost_p90,sell_price,working_capital_cost,return_reserve,scenario_confidence_score
+LC-001,GEN-A,DTC,sea+3pl,318,332,352,679,8,6,0.86
+LC-002,GEN-B,DTC,sea+3pl,341,356,378,719,9,7,0.86
+LC-003,GEN-A,Amazon,sea+fba,322,337,358,659,8,7,0.89
+LC-004,GEN-B,Amazon,sea+fba,346,362,384,699,9,7,0.89
+LC-005,GEN-A,TikTok Shop,sea+platform,320,336,360,649,8,7,0.82
+LC-006,GEN-B,TikTok Shop,sea+platform,344,360,385,689,9,7,0.82
+LC-007,GEN-A,eBay,sea+self,319,334,357,651,8,7,0.78
+LC-008,GEN-B,eBay,sea+self,343,358,382,691,9,7,0.78
+LC-009,GEN-A,Walmart,sea+wfs,321,335,357,649,8,7,0.8
+LC-010,GEN-B,Walmart,sea+wfs,345,359,381,689,9,7,0.8
+LC-011,GEN-A,B2B,pallet,306,319,338,579,7,4,0.76
+LC-012,GEN-B,B2B,pallet,328,342,362,619,8,4,0.76

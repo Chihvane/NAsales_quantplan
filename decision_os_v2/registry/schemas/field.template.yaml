@@ -1,0 +1,10 @@
+field_schema:
+  field_id: F-TAM-001
+  schema_version: 2.0
+  ref_key: dim_market.market_id
+  entity: market
+  source: statista_api
+  data_type: float
+  unit: USD
+  update_frequency: quarterly
+  confidence_level: A

@@ -1,0 +1,13 @@
+platform,listing_id,canonical_sku,brand,seller_id,captured_at,list_price,sale_price,currency,shipping_fee,rating_avg,review_count,sold_count_window,sales_rank,active_flag,seller_type,fulfillment_type
+DTC,DTC-L1,GEN-A,NorthPeak,DTC-01,2026-02-28,699,679,USD,0,4.7,128,42,12,true,brand,3pl
+DTC,DTC-L2,GEN-B,NorthPeak,DTC-01,2026-02-28,749,719,USD,0,4.6,86,31,18,true,brand,3pl
+Amazon,AMZ-L1,GEN-A,NorthPeak,AMZ-01,2026-02-28,689,659,USD,0,4.5,542,95,6,true,brand,FBA
+Amazon,AMZ-L2,GEN-B,NorthPeak,AMZ-01,2026-02-28,739,699,USD,0,4.4,388,72,9,true,brand,FBA
+TikTok Shop,TTS-L1,GEN-A,NorthPeak,TTS-01,2026-02-28,679,649,USD,0,4.4,166,58,15,true,brand,platform
+TikTok Shop,TTS-L2,GEN-B,NorthPeak,TTS-01,2026-02-28,729,689,USD,0,4.3,142,47,19,true,brand,platform
+eBay,EBY-L1,GEN-A,NorthPeak,EBY-01,2026-02-28,669,639,USD,12,4.2,210,34,21,true,reseller,self_fulfilled
+eBay,EBY-L2,GEN-B,NorthPeak,EBY-01,2026-02-28,719,679,USD,12,4.1,174,28,24,true,reseller,self_fulfilled
+Walmart,WMT-L1,GEN-A,NorthPeak,WMT-01,2026-02-28,679,649,USD,0,4.4,98,39,17,true,brand,WFS
+Walmart,WMT-L2,GEN-B,NorthPeak,WMT-01,2026-02-28,729,689,USD,0,4.3,81,26,23,true,brand,WFS
+B2B,B2B-L1,GEN-A,NorthPeak,B2B-01,2026-02-28,599,579,USD,0,0,0,18,0,true,dealer,pallet
+B2B,B2B-L2,GEN-B,NorthPeak,B2B-01,2026-02-28,639,619,USD,0,0,0,15,0,true,dealer,pallet

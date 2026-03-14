@@ -1,0 +1,7 @@
+date,channel,sku_id,action_type,old_price,new_price,promo_flag,bundle_flag,owner
+2026-02-02,DTC,GEN-A,promo_test,679,659,true,false,growth
+2026-02-03,Amazon,GEN-A,price_reset,659,649,true,false,marketplace
+2026-02-05,TikTok Shop,GEN-B,bundle_offer,689,689,false,true,social_commerce
+2026-02-06,eBay,GEN-A,markdown,629,619,true,false,marketplace
+2026-02-09,Walmart,GEN-B,title_bundle,699,699,false,true,retail_ops
+2026-02-11,B2B,GEN-A,account_discount,599,589,true,false,sales_ops

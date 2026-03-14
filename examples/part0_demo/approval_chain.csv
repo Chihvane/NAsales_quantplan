@@ -1,0 +1,16 @@
+gate_id,step_order,role_name,owner_name,action_type,status,signed_at,veto_flag
+Gate1,1,Prepared by,Li Chen,prepare,signed,2026-03-01,false
+Gate1,2,Reviewed by,Wang Min,review,signed,2026-03-02,false
+Gate1,3,Approved by,Zhao Lei,approve,signed,2026-03-03,true
+Gate2,1,Prepared by,Li Chen,prepare,signed,2026-03-04,false
+Gate2,2,Reviewed by,Sun Yu,review,signed,2026-03-05,false
+Gate2,3,Approved by,Zhao Lei,approve,signed,2026-03-06,true
+Gate3,1,Prepared by,Guo Lin,prepare,signed,2026-03-07,false
+Gate3,2,Reviewed by,He Qiang,review,signed,2026-03-08,false
+Gate3,3,Approved by,Zhao Lei,approve,signed,2026-03-09,true
+Gate4,1,Prepared by,Guo Lin,prepare,signed,2026-03-10,false
+Gate4,2,Reviewed by,Sun Yu,review,signed,2026-03-11,false
+Gate4,3,Approved by,Zhao Lei,approve,signed,2026-03-12,true
+Gate5,1,Prepared by,Li Chen,prepare,signed,2026-03-13,false
+Gate5,2,Reviewed by,Wang Min,review,signed,2026-03-13,false
+Gate5,3,Approved by,Zhao Lei,approve,signed,2026-03-13,true

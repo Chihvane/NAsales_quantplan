@@ -1,0 +1,15 @@
+date,channel,traffic_source,sessions,product_page_views,add_to_cart,checkout_start,orders
+2026-02-01,DTC,paid_search,6200,4460,520,250,8
+2026-02-01,DTC,paid_social,5100,3480,410,202,6
+2026-02-01,DTC,email,1500,1080,180,92,4
+2026-02-01,DTC,direct,2400,1710,265,128,3
+2026-02-01,Amazon,amazon_ads,8200,7020,980,540,15
+2026-02-01,Amazon,organic_search,2600,2100,250,116,6
+2026-02-01,TikTok Shop,tiktok_ads,9800,7840,960,462,11
+2026-02-01,TikTok Shop,organic_social,3400,2380,318,152,4
+2026-02-01,eBay,ebay_promoted,2500,1790,210,106,5
+2026-02-01,eBay,organic_search,980,710,90,42,2
+2026-02-01,Walmart,walmart_ads,3200,2540,290,138,7
+2026-02-01,Walmart,organic_search,1400,980,118,58,3
+2026-02-01,B2B,affiliate,260,220,38,18,2
+2026-02-01,B2B,direct,120,96,21,11,1

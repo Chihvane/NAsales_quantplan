@@ -37,6 +37,84 @@ def build_table_inventory(dataset: Any) -> dict[str, dict[str, Any]]:
     return inventory
 
 
+def _derive_gate_result(
+    section_definition: dict[str, Any],
+    metrics: dict[str, Any],
+) -> dict[str, Any]:
+    gate_status_key = section_definition.get("gate_status_key")
+    recommendation_keys = ("recommendation", "expansion_gate_status", "decision_status", "status")
+    pass_values = {"pass", "go", "scale_up", "recommended_entry", "ready_for_execution_system", "control_tower_ready"}
+    review_values = {
+        "review",
+        "pilot_first",
+        "pilot_only",
+        "hold_and_optimize",
+        "selective",
+        "prepare_rollout",
+        "control_tower_needs_hardening",
+    }
+    fail_values = {"fail", "no_go", "rollback", "stop", "not_recommended", "control_tower_not_ready"}
+
+    if gate_status_key and gate_status_key in metrics:
+        raw_value = metrics.get(gate_status_key)
+        raw_value_normalized = str(raw_value).strip().lower()
+        if raw_value_normalized in pass_values:
+            status = "pass"
+        elif raw_value_normalized in fail_values:
+            status = "fail"
+        elif raw_value_normalized in review_values:
+            status = "review"
+        else:
+            status = "review" if raw_value not in (None, "", []) else "not_applicable"
+        return {
+            "status": status,
+            "source": gate_status_key,
+            "raw_value": raw_value,
+            "failed_items": [],
+        }
+
+    gate_results = metrics.get("gate_results")
+    if isinstance(gate_results, dict) and gate_results:
+        failed_items = [key for key, value in gate_results.items() if not bool(value)]
+        if not failed_items:
+            status = "pass"
+        elif len(failed_items) >= max(1, len(gate_results) // 2):
+            status = "fail"
+        else:
+            status = "review"
+        return {
+            "status": status,
+            "source": "gate_results",
+            "raw_value": gate_results,
+            "failed_items": failed_items,
+        }
+
+    for key in recommendation_keys:
+        raw_value = metrics.get(key)
+        if raw_value in (None, "", [], {}):
+            continue
+        raw_value_normalized = str(raw_value).strip().lower()
+        if raw_value_normalized in pass_values:
+            status = "pass"
+        elif raw_value_normalized in fail_values:
+            status = "fail"
+        else:
+            status = "review"
+        return {
+            "status": status,
+            "source": key,
+            "raw_value": raw_value,
+            "failed_items": [],
+        }
+
+    return {
+        "status": "not_applicable",
+        "source": "",
+        "raw_value": "",
+        "failed_items": [],
+    }
+
+
 def build_section_payload(
     section_id: str,
     section_definition: dict[str, Any],
@@ -80,6 +158,16 @@ def build_section_payload(
         "title": section_definition.get("title", section_id),
         "required_tables": required_tables,
         "metric_ids": metric_ids,
+        "granularity": {
+            "analysis_grain": section_definition.get("analysis_grain", ""),
+            "entity_grain": section_definition.get("entity_grain", ""),
+            "time_grain": section_definition.get("time_grain", ""),
+        },
+        "channel_scope": list(section_definition.get("channel_scope", [])),
+        "master_data_ref": list(section_definition.get("master_data_refs", [])),
+        "evidence_ref": list(section_definition.get("evidence_refs", [])),
+        "rule_ref": list(section_definition.get("rule_refs", [])),
+        "gate_result": _derive_gate_result(section_definition, metrics),
         "data_quality": data_quality,
         "confidence": {
             "score": round(quality_score, 4),
@@ -95,6 +183,19 @@ def build_report_overview(sections: dict[str, dict[str, Any]]) -> dict[str, Any]
         for section in sections.values()
     ]
     levels = [section.get("confidence", {}).get("level", "low") for section in sections.values()]
+    all_channels = sorted(
+        {
+            channel
+            for section in sections.values()
+            for channel in section.get("channel_scope", [])
+            if channel
+        }
+    )
+    gate_statuses = [section.get("gate_result", {}).get("status", "not_applicable") for section in sections.values()]
+    sections_with_master_refs = sum(1 for section in sections.values() if section.get("master_data_ref"))
+    sections_with_evidence_refs = sum(1 for section in sections.values() if section.get("evidence_ref"))
+    sections_with_rule_refs = sum(1 for section in sections.values() if section.get("rule_ref"))
+    section_count = len(sections) or 1
     return {
         "section_count": len(sections),
         "average_confidence_score": round(mean(confidence_scores), 4) if confidence_scores else 0.0,
@@ -102,6 +203,18 @@ def build_report_overview(sections: dict[str, dict[str, Any]]) -> dict[str, Any]
             "high": sum(1 for level in levels if level == "high"),
             "medium": sum(1 for level in levels if level == "medium"),
             "low": sum(1 for level in levels if level == "low"),
+        },
+        "connected_channel_scope": all_channels,
+        "control_tower_binding": {
+            "master_data_ref_coverage_ratio": round(sections_with_master_refs / section_count, 4),
+            "evidence_ref_coverage_ratio": round(sections_with_evidence_refs / section_count, 4),
+            "rule_ref_coverage_ratio": round(sections_with_rule_refs / section_count, 4),
+            "gate_status_mix": {
+                "pass": sum(1 for status in gate_statuses if status == "pass"),
+                "review": sum(1 for status in gate_statuses if status == "review"),
+                "fail": sum(1 for status in gate_statuses if status == "fail"),
+                "not_applicable": sum(1 for status in gate_statuses if status == "not_applicable"),
+            },
         },
     }
 

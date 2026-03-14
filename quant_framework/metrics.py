@@ -5,9 +5,11 @@ from math import sqrt
 from statistics import mean, median, pstdev
 
 from .models import (
+    ChannelBenchmarkRecord,
     ChannelRecord,
     CustomerSegmentRecord,
     ListingRecord,
+    MarketSizeInputRecord,
     MarketSizeAssumptions,
     RegionDemandRecord,
     SearchTrendRecord,
@@ -37,6 +39,10 @@ def _month_bucket(month_value: str) -> str:
     if len(month_value) >= 7:
         return month_value[5:7]
     return month_value
+
+
+def _month_from_date(value: str) -> str:
+    return value[:7] if len(value) >= 7 else value
 
 
 def _percentile(values: list[float], percentile: float) -> float:
@@ -175,6 +181,15 @@ def _match_quantile_price_band(
     return "unclassified"
 
 
+def _normalize_label(value: str) -> str:
+    return "".join(ch for ch in value.lower() if ch.isalnum())
+
+
+def _grade_value(grade: str) -> float:
+    mapping = {"A": 1.0, "B": 0.8, "C": 0.6, "D": 0.4}
+    return mapping.get((grade or "").upper(), 0.0)
+
+
 def _classify_hhi(hhi: float) -> str:
     if hhi < 1000:
         return "unconcentrated"
@@ -191,6 +206,7 @@ def _midpoint_change(start_value: float, end_value: float) -> float:
 def compute_demand_metrics(
     search_trends: list[SearchTrendRecord],
     region_demand: list[RegionDemandRecord],
+    transactions: list[TransactionRecord] | None = None,
 ) -> dict:
     if not search_trends:
         return {
@@ -250,6 +266,35 @@ def compute_demand_metrics(
         month for month, index_value in seasonality_index.items() if index_value <= 80
     ]
 
+    transaction_monthly_units: dict[str, int] = defaultdict(int)
+    for record in transactions or []:
+        transaction_monthly_units[_month_from_date(record.date)] += max(record.units, 0)
+
+    lag_candidates = []
+    ordered_month_labels = list(monthly_average.keys())
+    ordered_month_values = list(monthly_average.values())
+    for lag_months in range(0, 4):
+        trend_values_for_lag = []
+        sales_values_for_lag = []
+        for index, month_label in enumerate(ordered_month_labels):
+            if month_label not in transaction_monthly_units:
+                continue
+            trend_index = index - lag_months
+            if trend_index < 0:
+                continue
+            trend_values_for_lag.append(ordered_month_values[trend_index])
+            sales_values_for_lag.append(transaction_monthly_units[month_label])
+        if len(trend_values_for_lag) >= 3:
+            lag_candidates.append(
+                {
+                    "lag_months": lag_months,
+                    "correlation": round(_pearson_correlation(trend_values_for_lag, sales_values_for_lag), 4),
+                    "observation_count": len(trend_values_for_lag),
+                }
+            )
+
+    best_lag = max(lag_candidates, key=lambda item: item["correlation"], default=None)
+
     return {
         "trend": {
             "monthly_average_interest": _round_dict(monthly_average, digits=2),
@@ -258,6 +303,7 @@ def compute_demand_metrics(
             "growth_rate": round(_safe_divide(last_value - first_value, first_value), 4),
             "cagr": round(cagr, 4),
             "volatility": round(_safe_divide(pstdev(values), overall_average), 4),
+            "heat_volatility_coefficient": round(_safe_divide(pstdev(values), overall_average), 4),
             "three_month_momentum": round(three_month_momentum, 4),
         },
         "seasonality_index": _round_dict(seasonality_index, digits=2),
@@ -269,6 +315,11 @@ def compute_demand_metrics(
             "months_covered": len(monthly_average),
             "keyword_count": len(keywords),
             "google_trends_index_range_check": all(0 <= value <= 100 for value in values),
+        },
+        "lag_analysis": {
+            "best_lag_months": best_lag["lag_months"] if best_lag else None,
+            "best_lag_correlation": best_lag["correlation"] if best_lag else None,
+            "candidate_lags": lag_candidates,
         },
     }
 
@@ -315,6 +366,72 @@ def compute_top_down_market_size(
         "sam": round(sam, 2),
         "serviceable_import_market": round(sam, 2),
         "som": round(som, 2),
+    }
+
+
+def compute_market_size_input_panel(
+    market_size_inputs: list[MarketSizeInputRecord],
+    assumptions: MarketSizeAssumptions,
+) -> dict:
+    if not market_size_inputs:
+        return {}
+
+    confidence_counts: dict[str, int] = defaultdict(int)
+    consistency_flags = []
+    implied_gap_ratios = []
+    rows = []
+    for record in sorted(market_size_inputs, key=lambda item: item.tam, reverse=True):
+        confidence_counts[(record.confidence_grade or "unknown").upper()] += 1
+        waterfall_valid = record.tam >= record.sam >= record.som >= 0
+        penetration_valid = 0 <= record.ecommerce_penetration <= 1 and 0 <= record.importable_share <= 1
+        implied_sam = record.tam * record.ecommerce_penetration * record.importable_share
+        implied_gap_ratio = abs(implied_sam - record.sam) / record.sam if record.sam else 0.0
+        implied_gap_ratios.append(implied_gap_ratio)
+        consistency_flags.append(waterfall_valid and penetration_valid)
+        rows.append(
+            {
+                "market_segment": record.market_segment,
+                "tam": round(record.tam, 2),
+                "sam": round(record.sam, 2),
+                "som": round(record.som, 2),
+                "ecommerce_penetration": round(record.ecommerce_penetration, 4),
+                "importable_share": round(record.importable_share, 4),
+                "cagr": round(record.cagr, 4),
+                "source": record.source,
+                "confidence_grade": record.confidence_grade,
+                "waterfall_valid": waterfall_valid,
+                "implied_sam_gap_ratio": round(implied_gap_ratio, 4),
+            }
+        )
+
+    reference_tam = mean([record.tam for record in market_size_inputs])
+    reference_sam = mean([record.sam for record in market_size_inputs])
+    reference_som = mean([record.som for record in market_size_inputs])
+    reference_cagr = mean([record.cagr for record in market_size_inputs])
+    top_down = compute_top_down_market_size(assumptions)
+
+    return {
+        "rows": rows,
+        "reference_panel": {
+            "average_tam": round(reference_tam, 2),
+            "average_sam": round(reference_sam, 2),
+            "average_som": round(reference_som, 2),
+            "average_cagr": round(reference_cagr, 4),
+        },
+        "confidence_mix": {
+            key: round(_safe_divide(value, len(market_size_inputs)), 4)
+            for key, value in sorted(confidence_counts.items())
+        },
+        "consistency_ratio": round(_safe_divide(sum(1 for flag in consistency_flags if flag), len(consistency_flags)), 4),
+        "average_implied_sam_gap_ratio": round(mean(implied_gap_ratios), 4) if implied_gap_ratios else 0.0,
+        "assumption_vs_reference_gap_ratio": round(
+            abs(top_down.get("sam", 0.0) - reference_sam) / reference_sam,
+            4,
+        ) if reference_sam else 0.0,
+        "average_confidence_score": round(
+            mean([_grade_value(record.confidence_grade) for record in market_size_inputs]),
+            4,
+        ),
     }
 
 
@@ -403,19 +520,64 @@ def compute_bottom_up_market_size(
     }
 
 
-def compute_channel_metrics(channels: list[ChannelRecord]) -> dict:
+def compute_channel_metrics(
+    channels: list[ChannelRecord],
+    benchmarks: list[ChannelBenchmarkRecord] | None = None,
+) -> dict:
     total_revenue = sum(record.revenue for record in channels)
     total_visits = sum(record.visits for record in channels)
     total_orders = sum(record.orders for record in channels)
     total_ad_spend = sum(record.ad_spend for record in channels)
+    benchmark_map = {
+        _normalize_label(record.channel): record
+        for record in benchmarks or []
+    }
     channel_rows = []
+    benchmark_matches = 0
+    over_benchmark_count = 0
     for record in sorted(channels, key=lambda item: item.revenue, reverse=True):
         conversion_rate = None if record.visits == 0 else round(record.orders / record.visits, 4)
         roas = None if record.ad_spend == 0 else round(record.revenue / record.ad_spend, 2)
+        average_order_value = round(_safe_divide(record.revenue, record.orders), 2)
         cost_per_order = None if record.orders == 0 or record.ad_spend == 0 else round(
             record.ad_spend / record.orders,
             2,
         )
+        benchmark = benchmark_map.get(_normalize_label(record.channel))
+        conversion_gap = None
+        aov_gap = None
+        roas_gap = None
+        cac_gap = None
+        benchmark_status = "unbenchmarked"
+        available_gaps = []
+        if benchmark:
+            benchmark_matches += 1
+            if conversion_rate is not None and benchmark.benchmark_conversion_rate > 0:
+                conversion_gap = round(
+                    _safe_divide(conversion_rate, benchmark.benchmark_conversion_rate) - 1,
+                    4,
+                )
+                available_gaps.append(conversion_gap)
+            if average_order_value and benchmark.benchmark_average_order_value > 0:
+                aov_gap = round(
+                    _safe_divide(average_order_value, benchmark.benchmark_average_order_value) - 1,
+                    4,
+                )
+                available_gaps.append(aov_gap)
+            if roas is not None and benchmark.benchmark_roas > 0:
+                roas_gap = round(_safe_divide(roas, benchmark.benchmark_roas) - 1, 4)
+                available_gaps.append(roas_gap)
+            if cost_per_order is not None and benchmark.benchmark_cac > 0:
+                cac_gap = round(1 - _safe_divide(cost_per_order, benchmark.benchmark_cac), 4)
+                available_gaps.append(cac_gap)
+            benchmark_score = mean(available_gaps) if available_gaps else 0.0
+            if benchmark_score >= 0.05:
+                benchmark_status = "above_benchmark"
+                over_benchmark_count += 1
+            elif benchmark_score <= -0.05:
+                benchmark_status = "below_benchmark"
+            else:
+                benchmark_status = "near_benchmark"
         channel_rows.append(
             {
                 "channel": record.channel,
@@ -427,7 +589,7 @@ def compute_channel_metrics(channels: list[ChannelRecord]) -> dict:
                 "order_share": round(_safe_divide(record.orders, total_orders), 4),
                 "revenue_share": round(_safe_divide(record.revenue, total_revenue), 4),
                 "conversion_rate": conversion_rate,
-                "average_order_value": round(_safe_divide(record.revenue, record.orders), 2),
+                "average_order_value": average_order_value,
                 "revenue_per_visit": None if record.visits == 0 else round(record.revenue / record.visits, 2),
                 "roas": roas,
                 "cost_per_order": cost_per_order,
@@ -439,6 +601,15 @@ def compute_channel_metrics(channels: list[ChannelRecord]) -> dict:
                     4,
                 ) if record.visits else None,
                 "net_revenue_after_ads": round(record.revenue - record.ad_spend, 2),
+                "benchmark_conversion_rate": benchmark.benchmark_conversion_rate if benchmark else None,
+                "benchmark_average_order_value": benchmark.benchmark_average_order_value if benchmark else None,
+                "benchmark_roas": benchmark.benchmark_roas if benchmark else None,
+                "benchmark_cac": benchmark.benchmark_cac if benchmark else None,
+                "conversion_rate_gap": conversion_gap,
+                "average_order_value_gap": aov_gap,
+                "roas_gap": roas_gap,
+                "cac_gap": cac_gap,
+                "benchmark_status": benchmark_status,
             }
         )
     return {
@@ -450,6 +621,8 @@ def compute_channel_metrics(channels: list[ChannelRecord]) -> dict:
             "overall_conversion_rate": round(_safe_divide(total_orders, total_visits), 4),
             "overall_average_order_value": round(_safe_divide(total_revenue, total_orders), 2),
             "overall_roas": round(_safe_divide(total_revenue, total_ad_spend), 2) if total_ad_spend else None,
+            "benchmark_coverage_ratio": round(_safe_divide(benchmark_matches, len(channels)), 4) if channels else 0.0,
+            "over_benchmark_channel_ratio": round(_safe_divide(over_benchmark_count, benchmark_matches), 4) if benchmark_matches else 0.0,
         },
         "channels": channel_rows,
     }

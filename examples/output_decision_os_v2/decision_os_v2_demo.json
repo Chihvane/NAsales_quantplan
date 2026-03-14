@@ -1,0 +1,78 @@
+{
+  "gate_result": {
+    "gate_id": "GATE-SKU-LAUNCH",
+    "status": "GO",
+    "failed_conditions": [],
+    "evaluated_condition_count": 4
+  },
+  "decision_record": {
+    "decision_id": "DEC-OSV2-0001",
+    "gate_id": "GATE-SKU-LAUNCH",
+    "model_version": "2.0.0",
+    "capital_version": "2.0",
+    "risk_version": "2.0",
+    "status": "GO",
+    "failed_conditions": [],
+    "approved_by": "strategy_committee",
+    "approved_at": "2026-03-14T12:00:00Z",
+    "hash_signature": "30d18170ef1ed776"
+  },
+  "portfolio": {
+    "accepted_count": 3,
+    "rejected_count": 1,
+    "allocated_capital": 1320000,
+    "remaining_capital": 1580000,
+    "channel_allocation_share": {
+      "Amazon": 0.1552,
+      "DTC": 0.1103,
+      "TikTok Shop": 0.1897
+    },
+    "rows": [
+      {
+        "opportunity_id": "OPP-001",
+        "channel": "Amazon",
+        "allocated_capital": 450000,
+        "expected_return": 0.23,
+        "objective_score": 0.020001,
+        "accepted": true,
+        "reject_reason": ""
+      },
+      {
+        "opportunity_id": "OPP-002",
+        "channel": "DTC",
+        "allocated_capital": 320000,
+        "expected_return": 0.19,
+        "objective_score": 0.015001,
+        "accepted": true,
+        "reject_reason": ""
+      },
+      {
+        "opportunity_id": "OPP-003",
+        "channel": "TikTok Shop",
+        "allocated_capital": 550000,
+        "expected_return": 0.28,
+        "objective_score": -0.003999,
+        "accepted": true,
+        "reject_reason": ""
+      },
+      {
+        "opportunity_id": "OPP-004",
+        "channel": "Amazon",
+        "allocated_capital": 0.0,
+        "expected_return": 0.31,
+        "objective_score": -0.098,
+        "accepted": false,
+        "reject_reason": "loss_probability_limit"
+      }
+    ]
+  },
+  "feedback": {
+    "decision_id": "DEC-OSV2-0001",
+    "predicted_profit": 180000.0,
+    "actual_profit": 147500.0,
+    "predicted_loss_probability": 0.12,
+    "actual_loss_probability": 0.16,
+    "model_prediction_error": -32500.0,
+    "recalibration_required": false
+  }
+}

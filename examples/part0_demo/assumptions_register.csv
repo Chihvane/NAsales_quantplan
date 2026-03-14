@@ -1,0 +1,9 @@
+assumption_id,domain,assumption_text,rationale,confidence_grade,owner_role,validation_method,status,due_date
+A001,market,North America demand will remain positive over the next 12 months,Recent search and sell-through trend are positive,B,Research Lead,trend_refresh,validated,2026-03-01
+A002,customer,Core buyers will keep preferring the mid-price band,Current realized sweet spot is stable,B,Product Lead,transaction_refresh,validated,2026-03-01
+A003,channel,Amazon remains the main volume channel,Current channel share stays above 50 percent,A,Channel Lead,channel_panel_refresh,validated,2026-03-05
+A004,supply,Primary factory can keep MOQ and lead time stable,RFQ and shipment history are within range,B,Sourcing Lead,rfq_plus_shipment_review,in_progress,2026-03-25
+A005,compliance,No new hard regulatory block appears in the next quarter,Current compliance watchlist is green,C,Legal Lead,policy_watch,in_progress,2026-03-28
+A006,finance,Contribution margin can stay above 18 percent in pilot,Current landed cost and fee model support it,B,Finance Lead,pilot_margin_review,validated,2026-03-10
+A007,inventory,Working capital can support a 90 day test,Current cash buffer is sufficient,C,Ops Finance Lead,cash_flow_review,in_progress,2026-03-22
+A008,governance,All Gate decisions will keep an auditable sign-off trail,Approval chain template is defined,A,Strategy Director,audit_check,validated,2026-03-12

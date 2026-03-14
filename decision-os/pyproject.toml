@@ -1,0 +1,40 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "decision-os"
+version = "0.1.0"
+description = "Enterprise Decision OS v3.0 GitHub-grade skeleton."
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = [
+  "alembic",
+  "PyYAML",
+  "numpy",
+  "pandas",
+  "scipy",
+  "statsmodels",
+  "scikit-learn",
+  "cvxpy",
+  "sqlalchemy",
+  "fastapi",
+  "uvicorn",
+  "streamlit",
+  "jinja2",
+  "reportlab",
+  "requests",
+  "pydantic",
+  "celery",
+  "redis",
+  "psycopg[binary]",
+  "gunicorn",
+  "alembic",
+  "sqlalchemy",
+]
+
+[tool.setuptools]
+packages = []
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

@@ -1,0 +1,18 @@
+decision_os:
+  system_id: DOS-NA-2026
+  schema_version: 2.0
+  namespace: north_america_niche_goods
+  governance_owner: strategy_committee
+  capital_pool_ref: CAPITAL-POOL-001
+  risk_budget_ref: RISK-BUDGET-001
+  gate_engine_version: 2.1
+
+id_system:
+  field: F-XXXX
+  metric: M-XXXX
+  factor: FAC-XXXX
+  model: MOD-XXXX
+  gate: GATE-XXXX
+  decision: DEC-XXXX
+  capital: CAP-XXXX
+  risk: RSK-XXXX

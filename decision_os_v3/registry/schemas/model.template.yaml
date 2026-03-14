@@ -1,0 +1,14 @@
+model:
+  model_id: MOD-MONTE-CARLO-PROFIT
+  schema_version: 3.0
+  type: monte_carlo
+  inputs:
+    - FAC-MARKET-ATTRACT
+    - FAC-COST-RISK
+    - F-LANDED-COST
+  outputs:
+    - profit_p10
+    - profit_p50
+    - profit_p90
+    - loss_probability
+  validation_method: backtest_12m

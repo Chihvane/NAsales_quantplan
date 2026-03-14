@@ -1,0 +1,11 @@
+decision_record:
+  decision_id: DEC-00012
+  schema_version: 2.0
+  ref_key: decision.sku_launch
+  gate_id: GATE-SKU-LAUNCH
+  model_version: 2.0
+  capital_version: 2.0
+  risk_version: 2.0
+  approved_by: strategy_committee
+  approved_at: "2026-03-14T12:00:00Z"
+  hash_signature: ""

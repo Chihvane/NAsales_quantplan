@@ -1,0 +1,17 @@
+model_schema:
+  model_id: MOD-MONTE-CARLO-PROFIT-01
+  schema_version: 1.3
+  type: simulation
+  simulation_count: 10000
+  inputs:
+    - FAC-MARKET-ATTRACT-01
+    - FAC-COST-RISK-01
+    - F-LANDED-COST-001
+  outputs:
+    - profit_p10
+    - profit_p50
+    - profit_p90
+    - loss_probability
+  assumptions:
+    distribution: triangular
+  validation_method: backtest_12m

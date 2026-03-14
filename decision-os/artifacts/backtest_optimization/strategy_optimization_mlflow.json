@@ -1,0 +1,21 @@
+{
+  "integration": "mlflow",
+  "run_name": "decision_os_backtest_optimization",
+  "package_available": false,
+  "params": {
+    "min_factor_score": 0.55,
+    "max_loss_probability": 0.1,
+    "min_profit_p50": 0.0,
+    "min_margin_p50_ratio": 0.18,
+    "max_volatility": 0.24,
+    "max_positions_per_period": 4
+  },
+  "metrics": {
+    "train_alpha": -0.108294,
+    "test_alpha": 0.516287,
+    "train_composite_score": 0.82975,
+    "test_composite_score": 1.61223,
+    "train_hit_rate": 0.94,
+    "test_hit_rate": 1.0
+  }
+}

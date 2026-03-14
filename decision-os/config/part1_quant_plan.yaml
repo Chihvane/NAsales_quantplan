@@ -1,0 +1,156 @@
+plan_id: PART1-QUANT-PLAN-20260314
+schema_version: 1.0
+module: part1_market_quant_engine
+owner: strategy_committee
+status: active
+
+goals:
+  - standardize_part1_as_market_quant_engine
+  - connect_part1_to_decision_os_gate
+  - add_uncertainty_and_evidence_grading
+  - unify_part1_backtest_with_walk_forward_engine
+
+layers:
+  governance:
+    required_objects:
+      - event_library
+      - source_registry
+      - part1_threshold_registry
+    mandatory_outputs:
+      - evidence_ref
+      - master_data_ref
+      - rule_ref
+      - confidence
+      - staleness
+      - gate_result
+  data:
+    observation_tables:
+      - search_trends
+      - region_demand
+      - customer_segments
+      - listings
+      - transactions
+      - channels
+    reference_tables:
+      - market_size_inputs
+      - channel_benchmarks
+      - event_library
+      - source_registry
+    backtest_tables:
+      - part1_factor_snapshots
+      - part1_gate_records
+      - part1_backtest_panel
+      - part1_stress_scenarios
+  factor:
+    outputs:
+      - FAC-MARKET-ATTRACT
+      - FAC-DEMAND-STABILITY
+      - FAC-CUSTOMER-FIT
+      - FAC-CHANNEL-EFFICIENCY
+      - FAC-CHANNEL-RISK
+      - FAC-PRICE-REALIZATION
+
+sections:
+  "1.1":
+    theme: demand_overview
+    planned_upgrades:
+      - event_library
+      - anchored_trend_normalization
+      - lead_lag_confidence
+      - demand_regime
+    outputs:
+      - demand_strength_score
+      - demand_stability_score
+      - event_sensitivity_score
+  "1.2":
+    theme: customer_profile
+    planned_upgrades:
+      - source_weighted_persona
+      - sampling_adequacy
+      - persona_concentration
+    outputs:
+      - customer_fit_score
+      - persona_confidence_score
+      - persona_concentration_score
+  "1.3":
+    theme: market_size
+    planned_upgrades:
+      - source_weighted_triangulation
+      - uncertainty_first_sizing
+      - coverage_adjusted_bottom_up
+      - market_entry_fit
+    outputs:
+      - market_attractiveness_factor
+      - market_structure_factor
+      - sizing_confidence_band
+  "1.4":
+    theme: channel_analysis
+    planned_upgrades:
+      - channel_concentration
+      - channel_path
+      - benchmark_quality
+      - channel_risk
+    outputs:
+      - channel_efficiency_factor
+      - channel_risk_factor
+      - channel_dependency_score
+  "1.5":
+    theme: listed_price
+    planned_upgrades:
+      - spec_adjusted_premium
+      - promo_contamination_flag
+      - price_architecture
+      - price_white_space_signal
+    outputs:
+      - price_band_fit_factor
+      - brand_premium_clean
+      - price_white_space_signal
+  "1.6":
+    theme: transaction_price
+    planned_upgrades:
+      - elasticity_confidence
+      - short_long_term_elasticity
+      - discount_dependency
+      - realized_margin_proxy
+    outputs:
+      - price_realization_factor
+      - elasticity_reliability_score
+      - discount_dependency_score
+
+backtest:
+  mode: walk_forward
+  split_policy: train_test_split_required
+  scenarios:
+    - freight_up_40
+    - cpc_up_50
+    - return_rate_x2
+    - demand_drop
+    - channel_policy_shock
+  outputs:
+    - part1_backtest_summary.json
+    - part1_factor_panel.csv
+    - part1_gate_records.csv
+    - part1_alpha_table.csv
+    - part1_stress_test_summary.json
+
+delivery_phases:
+  - phase: governance
+    tasks:
+      - finalize_event_library
+      - finalize_source_registry
+      - finalize_threshold_registry
+      - add_staleness_and_confidence_downgrade
+  - phase: factorization
+    tasks:
+      - build_part1_factor_snapshots
+      - connect_to_decision_os_registry
+  - phase: backtesting
+    tasks:
+      - unify_quant_framework_and_decision_os_backtest
+      - add_train_test_split
+      - add_stress_test
+  - phase: gate
+    tasks:
+      - connect_market_entry_gate
+      - output_decision_record
+      - bind_capital_and_risk_constraints

@@ -10,10 +10,12 @@ from .models import (
     MarketSizeAssumptions,
     Part2Assumptions,
     Part2Dataset,
-    Part4Assumptions,
-    Part4Dataset,
     Part3Assumptions,
     Part3Dataset,
+    Part4Assumptions,
+    Part4Dataset,
+    Part5Assumptions,
+    Part5Dataset,
     ReviewRecord,
     SoldTransactionRecord,
     TransactionRecord,
@@ -28,6 +30,8 @@ from .part3_metrics import compute_landed_cost_metrics
 from .part3_simulation import run_landed_cost_monte_carlo
 from .part4_metrics import compute_channel_pnl_rows
 from .part4_simulation import run_part4_roi_monte_carlo
+from .part5_forecasting import summarize_kpi_trend
+from .part5_metrics import build_part5_channel_rows
 from .stats_utils import percentile as _percentile
 
 
@@ -406,4 +410,136 @@ def build_part4_uncertainty_snapshot(
             seed=seed,
         ),
         "roi_monte_carlo": monte_carlo,
+    }
+
+
+def build_part5_uncertainty_snapshot(
+    dataset: Part5Dataset,
+    assumptions: Part5Assumptions,
+    iterations: int = 600,
+    alpha: float = 0.05,
+    seed: int = 42,
+) -> dict:
+    channel_rows = build_part5_channel_rows(dataset, assumptions)
+    daily_margin_rates = [
+        record.contribution_profit / record.revenue
+        for record in dataset.kpi_daily_snapshots
+        if record.revenue > 0
+    ]
+    cash_lock_values = [record.inventory_cash_lock for record in dataset.cash_flow_snapshots]
+    refund_cash_values = [record.refund_cash_out for record in dataset.cash_flow_snapshots]
+    channel_health_scores = []
+    for row in channel_rows:
+        profit_safety = min(row.get("contribution_margin_rate", 0.0) / max(assumptions.min_contribution_margin_rate, 0.01), 1.0)
+        refund_safety = max(0.0, 1 - row.get("return_rate", 0.0) / max(assumptions.max_refund_rate, 0.01))
+        dispute_safety = max(0.0, 1 - row.get("dispute_rate", 0.0) / max(assumptions.max_dispute_rate, 0.01))
+        inventory_safety = max(
+            0.0,
+            1 - abs(row.get("inventory_days", 0.0) - assumptions.target_inventory_days) / max(assumptions.target_inventory_days, 1),
+        )
+        channel_health_scores.append(
+            profit_safety * 0.4 + refund_safety * 0.25 + dispute_safety * 0.15 + inventory_safety * 0.2
+        )
+    forecast_summary = summarize_kpi_trend(dataset.kpi_daily_snapshots)
+    return {
+        "daily_contribution_margin_rate": _bootstrap_values(
+            daily_margin_rates,
+            statistic="mean",
+            iterations=iterations,
+            alpha=alpha,
+            seed=seed,
+        )
+        if daily_margin_rates
+        else {},
+        "inventory_cash_lock": _bootstrap_values(
+            cash_lock_values,
+            statistic="median",
+            iterations=iterations,
+            alpha=alpha,
+            seed=seed,
+        )
+        if cash_lock_values
+        else {},
+        "refund_cash_out": _bootstrap_values(
+            refund_cash_values,
+            statistic="mean",
+            iterations=iterations,
+            alpha=alpha,
+            seed=seed,
+        )
+        if refund_cash_values
+        else {},
+        "channel_health_score": _bootstrap_values(
+            channel_health_scores,
+            statistic="mean",
+            iterations=iterations,
+            alpha=alpha,
+            seed=seed,
+        )
+        if channel_health_scores
+        else {},
+        "forecast_snapshot": {
+            "trend_direction": forecast_summary.get("trend_direction"),
+            "forecast_next_7d_revenue": forecast_summary.get("forecast_next_7d_revenue", 0.0),
+            "forecast_next_7d_profit": forecast_summary.get("forecast_next_7d_profit", 0.0),
+        },
+    }
+
+
+def build_part0_uncertainty_snapshot(report: dict) -> dict:
+    sections = report.get("sections", {})
+    quality_scores = [
+        payload.get("data_quality", {}).get("quality_score", 0.0)
+        for payload in sections.values()
+    ]
+    average_quality = mean(quality_scores) if quality_scores else 0.0
+    spread = max(0.05, (1 - average_quality) * 0.2)
+    gate_score = sections.get("0.4", {}).get("metrics", {}).get("gate_operability_score", 0.0)
+    audit_score = sections.get("0.2", {}).get("metrics", {}).get("auditability_score", 0.0)
+    return {
+        "governance_quality_band": {
+            "p10": round(max(0.0, average_quality - spread), 4),
+            "p50": round(average_quality, 4),
+            "p90": round(min(1.0, average_quality + spread), 4),
+        },
+        "decision_gate_band": {
+            "p10": round(max(0.0, gate_score - spread), 4),
+            "p50": round(gate_score, 4),
+            "p90": round(min(1.0, gate_score + spread), 4),
+        },
+        "auditability_band": {
+            "p10": round(max(0.0, audit_score - spread), 4),
+            "p50": round(audit_score, 4),
+            "p90": round(min(1.0, audit_score + spread), 4),
+        },
+    }
+
+
+def build_horizontal_system_uncertainty_snapshot(report: dict) -> dict:
+    sections = report.get("sections", {})
+    quality_scores = [
+        payload.get("data_quality", {}).get("quality_score", 0.0)
+        for payload in sections.values()
+    ]
+    average_quality = mean(quality_scores) if quality_scores else 0.0
+    spread = max(0.05, (1 - average_quality) * 0.2)
+    master_data_score = sections.get("H1", {}).get("metrics", {}).get("master_data_health_score", 0.0)
+    audit_score = sections.get("H2", {}).get("metrics", {}).get("audit_trace_score", 0.0)
+    gate_score = sections.get("H3", {}).get("metrics", {}).get("decision_gate_control_score", 0.0)
+    return {
+        "master_data_band": {
+            "p10": round(max(0.0, master_data_score - spread), 4),
+            "p50": round(master_data_score, 4),
+            "p90": round(min(1.0, master_data_score + spread), 4),
+        },
+        "audit_trace_band": {
+            "p10": round(max(0.0, audit_score - spread), 4),
+            "p50": round(audit_score, 4),
+            "p90": round(min(1.0, audit_score + spread), 4),
+        },
+        "decision_gate_band": {
+            "p10": round(max(0.0, gate_score - spread), 4),
+            "p50": round(gate_score, 4),
+            "p90": round(min(1.0, gate_score + spread), 4),
+        },
     }

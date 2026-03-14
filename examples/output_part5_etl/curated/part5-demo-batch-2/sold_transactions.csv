@@ -1,0 +1,13 @@
+platform,sold_id,listing_id,canonical_sku,sold_at,transaction_price,shipping_fee,units,seller_type
+DTC,S-DTC-001,DTC-L1,GEN-A,2026-02-10,679,0,12,brand
+DTC,S-DTC-002,DTC-L2,GEN-B,2026-02-18,719,0,9,brand
+Amazon,S-AMZ-001,AMZ-L1,GEN-A,2026-02-11,659,0,24,brand
+Amazon,S-AMZ-002,AMZ-L2,GEN-B,2026-02-20,699,0,18,brand
+TikTok Shop,S-TTS-001,TTS-L1,GEN-A,2026-02-07,649,0,15,brand
+TikTok Shop,S-TTS-002,TTS-L2,GEN-B,2026-02-21,689,0,12,brand
+eBay,S-EBY-001,EBY-L1,GEN-A,2026-02-08,639,12,8,reseller
+eBay,S-EBY-002,EBY-L2,GEN-B,2026-02-22,679,12,7,reseller
+Walmart,S-WMT-001,WMT-L1,GEN-A,2026-02-09,649,0,11,brand
+Walmart,S-WMT-002,WMT-L2,GEN-B,2026-02-19,689,0,8,brand
+B2B,S-B2B-001,B2B-L1,GEN-A,2026-02-13,579,0,20,dealer
+B2B,S-B2B-002,B2B-L2,GEN-B,2026-02-24,619,0,16,dealer

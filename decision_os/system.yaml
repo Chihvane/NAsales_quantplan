@@ -1,0 +1,26 @@
+decision_os:
+  system_id: DOS-NA-NICHE-001
+  schema_version: 1.0.0
+  namespace: north_america_niche_goods
+  last_updated: 2026-03-14
+  owner: strategy_committee
+  capital_config_ref: CAPITAL-CONFIG-001
+  risk_config_ref: RISK-CONFIG-001
+
+id_system:
+  sku: SKU-XXXXX
+  channel: CH-XXXXX
+  supplier: SUP-XXXXX
+  market: MKT-XXXXX
+  metric: M-XXXXX
+  factor: FAC-XXXXX
+  model: MOD-XXXXX
+  gate: GATE-XXXXX
+  decision: DEC-XXXXX
+
+registry_refs:
+  field_schema_dir: decision_os/schemas
+  capital_config: decision_os/config/capital_config.template.yaml
+  risk_config: decision_os/config/risk_config.template.yaml
+  gate_schema: decision_os/schemas/gate_schema.template.yaml
+  decision_record_schema: decision_os/schemas/decision_record.template.yaml

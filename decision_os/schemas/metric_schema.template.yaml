@@ -1,0 +1,11 @@
+metric_schema:
+  metric_id: M-GROSS-MARGIN-001
+  schema_version: 2.0
+  formula: "(net_price - landed_cost - platform_fee)"
+  depends_on:
+    - F-SKU-NET-PRICE-001
+    - F-SKU-LANDED-COST-001
+    - F-CHANNEL-FEE-002
+  aggregation: sku_day
+  owner: analytics_team
+  confidence_level: B

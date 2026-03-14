@@ -1,0 +1,9 @@
+date,channel,order_id,sku_id,return_flag,refund_amount,return_reason,claim_cost,dispute_flag
+2026-02-12,DTC,ODTC-001,GEN-A,true,679,damaged,24,false
+2026-02-23,DTC,ODTC-002,GEN-B,true,719,not_as_expected,18,false
+2026-02-16,Amazon,OAMZ-001,GEN-A,true,659,damaged,22,false
+2026-02-25,Amazon,OAMZ-002,GEN-B,true,699,late_delivery,20,false
+2026-02-27,TikTok Shop,OTTS-001,GEN-B,true,689,quality_issue,24,false
+2026-02-14,eBay,OEBY-001,GEN-A,true,639,buyer_remorse,16,true
+2026-02-21,Walmart,OWMT-001,GEN-A,true,649,damaged,19,false
+2026-02-26,B2B,OB2B-001,GEN-A,true,579,carton_damage,12,false

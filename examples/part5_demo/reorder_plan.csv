@@ -1,0 +1,7 @@
+date,sku_id,warehouse,reorder_point,safety_stock,target_cover_days,planned_units,eta
+2026-02-04,GEN-A,US-3PL,18,10,42,120,2026-03-01
+2026-02-04,GEN-B,US-3PL,16,9,40,96,2026-03-03
+2026-02-08,GEN-A,Amazon-FBA,24,12,48,180,2026-03-05
+2026-02-08,GEN-B,Amazon-FBA,22,12,46,156,2026-03-05
+2026-02-10,GEN-A,Walmart-WFS,14,8,38,72,2026-03-07
+2026-02-10,GEN-B,Walmart-WFS,12,8,36,64,2026-03-07

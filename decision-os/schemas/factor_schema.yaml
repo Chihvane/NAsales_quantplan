@@ -1,0 +1,12 @@
+schema_version: 3.0
+entity_type: factor
+required_fields:
+  - factor_id
+  - schema_version
+  - components
+field_types:
+  factor_id: str
+  normalization_method: str
+  weighting_logic: str
+validation_rules:
+  - not_null: [factor_id, components]

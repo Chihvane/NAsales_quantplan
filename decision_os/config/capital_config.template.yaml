@@ -1,0 +1,8 @@
+capital_config:
+  config_id: CAPITAL-CONFIG-001
+  schema_version: 1.0
+  capital_pool_total: 2500000
+  capital_allocated: 1200000
+  capital_free: 1300000
+  capital_cost: 0.12
+  currency: USD

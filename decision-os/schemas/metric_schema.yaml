@@ -1,0 +1,12 @@
+schema_version: 3.0
+entity_type: metric
+required_fields:
+  - metric_id
+  - schema_version
+  - formula
+field_types:
+  metric_id: str
+  formula: str
+  aggregation_level: str
+validation_rules:
+  - not_null: [metric_id, formula]

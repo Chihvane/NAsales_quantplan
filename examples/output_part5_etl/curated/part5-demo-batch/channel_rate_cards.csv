@@ -1,0 +1,19 @@
+channel,fee_type,fee_basis,fee_rate,fixed_fee,effective_date,source_ref,notes
+DTC,shopify_fee,revenue,0.028,0.3,2026-01-01,shopify-v1,base transaction fee
+DTC,payment_processing,revenue,0.024,0,2026-01-01,stripe-v1,card fee
+DTC,fulfillment_fee,units,0,18,2026-01-01,3pl-v1,pick pack
+Amazon,referral_fee,revenue,0.15,0,2026-01-01,amazon-v1,referral
+Amazon,fba_fulfillment,units,0,29,2026-01-01,amazon-v1,fulfillment
+Amazon,storage_fee,inventory_units,0,1.2,2026-01-01,amazon-v1,monthly storage
+TikTok Shop,platform_fee,revenue,0.08,0,2026-01-01,tiktok-v1,platform fee
+TikTok Shop,payment_processing,revenue,0.022,0,2026-01-01,tiktok-v1,payment
+TikTok Shop,fulfillment_fee,units,0,20,2026-01-01,tiktok-v1,fulfillment
+eBay,final_value_fee,revenue,0.13,0,2026-01-01,ebay-v1,final value
+eBay,payment_processing,revenue,0.03,0.3,2026-01-01,ebay-v1,payment
+eBay,shipping_fulfillment,units,0,22,2026-01-01,ebay-v1,shipping
+Walmart,referral_fee,revenue,0.14,0,2026-01-01,walmart-v1,referral
+Walmart,wfs_fulfillment,units,0,24,2026-01-01,walmart-v1,fulfillment
+Walmart,storage_fee,inventory_units,0,0.9,2026-01-01,walmart-v1,storage
+B2B,account_support,revenue,0.025,0,2026-01-01,b2b-v1,account management
+B2B,rebate_fee,revenue,0.01,0,2026-01-01,b2b-v1,reward accrual
+B2B,pallet_fulfillment,units,0,12,2026-01-01,b2b-v1,pallet prep

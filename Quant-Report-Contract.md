@@ -2,7 +2,7 @@
 
 ## Purpose
 
-This file defines the shared output contract used by Part 1, Part 2, and Part 3.
+This file defines the shared output contract used by Part 0 through Part 5, plus the horizontal system control module.
 
 The goal is to keep all quantitative modules aligned on:
 
@@ -23,12 +23,14 @@ Every report now returns:
 - `uncertainty`
 - `validation`
 
-For Part 1, Part 2, and Part 3, `overview` now also carries a shared decision layer:
+For Part 0 through Part 5 and the horizontal module, `overview` now also carries a shared decision layer:
 
 - `headline_metrics`
 - `decision_signal`
 - `decision_score`
 - `decision_summary`
+- `connected_channel_scope`
+- `control_tower_binding`
 
 ## Metadata
 
@@ -53,6 +55,21 @@ Every section now uses the same outer structure:
   "title": "市场现状与需求概览",
   "required_tables": ["search_trends", "region_demand"],
   "metric_ids": ["demand_growth_rate", "seasonality_index", "regional_demand_share"],
+  "granularity": {
+    "analysis_grain": "month x keyword / region",
+    "entity_grain": "keyword / region",
+    "time_grain": "month"
+  },
+  "channel_scope": ["marketwide"],
+  "master_data_ref": ["mdm.calendar", "mdm.region"],
+  "evidence_ref": ["evidence.search_trends", "evidence.region_demand"],
+  "rule_ref": ["gate.market_entry", "gate.demand_stability"],
+  "gate_result": {
+    "status": "not_applicable",
+    "source": "",
+    "raw_value": "",
+    "failed_items": []
+  },
   "data_quality": {
     "record_counts": {
       "search_trends": 12,
@@ -72,6 +89,27 @@ Every section now uses the same outer structure:
   "metrics": {}
 }
 ```
+
+## Control-Tower Binding
+
+All sections now expose the same governance bridge back to `Part 0` and the horizontal control module:
+
+- `master_data_ref`
+  - which master-data domains the section depends on
+- `evidence_ref`
+  - which evidence chains support the section
+- `rule_ref`
+  - which gate / guardrail / stop-loss rules govern the section
+- `gate_result`
+  - normalized section-level gate status: `pass / review / fail / not_applicable`
+
+At the report overview level, this is summarized as:
+
+- `connected_channel_scope`
+- `control_tower_binding.master_data_ref_coverage_ratio`
+- `control_tower_binding.evidence_ref_coverage_ratio`
+- `control_tower_binding.rule_ref_coverage_ratio`
+- `control_tower_binding.gate_status_mix`
 
 ## Data Quality Rule
 
@@ -100,9 +138,19 @@ Each part now defines `quality_targets` inside its section structure.
 
 This keeps confidence scoring comparable while still respecting different data grains:
 
+- Part 0: governance / gate / approval / update-policy / field-dictionary level
+- Horizontal System: master-data / audit-lineage / decision-rule level
 - Part 1: search / region / listing / transaction / channel level
 - Part 2: listing snapshot / sold transaction / review level
 - Part 3: supplier / RFQ / route / shipment event level
+- Part 4: channel / traffic / ROI / readiness level
+- Part 5: operating / experiment / inventory / alert level
+
+Granularity is now also explicit in every section via:
+
+- `analysis_grain`
+- `entity_grain`
+- `time_grain`
 
 ## CLI Summary
 
@@ -124,6 +172,10 @@ Shared assembly logic lives in:
 
 Current builders using this contract:
 
+- [part0.py](/Users/zhiwenxiang/Documents/Playground/北美市场量化报告/quant_framework/part0.py)
+- [horizontal_system.py](/Users/zhiwenxiang/Documents/Playground/北美市场量化报告/quant_framework/horizontal_system.py)
 - [part1.py](/Users/zhiwenxiang/Documents/Playground/北美市场量化报告/quant_framework/part1.py)
 - [part2.py](/Users/zhiwenxiang/Documents/Playground/北美市场量化报告/quant_framework/part2.py)
 - [part3.py](/Users/zhiwenxiang/Documents/Playground/北美市场量化报告/quant_framework/part3.py)
+- [part4.py](/Users/zhiwenxiang/Documents/Playground/北美市场量化报告/quant_framework/part4.py)
+- [part5.py](/Users/zhiwenxiang/Documents/Playground/北美市场量化报告/quant_framework/part5.py)

@@ -1,0 +1,12 @@
+entity_type,entity_id,entity_name,owner_role,version,approved_flag,active_flag,duplicate_flag,missing_required_field_count,updated_at
+sku,SKU-001,Portable Generator 2200W,Data Steward,v1.2,true,true,false,0,2026-03-10
+sku,SKU-002,Portable Generator 3500W,Data Steward,v1.2,true,true,false,0,2026-03-10
+channel,CH-AMZ,Amazon,Channel Ops,v1.1,true,true,false,0,2026-03-08
+channel,CH-TTS,TikTok Shop,Channel Ops,v1.1,true,true,false,0,2026-03-08
+brand,BR-ALPHA,Brand Alpha,Brand Manager,v1.0,true,true,false,0,2026-03-06
+brand,BR-WL,White Label Prime,Brand Manager,v1.0,true,true,false,0,2026-03-06
+supplier,SUP-001,Ningbo Factory A,Sourcing Lead,v2.0,true,true,false,0,2026-03-05
+supplier,SUP-002,Shenzhen Factory B,Sourcing Lead,v2.0,true,true,false,0,2026-03-05
+calendar,CAL-NA,North America Trading Calendar,BI Lead,v1.0,true,true,false,0,2026-03-07
+price_metric,PM-CORE,Core Price KPI Dictionary,Finance Ops,v1.0,true,true,false,0,2026-03-09
+region,REG-US-SE,US Southeast,BI Lead,v1.0,true,true,false,0,2026-03-07

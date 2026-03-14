@@ -1,0 +1,11 @@
+experiment_id,entity_id,variant,assigned_at,channel
+EXP-001,u001,control,2026-02-01,DTC
+EXP-001,u002,treatment,2026-02-01,DTC
+EXP-003,u101,control,2026-02-03,Amazon
+EXP-003,u102,treatment,2026-02-03,Amazon
+EXP-004,u201,control,2026-02-05,TikTok Shop
+EXP-004,u202,treatment,2026-02-05,TikTok Shop
+EXP-005,u301,control,2026-02-08,Walmart
+EXP-005,u302,treatment,2026-02-08,Walmart
+EXP-006,u401,control,2026-02-10,eBay
+EXP-006,u402,treatment,2026-02-10,eBay

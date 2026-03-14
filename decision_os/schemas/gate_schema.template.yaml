@@ -1,0 +1,26 @@
+gate_schema:
+  gate_id: GATE-MARKET-ENTRY-01
+  schema_version: 2.0
+  trigger:
+    conditions:
+      - source: metric
+        ref: profit_p50
+        operator: ">="
+        value: 0
+      - source: metric
+        ref: loss_probability
+        operator: "<="
+        value: 0.25
+      - source: factor
+        ref: FAC-MARKET-ATTRACT-01
+        operator: ">="
+        value: 0.5
+  capital_constraint:
+    lhs: required_capital
+    operator: "<="
+    rhs: capital_free
+  risk_budget:
+    lhs: expected_drawdown
+    operator: "<="
+    rhs: risk_limit
+  logic: AND

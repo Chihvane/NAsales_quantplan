@@ -1,0 +1,7 @@
+experiment_id,channel,hypothesis,start_date,end_date,primary_metric,mde,split_ratio,stop_rule,status
+EXP-001,DTC,Landing page hero rewrite lifts CVR,2026-02-01,2026-02-12,conversion_rate,0.08,0.5,95pct_confidence,completed
+EXP-002,DTC,Email recovery flow lifts checkout completion,2026-02-14,2026-02-28,checkout_completion_rate,0.06,0.5,95pct_confidence,active
+EXP-003,Amazon,A+ content refresh lifts CTR,2026-02-03,2026-02-14,conversion_rate,0.05,0.5,95pct_confidence,completed
+EXP-004,TikTok Shop,Creator video bundle improves add to cart,2026-02-05,2026-02-16,add_to_cart_rate,0.07,0.5,95pct_confidence,completed
+EXP-005,Walmart,Title rewrite improves search conversion,2026-02-08,2026-02-18,conversion_rate,0.05,0.5,95pct_confidence,completed
+EXP-006,eBay,Free shipping badge improves checkout,2026-02-10,2026-02-20,checkout_completion_rate,0.04,0.5,95pct_confidence,completed

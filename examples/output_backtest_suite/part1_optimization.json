@@ -1,0 +1,1048 @@
+{
+  "split_month": "2025-04",
+  "candidate_count": 243,
+  "base_weights": {
+    "demand_momentum": 0.35,
+    "channel_roas": 0.25,
+    "price_realization_rate": 0.2,
+    "supply_pressure": -0.1,
+    "hhi": -0.1
+  },
+  "optimized_weights": {
+    "demand_momentum": 0.4375,
+    "channel_roas": 0.1875,
+    "price_realization_rate": 0.25,
+    "supply_pressure": -0.125,
+    "hhi": -0.125
+  },
+  "baseline_train": {
+    "config": {
+      "lookback_months": 3,
+      "top_n": 2,
+      "signal_weights": {
+        "demand_momentum": 0.35,
+        "channel_roas": 0.25,
+        "price_realization_rate": 0.2,
+        "supply_pressure": -0.1,
+        "hhi": -0.1
+      }
+    },
+    "summary": {
+      "periods": 12,
+      "avg_strategy_return": 0.0217,
+      "avg_benchmark_return": 0.0114,
+      "avg_excess_return": 0.0103,
+      "hit_rate": 0.75,
+      "cumulative_strategy_return": 0.2888,
+      "cumulative_benchmark_return": 0.1456,
+      "cumulative_excess_return": 0.1431
+    },
+    "monthly_records": [
+      {
+        "month": "2024-04",
+        "next_month": "2024-05",
+        "selected_categories": [
+          "camping_gear",
+          "edc"
+        ],
+        "selected_scores": {
+          "camping_gear": 0.7503,
+          "edc": 0.4464
+        },
+        "strategy_return": 0.0652,
+        "benchmark_return": 0.0169,
+        "excess_return": 0.0483
+      },
+      {
+        "month": "2024-05",
+        "next_month": "2024-06",
+        "selected_categories": [
+          "camping_gear",
+          "edc"
+        ],
+        "selected_scores": {
+          "camping_gear": 1.0059,
+          "edc": 0.5042
+        },
+        "strategy_return": 0.0596,
+        "benchmark_return": 0.0201,
+        "excess_return": 0.0395
+      },
+      {
+        "month": "2024-06",
+        "next_month": "2024-07",
+        "selected_categories": [
+          "camping_gear",
+          "edc"
+        ],
+        "selected_scores": {
+          "camping_gear": 1.0348,
+          "edc": 0.3801
+        },
+        "strategy_return": 0.0352,
+        "benchmark_return": 0.0075,
+        "excess_return": 0.0277
+      },
+      {
+        "month": "2024-07",
+        "next_month": "2024-08",
+        "selected_categories": [
+          "camping_gear",
+          "edc"
+        ],
+        "selected_scores": {
+          "camping_gear": 0.8932,
+          "edc": 0.6973
+        },
+        "strategy_return": 0.0313,
+        "benchmark_return": 0.0244,
+        "excess_return": 0.0068
+      },
+      {
+        "month": "2024-08",
+        "next_month": "2024-09",
+        "selected_categories": [
+          "portable_generators",
+          "edc"
+        ],
+        "selected_scores": {
+          "portable_generators": 1.1877,
+          "edc": 0.1082
+        },
+        "strategy_return": 0.0095,
+        "benchmark_return": 0.0018,
+        "excess_return": 0.0077
+      },
+      {
+        "month": "2024-09",
+        "next_month": "2024-10",
+        "selected_categories": [
+          "portable_generators",
+          "edc"
+        ],
+        "selected_scores": {
+          "portable_generators": 1.0701,
+          "edc": 0.2874
+        },
+        "strategy_return": -0.0256,
+        "benchmark_return": 0.0044,
+        "excess_return": -0.0301
+      },
+      {
+        "month": "2024-10",
+        "next_month": "2024-11",
+        "selected_categories": [
+          "car_parts",
+          "edc"
+        ],
+        "selected_scores": {
+          "car_parts": 0.7135,
+          "edc": 0.6271
+        },
+        "strategy_return": 0.0305,
+        "benchmark_return": 0.0219,
+        "excess_return": 0.0086
+      },
+      {
+        "month": "2024-11",
+        "next_month": "2024-12",
+        "selected_categories": [
+          "edc",
+          "cigar_accessories"
+        ],
+        "selected_scores": {
+          "edc": 0.9173,
+          "cigar_accessories": 0.2338
+        },
+        "strategy_return": 0.0364,
+        "benchmark_return": 0.0172,
+        "excess_return": 0.0193
+      },
+      {
+        "month": "2024-12",
+        "next_month": "2025-01",
+        "selected_categories": [
+          "edc",
+          "portable_generators"
+        ],
+        "selected_scores": {
+          "edc": 0.6792,
+          "portable_generators": 0.5282
+        },
+        "strategy_return": 0.0085,
+        "benchmark_return": 0.0032,
+        "excess_return": 0.0053
+      },
+      {
+        "month": "2025-01",
+        "next_month": "2025-02",
+        "selected_categories": [
+          "portable_generators",
+          "camping_gear"
+        ],
+        "selected_scores": {
+          "portable_generators": 0.8465,
+          "camping_gear": 0.5398
+        },
+        "strategy_return": -0.0021,
+        "benchmark_return": 0.0054,
+        "excess_return": -0.0075
+      },
+      {
+        "month": "2025-02",
+        "next_month": "2025-03",
+        "selected_categories": [
+          "edc",
+          "portable_generators"
+        ],
+        "selected_scores": {
+          "edc": 0.5411,
+          "portable_generators": 0.4013
+        },
+        "strategy_return": -0.0126,
+        "benchmark_return": 0.0028,
+        "excess_return": -0.0154
+      },
+      {
+        "month": "2025-03",
+        "next_month": "2025-04",
+        "selected_categories": [
+          "edc",
+          "car_parts"
+        ],
+        "selected_scores": {
+          "edc": 0.7514,
+          "car_parts": 0.7427
+        },
+        "strategy_return": 0.0245,
+        "benchmark_return": 0.0115,
+        "excess_return": 0.013
+      }
+    ]
+  },
+  "baseline_test": {
+    "config": {
+      "lookback_months": 3,
+      "top_n": 2,
+      "signal_weights": {
+        "demand_momentum": 0.35,
+        "channel_roas": 0.25,
+        "price_realization_rate": 0.2,
+        "supply_pressure": -0.1,
+        "hhi": -0.1
+      }
+    },
+    "summary": {
+      "periods": 8,
+      "avg_strategy_return": 0.0172,
+      "avg_benchmark_return": 0.0153,
+      "avg_excess_return": 0.0019,
+      "hit_rate": 0.5,
+      "cumulative_strategy_return": 0.144,
+      "cumulative_benchmark_return": 0.1286,
+      "cumulative_excess_return": 0.0154
+    },
+    "monthly_records": [
+      {
+        "month": "2025-04",
+        "next_month": "2025-05",
+        "selected_categories": [
+          "camping_gear",
+          "car_parts"
+        ],
+        "selected_scores": {
+          "camping_gear": 1.0186,
+          "car_parts": 0.1962
+        },
+        "strategy_return": 0.0275,
+        "benchmark_return": 0.0157,
+        "excess_return": 0.0118
+      },
+      {
+        "month": "2025-05",
+        "next_month": "2025-06",
+        "selected_categories": [
+          "camping_gear",
+          "edc"
+        ],
+        "selected_scores": {
+          "camping_gear": 0.8167,
+          "edc": 0.2355
+        },
+        "strategy_return": 0.0376,
+        "benchmark_return": 0.0078,
+        "excess_return": 0.0298
+      },
+      {
+        "month": "2025-06",
+        "next_month": "2025-07",
+        "selected_categories": [
+          "camping_gear",
+          "portable_generators"
+        ],
+        "selected_scores": {
+          "camping_gear": 0.8418,
+          "portable_generators": 0.3921
+        },
+        "strategy_return": 0.0164,
+        "benchmark_return": 0.0179,
+        "excess_return": -0.0014
+      },
+      {
+        "month": "2025-07",
+        "next_month": "2025-08",
+        "selected_categories": [
+          "camping_gear",
+          "edc"
+        ],
+        "selected_scores": {
+          "camping_gear": 0.7273,
+          "edc": 0.4433
+        },
+        "strategy_return": 0.0296,
+        "benchmark_return": 0.0242,
+        "excess_return": 0.0053
+      },
+      {
+        "month": "2025-08",
+        "next_month": "2025-09",
+        "selected_categories": [
+          "portable_generators",
+          "edc"
+        ],
+        "selected_scores": {
+          "portable_generators": 1.2846,
+          "edc": 0.1813
+        },
+        "strategy_return": 0.0104,
+        "benchmark_return": 0.0166,
+        "excess_return": -0.0062
+      },
+      {
+        "month": "2025-09",
+        "next_month": "2025-10",
+        "selected_categories": [
+          "portable_generators",
+          "edc"
+        ],
+        "selected_scores": {
+          "portable_generators": 0.9164,
+          "edc": 0.1902
+        },
+        "strategy_return": -0.023,
+        "benchmark_return": 0.0036,
+        "excess_return": -0.0266
+      },
+      {
+        "month": "2025-10",
+        "next_month": "2025-11",
+        "selected_categories": [
+          "edc",
+          "car_parts"
+        ],
+        "selected_scores": {
+          "edc": 0.6835,
+          "car_parts": 0.6514
+        },
+        "strategy_return": -0.0019,
+        "benchmark_return": 0.0061,
+        "excess_return": -0.008
+      },
+      {
+        "month": "2025-11",
+        "next_month": "2025-12",
+        "selected_categories": [
+          "edc",
+          "cigar_accessories"
+        ],
+        "selected_scores": {
+          "edc": 0.8,
+          "cigar_accessories": 0.24
+        },
+        "strategy_return": 0.0407,
+        "benchmark_return": 0.0303,
+        "excess_return": 0.0104
+      }
+    ]
+  },
+  "optimized_train": {
+    "config": {
+      "lookback_months": 3,
+      "top_n": 2,
+      "signal_weights": {
+        "demand_momentum": 0.4375,
+        "channel_roas": 0.1875,
+        "price_realization_rate": 0.25,
+        "supply_pressure": -0.125,
+        "hhi": -0.125
+      }
+    },
+    "summary": {
+      "periods": 12,
+      "avg_strategy_return": 0.0248,
+      "avg_benchmark_return": 0.0114,
+      "avg_excess_return": 0.0134,
+      "hit_rate": 0.8333,
+      "cumulative_strategy_return": 0.3374,
+      "cumulative_benchmark_return": 0.1456,
+      "cumulative_excess_return": 0.1918
+    },
+    "monthly_records": [
+      {
+        "month": "2024-04",
+        "next_month": "2024-05",
+        "selected_categories": [
+          "camping_gear",
+          "edc"
+        ],
+        "selected_scores": {
+          "camping_gear": 0.7825,
+          "edc": 0.5775
+        },
+        "strategy_return": 0.0652,
+        "benchmark_return": 0.0169,
+        "excess_return": 0.0483
+      },
+      {
+        "month": "2024-05",
+        "next_month": "2024-06",
+        "selected_categories": [
+          "camping_gear",
+          "edc"
+        ],
+        "selected_scores": {
+          "camping_gear": 1.1066,
+          "edc": 0.6307
+        },
+        "strategy_return": 0.0596,
+        "benchmark_return": 0.0201,
+        "excess_return": 0.0395
+      },
+      {
+        "month": "2024-06",
+        "next_month": "2024-07",
+        "selected_categories": [
+          "camping_gear",
+          "edc"
+        ],
+        "selected_scores": {
+          "camping_gear": 1.1446,
+          "edc": 0.4924
+        },
+        "strategy_return": 0.0352,
+        "benchmark_return": 0.0075,
+        "excess_return": 0.0277
+      },
+      {
+        "month": "2024-07",
+        "next_month": "2024-08",
+        "selected_categories": [
+          "camping_gear",
+          "edc"
+        ],
+        "selected_scores": {
+          "camping_gear": 0.9704,
+          "edc": 0.8566
+        },
+        "strategy_return": 0.0313,
+        "benchmark_return": 0.0244,
+        "excess_return": 0.0068
+      },
+      {
+        "month": "2024-08",
+        "next_month": "2024-09",
+        "selected_categories": [
+          "portable_generators",
+          "edc"
+        ],
+        "selected_scores": {
+          "portable_generators": 1.2764,
+          "edc": 0.1434
+        },
+        "strategy_return": 0.0095,
+        "benchmark_return": 0.0018,
+        "excess_return": 0.0077
+      },
+      {
+        "month": "2024-09",
+        "next_month": "2024-10",
+        "selected_categories": [
+          "portable_generators",
+          "edc"
+        ],
+        "selected_scores": {
+          "portable_generators": 1.1043,
+          "edc": 0.3659
+        },
+        "strategy_return": -0.0256,
+        "benchmark_return": 0.0044,
+        "excess_return": -0.0301
+      },
+      {
+        "month": "2024-10",
+        "next_month": "2024-11",
+        "selected_categories": [
+          "car_parts",
+          "edc"
+        ],
+        "selected_scores": {
+          "car_parts": 0.8669,
+          "edc": 0.7798
+        },
+        "strategy_return": 0.0305,
+        "benchmark_return": 0.0219,
+        "excess_return": 0.0086
+      },
+      {
+        "month": "2024-11",
+        "next_month": "2024-12",
+        "selected_categories": [
+          "edc",
+          "cigar_accessories"
+        ],
+        "selected_scores": {
+          "edc": 1.0562,
+          "cigar_accessories": 0.3708
+        },
+        "strategy_return": 0.0364,
+        "benchmark_return": 0.0172,
+        "excess_return": 0.0193
+      },
+      {
+        "month": "2024-12",
+        "next_month": "2025-01",
+        "selected_categories": [
+          "edc",
+          "portable_generators"
+        ],
+        "selected_scores": {
+          "edc": 0.8377,
+          "portable_generators": 0.4336
+        },
+        "strategy_return": 0.0085,
+        "benchmark_return": 0.0032,
+        "excess_return": 0.0053
+      },
+      {
+        "month": "2025-01",
+        "next_month": "2025-02",
+        "selected_categories": [
+          "portable_generators",
+          "camping_gear"
+        ],
+        "selected_scores": {
+          "portable_generators": 0.8642,
+          "camping_gear": 0.6062
+        },
+        "strategy_return": -0.0021,
+        "benchmark_return": 0.0054,
+        "excess_return": -0.0075
+      },
+      {
+        "month": "2025-02",
+        "next_month": "2025-03",
+        "selected_categories": [
+          "edc",
+          "camping_gear"
+        ],
+        "selected_scores": {
+          "edc": 0.6369,
+          "camping_gear": 0.3461
+        },
+        "strategy_return": 0.0247,
+        "benchmark_return": 0.0028,
+        "excess_return": 0.0219
+      },
+      {
+        "month": "2025-03",
+        "next_month": "2025-04",
+        "selected_categories": [
+          "car_parts",
+          "edc"
+        ],
+        "selected_scores": {
+          "car_parts": 0.9428,
+          "edc": 0.8578
+        },
+        "strategy_return": 0.0245,
+        "benchmark_return": 0.0115,
+        "excess_return": 0.013
+      }
+    ]
+  },
+  "optimized_test": {
+    "config": {
+      "lookback_months": 3,
+      "top_n": 2,
+      "signal_weights": {
+        "demand_momentum": 0.4375,
+        "channel_roas": 0.1875,
+        "price_realization_rate": 0.25,
+        "supply_pressure": -0.125,
+        "hhi": -0.125
+      }
+    },
+    "summary": {
+      "periods": 8,
+      "avg_strategy_return": 0.0172,
+      "avg_benchmark_return": 0.0153,
+      "avg_excess_return": 0.0019,
+      "hit_rate": 0.5,
+      "cumulative_strategy_return": 0.144,
+      "cumulative_benchmark_return": 0.1286,
+      "cumulative_excess_return": 0.0154
+    },
+    "monthly_records": [
+      {
+        "month": "2025-04",
+        "next_month": "2025-05",
+        "selected_categories": [
+          "camping_gear",
+          "car_parts"
+        ],
+        "selected_scores": {
+          "camping_gear": 1.1278,
+          "car_parts": 0.3072
+        },
+        "strategy_return": 0.0275,
+        "benchmark_return": 0.0157,
+        "excess_return": 0.0118
+      },
+      {
+        "month": "2025-05",
+        "next_month": "2025-06",
+        "selected_categories": [
+          "camping_gear",
+          "edc"
+        ],
+        "selected_scores": {
+          "camping_gear": 0.8829,
+          "edc": 0.3143
+        },
+        "strategy_return": 0.0376,
+        "benchmark_return": 0.0078,
+        "excess_return": 0.0298
+      },
+      {
+        "month": "2025-06",
+        "next_month": "2025-07",
+        "selected_categories": [
+          "camping_gear",
+          "portable_generators"
+        ],
+        "selected_scores": {
+          "camping_gear": 0.9324,
+          "portable_generators": 0.3463
+        },
+        "strategy_return": 0.0164,
+        "benchmark_return": 0.0179,
+        "excess_return": -0.0014
+      },
+      {
+        "month": "2025-07",
+        "next_month": "2025-08",
+        "selected_categories": [
+          "camping_gear",
+          "edc"
+        ],
+        "selected_scores": {
+          "camping_gear": 0.7853,
+          "edc": 0.5798
+        },
+        "strategy_return": 0.0296,
+        "benchmark_return": 0.0242,
+        "excess_return": 0.0053
+      },
+      {
+        "month": "2025-08",
+        "next_month": "2025-09",
+        "selected_categories": [
+          "portable_generators",
+          "edc"
+        ],
+        "selected_scores": {
+          "portable_generators": 1.3763,
+          "edc": 0.2646
+        },
+        "strategy_return": 0.0104,
+        "benchmark_return": 0.0166,
+        "excess_return": -0.0062
+      },
+      {
+        "month": "2025-09",
+        "next_month": "2025-10",
+        "selected_categories": [
+          "portable_generators",
+          "edc"
+        ],
+        "selected_scores": {
+          "portable_generators": 0.9185,
+          "edc": 0.2805
+        },
+        "strategy_return": -0.023,
+        "benchmark_return": 0.0036,
+        "excess_return": -0.0266
+      },
+      {
+        "month": "2025-10",
+        "next_month": "2025-11",
+        "selected_categories": [
+          "edc",
+          "car_parts"
+        ],
+        "selected_scores": {
+          "edc": 0.8391,
+          "car_parts": 0.7674
+        },
+        "strategy_return": -0.0019,
+        "benchmark_return": 0.0061,
+        "excess_return": -0.008
+      },
+      {
+        "month": "2025-11",
+        "next_month": "2025-12",
+        "selected_categories": [
+          "edc",
+          "cigar_accessories"
+        ],
+        "selected_scores": {
+          "edc": 0.9609,
+          "cigar_accessories": 0.3667
+        },
+        "strategy_return": 0.0407,
+        "benchmark_return": 0.0303,
+        "excess_return": 0.0104
+      }
+    ]
+  },
+  "optimized_full": {
+    "config": {
+      "lookback_months": 3,
+      "top_n": 2,
+      "signal_weights": {
+        "demand_momentum": 0.4375,
+        "channel_roas": 0.1875,
+        "price_realization_rate": 0.25,
+        "supply_pressure": -0.125,
+        "hhi": -0.125
+      }
+    },
+    "summary": {
+      "periods": 20,
+      "avg_strategy_return": 0.0217,
+      "avg_benchmark_return": 0.013,
+      "avg_excess_return": 0.0088,
+      "hit_rate": 0.7,
+      "cumulative_strategy_return": 0.53,
+      "cumulative_benchmark_return": 0.293,
+      "cumulative_excess_return": 0.2371
+    },
+    "monthly_records": [
+      {
+        "month": "2024-04",
+        "next_month": "2024-05",
+        "selected_categories": [
+          "camping_gear",
+          "edc"
+        ],
+        "selected_scores": {
+          "camping_gear": 0.7825,
+          "edc": 0.5775
+        },
+        "strategy_return": 0.0652,
+        "benchmark_return": 0.0169,
+        "excess_return": 0.0483
+      },
+      {
+        "month": "2024-05",
+        "next_month": "2024-06",
+        "selected_categories": [
+          "camping_gear",
+          "edc"
+        ],
+        "selected_scores": {
+          "camping_gear": 1.1066,
+          "edc": 0.6307
+        },
+        "strategy_return": 0.0596,
+        "benchmark_return": 0.0201,
+        "excess_return": 0.0395
+      },
+      {
+        "month": "2024-06",
+        "next_month": "2024-07",
+        "selected_categories": [
+          "camping_gear",
+          "edc"
+        ],
+        "selected_scores": {
+          "camping_gear": 1.1446,
+          "edc": 0.4924
+        },
+        "strategy_return": 0.0352,
+        "benchmark_return": 0.0075,
+        "excess_return": 0.0277
+      },
+      {
+        "month": "2024-07",
+        "next_month": "2024-08",
+        "selected_categories": [
+          "camping_gear",
+          "edc"
+        ],
+        "selected_scores": {
+          "camping_gear": 0.9704,
+          "edc": 0.8566
+        },
+        "strategy_return": 0.0313,
+        "benchmark_return": 0.0244,
+        "excess_return": 0.0068
+      },
+      {
+        "month": "2024-08",
+        "next_month": "2024-09",
+        "selected_categories": [
+          "portable_generators",
+          "edc"
+        ],
+        "selected_scores": {
+          "portable_generators": 1.2764,
+          "edc": 0.1434
+        },
+        "strategy_return": 0.0095,
+        "benchmark_return": 0.0018,
+        "excess_return": 0.0077
+      },
+      {
+        "month": "2024-09",
+        "next_month": "2024-10",
+        "selected_categories": [
+          "portable_generators",
+          "edc"
+        ],
+        "selected_scores": {
+          "portable_generators": 1.1043,
+          "edc": 0.3659
+        },
+        "strategy_return": -0.0256,
+        "benchmark_return": 0.0044,
+        "excess_return": -0.0301
+      },
+      {
+        "month": "2024-10",
+        "next_month": "2024-11",
+        "selected_categories": [
+          "car_parts",
+          "edc"
+        ],
+        "selected_scores": {
+          "car_parts": 0.8669,
+          "edc": 0.7798
+        },
+        "strategy_return": 0.0305,
+        "benchmark_return": 0.0219,
+        "excess_return": 0.0086
+      },
+      {
+        "month": "2024-11",
+        "next_month": "2024-12",
+        "selected_categories": [
+          "edc",
+          "cigar_accessories"
+        ],
+        "selected_scores": {
+          "edc": 1.0562,
+          "cigar_accessories": 0.3708
+        },
+        "strategy_return": 0.0364,
+        "benchmark_return": 0.0172,
+        "excess_return": 0.0193
+      },
+      {
+        "month": "2024-12",
+        "next_month": "2025-01",
+        "selected_categories": [
+          "edc",
+          "portable_generators"
+        ],
+        "selected_scores": {
+          "edc": 0.8377,
+          "portable_generators": 0.4336
+        },
+        "strategy_return": 0.0085,
+        "benchmark_return": 0.0032,
+        "excess_return": 0.0053
+      },
+      {
+        "month": "2025-01",
+        "next_month": "2025-02",
+        "selected_categories": [
+          "portable_generators",
+          "camping_gear"
+        ],
+        "selected_scores": {
+          "portable_generators": 0.8642,
+          "camping_gear": 0.6062
+        },
+        "strategy_return": -0.0021,
+        "benchmark_return": 0.0054,
+        "excess_return": -0.0075
+      },
+      {
+        "month": "2025-02",
+        "next_month": "2025-03",
+        "selected_categories": [
+          "edc",
+          "camping_gear"
+        ],
+        "selected_scores": {
+          "edc": 0.6369,
+          "camping_gear": 0.3461
+        },
+        "strategy_return": 0.0247,
+        "benchmark_return": 0.0028,
+        "excess_return": 0.0219
+      },
+      {
+        "month": "2025-03",
+        "next_month": "2025-04",
+        "selected_categories": [
+          "car_parts",
+          "edc"
+        ],
+        "selected_scores": {
+          "car_parts": 0.9428,
+          "edc": 0.8578
+        },
+        "strategy_return": 0.0245,
+        "benchmark_return": 0.0115,
+        "excess_return": 0.013
+      },
+      {
+        "month": "2025-04",
+        "next_month": "2025-05",
+        "selected_categories": [
+          "camping_gear",
+          "car_parts"
+        ],
+        "selected_scores": {
+          "camping_gear": 1.1278,
+          "car_parts": 0.3072
+        },
+        "strategy_return": 0.0275,
+        "benchmark_return": 0.0157,
+        "excess_return": 0.0118
+      },
+      {
+        "month": "2025-05",
+        "next_month": "2025-06",
+        "selected_categories": [
+          "camping_gear",
+          "edc"
+        ],
+        "selected_scores": {
+          "camping_gear": 0.8829,
+          "edc": 0.3143
+        },
+        "strategy_return": 0.0376,
+        "benchmark_return": 0.0078,
+        "excess_return": 0.0298
+      },
+      {
+        "month": "2025-06",
+        "next_month": "2025-07",
+        "selected_categories": [
+          "camping_gear",
+          "portable_generators"
+        ],
+        "selected_scores": {
+          "camping_gear": 0.9324,
+          "portable_generators": 0.3463
+        },
+        "strategy_return": 0.0164,
+        "benchmark_return": 0.0179,
+        "excess_return": -0.0014
+      },
+      {
+        "month": "2025-07",
+        "next_month": "2025-08",
+        "selected_categories": [
+          "camping_gear",
+          "edc"
+        ],
+        "selected_scores": {
+          "camping_gear": 0.7853,
+          "edc": 0.5798
+        },
+        "strategy_return": 0.0296,
+        "benchmark_return": 0.0242,
+        "excess_return": 0.0053
+      },
+      {
+        "month": "2025-08",
+        "next_month": "2025-09",
+        "selected_categories": [
+          "portable_generators",
+          "edc"
+        ],
+        "selected_scores": {
+          "portable_generators": 1.3763,
+          "edc": 0.2646
+        },
+        "strategy_return": 0.0104,
+        "benchmark_return": 0.0166,
+        "excess_return": -0.0062
+      },
+      {
+        "month": "2025-09",
+        "next_month": "2025-10",
+        "selected_categories": [
+          "portable_generators",
+          "edc"
+        ],
+        "selected_scores": {
+          "portable_generators": 0.9185,
+          "edc": 0.2805
+        },
+        "strategy_return": -0.023,
+        "benchmark_return": 0.0036,
+        "excess_return": -0.0266
+      },
+      {
+        "month": "2025-10",
+        "next_month": "2025-11",
+        "selected_categories": [
+          "edc",
+          "car_parts"
+        ],
+        "selected_scores": {
+          "edc": 0.8391,
+          "car_parts": 0.7674
+        },
+        "strategy_return": -0.0019,
+        "benchmark_return": 0.0061,
+        "excess_return": -0.008
+      },
+      {
+        "month": "2025-11",
+        "next_month": "2025-12",
+        "selected_categories": [
+          "edc",
+          "cigar_accessories"
+        ],
+        "selected_scores": {
+          "edc": 0.9609,
+          "cigar_accessories": 0.3667
+        },
+        "strategy_return": 0.0407,
+        "benchmark_return": 0.0303,
+        "excess_return": 0.0104
+      }
+    ]
+  },
+  "improvement": {
+    "train_avg_excess_delta": 0.0031,
+    "test_avg_excess_delta": 0.0,
+    "test_hit_rate_delta": 0.0
+  }
+}

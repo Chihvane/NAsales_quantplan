@@ -1,0 +1,9 @@
+rule_id,scenario,gate_name,metric_name,operator,threshold_value,severity,approver_role,active_flag,version,stop_loss_flag
+RULE-ENTRY-01,market_entry,Gate1,tam_usd,>=,50000000,high,Strategy Director,true,v1.0,false
+RULE-ENTRY-02,market_entry,Gate1,roi_payback_months,<=,24,high,Strategy Director,true,v1.0,false
+RULE-SCALE-01,pilot_scale,Gate3,retention_rate,>=,0.22,medium,GM,true,v1.1,false
+RULE-SKU-01,sku_exit,Gate5,gross_margin_rate,<=,0.08,high,Category Lead,true,v1.0,true
+RULE-SKU-02,sku_exit,Gate5,quality_claim_rate,>=,0.05,high,Category Lead,true,v1.0,true
+RULE-CHANNEL-01,channel_exit,Gate5,channel_roas,<=,1.8,high,GM,true,v1.0,true
+RULE-ADS-01,ad_pause,Gate3,ad_roi,<=,0.9,medium,Growth Lead,true,v1.1,true
+RULE-ADS-02,ad_pause,Gate3,cac_payback_days,>=,120,medium,Growth Lead,true,v1.1,true

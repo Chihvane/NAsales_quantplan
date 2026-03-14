@@ -1,0 +1,24 @@
+gate:
+  gate_id: GATE-MARKET-ENTRY
+  schema_version: 3.0
+  logic: AND
+  conditions:
+    - source: model_output
+      ref: profit_p50
+      operator: ">="
+      value: 0
+    - source: model_output
+      ref: loss_probability
+      operator: "<="
+      budget_ref: risk_budget.max_loss_probability
+    - source: factor
+      ref: FAC-MARKET-ATTRACT
+      operator: ">="
+      value: 0.5
+    - source: capital
+      ref: required_capital
+      operator: "<="
+      budget_ref: capital_pool.free_capital
+  decision_output:
+    pass: GO
+    fail: NO_GO

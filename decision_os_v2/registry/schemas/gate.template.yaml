@@ -1,0 +1,24 @@
+gate_schema:
+  gate_id: GATE-SKU-LAUNCH
+  schema_version: 2.1
+  logic: AND
+  conditions:
+    - source: model_output
+      ref: profit_p50
+      operator: ">="
+      value: 0
+    - source: model_output
+      ref: loss_probability
+      operator: "<="
+      budget_ref: risk_budget.max_loss_probability
+    - source: capital
+      ref: required_capital
+      operator: "<="
+      budget_ref: capital_pool.free_capital
+    - source: factor
+      ref: FAC-MARKET-ATTRACT
+      operator: ">="
+      value: 0.5
+  decision_output:
+    on_pass: GO
+    on_fail: NO_GO

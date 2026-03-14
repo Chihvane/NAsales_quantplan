@@ -3,9 +3,14 @@ from __future__ import annotations
 from pathlib import Path
 
 from .loaders import (
+    load_channel_benchmarks,
     load_channels,
     load_customer_segments,
+    load_event_library,
+    load_evidence_sources,
+    load_gate_thresholds,
     load_listings,
+    load_market_size_inputs,
     load_region_demand,
     load_search_trends,
     load_transactions,
@@ -31,4 +36,29 @@ def build_dataset_from_directory(data_dir: str | Path) -> Part1Dataset:
         listings=load_listings(data_dir / "listings.csv"),
         transactions=load_transactions(data_dir / "transactions.csv"),
         channels=load_channels(data_dir / "channels.csv"),
+        market_size_inputs=(
+            load_market_size_inputs(data_dir / "market_size_inputs.csv")
+            if (data_dir / "market_size_inputs.csv").exists()
+            else []
+        ),
+        channel_benchmarks=(
+            load_channel_benchmarks(data_dir / "channel_benchmarks.csv")
+            if (data_dir / "channel_benchmarks.csv").exists()
+            else []
+        ),
+        event_library=(
+            load_event_library(data_dir / "event_library.csv")
+            if (data_dir / "event_library.csv").exists()
+            else []
+        ),
+        source_registry=(
+            load_evidence_sources(data_dir / "source_registry.csv")
+            if (data_dir / "source_registry.csv").exists()
+            else []
+        ),
+        part1_threshold_registry=(
+            load_gate_thresholds(data_dir / "part1_threshold_registry.csv")
+            if (data_dir / "part1_threshold_registry.csv").exists()
+            else []
+        ),
     )

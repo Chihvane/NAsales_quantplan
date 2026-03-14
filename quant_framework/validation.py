@@ -47,6 +47,245 @@ def _status(passed: bool, review: bool = False) -> str:
     return "fail"
 
 
+PART0_SOURCE_REFERENCES = {
+    "stage_gate": {
+        "label": "Stage-Gate governance references",
+        "url": "https://www.stage-gate.com/blog/the-stage-gate-model-an-overview/",
+    },
+    "raci": {
+        "label": "RACI responsibility matrix references",
+        "url": "https://marketingdecision.org/decision-raci-matrix/",
+    },
+}
+
+
+HORIZONTAL_SOURCE_REFERENCES = {
+    "master_data": {
+        "label": "Master data and data dictionary governance references",
+        "url": "https://www.jiandaoyun.com/nblog/411173/",
+    },
+    "audit_chain": {
+        "label": "Evidence lineage and audit chain references",
+        "url": "https://sgsystemsglobal.com/zh-CN/",
+    },
+    "decision_rules": {
+        "label": "Go/No-Go decision process references",
+        "url": "https://www.inventive.ai/blog-posts/go-no-go-decision-projects",
+    },
+}
+
+
+def build_part0_methodology_validation(report: dict) -> dict:
+    section_01 = report["sections"]["0.1"]["metrics"]
+    section_02 = report["sections"]["0.2"]["metrics"]
+    section_03 = report["sections"]["0.3"]["metrics"]
+    section_04 = report["sections"]["0.4"]["metrics"]
+    section_05 = report["sections"]["0.5"]["metrics"]
+    section_06 = report["sections"]["0.6"]["metrics"]
+    section_07 = report["sections"]["0.7"]["metrics"]
+
+    confidence_mix = section_02.get("confidence_mix", {})
+    confidence_sum = sum(confidence_mix.values())
+    auto_checks = [
+        {
+            "check_id": "decision_gate_coverage",
+            "status": _status(
+                section_01.get("gate_coverage_ratio", 0.0) <= 1.0
+                and section_01.get("gate_coverage_ratio", 0.0) > 0
+                and section_01.get("decision_tree_score", 0.0) <= 1.0
+            ),
+            "source": PART0_SOURCE_REFERENCES["stage_gate"],
+            "method": "Part 0 should explicitly cover the stage-gate chain rather than leaving decision nodes unbound.",
+            "evidence": {
+                "gate_coverage_ratio": section_01.get("gate_coverage_ratio"),
+                "gate_count": section_01.get("gate_count"),
+                "decision_tree_score": section_01.get("decision_tree_score"),
+            },
+        },
+        {
+            "check_id": "confidence_mix_integrity",
+            "status": _status(abs(confidence_sum - 1.0) <= 0.01, review=not bool(confidence_mix)),
+            "source": PART0_SOURCE_REFERENCES["stage_gate"],
+            "method": "Confidence grade shares should reconcile back to 100% of the registered evidence pool.",
+            "evidence": {
+                "confidence_mix": confidence_mix,
+                "confidence_sum": round(confidence_sum, 4),
+            },
+        },
+        {
+            "check_id": "assumption_validation_range",
+            "status": _status(
+                0.0 <= section_03.get("validated_ratio", 0.0) <= 1.0
+                and 0.0 <= section_03.get("validation_method_coverage_ratio", 0.0) <= 1.0
+            ),
+            "source": PART0_SOURCE_REFERENCES["stage_gate"],
+            "method": "Assumption validation and method coverage are bounded ratios.",
+            "evidence": {
+                "validated_ratio": section_03.get("validated_ratio"),
+                "validation_method_coverage_ratio": section_03.get("validation_method_coverage_ratio"),
+            },
+        },
+        {
+            "check_id": "gate_operability_range",
+            "status": _status(
+                0.0 <= section_04.get("gate_operability_score", 0.0) <= 1.0
+                and 0.0 <= section_04.get("threshold_completeness_ratio", 0.0) <= 1.0
+            ),
+            "source": PART0_SOURCE_REFERENCES["stage_gate"],
+            "method": "Gate operability and threshold completeness are normalized governance scores.",
+            "evidence": {
+                "gate_operability_score": section_04.get("gate_operability_score"),
+                "threshold_completeness_ratio": section_04.get("threshold_completeness_ratio"),
+            },
+        },
+        {
+            "check_id": "strategic_gate_family_coverage",
+            "status": _status(
+                0.0 <= section_04.get("strategic_metric_family_coverage_ratio", 0.0) <= 1.0,
+                review=not bool(section_04.get("strategic_metric_family_mix")),
+            ),
+            "source": PART0_SOURCE_REFERENCES["stage_gate"],
+            "method": "Part 0 should explicitly map strategic gates across capital return, market structure, demand stability, payback and risk control.",
+            "evidence": {
+                "strategic_metric_family_coverage_ratio": section_04.get("strategic_metric_family_coverage_ratio"),
+                "strategic_metric_family_mix": section_04.get("strategic_metric_family_mix"),
+                "uncovered_strategic_metric_families": section_04.get("uncovered_strategic_metric_families"),
+            },
+        },
+        {
+            "check_id": "signature_chain_integrity",
+            "status": _status(
+                0.0 <= section_05.get("gate_signoff_coverage_ratio", 0.0) <= 1.0
+                and 0.0 <= section_05.get("minimum_step_pass_ratio", 0.0) <= 1.0
+            ),
+            "source": PART0_SOURCE_REFERENCES["raci"],
+            "method": "Signoff coverage and minimum-step pass rate must stay inside a 0-1 governance range.",
+            "evidence": {
+                "gate_signoff_coverage_ratio": section_05.get("gate_signoff_coverage_ratio"),
+                "minimum_step_pass_ratio": section_05.get("minimum_step_pass_ratio"),
+            },
+        },
+        {
+            "check_id": "refresh_policy_alignment",
+            "status": _status(
+                0.0 <= section_06.get("refresh_expiry_alignment_ratio", 0.0) <= 1.0
+                and 0.0 <= section_06.get("event_trigger_coverage_ratio", 0.0) <= 1.0
+            ),
+            "source": PART0_SOURCE_REFERENCES["stage_gate"],
+            "method": "Refresh and expiry policies must be explicitly bounded and machine-readable.",
+            "evidence": {
+                "refresh_expiry_alignment_ratio": section_06.get("refresh_expiry_alignment_ratio"),
+                "event_trigger_coverage_ratio": section_06.get("event_trigger_coverage_ratio"),
+            },
+        },
+        {
+            "check_id": "field_dictionary_compliance",
+            "status": _status(
+                0.0 <= section_07.get("naming_compliance_ratio", 0.0) <= 1.0
+                and 0.0 <= section_07.get("definition_coverage_ratio", 0.0) <= 1.0
+            ),
+            "source": PART0_SOURCE_REFERENCES["raci"],
+            "method": "Field dictionary compliance must be explicit so future projects do not drift in naming and meaning.",
+            "evidence": {
+                "naming_compliance_ratio": section_07.get("naming_compliance_ratio"),
+                "definition_coverage_ratio": section_07.get("definition_coverage_ratio"),
+            },
+        },
+    ]
+
+    summary = {
+        "pass_count": sum(1 for check in auto_checks if check["status"] == "pass"),
+        "review_count": sum(1 for check in auto_checks if check["status"] == "review"),
+        "fail_count": sum(1 for check in auto_checks if check["status"] == "fail"),
+    }
+    return {"checks": auto_checks, "summary": summary}
+
+
+def build_horizontal_system_validation(report: dict) -> dict:
+    section_h1 = report["sections"]["H1"]["metrics"]
+    section_h2 = report["sections"]["H2"]["metrics"]
+    section_h3 = report["sections"]["H3"]["metrics"]
+
+    checks = [
+        {
+            "check_id": "entity_type_coverage_range",
+            "status": _status(
+                0.0 <= section_h1.get("entity_type_coverage_ratio", 0.0) <= 1.0
+                and 0.0 <= section_h1.get("dictionary_approval_ratio", 0.0) <= 1.0
+            ),
+            "source": HORIZONTAL_SOURCE_REFERENCES["master_data"],
+            "method": "Master-data coverage and dictionary approval should be normalized governance ratios.",
+            "evidence": {
+                "entity_type_coverage_ratio": section_h1.get("entity_type_coverage_ratio"),
+                "dictionary_approval_ratio": section_h1.get("dictionary_approval_ratio"),
+            },
+        },
+        {
+            "check_id": "duplicate_free_integrity",
+            "status": _status(0.0 <= section_h1.get("duplicate_free_ratio", 0.0) <= 1.0),
+            "source": HORIZONTAL_SOURCE_REFERENCES["master_data"],
+            "method": "Duplicate-free ratio must stay inside 0-1 and support master-data quality monitoring.",
+            "evidence": {
+                "duplicate_free_ratio": section_h1.get("duplicate_free_ratio"),
+                "required_field_compliance_ratio": section_h1.get("required_field_compliance_ratio"),
+            },
+        },
+        {
+            "check_id": "evidence_lineage_reproducibility",
+            "status": _status(
+                0.0 <= section_h2.get("reproducibility_ratio", 0.0) <= 1.0
+                and 0.0 <= section_h2.get("traceback_sla_ratio", 0.0) <= 1.0
+            ),
+            "source": HORIZONTAL_SOURCE_REFERENCES["audit_chain"],
+            "method": "Evidence lineage should expose bounded reproducibility and traceback SLA ratios.",
+            "evidence": {
+                "reproducibility_ratio": section_h2.get("reproducibility_ratio"),
+                "traceback_sla_ratio": section_h2.get("traceback_sla_ratio"),
+            },
+        },
+        {
+            "check_id": "audit_immutability_integrity",
+            "status": _status(0.0 <= section_h2.get("immutable_audit_ratio", 0.0) <= 1.0),
+            "source": HORIZONTAL_SOURCE_REFERENCES["audit_chain"],
+            "method": "Audit immutability must be represented as an explicit normalized control ratio.",
+            "evidence": {
+                "immutable_audit_ratio": section_h2.get("immutable_audit_ratio"),
+                "audit_approval_ref_ratio": section_h2.get("audit_approval_ref_ratio"),
+            },
+        },
+        {
+            "check_id": "decision_rule_scenario_coverage",
+            "status": _status(0.0 <= section_h3.get("scenario_coverage_ratio", 0.0) <= 1.0),
+            "source": HORIZONTAL_SOURCE_REFERENCES["decision_rules"],
+            "method": "Decision-rule scenario coverage is normalized against the required scenario library.",
+            "evidence": {
+                "scenario_coverage_ratio": section_h3.get("scenario_coverage_ratio"),
+                "rule_scenario_mix": section_h3.get("rule_scenario_mix"),
+            },
+        },
+        {
+            "check_id": "trigger_resolution_integrity",
+            "status": _status(
+                0.0 <= section_h3.get("trigger_resolution_ratio", 0.0) <= 1.0
+                and 0.0 <= section_h3.get("trigger_approval_ref_ratio", 0.0) <= 1.0
+            ),
+            "source": HORIZONTAL_SOURCE_REFERENCES["decision_rules"],
+            "method": "Triggered decisions should keep bounded closure and approval-reference ratios.",
+            "evidence": {
+                "trigger_resolution_ratio": section_h3.get("trigger_resolution_ratio"),
+                "trigger_approval_ref_ratio": section_h3.get("trigger_approval_ref_ratio"),
+            },
+        },
+    ]
+
+    summary = {
+        "pass_count": sum(1 for check in checks if check["status"] == "pass"),
+        "review_count": sum(1 for check in checks if check["status"] == "review"),
+        "fail_count": sum(1 for check in checks if check["status"] == "fail"),
+    }
+    return {"checks": checks, "summary": summary}
+
+
 def build_methodology_validation(report: dict) -> dict:
     section_11 = report["sections"]["1.1"]["metrics"]
     section_13 = report["sections"]["1.3"]["metrics"]
@@ -137,6 +376,23 @@ def build_methodology_validation(report: dict) -> dict:
             },
         }
     )
+    market_size_reference_panel = section_13.get("market_size_inputs", {})
+    checks.append(
+        {
+            "check_id": "market_size_reference_panel_consistency",
+            "status": _status(
+                market_size_reference_panel.get("consistency_ratio", 0.0) >= 0.8,
+                review=not bool(market_size_reference_panel),
+            ),
+            "source": SOURCE_REFERENCES["holoniq_market_sizing"],
+            "method": "Explicit TAM/SAM/SOM reference rows should preserve the TAM>=SAM>=SOM waterfall and bounded penetration assumptions.",
+            "evidence": {
+                "consistency_ratio": market_size_reference_panel.get("consistency_ratio"),
+                "assumption_vs_reference_gap_ratio": market_size_reference_panel.get("assumption_vs_reference_gap_ratio"),
+                "missing_input": not bool(market_size_reference_panel),
+            },
+        }
+    )
 
     raw_sample_monthly_gmv = section_13["bottom_up"].get("sample_monthly_gmv_raw", 0.0)
     adjusted_sample_monthly_gmv = section_13["bottom_up"].get("sample_monthly_gmv", 0.0)
@@ -197,6 +453,33 @@ def build_methodology_validation(report: dict) -> dict:
                 "channel": first_channel["channel"] if first_channel else None,
                 "roas": first_channel["roas"] if first_channel else None,
                 "missing_input": first_channel is None or not first_channel["ad_spend"],
+            },
+        }
+    )
+    benchmark_channel = next(
+        (row for row in section_14.get("channels", []) if row.get("benchmark_conversion_rate") is not None),
+        None,
+    )
+    benchmark_gap_ok = False
+    if benchmark_channel and benchmark_channel.get("benchmark_conversion_rate"):
+        expected_gap = round(
+            benchmark_channel["conversion_rate"] / benchmark_channel["benchmark_conversion_rate"] - 1,
+            4,
+        )
+        benchmark_gap_ok = benchmark_channel.get("conversion_rate_gap") == expected_gap
+    checks.append(
+        {
+            "check_id": "channel_benchmark_gap_formula",
+            "status": _status(
+                benchmark_gap_ok,
+                review=benchmark_channel is None,
+            ),
+            "source": SOURCE_REFERENCES["google_ads_conversion"],
+            "method": "Channel benchmark gap is modeled as actual conversion divided by benchmark conversion minus one.",
+            "evidence": {
+                "channel": benchmark_channel.get("channel") if benchmark_channel else None,
+                "conversion_rate_gap": benchmark_channel.get("conversion_rate_gap") if benchmark_channel else None,
+                "missing_input": benchmark_channel is None,
             },
         }
     )
@@ -862,6 +1145,364 @@ def build_part4_methodology_validation(report: dict) -> dict:
                 "recommendation": recommendation,
                 "budget_sum": round(budget_sum, 4),
                 "missing_input": not bool(gate_results),
+            },
+        }
+    )
+
+    pass_count = sum(1 for check in checks if check["status"] == "pass")
+    review_count = sum(1 for check in checks if check["status"] == "review")
+    fail_count = sum(1 for check in checks if check["status"] == "fail")
+
+    return {
+        "summary": {
+            "pass_count": pass_count,
+            "review_count": review_count,
+            "fail_count": fail_count,
+        },
+        "checks": checks,
+    }
+
+
+PART5_SOURCE_REFERENCES = {
+    "operating_gate": {
+        "label": "Part 5 Operating Gate Design",
+        "url": "",
+    },
+    "data_monitoring": {
+        "label": "Part 5 Monitoring and Data Reliability",
+        "url": "",
+    },
+    "growth_funnel": {
+        "label": "Part 5 Growth Loop",
+        "url": "",
+    },
+    "pricing_control": {
+        "label": "Part 5 Pricing and Margin Protection",
+        "url": "",
+    },
+    "inventory_cash": {
+        "label": "Part 5 Inventory and Cash Control",
+        "url": "",
+    },
+    "experimentation": {
+        "label": "Part 5 Experimentation System",
+        "url": "",
+    },
+    "scale_gate": {
+        "label": "Part 5 Scale Gate",
+        "url": "",
+    },
+}
+
+
+def build_part5_methodology_validation(report: dict) -> dict:
+    section_51 = report["sections"]["5.1"]["metrics"]
+    section_52 = report["sections"]["5.2"]["metrics"]
+    section_53 = report["sections"]["5.3"]["metrics"]
+    section_54 = report["sections"]["5.4"]["metrics"]
+    section_55 = report["sections"]["5.5"]["metrics"]
+    section_56 = report["sections"]["5.6"]["metrics"]
+    section_57 = report["sections"]["5.7"]["metrics"]
+
+    checks = []
+
+    operating_health_score = section_51.get("operating_health_score")
+    gate_breach_rate = section_51.get("gate_breach_rate")
+    checks.append(
+        {
+            "check_id": "operating_health_and_gate_range",
+            "status": _status(
+                operating_health_score is not None
+                and 0.0 <= operating_health_score <= 1.0
+                and gate_breach_rate is not None
+                and 0.0 <= gate_breach_rate <= 1.0,
+                review=operating_health_score is None or gate_breach_rate is None,
+            ),
+            "source": PART5_SOURCE_REFERENCES["operating_gate"],
+            "method": "Operating health and gate breach rate are normalized to a 0-1 range for cross-channel comparability.",
+            "evidence": {
+                "operating_health_score": operating_health_score,
+                "gate_breach_rate": gate_breach_rate,
+            },
+        }
+    )
+
+    data_coverage_score = section_52.get("data_coverage_score")
+    fee_version_coverage = section_52.get("fee_version_coverage")
+    policy_source_url_coverage = section_52.get("policy_source_url_coverage")
+    checks.append(
+        {
+            "check_id": "monitoring_coverage_range",
+            "status": _status(
+                data_coverage_score is not None
+                and 0.0 <= data_coverage_score <= 1.0
+                and fee_version_coverage is not None
+                and 0.0 <= fee_version_coverage <= 1.0,
+                review=data_coverage_score is None or fee_version_coverage is None,
+            ),
+            "source": PART5_SOURCE_REFERENCES["data_monitoring"],
+            "method": "Coverage-style monitoring metrics remain bounded between 0 and 1.",
+            "evidence": {
+                "data_coverage_score": data_coverage_score,
+                "fee_version_coverage": fee_version_coverage,
+                "policy_source_url_coverage": policy_source_url_coverage,
+            },
+        }
+    )
+    weekly_channel_pnl = section_52.get("weekly_channel_pnl", [])
+    weekly_contribution_profit = section_52.get("weekly_contribution_profit", {})
+    weekly_profit_sum = round(sum(weekly_contribution_profit.values()), 4) if weekly_contribution_profit else None
+    weekly_row_profit_sum = round(sum(row.get("contribution_profit", 0.0) for row in weekly_channel_pnl), 4) if weekly_channel_pnl else None
+    checks.append(
+        {
+            "check_id": "weekly_pnl_reconciliation",
+            "status": _status(
+                weekly_profit_sum is not None
+                and weekly_row_profit_sum is not None
+                and abs(weekly_profit_sum - weekly_row_profit_sum) <= 0.01,
+                review=not bool(weekly_channel_pnl),
+            ),
+            "source": PART5_SOURCE_REFERENCES["data_monitoring"],
+            "method": "Weekly contribution-profit totals should reconcile between weekly rollup rows and chart-ready week totals.",
+            "evidence": {
+                "weekly_profit_sum": weekly_profit_sum,
+                "weekly_row_profit_sum": weekly_row_profit_sum,
+                "weekly_row_count": len(weekly_channel_pnl),
+            },
+        }
+    )
+
+    data_contract = section_52.get("data_contract", {})
+    checks.append(
+        {
+            "check_id": "data_contract_presence",
+            "status": _status(
+                bool(data_contract.get("data_availability_flags"))
+                and isinstance(data_contract.get("proxy_usage_flags", []), list)
+                and isinstance(data_contract.get("confidence_downgrade_reason", []), list)
+                and isinstance(data_contract.get("model_blockers", []), list),
+                review=not bool(data_contract),
+            ),
+            "source": PART5_SOURCE_REFERENCES["data_monitoring"],
+            "method": "When key inputs are missing, the report must explicitly declare availability, proxy usage, downgrade reasons, and blockers.",
+            "evidence": {
+                "data_contract_present": bool(data_contract),
+                "availability_flag_count": len(data_contract.get("data_availability_flags", {})),
+                "proxy_usage_count": len(data_contract.get("proxy_usage_flags", [])),
+            },
+        }
+    )
+
+    funnel = section_53.get("funnel_conversion_matrix", {})
+    funnel_ok = bool(funnel) and all(0.0 <= value <= 1.0 for value in funnel.values())
+    checks.append(
+        {
+            "check_id": "growth_funnel_range",
+            "status": _status(funnel_ok, review=not funnel),
+            "source": PART5_SOURCE_REFERENCES["growth_funnel"],
+            "method": "Funnel rates are modeled as conditional conversion rates and should remain within a 0-1 range.",
+            "evidence": {
+                "funnel_conversion_matrix": funnel,
+                "missing_input": not bool(funnel),
+            },
+        }
+    )
+
+    promo_action_share = section_54.get("promo_action_share")
+    bundle_action_share = section_54.get("bundle_action_share")
+    price_realization_rate = section_54.get("price_realization_rate")
+    checks.append(
+        {
+            "check_id": "pricing_control_range",
+            "status": _status(
+                promo_action_share is not None
+                and 0.0 <= promo_action_share <= 1.0
+                and bundle_action_share is not None
+                and 0.0 <= bundle_action_share <= 1.0
+                and price_realization_rate is not None
+                and 0.0 <= price_realization_rate <= 1.1,
+                review=promo_action_share is None or bundle_action_share is None or price_realization_rate is None,
+            ),
+            "source": PART5_SOURCE_REFERENCES["pricing_control"],
+            "method": "Promotion, bundle, and price realization ratios should stay within realistic retail ranges.",
+            "evidence": {
+                "promo_action_share": promo_action_share,
+                "bundle_action_share": bundle_action_share,
+                "price_realization_rate": price_realization_rate,
+            },
+        }
+    )
+
+    stockout_risk = section_55.get("stockout_risk")
+    overstock_risk = section_55.get("overstock_risk")
+    reorder_readiness_score = section_55.get("reorder_readiness_score")
+    checks.append(
+        {
+            "check_id": "inventory_cash_range",
+            "status": _status(
+                stockout_risk is not None
+                and 0.0 <= stockout_risk <= 1.0
+                and overstock_risk is not None
+                and 0.0 <= overstock_risk <= 1.0
+                and reorder_readiness_score is not None
+                and 0.0 <= reorder_readiness_score <= 1.0,
+                review=stockout_risk is None or overstock_risk is None or reorder_readiness_score is None,
+            ),
+            "source": PART5_SOURCE_REFERENCES["inventory_cash"],
+            "method": "Inventory and reorder readiness metrics are normalized risk scores and should remain within a 0-1 range.",
+            "evidence": {
+                "stockout_risk": stockout_risk,
+                "overstock_risk": overstock_risk,
+                "reorder_readiness_score": reorder_readiness_score,
+            },
+        }
+    )
+
+    sample_size_per_variant = (
+        section_56.get("sample_size_guidance", {}).get("sample_size_per_variant")
+    )
+    causal_confidence_score = section_56.get("causal_confidence_score")
+    hard_constraints = section_56.get("platform_hard_constraints", {})
+    readouts = section_56.get("readouts", {})
+    checks.append(
+        {
+            "check_id": "experiment_design_integrity",
+            "status": _status(
+                sample_size_per_variant is not None
+                and sample_size_per_variant > 0
+                and causal_confidence_score is not None
+                and 0.0 <= causal_confidence_score <= 1.0,
+                review=sample_size_per_variant is None or causal_confidence_score is None,
+            ),
+            "source": PART5_SOURCE_REFERENCES["experimentation"],
+            "method": "Experimentation output requires positive sample size guidance and a bounded confidence score.",
+            "evidence": {
+                "sample_size_per_variant": sample_size_per_variant,
+                "causal_confidence_score": causal_confidence_score,
+                "minimum_runtime_days": hard_constraints.get("minimum_runtime_days"),
+            },
+        }
+    )
+
+    readout_coverage_ratio = readouts.get("readout_coverage_ratio")
+    assignment_coverage_ratio = readouts.get("assignment_coverage_ratio")
+    incrementality_score = section_56.get("incrementality_score")
+    average_posterior_win_probability = readouts.get("average_posterior_win_probability")
+    average_hierarchical_win_probability = readouts.get("average_hierarchical_win_probability")
+    temporal_consistency_score = readouts.get("temporal_consistency_score")
+    checks.append(
+        {
+            "check_id": "experiment_readout_range",
+            "status": _status(
+                readout_coverage_ratio is not None
+                and 0.0 <= readout_coverage_ratio <= 1.0
+                and assignment_coverage_ratio is not None
+                and 0.0 <= assignment_coverage_ratio <= 1.0
+                and incrementality_score is not None
+                and 0.0 <= incrementality_score <= 1.0,
+                review=not bool(readouts),
+            ),
+            "source": PART5_SOURCE_REFERENCES["experimentation"],
+            "method": "Experiment readout coverage, assignment coverage, and incrementality score are normalized to a 0-1 range.",
+            "evidence": {
+                "readout_coverage_ratio": readout_coverage_ratio,
+                "assignment_coverage_ratio": assignment_coverage_ratio,
+                "incrementality_score": incrementality_score,
+            },
+        }
+    )
+    checks.append(
+        {
+            "check_id": "experiment_posterior_range",
+            "status": _status(
+                average_posterior_win_probability is not None
+                and 0.0 <= average_posterior_win_probability <= 1.0
+                and average_hierarchical_win_probability is not None
+                and 0.0 <= average_hierarchical_win_probability <= 1.0
+                and temporal_consistency_score is not None
+                and 0.0 <= temporal_consistency_score <= 1.0,
+                review=not bool(readouts),
+            ),
+            "source": PART5_SOURCE_REFERENCES["experimentation"],
+            "method": "Posterior win probability and temporal consistency score are normalized to a 0-1 range.",
+            "evidence": {
+                "average_posterior_win_probability": average_posterior_win_probability,
+                "average_hierarchical_win_probability": average_hierarchical_win_probability,
+                "temporal_consistency_score": temporal_consistency_score,
+            },
+        }
+    )
+    auto_stop_summary = readouts.get("auto_stop_summary", {})
+    total_auto_stop = sum(auto_stop_summary.values()) if auto_stop_summary else None
+    readout_count = readouts.get("readout_count")
+    checks.append(
+        {
+            "check_id": "experiment_auto_stop_integrity",
+            "status": _status(
+                total_auto_stop is not None
+                and readout_count is not None
+                and total_auto_stop == readout_count,
+                review=not bool(auto_stop_summary),
+            ),
+            "source": PART5_SOURCE_REFERENCES["experimentation"],
+            "method": "Auto-stop bucket counts should reconcile to the number of readable experiments.",
+            "evidence": {
+                "auto_stop_summary": auto_stop_summary,
+                "readout_count": readout_count,
+            },
+        }
+    )
+
+    expansion_gate_status = section_57.get("expansion_gate_status")
+    budget_allocation = section_57.get("budget_allocation", {})
+    budget_sum = sum(budget_allocation.values())
+    rollback_trigger_rate = section_57.get("rollback_trigger_rate")
+    checks.append(
+        {
+            "check_id": "scale_gate_integrity",
+            "status": _status(
+                expansion_gate_status in {"scale_up", "hold_and_optimize", "pilot_only", "rollback"}
+                and (not budget_allocation or abs(budget_sum - 1.0) <= 0.02)
+                and rollback_trigger_rate is not None
+                and 0.0 <= rollback_trigger_rate <= 1.0,
+                review=expansion_gate_status is None,
+            ),
+            "source": PART5_SOURCE_REFERENCES["scale_gate"],
+            "method": "Scale-gate output uses a fixed enum, normalized rollback rate, and budget shares that reconcile back to 100%.",
+            "evidence": {
+                "expansion_gate_status": expansion_gate_status,
+                "budget_sum": round(budget_sum, 4),
+                "rollback_trigger_rate": rollback_trigger_rate,
+            },
+        }
+    )
+
+    alert_type_mix = section_57.get("alerts", {}).get("alert_type_mix", {})
+    alert_count = section_57.get("alerts", {}).get("alert_count")
+    alert_mix_ok = not alert_type_mix or alert_count == sum(alert_type_mix.values())
+    checks.append(
+        {
+            "check_id": "alert_mix_consistency",
+            "status": _status(alert_mix_ok, review=alert_count is None),
+            "source": PART5_SOURCE_REFERENCES["scale_gate"],
+            "method": "Alert type counts should reconcile back to the total alert count.",
+            "evidence": {
+                "alert_count": alert_count,
+                "alert_type_sum": sum(alert_type_mix.values()) if alert_type_mix else 0,
+            },
+        }
+    )
+    alerts = section_57.get("alerts", {}).get("alerts", [])
+    runbook_coverage_ok = not alerts or all(bool(alert.get("runbook_action")) for alert in alerts)
+    checks.append(
+        {
+            "check_id": "alert_runbook_coverage",
+            "status": _status(runbook_coverage_ok, review=not alerts),
+            "source": PART5_SOURCE_REFERENCES["scale_gate"],
+            "method": "Each operational alert should carry a runbook action so risk signals can be executed, not just reported.",
+            "evidence": {
+                "alert_count": len(alerts),
+                "alerts_missing_runbook": sum(1 for alert in alerts if not alert.get("runbook_action")),
             },
         }
     )

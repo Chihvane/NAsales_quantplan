@@ -1,0 +1,11 @@
+field:
+  field_id: F-SKU-PRICE-001
+  schema_version: 3.0
+  entity: SKU
+  data_type: float
+  unit: USD
+  source: amazon_sp_api
+  update_frequency: daily
+  confidence_level: A
+  owner: data_team
+  ref_key: dim_product.sku_id

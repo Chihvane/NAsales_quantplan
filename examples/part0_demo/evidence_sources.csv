@@ -1,0 +1,9 @@
+source_id,topic,source_name,source_type,confidence_grade,collected_at,freshness_days,version,status,owner_role
+S001,market,US Census,official,A,2026-02-20,180,v2026.02,active,Research Lead
+S002,market,IBISWorld industry file,paid_research,B,2026-02-18,120,v2026.02,active,Research Lead
+S003,channel,Amazon internal export,first_party,A,2026-03-08,30,v2026.03,active,Channel Lead
+S004,channel,TikTok Shop seller center,first_party,A,2026-03-09,30,v2026.03,active,Channel Lead
+S005,customer,Google Trends,public_tool,C,2026-03-05,30,v2026.03,active,Growth Lead
+S006,supply,RFQ batch 2026Q1,first_party,B,2026-03-01,60,v2026.03,active,Sourcing Lead
+S007,compliance,UL / FCC requirements memo,expert_note,B,2026-02-28,90,v2026.03,active,Legal Lead
+S008,governance,Internal decision memo,internal_doc,A,2026-03-10,30,v2026.03,draft,Strategy Director

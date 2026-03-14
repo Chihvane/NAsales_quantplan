@@ -1,0 +1,14 @@
+factor_schema:
+  factor_id: FAC-MARKET-ATTRACT
+  schema_version: 2.0
+  ref_key: factor.market_attractiveness
+  components:
+    - metric: M-TAM
+      weight: 0.25
+    - metric: M-CAGR
+      weight: 0.25
+    - metric: M-HHI
+      weight: -0.25
+    - metric: M-VOLATILITY
+      weight: -0.25
+  normalization: z_score

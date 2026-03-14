@@ -1,0 +1,7 @@
+database:
+  engine: postgresql
+  host: localhost
+  port: 5432
+  database: decision_os
+  user: admin
+  password_env: POSTGRES_PASSWORD

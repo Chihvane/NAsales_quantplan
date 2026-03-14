@@ -1,0 +1,7 @@
+scope_id,scope_name,update_frequency_days,expiry_days,event_trigger,owner_role,sla_days,status
+P001,market_sizing,90,180,major_competitor_entry,Research Lead,5,active
+P002,pricing_competition,30,45,promo_shock_or_fee_change,Channel Lead,3,active
+P003,customer_profile,180,365,behavior_shift_signal,Product Lead,10,active
+P004,supply_and_cost,30,60,freight_or_tariff_change,Sourcing Lead,3,active
+P005,compliance_watch,14,30,policy_or_regulation_change,Legal Lead,2,active
+P006,board_summary,30,60,gate_review_or_major_deviation,Strategy Director,2,active

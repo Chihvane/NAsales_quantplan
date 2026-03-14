@@ -1,0 +1,5 @@
+gate_id,gate_name,metric_name,operator,threshold_value,unit,source_grade_min,approver_role,decision_if_fail
+GATE-P1-001,market_entry,demand_stability_score,>=,0.55,score,B,strategy_director,hold
+GATE-P1-002,market_entry,market_attractiveness_factor,>=,0.6,score,B,strategy_director,no_go
+GATE-P1-003,market_entry,channel_dependency_score,<=,0.65,ratio,B,risk_officer,review
+GATE-P1-004,market_entry,event_sensitivity_score,<=,0.75,score,C,risk_officer,review

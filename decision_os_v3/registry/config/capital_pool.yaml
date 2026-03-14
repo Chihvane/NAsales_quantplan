@@ -1,0 +1,7 @@
+capital_pool:
+  capital_pool_id: CAP-POOL-001
+  schema_version: 3.0
+  total_capital: 5000000
+  allocated_capital: 2100000
+  free_capital: 2900000
+  cost_of_capital: 0.12

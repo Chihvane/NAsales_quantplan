@@ -1,0 +1,10 @@
+gate_id,gate_name,metric_name,operator,threshold_value,unit,source_grade_min,approver_role,decision_if_fail
+Gate1,市场进入门,TAM_USD,>=,50000000,USD,B,Strategy Director,hold_or_kill
+Gate1,市场进入门,market_hhi,<=,2000,index,A,Strategy Director,hold_or_kill
+Gate1,市场进入门,market_heat_volatility,<=,0.25,ratio,B,Strategy Director,hold_or_kill
+Gate2,项目立项门,roic_spread_to_wacc,>=,0.03,ratio,A,GM,recycle_or_kill
+Gate2,项目立项门,payback_months,<=,24,months,A,GM,recycle_or_kill
+Gate2,项目立项门,supply_risk_score,<=,0.35,score,B,GM,recycle_or_kill
+Gate3,试点验证门,paid_orders_90d,>=,500,orders,A,Growth Lead,recycle_or_kill
+Gate4,放大量产门,contribution_margin_rate,>=,0.20,ratio,A,GM,hold
+Gate5,退出门,revenue_yoy_change,<=,-0.20,ratio,A,CEO,exit

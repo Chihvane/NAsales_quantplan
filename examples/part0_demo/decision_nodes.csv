@@ -1,0 +1,12 @@
+node_id,parent_id,gate_id,stage,decision_question,domain,metric_ref,owner_role,go_path,hold_path,kill_path
+N001,,Gate1,market_entry,Should we enter this niche market?,market,tam_cagr_hhi,Research Lead,Gate2,recheck_market,exit
+N002,N001,Gate1,market_entry,Is market concentration acceptable?,market,hhi_threshold,Strategy Director,Gate2,re-scope,exit
+N003,N001,Gate2,project_selection,Which subcategory is worth funding first?,category,som_margin_supply,Category Manager,Gate3,re-prioritize,exit
+N004,N003,Gate2,project_selection,Is the target unit economics above the minimum bar?,finance,margin_threshold,Finance Lead,Gate3,reprice,exit
+N005,N003,Gate3,pilot,Does the pilot achieve sample-size and margin targets?,pilot,pilot_kpi_bundle,Growth Lead,Gate4,iterate_pilot,exit
+N006,N005,Gate3,pilot,Are customer signals strong enough to continue?,customer,voc_threshold,Product Lead,Gate4,iterate_offer,exit
+N007,N005,Gate4,scale,Can supply and working capital support scale-up?,supply,capacity_cash_limit,Operations Lead,Gate5,slow_scale,exit
+N008,N007,Gate4,scale,Are channel ROI and payback within allowed range?,channel,roi_payback_limit,Channel Lead,Gate5,optimize_mix,exit
+N009,N007,Gate5,exit,Should we trigger rollback or exit?,risk,exit_rule_bundle,GM,turnaround,exit
+N010,N009,Gate5,exit,Is there a regulatory or platform event forcing exit?,compliance,policy_ban_trigger,Legal Lead,turnaround,exit
+N011,N009,Gate5,exit,Should remaining inventory be liquidated or redirected?,inventory,clearance_gate,Ops Finance Lead,clearance_plan,write_off

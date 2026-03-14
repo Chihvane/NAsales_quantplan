@@ -1,0 +1,8 @@
+feedback_record:
+  decision_id: DEC-00012
+  schema_version: 2.0
+  ref_key: feedback.sku_launch
+  actual_profit: 0
+  actual_loss_probability: 0
+  model_prediction_error: 0
+  recalibration_required: false

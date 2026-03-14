@@ -144,6 +144,14 @@
   - `date, channel, receivable, payable, inventory_cash_lock, ad_cash_out, refund_cash_out`
   - 用于现金流与营运资本监控
 
+- `experiment_assignments.csv`
+  - `experiment_id, entity_id, variant, assigned_at, channel`
+  - 用于实验分配覆盖率和因果可信度判断
+
+- `experiment_metrics.csv`
+  - `experiment_id, date, variant, metric_name, exposures, conversions, value, ci_low, ci_high`
+  - 用于 uplift、显著性与结果读数
+
 ### 可选扩展表
 
 - `attribution_events.csv`
@@ -182,6 +190,199 @@
 - `proxy_usage_flags`
 - `confidence_downgrade_reason`
 - `model_blockers`
+
+---
+
+## ETL 与审计包
+
+第五部分和前四部分不同，不能只关心“算出什么指标”，还必须保证结果可追溯、可复现、可回放。
+
+建议固定执行链路：
+
+1. `Extract`
+   - 官方 API 优先
+   - 平台报表导出次之
+   - 任何抓取都必须遵守平台条款、限流与 robots 规则
+2. `Land(raw)`
+   - 原始 JSON / CSV 全量落地
+   - 记录参数、时间戳、状态码、数据源版本
+3. `Transform`
+   - 币种、税费、时区、费用版本统一
+   - 与 `landed_cost_scenarios`、`channel_rate_cards`、`policy_change_log` 关联
+4. `Load(curated)`
+   - 输出日 / 周经营宽表
+   - 生成数据批次号
+5. `Serve`
+   - 输出 `report / alerts / charts / audit_pack`
+
+建议 ETL 至少再补三层能力：
+
+- `connector`
+  - 区分 `bundle_sync / export_drop / api_cache`
+- `retry_log`
+  - 每个文件的重试次数、时间戳、错误信息
+- `batch_diff`
+  - 与上一批 manifest 对比，识别新增、变更、移除文件
+
+建议在 Part 5 固定输出 `audit_pack`，包含：
+
+- `table_batches`
+- `fee_version_audit`
+- `policy_change_audit`
+- `experiment_audit`
+- `data_contract`
+
+这轮继续细化后的新增要求：
+
+- 每个经营预警必须绑定 `runbook_action`
+- 预警不只看静态阈值，还要监控 `change_point`
+- `week × channel` 经营汇总必须可回溯到日经营快照
+
+当前代码已对齐到：
+
+- [part5_audit.py](/Users/zhiwenxiang/Documents/Playground/北美市场量化报告/quant_framework/part5_audit.py)
+- [part5.py](/Users/zhiwenxiang/Documents/Playground/北美市场量化报告/quant_framework/part5.py)
+
+---
+
+## 费用与政策版本化
+
+第五部分必须把“平台费用”和“平台规则”视为版本化输入，而不是静态常数。
+
+建议最低要求：
+
+- 每条费用记录至少有 `effective_date`
+- 每个渠道至少保留一种 `source_ref`
+- 每条政策变化至少保留 `effective_date`
+- 如果存在官方链接，必须记录 `source_url`
+
+建议输出指标：
+
+- `fee_version_coverage`
+- `fee_source_ref_coverage`
+- `policy_monitoring_completeness`
+- `policy_source_url_coverage`
+- `latest_fee_effective_date`
+- `latest_policy_effective_date`
+- `stale_fee_version_ratio`
+- `stale_policy_monitoring_ratio`
+- `fee_version_binding_rows`
+- `policy_monitoring_rows`
+- `weekly_channel_pnl`
+- `weekly_contribution_profit`
+
+如果以上字段缺失，不允许继续输出“高置信度利润结论”。
+
+其中：
+
+- `fee_version_binding_rows`
+  - 用于核对每个渠道的费用类型覆盖、最新生效日、版本老化天数
+- `policy_monitoring_rows`
+  - 用于核对每个平台的政策监控覆盖、最近变更、是否存在监控老化
+- `weekly_channel_pnl`
+  - 用于周度经营复盘和周度利润对账
+- `weekly_contribution_profit`
+  - 用于图表输出和与周明细回勾
+
+---
+
+## 数据质量门
+
+第五部分的监控结论必须先过数据质量门，再允许进入经营结论。
+
+建议固定质量门：
+
+- `coverage_gate`
+  - 核心表是否齐备
+- `version_gate`
+  - 费用和政策是否有版本
+- `consistency_gate`
+  - 指标之间是否能回勾
+- `latency_gate`
+  - 数据是否足够新
+- `contract_gate`
+  - 缺失项是否显式声明并正确降级
+
+当前代码已通过 `data_contract` 显式输出：
+
+- `data_availability_flags`
+- `proxy_usage_flags`
+- `confidence_downgrade_reason`
+- `model_blockers`
+
+---
+
+## 实验硬约束
+
+第五部分的实验体系不能只记录“做了几个实验”，必须记录实验是否满足最低执行条件。
+
+建议固定输出：
+
+- `sample_size_guidance`
+- `minimum_runtime_days`
+- `minimum_runtime_pass_rate`
+- `preferred_method_order`
+- `causal_confidence_score`
+- `posterior_probability_treatment_best`
+- `hierarchical_probability_treatment_best`
+- `posterior_expected_absolute_uplift`
+- `hierarchical_expected_absolute_uplift`
+- `temporal_consistency_score`
+- `auto_stop_decision`
+- `auto_stop_reason`
+- `sample_ratio_to_target`
+
+推荐方法顺序：
+
+1. 平台原生 A/B 或 Lift
+2. 受控 split test
+3. 无法随机化时，才进入 DiD / IPW 等准实验方法
+
+如果没有 `experiment_assignment` 或平台级实验分组数据，必须明确降级为：
+
+- `registry_only_experiment_tracking`
+- `strict_causal_attribution` blocked
+
+---
+
+## 不确定性与输出规范
+
+第五部分不允许只输出单点值。
+
+建议固定输出：
+
+- 经营健康分区间
+- 日贡献毛利率区间
+- 现金锁定区间
+- 退款现金流区间
+- 未来 7 天收入 / 利润预测快照
+
+当前代码已落地在：
+
+- [uncertainty.py](/Users/zhiwenxiang/Documents/Playground/北美市场量化报告/quant_framework/uncertainty.py)
+
+---
+
+## 当前代码已覆盖的 Part 5 能力
+
+当前 Part 5 已经具备：
+
+- 标准输入装配
+- 经营门禁与健康分
+- 数据契约与降级声明
+- 费用 / 政策版本覆盖率
+- 增长漏斗与留存趋势
+- 价格动作与利润保护
+- 库存与现金锁定风险
+- 实验约束与样本量建议
+- 实验读数、贝叶斯后验与增量判定
+- 分层后验收缩
+- 时间切片一致性校验
+- 自动止损 / 提前放量规则
+- 预算优化
+- ETL connector、批次 diff 与审计包
+- 不确定性区间
+- 校验与图表
 
 ---
 

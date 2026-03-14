@@ -1,0 +1,169 @@
+{
+  "batch_id": "part5-demo-batch-2",
+  "connector": "export_drop",
+  "generated_at": "2026-03-13T14:46:55.438424+00:00",
+  "max_retries": 2,
+  "staged_file_count": 19,
+  "staging_log": [
+    {
+      "attempt": 1,
+      "status": "success",
+      "started_at": "2026-03-13T14:46:55.423693+00:00",
+      "connector": "export_drop",
+      "file_name": "b2b_accounts.csv"
+    },
+    {
+      "attempt": 1,
+      "status": "success",
+      "started_at": "2026-03-13T14:46:55.424853+00:00",
+      "connector": "export_drop",
+      "file_name": "cash_flow_snapshots.csv"
+    },
+    {
+      "attempt": 1,
+      "status": "success",
+      "started_at": "2026-03-13T14:46:55.425210+00:00",
+      "connector": "export_drop",
+      "file_name": "channel_rate_cards.csv"
+    },
+    {
+      "attempt": 1,
+      "status": "success",
+      "started_at": "2026-03-13T14:46:55.425553+00:00",
+      "connector": "export_drop",
+      "file_name": "customer_cohorts.csv"
+    },
+    {
+      "attempt": 1,
+      "status": "success",
+      "started_at": "2026-03-13T14:46:55.426025+00:00",
+      "connector": "export_drop",
+      "file_name": "experiment_assignments.csv"
+    },
+    {
+      "attempt": 1,
+      "status": "success",
+      "started_at": "2026-03-13T14:46:55.426550+00:00",
+      "connector": "export_drop",
+      "file_name": "experiment_metrics.csv"
+    },
+    {
+      "attempt": 1,
+      "status": "success",
+      "started_at": "2026-03-13T14:46:55.426939+00:00",
+      "connector": "export_drop",
+      "file_name": "experiment_registry.csv"
+    },
+    {
+      "attempt": 1,
+      "status": "success",
+      "started_at": "2026-03-13T14:46:55.427321+00:00",
+      "connector": "export_drop",
+      "file_name": "inventory_positions.csv"
+    },
+    {
+      "attempt": 1,
+      "status": "success",
+      "started_at": "2026-03-13T14:46:55.427751+00:00",
+      "connector": "export_drop",
+      "file_name": "kpi_daily_snapshots.csv"
+    },
+    {
+      "attempt": 1,
+      "status": "success",
+      "started_at": "2026-03-13T14:46:55.428220+00:00",
+      "connector": "export_drop",
+      "file_name": "landed_cost_scenarios.csv"
+    },
+    {
+      "attempt": 1,
+      "status": "success",
+      "started_at": "2026-03-13T14:46:55.428669+00:00",
+      "connector": "export_drop",
+      "file_name": "listing_snapshots.csv"
+    },
+    {
+      "attempt": 1,
+      "status": "success",
+      "started_at": "2026-03-13T14:46:55.429023+00:00",
+      "connector": "export_drop",
+      "file_name": "marketing_spend.csv"
+    },
+    {
+      "attempt": 1,
+      "status": "success",
+      "started_at": "2026-03-13T14:46:55.429353+00:00",
+      "connector": "export_drop",
+      "file_name": "policy_change_log.csv"
+    },
+    {
+      "attempt": 1,
+      "status": "success",
+      "started_at": "2026-03-13T14:46:55.429639+00:00",
+      "connector": "export_drop",
+      "file_name": "pricing_actions.csv"
+    },
+    {
+      "attempt": 1,
+      "status": "success",
+      "started_at": "2026-03-13T14:46:55.429955+00:00",
+      "connector": "export_drop",
+      "file_name": "product_catalog.csv"
+    },
+    {
+      "attempt": 1,
+      "status": "success",
+      "started_at": "2026-03-13T14:46:55.430240+00:00",
+      "connector": "export_drop",
+      "file_name": "reorder_plan.csv"
+    },
+    {
+      "attempt": 1,
+      "status": "success",
+      "started_at": "2026-03-13T14:46:55.430544+00:00",
+      "connector": "export_drop",
+      "file_name": "returns_claims.csv"
+    },
+    {
+      "attempt": 1,
+      "status": "success",
+      "started_at": "2026-03-13T14:46:55.430846+00:00",
+      "connector": "export_drop",
+      "file_name": "sold_transactions.csv"
+    },
+    {
+      "attempt": 1,
+      "status": "success",
+      "started_at": "2026-03-13T14:46:55.431167+00:00",
+      "connector": "export_drop",
+      "file_name": "traffic_sessions.csv"
+    }
+  ],
+  "manifest_diff": {
+    "previous_manifest": "examples/output_part5_etl/audit/part5_etl_manifest_part5-demo-batch.json",
+    "added_files": [],
+    "removed_files": [],
+    "changed_files": [],
+    "unchanged_files": [
+      "b2b_accounts.csv",
+      "cash_flow_snapshots.csv",
+      "channel_rate_cards.csv",
+      "customer_cohorts.csv",
+      "experiment_assignments.csv",
+      "experiment_metrics.csv",
+      "experiment_registry.csv",
+      "inventory_positions.csv",
+      "kpi_daily_snapshots.csv",
+      "landed_cost_scenarios.csv",
+      "listing_snapshots.csv",
+      "marketing_spend.csv",
+      "policy_change_log.csv",
+      "pricing_actions.csv",
+      "product_catalog.csv",
+      "reorder_plan.csv",
+      "returns_claims.csv",
+      "sold_transactions.csv",
+      "traffic_sessions.csv"
+    ]
+  }
+}

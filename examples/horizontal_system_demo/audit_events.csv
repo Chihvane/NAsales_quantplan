@@ -1,0 +1,11 @@
+audit_id,event_type,object_type,object_id,actor_role,happened_at,immutable_flag,approval_ref,status
+AUD-001,schema_update,data_dictionary,dict_v3,Data Steward,2026-03-09T09:00:00Z,true,APR-402,closed
+AUD-002,master_data_approval,master_data,SKU-001,Data Steward,2026-03-09T10:00:00Z,true,APR-110,approved
+AUD-003,master_data_approval,master_data,SUP-001,Sourcing Lead,2026-03-09T10:10:00Z,true,APR-111,approved
+AUD-004,lineage_review,evidence_lineage,LIN-002,BI Lead,2026-03-09T11:00:00Z,true,APR-101,closed
+AUD-005,rule_release,decision_rules,RULE-ENTRY-01,Strategy Director,2026-03-09T12:00:00Z,true,APR-401,approved
+AUD-006,trigger_review,decision_triggers,TRG-004,GM,2026-03-10T09:30:00Z,true,APR-450,closed
+AUD-007,policy_change,decision_rules,RULE-ADS-01,Growth Lead,2026-03-10T10:15:00Z,true,APR-451,closed
+AUD-008,etl_snapshot,evidence_lineage,LIN-005,Data Engineer,2026-03-10T10:45:00Z,true,APR-305,closed
+AUD-009,access_review,audit_events,AUD-001,Compliance,2026-03-10T11:30:00Z,true,APR-499,closed
+AUD-010,traceback_test,evidence_lineage,LIN-008,Audit Lead,2026-03-10T14:00:00Z,true,APR-500,closed

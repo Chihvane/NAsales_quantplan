@@ -221,6 +221,74 @@ def _render_horizontal_bar_chart(
     _write_svg(output_path, svg)
 
 
+def generate_part0_chart_assets(report: dict, output_dir: str | Path) -> dict[str, str]:
+    output_dir = Path(output_dir)
+    output_dir.mkdir(parents=True, exist_ok=True)
+
+    confidence_series = (
+        report.get("sections", {})
+        .get("0.2", {})
+        .get("metrics", {})
+        .get("confidence_mix", {})
+    )
+    gate_series = {
+        "decision_tree": report.get("sections", {}).get("0.1", {}).get("metrics", {}).get("decision_tree_score", 0.0),
+        "gate_operability": report.get("sections", {}).get("0.4", {}).get("metrics", {}).get("gate_operability_score", 0.0),
+        "signature_chain": report.get("sections", {}).get("0.5", {}).get("metrics", {}).get("signature_chain_score", 0.0),
+        "refresh_policy": report.get("sections", {}).get("0.6", {}).get("metrics", {}).get("refresh_policy_score", 0.0),
+        "dictionary_reuse": report.get("sections", {}).get("0.7", {}).get("metrics", {}).get("dictionary_reuse_score", 0.0),
+    }
+
+    confidence_chart = output_dir / "confidence_grade_mix.svg"
+    gate_chart = output_dir / "governance_scorecard.svg"
+
+    _render_vertical_bar_chart(confidence_series, "Part 0 Confidence Grade Mix", confidence_chart, as_percent=True)
+    _render_horizontal_bar_chart(gate_series, "Part 0 Governance Scorecard", gate_chart, as_percent=True)
+
+    return {
+        "confidence_mix_chart": str(confidence_chart),
+        "governance_scorecard_chart": str(gate_chart),
+    }
+
+
+def generate_horizontal_system_chart_assets(report: dict, output_dir: str | Path) -> dict[str, str]:
+    output_dir = Path(output_dir)
+    output_dir.mkdir(parents=True, exist_ok=True)
+
+    master_data_series = {
+        "entity_coverage": report.get("sections", {}).get("H1", {}).get("metrics", {}).get("entity_type_coverage_ratio", 0.0),
+        "dictionary_approval": report.get("sections", {}).get("H1", {}).get("metrics", {}).get("dictionary_approval_ratio", 0.0),
+        "duplicate_free": report.get("sections", {}).get("H1", {}).get("metrics", {}).get("duplicate_free_ratio", 0.0),
+        "required_field_ok": report.get("sections", {}).get("H1", {}).get("metrics", {}).get("required_field_compliance_ratio", 0.0),
+    }
+    audit_series = {
+        "reproducibility": report.get("sections", {}).get("H2", {}).get("metrics", {}).get("reproducibility_ratio", 0.0),
+        "traceback_sla": report.get("sections", {}).get("H2", {}).get("metrics", {}).get("traceback_sla_ratio", 0.0),
+        "immutable_audit": report.get("sections", {}).get("H2", {}).get("metrics", {}).get("immutable_audit_ratio", 0.0),
+        "approval_linkage": report.get("sections", {}).get("H2", {}).get("metrics", {}).get("approval_linkage_ratio", 0.0),
+    }
+    rule_series = {
+        "scenario_coverage": report.get("sections", {}).get("H3", {}).get("metrics", {}).get("scenario_coverage_ratio", 0.0),
+        "active_rules": report.get("sections", {}).get("H3", {}).get("metrics", {}).get("active_rule_ratio", 0.0),
+        "stop_loss_rules": report.get("sections", {}).get("H3", {}).get("metrics", {}).get("stop_loss_rule_ratio", 0.0),
+        "trigger_resolution": report.get("sections", {}).get("H3", {}).get("metrics", {}).get("trigger_resolution_ratio", 0.0),
+    }
+
+    master_path = output_dir / "master_data_governance.svg"
+    audit_path = output_dir / "evidence_audit_chain.svg"
+    rule_path = output_dir / "decision_threshold_system.svg"
+
+    _render_horizontal_bar_chart(master_data_series, "Horizontal System Master Data Governance", master_path, as_percent=True)
+    _render_horizontal_bar_chart(audit_series, "Horizontal System Evidence And Audit Chain", audit_path, as_percent=True)
+    _render_horizontal_bar_chart(rule_series, "Horizontal System Decision Thresholds", rule_path, as_percent=True)
+
+    return {
+        "master_data_chart": str(master_path),
+        "audit_chain_chart": str(audit_path),
+        "decision_rule_chart": str(rule_path),
+    }
+
+
 def generate_part1_chart_assets(report: dict, output_dir: str | Path) -> dict[str, str]:
     output_dir = Path(output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
@@ -491,4 +559,83 @@ def generate_part4_chart_assets(report: dict, output_dir: str | Path) -> dict[st
         "traffic_source_chart": str(traffic_path),
         "channel_payback_chart": str(payback_path),
         "roi_band_chart": str(roi_band_path),
+    }
+
+
+def generate_part5_chart_assets(report: dict, output_dir: str | Path) -> dict[str, str]:
+    output_dir = Path(output_dir)
+    output_dir.mkdir(parents=True, exist_ok=True)
+
+    operating_health_series = {
+        row["channel"]: row["health_score"]
+        for row in report.get("sections", {}).get("5.1", {}).get("metrics", {}).get("channel_health_rows", [])
+    }
+    revenue_trend_series = (
+        report.get("sections", {})
+        .get("5.3", {})
+        .get("metrics", {})
+        .get("forecast_summary", {})
+        .get("daily_revenue", {})
+    )
+    weekly_contribution_series = (
+        report.get("sections", {})
+        .get("5.2", {})
+        .get("metrics", {})
+        .get("weekly_contribution_profit", {})
+    )
+    alert_type_series = (
+        report.get("sections", {})
+        .get("5.7", {})
+        .get("metrics", {})
+        .get("alerts", {})
+        .get("alert_type_mix", {})
+    )
+    budget_allocation_series = (
+        report.get("sections", {})
+        .get("5.7", {})
+        .get("metrics", {})
+        .get("budget_allocation", {})
+    )
+
+    health_path = output_dir / "operating_health_by_channel.svg"
+    revenue_path = output_dir / "daily_revenue_trend.svg"
+    weekly_profit_path = output_dir / "weekly_contribution_profit.svg"
+    alert_path = output_dir / "alert_type_mix.svg"
+    budget_path = output_dir / "budget_allocation.svg"
+
+    _render_horizontal_bar_chart(
+        operating_health_series,
+        "Operating Health By Channel",
+        health_path,
+        as_percent=True,
+    )
+    _render_line_chart(
+        revenue_trend_series,
+        "Daily Revenue Trend",
+        revenue_path,
+    )
+    _render_line_chart(
+        weekly_contribution_series,
+        "Weekly Contribution Profit",
+        weekly_profit_path,
+    )
+    _render_vertical_bar_chart(
+        alert_type_series,
+        "Alert Type Mix",
+        alert_path,
+        as_percent=False,
+    )
+    _render_horizontal_bar_chart(
+        budget_allocation_series,
+        "Budget Allocation Recommendation",
+        budget_path,
+        as_percent=True,
+    )
+
+    return {
+        "operating_health_chart": str(health_path),
+        "daily_revenue_chart": str(revenue_path),
+        "weekly_contribution_profit_chart": str(weekly_profit_path),
+        "alert_mix_chart": str(alert_path),
+        "budget_allocation_chart": str(budget_path),
     }

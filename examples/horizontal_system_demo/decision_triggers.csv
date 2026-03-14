@@ -1,0 +1,7 @@
+trigger_id,rule_id,object_scope,triggered_at,observed_value,decision_status,resolved_flag,approval_ref
+TRG-001,RULE-ENTRY-01,portable_generators_na,2026-03-10T09:00:00Z,98000000,go,true,APR-610
+TRG-002,RULE-ENTRY-02,portable_generators_na,2026-03-10T09:00:00Z,19,go,true,APR-610
+TRG-003,RULE-SCALE-01,tiktok_pilot_q1,2026-03-10T10:00:00Z,0.24,go,true,APR-611
+TRG-004,RULE-SKU-01,SKU-009,2026-03-10T11:00:00Z,0.06,exit,true,APR-612
+TRG-005,RULE-CHANNEL-01,ebay_channel,2026-03-10T12:00:00Z,1.5,exit,true,APR-613
+TRG-006,RULE-ADS-01,amazon_campaign_14,2026-03-10T13:00:00Z,0.82,pause,true,APR-614

@@ -1,0 +1,16 @@
+schema_version: 3.0
+entity_type: field
+required_fields:
+  - field_id
+  - schema_version
+  - entity
+  - data_type
+  - source
+field_types:
+  field_id: str
+  entity: str
+  data_type: str
+  unit: str
+  source: str
+validation_rules:
+  - not_null: [field_id, entity, data_type, source]

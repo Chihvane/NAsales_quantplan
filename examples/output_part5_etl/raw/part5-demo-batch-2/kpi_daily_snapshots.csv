@@ -1,0 +1,15 @@
+date,channel,revenue,contribution_profit,ad_spend,refunds,disputes,inventory_value,operating_status
+2026-02-01,DTC,4520,760,220,0,0,12800,healthy
+2026-02-02,Amazon,6890,1180,320,0,0,19200,healthy
+2026-02-03,TikTok Shop,5210,870,260,0,0,14800,healthy
+2026-02-04,eBay,3180,410,120,0,0,9600,warning
+2026-02-05,Walmart,3410,520,140,0,0,10100,healthy
+2026-02-06,B2B,8120,1520,60,0,0,23600,healthy
+2026-02-07,DTC,4380,690,210,120,0,12400,warning
+2026-02-08,Amazon,7010,1210,330,0,0,18900,healthy
+2026-02-09,TikTok Shop,5480,930,275,0,0,14620,healthy
+2026-02-10,eBay,3290,430,118,0,0,9420,healthy
+2026-02-11,Walmart,3520,560,150,0,0,9960,healthy
+2026-02-12,B2B,7980,1460,58,0,0,22850,healthy
+2026-02-13,DTC,4650,735,225,90,1,12150,warning
+2026-02-14,Amazon,7140,1245,340,0,0,18540,healthy

@@ -1,0 +1,6 @@
+system:
+  system_id: DOS-V3-NA-001
+  schema_version: 3.0
+  namespace: north_america_niche_goods
+  environment: local
+  governance_owner: strategy_committee

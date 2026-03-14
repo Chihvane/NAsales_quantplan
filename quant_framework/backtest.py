@@ -42,6 +42,42 @@ PART2_PANEL_FIELDS = [
     "gmv_index",
 ]
 
+PART3_PANEL_FIELDS = [
+    "month",
+    "scenario",
+    "quote_confidence",
+    "margin_rate",
+    "compliance_readiness",
+    "logistics_reliability",
+    "cost_advantage",
+    "scenario_confidence",
+    "realized_margin_index",
+]
+
+PART4_PANEL_FIELDS = [
+    "month",
+    "channel",
+    "contribution_margin_rate",
+    "repeat_rate",
+    "payback_efficiency",
+    "inventory_health",
+    "loss_resilience",
+    "traffic_efficiency",
+    "realized_profit_index",
+]
+
+PART5_PANEL_FIELDS = [
+    "month",
+    "channel",
+    "operating_health",
+    "growth_leverage",
+    "margin_protection",
+    "inventory_readiness",
+    "incrementality",
+    "alert_relief",
+    "realized_operating_index",
+]
+
 
 def _month_sequence(start_year: int, start_month: int, periods: int) -> list[str]:
     months = []
@@ -390,6 +426,329 @@ def generate_part2_demo_backtest_panel(seed: int = 42) -> list[dict[str, str]]:
     return sorted(panel_rows, key=lambda item: (item["month"], item["category"]))
 
 
+def generate_part3_demo_backtest_panel(seed: int = 42) -> list[dict[str, str]]:
+    rng = Random(seed)
+    months = _month_sequence(2024, 1, 24)
+    scenario_configs = {
+        "S001_FOB_SEA": {
+            "quote_confidence": 0.82,
+            "margin_rate": 0.232,
+            "compliance_readiness": 0.78,
+            "logistics_reliability": 0.73,
+            "cost_advantage": 0.18,
+            "scenario_confidence": 0.81,
+            "margin_index": 118,
+        },
+        "S002_DDP_FAST": {
+            "quote_confidence": 0.76,
+            "margin_rate": 0.214,
+            "compliance_readiness": 0.74,
+            "logistics_reliability": 0.79,
+            "cost_advantage": 0.11,
+            "scenario_confidence": 0.69,
+            "margin_index": 114,
+        },
+        "S003_EXW_SEA": {
+            "quote_confidence": 0.67,
+            "margin_rate": 0.196,
+            "compliance_readiness": 0.66,
+            "logistics_reliability": 0.68,
+            "cost_advantage": 0.08,
+            "scenario_confidence": 0.61,
+            "margin_index": 109,
+        },
+        "S004_FOB_AIR": {
+            "quote_confidence": 0.74,
+            "margin_rate": 0.181,
+            "compliance_readiness": 0.71,
+            "logistics_reliability": 0.84,
+            "cost_advantage": 0.03,
+            "scenario_confidence": 0.72,
+            "margin_index": 105,
+        },
+    }
+
+    panel_rows: list[dict[str, str]] = []
+    for scenario, config in scenario_configs.items():
+        margin_index = float(config["margin_index"])
+        for idx, month_label in enumerate(months):
+            month_number = int(month_label[-2:])
+            quote_confidence = _clamp(config["quote_confidence"] + rng.uniform(-0.03, 0.03), 0.45, 0.95)
+            margin_rate = _clamp(
+                config["margin_rate"]
+                + idx * 0.0012
+                + (0.006 if month_number in {3, 4, 9, 10} else 0.0)
+                + rng.uniform(-0.008, 0.008),
+                0.08,
+                0.34,
+            )
+            compliance_readiness = _clamp(
+                config["compliance_readiness"] + idx * 0.002 + rng.uniform(-0.025, 0.025),
+                0.4,
+                0.96,
+            )
+            logistics_reliability = _clamp(
+                config["logistics_reliability"]
+                + (0.02 if month_number in {5, 6, 7} else 0.0)
+                - (0.03 if month_number in {11, 12} else 0.0)
+                + rng.uniform(-0.03, 0.03),
+                0.42,
+                0.96,
+            )
+            cost_advantage = _clamp(
+                config["cost_advantage"] + idx * 0.001 + rng.uniform(-0.02, 0.02),
+                -0.08,
+                0.28,
+            )
+            scenario_confidence = _clamp(
+                config["scenario_confidence"]
+                + 0.4 * (quote_confidence - config["quote_confidence"])
+                + 0.3 * (compliance_readiness - config["compliance_readiness"])
+                + rng.uniform(-0.015, 0.015),
+                0.4,
+                0.95,
+            )
+
+            if idx > 0:
+                growth = (
+                    0.006
+                    + 0.34 * (margin_rate - 0.18)
+                    + 0.16 * (quote_confidence - 0.68)
+                    + 0.18 * (compliance_readiness - 0.65)
+                    + 0.12 * (logistics_reliability - 0.68)
+                    + 0.20 * cost_advantage
+                    + 0.10 * (scenario_confidence - 0.65)
+                    + rng.uniform(-0.015, 0.015)
+                )
+                growth = _clamp(growth, -0.08, 0.14)
+                margin_index *= 1 + growth
+
+            panel_rows.append(
+                {
+                    "month": month_label,
+                    "scenario": scenario,
+                    "quote_confidence": f"{quote_confidence:.4f}",
+                    "margin_rate": f"{margin_rate:.4f}",
+                    "compliance_readiness": f"{compliance_readiness:.4f}",
+                    "logistics_reliability": f"{logistics_reliability:.4f}",
+                    "cost_advantage": f"{cost_advantage:.4f}",
+                    "scenario_confidence": f"{scenario_confidence:.4f}",
+                    "realized_margin_index": f"{margin_index:.2f}",
+                }
+            )
+
+    return sorted(panel_rows, key=lambda item: (item["month"], item["scenario"]))
+
+
+def generate_part4_demo_backtest_panel(seed: int = 42) -> list[dict[str, str]]:
+    rng = Random(seed)
+    months = _month_sequence(2024, 1, 24)
+    channel_configs = {
+        "DTC": {
+            "contribution_margin_rate": 0.17,
+            "repeat_rate": 0.24,
+            "payback_efficiency": 0.68,
+            "inventory_health": 0.74,
+            "loss_resilience": 0.76,
+            "traffic_efficiency": 0.63,
+            "profit_index": 112,
+        },
+        "Amazon": {
+            "contribution_margin_rate": 0.16,
+            "repeat_rate": 0.14,
+            "payback_efficiency": 0.62,
+            "inventory_health": 0.78,
+            "loss_resilience": 0.72,
+            "traffic_efficiency": 0.69,
+            "profit_index": 118,
+        },
+        "TikTok Shop": {
+            "contribution_margin_rate": 0.145,
+            "repeat_rate": 0.11,
+            "payback_efficiency": 0.72,
+            "inventory_health": 0.69,
+            "loss_resilience": 0.65,
+            "traffic_efficiency": 0.76,
+            "profit_index": 110,
+        },
+        "Walmart": {
+            "contribution_margin_rate": 0.152,
+            "repeat_rate": 0.13,
+            "payback_efficiency": 0.64,
+            "inventory_health": 0.73,
+            "loss_resilience": 0.71,
+            "traffic_efficiency": 0.58,
+            "profit_index": 106,
+        },
+        "B2B": {
+            "contribution_margin_rate": 0.19,
+            "repeat_rate": 0.28,
+            "payback_efficiency": 0.81,
+            "inventory_health": 0.71,
+            "loss_resilience": 0.83,
+            "traffic_efficiency": 0.44,
+            "profit_index": 115,
+        },
+    }
+    panel_rows: list[dict[str, str]] = []
+    for channel, config in channel_configs.items():
+        profit_index = float(config["profit_index"])
+        for idx, month_label in enumerate(months):
+            month_number = int(month_label[-2:])
+            contribution_margin_rate = _clamp(
+                config["contribution_margin_rate"] + idx * 0.001 + rng.uniform(-0.01, 0.01),
+                0.06,
+                0.32,
+            )
+            repeat_rate = _clamp(
+                config["repeat_rate"] + idx * 0.0015 + rng.uniform(-0.015, 0.015),
+                0.04,
+                0.42,
+            )
+            payback_efficiency = _clamp(
+                config["payback_efficiency"] + (0.03 if month_number in {11, 12} else 0.0) + rng.uniform(-0.03, 0.03),
+                0.2,
+                0.95,
+            )
+            inventory_health = _clamp(
+                config["inventory_health"] - (0.03 if month_number in {8, 9} else 0.0) + rng.uniform(-0.03, 0.03),
+                0.3,
+                0.95,
+            )
+            loss_resilience = _clamp(
+                config["loss_resilience"] + 0.3 * (contribution_margin_rate - config["contribution_margin_rate"]) + rng.uniform(-0.02, 0.02),
+                0.35,
+                0.95,
+            )
+            traffic_efficiency = _clamp(
+                config["traffic_efficiency"] + (0.04 if month_number in {5, 6, 7} and channel in {"DTC", "TikTok Shop"} else 0.0) + rng.uniform(-0.04, 0.04),
+                0.2,
+                0.95,
+            )
+
+            if idx > 0:
+                growth = (
+                    0.007
+                    + 0.24 * (contribution_margin_rate - 0.12)
+                    + 0.15 * (repeat_rate - 0.12)
+                    + 0.16 * (payback_efficiency - 0.55)
+                    + 0.14 * (inventory_health - 0.62)
+                    + 0.18 * (loss_resilience - 0.6)
+                    + 0.12 * (traffic_efficiency - 0.5)
+                    + rng.uniform(-0.015, 0.015)
+                )
+                growth = _clamp(growth, -0.06, 0.12)
+                profit_index *= 1 + growth
+
+            panel_rows.append(
+                {
+                    "month": month_label,
+                    "channel": channel,
+                    "contribution_margin_rate": f"{contribution_margin_rate:.4f}",
+                    "repeat_rate": f"{repeat_rate:.4f}",
+                    "payback_efficiency": f"{payback_efficiency:.4f}",
+                    "inventory_health": f"{inventory_health:.4f}",
+                    "loss_resilience": f"{loss_resilience:.4f}",
+                    "traffic_efficiency": f"{traffic_efficiency:.4f}",
+                    "realized_profit_index": f"{profit_index:.2f}",
+                }
+            )
+    return sorted(panel_rows, key=lambda item: (item["month"], item["channel"]))
+
+
+def generate_part5_demo_backtest_panel(seed: int = 42) -> list[dict[str, str]]:
+    rng = Random(seed)
+    months = _month_sequence(2024, 1, 24)
+    channel_configs = {
+        "DTC": {
+            "operating_health": 0.69,
+            "growth_leverage": 0.66,
+            "margin_protection": 0.72,
+            "inventory_readiness": 0.74,
+            "incrementality": 0.67,
+            "alert_relief": 0.63,
+            "operating_index": 113,
+        },
+        "Amazon": {
+            "operating_health": 0.71,
+            "growth_leverage": 0.59,
+            "margin_protection": 0.75,
+            "inventory_readiness": 0.78,
+            "incrementality": 0.57,
+            "alert_relief": 0.68,
+            "operating_index": 116,
+        },
+        "TikTok Shop": {
+            "operating_health": 0.61,
+            "growth_leverage": 0.73,
+            "margin_protection": 0.63,
+            "inventory_readiness": 0.66,
+            "incrementality": 0.76,
+            "alert_relief": 0.54,
+            "operating_index": 109,
+        },
+        "Walmart": {
+            "operating_health": 0.64,
+            "growth_leverage": 0.56,
+            "margin_protection": 0.69,
+            "inventory_readiness": 0.72,
+            "incrementality": 0.61,
+            "alert_relief": 0.67,
+            "operating_index": 105,
+        },
+    }
+    panel_rows: list[dict[str, str]] = []
+    for channel, config in channel_configs.items():
+        operating_index = float(config["operating_index"])
+        for idx, month_label in enumerate(months):
+            month_number = int(month_label[-2:])
+            operating_health = _clamp(config["operating_health"] + idx * 0.001 + rng.uniform(-0.025, 0.025), 0.3, 0.95)
+            growth_leverage = _clamp(
+                config["growth_leverage"]
+                + (0.03 if month_number in {4, 5, 11} else 0.0)
+                + rng.uniform(-0.03, 0.03),
+                0.2,
+                0.95,
+            )
+            margin_protection = _clamp(config["margin_protection"] + rng.uniform(-0.03, 0.03), 0.25, 0.95)
+            inventory_readiness = _clamp(
+                config["inventory_readiness"] - (0.03 if month_number in {8, 9} else 0.0) + rng.uniform(-0.03, 0.03),
+                0.2,
+                0.95,
+            )
+            incrementality = _clamp(config["incrementality"] + idx * 0.002 + rng.uniform(-0.025, 0.025), 0.1, 0.95)
+            alert_relief = _clamp(config["alert_relief"] + rng.uniform(-0.04, 0.04), 0.1, 0.95)
+
+            if idx > 0:
+                growth = (
+                    0.005
+                    + 0.22 * (operating_health - 0.55)
+                    + 0.17 * (growth_leverage - 0.55)
+                    + 0.16 * (margin_protection - 0.6)
+                    + 0.13 * (inventory_readiness - 0.6)
+                    + 0.20 * (incrementality - 0.55)
+                    + 0.12 * (alert_relief - 0.5)
+                    + rng.uniform(-0.014, 0.014)
+                )
+                growth = _clamp(growth, -0.07, 0.13)
+                operating_index *= 1 + growth
+
+            panel_rows.append(
+                {
+                    "month": month_label,
+                    "channel": channel,
+                    "operating_health": f"{operating_health:.4f}",
+                    "growth_leverage": f"{growth_leverage:.4f}",
+                    "margin_protection": f"{margin_protection:.4f}",
+                    "inventory_readiness": f"{inventory_readiness:.4f}",
+                    "incrementality": f"{incrementality:.4f}",
+                    "alert_relief": f"{alert_relief:.4f}",
+                    "realized_operating_index": f"{operating_index:.2f}",
+                }
+            )
+    return sorted(panel_rows, key=lambda item: (item["month"], item["channel"]))
+
+
 def write_demo_backtest_panel(output_csv: str | Path, seed: int = 42) -> Path:
     rows = generate_demo_backtest_panel(seed=seed)
     write_csv_rows(output_csv, PANEL_FIELDS, rows)
@@ -399,6 +758,24 @@ def write_demo_backtest_panel(output_csv: str | Path, seed: int = 42) -> Path:
 def write_demo_part2_backtest_panel(output_csv: str | Path, seed: int = 42) -> Path:
     rows = generate_part2_demo_backtest_panel(seed=seed)
     write_csv_rows(output_csv, PART2_PANEL_FIELDS, rows)
+    return Path(output_csv)
+
+
+def write_demo_part3_backtest_panel(output_csv: str | Path, seed: int = 42) -> Path:
+    rows = generate_part3_demo_backtest_panel(seed=seed)
+    write_csv_rows(output_csv, PART3_PANEL_FIELDS, rows)
+    return Path(output_csv)
+
+
+def write_demo_part4_backtest_panel(output_csv: str | Path, seed: int = 42) -> Path:
+    rows = generate_part4_demo_backtest_panel(seed=seed)
+    write_csv_rows(output_csv, PART4_PANEL_FIELDS, rows)
+    return Path(output_csv)
+
+
+def write_demo_part5_backtest_panel(output_csv: str | Path, seed: int = 42) -> Path:
+    rows = generate_part5_demo_backtest_panel(seed=seed)
+    write_csv_rows(output_csv, PART5_PANEL_FIELDS, rows)
     return Path(output_csv)
 
 
@@ -440,6 +817,60 @@ def load_part2_backtest_panel(path: str | Path) -> list[dict[str, float | str]]:
             }
         )
     return parsed_rows
+
+
+def load_part3_backtest_panel(path: str | Path) -> list[dict[str, float | str]]:
+    rows = read_csv_rows(path)
+    return [
+        {
+            "month": row["month"],
+            "scenario": row["scenario"],
+            "quote_confidence": float(row["quote_confidence"]),
+            "margin_rate": float(row["margin_rate"]),
+            "compliance_readiness": float(row["compliance_readiness"]),
+            "logistics_reliability": float(row["logistics_reliability"]),
+            "cost_advantage": float(row["cost_advantage"]),
+            "scenario_confidence": float(row["scenario_confidence"]),
+            "realized_margin_index": float(row["realized_margin_index"]),
+        }
+        for row in rows
+    ]
+
+
+def load_part4_backtest_panel(path: str | Path) -> list[dict[str, float | str]]:
+    rows = read_csv_rows(path)
+    return [
+        {
+            "month": row["month"],
+            "channel": row["channel"],
+            "contribution_margin_rate": float(row["contribution_margin_rate"]),
+            "repeat_rate": float(row["repeat_rate"]),
+            "payback_efficiency": float(row["payback_efficiency"]),
+            "inventory_health": float(row["inventory_health"]),
+            "loss_resilience": float(row["loss_resilience"]),
+            "traffic_efficiency": float(row["traffic_efficiency"]),
+            "realized_profit_index": float(row["realized_profit_index"]),
+        }
+        for row in rows
+    ]
+
+
+def load_part5_backtest_panel(path: str | Path) -> list[dict[str, float | str]]:
+    rows = read_csv_rows(path)
+    return [
+        {
+            "month": row["month"],
+            "channel": row["channel"],
+            "operating_health": float(row["operating_health"]),
+            "growth_leverage": float(row["growth_leverage"]),
+            "margin_protection": float(row["margin_protection"]),
+            "inventory_readiness": float(row["inventory_readiness"]),
+            "incrementality": float(row["incrementality"]),
+            "alert_relief": float(row["alert_relief"]),
+            "realized_operating_index": float(row["realized_operating_index"]),
+        }
+        for row in rows
+    ]
 
 
 def build_part2_backtest_panel_from_dataset(
@@ -605,7 +1036,15 @@ def run_market_opportunity_backtest(
     panel_rows: list[dict[str, float | str]],
     lookback: int = 3,
     top_n: int = 2,
+    weights: dict[str, float] | None = None,
 ) -> dict:
+    weights = weights or {
+        "demand_momentum": 0.35,
+        "channel_roas": 0.25,
+        "price_realization_rate": 0.20,
+        "supply_pressure": -0.10,
+        "hhi": -0.10,
+    }
     rows_by_category: dict[str, list[dict[str, float | str]]] = {}
     for row in panel_rows:
         rows_by_category.setdefault(str(row["category"]), []).append(row)
@@ -662,11 +1101,11 @@ def run_market_opportunity_backtest(
         scores = {}
         for category in next_returns:
             scores[category] = (
-                0.35 * demand_z[category]
-                + 0.25 * roas_z[category]
-                + 0.20 * realization_z[category]
-                - 0.10 * supply_z[category]
-                - 0.10 * concentration_z[category]
+                weights["demand_momentum"] * demand_z[category]
+                + weights["channel_roas"] * roas_z[category]
+                + weights["price_realization_rate"] * realization_z[category]
+                + weights["supply_pressure"] * supply_z[category]
+                + weights["hhi"] * concentration_z[category]
             )
 
         ranked = sorted(scores.items(), key=lambda item: item[1], reverse=True)
@@ -694,13 +1133,7 @@ def run_market_opportunity_backtest(
         "config": {
             "lookback_months": lookback,
             "top_n": top_n,
-            "signal_weights": {
-                "demand_momentum": 0.35,
-                "channel_roas": 0.25,
-                "price_realization_rate": 0.20,
-                "supply_pressure": -0.10,
-                "hhi": -0.10,
-            },
+            "signal_weights": weights,
         },
         "summary": {
             "periods": len(monthly_records),
@@ -728,7 +1161,17 @@ def run_part2_competition_backtest(
     panel_rows: list[dict[str, float | str]],
     lookback: int = 3,
     top_n: int = 2,
+    weights: dict[str, float] | None = None,
 ) -> dict:
+    weights = weights or {
+        "top_sku_share_improvement": 0.15,
+        "sweet_spot_share": 0.25,
+        "whitespace_score_delta": 0.25,
+        "negative_review_rate": 0.15,
+        "median_lifetime_days": 0.12,
+        "exit_risk": 0.05,
+        "discount_efficiency": 0.03,
+    }
     rows_by_category: dict[str, list[dict[str, float | str]]] = {}
     for row in panel_rows:
         rows_by_category.setdefault(str(row["category"]), []).append(row)
@@ -788,13 +1231,13 @@ def run_part2_competition_backtest(
         scores = {}
         for category in next_returns:
             scores[category] = (
-                0.15 * top_sku_z[category]
-                + 0.25 * sweet_spot_z[category]
-                + 0.25 * whitespace_z[category]
-                + 0.15 * negative_review_z[category]
-                + 0.12 * lifetime_z[category]
-                + 0.05 * exit_risk_z[category]
-                + 0.03 * discount_z[category]
+                weights["top_sku_share_improvement"] * top_sku_z[category]
+                + weights["sweet_spot_share"] * sweet_spot_z[category]
+                + weights["whitespace_score_delta"] * whitespace_z[category]
+                + weights["negative_review_rate"] * negative_review_z[category]
+                + weights["median_lifetime_days"] * lifetime_z[category]
+                + weights["exit_risk"] * exit_risk_z[category]
+                + weights["discount_efficiency"] * discount_z[category]
             )
 
         ranked = sorted(scores.items(), key=lambda item: item[1], reverse=True)
@@ -822,15 +1265,7 @@ def run_part2_competition_backtest(
         "config": {
             "lookback_months": lookback,
             "top_n": top_n,
-            "signal_weights": {
-                "top_sku_share_improvement": 0.15,
-                "sweet_spot_share": 0.25,
-                "whitespace_score_delta": 0.25,
-                "negative_review_rate": 0.15,
-                "median_lifetime_days": 0.12,
-                "exit_risk": 0.05,
-                "discount_efficiency": 0.03,
-            },
+            "signal_weights": weights,
             "target_normalization": "gmv_per_listing",
             "return_winsorization": [-0.8, 1.5],
         },
@@ -853,6 +1288,431 @@ def run_part2_competition_backtest(
             ),
         },
         "monthly_records": monthly_records,
+    }
+
+
+def run_part3_supply_backtest(
+    panel_rows: list[dict[str, float | str]],
+    lookback: int = 3,
+    top_n: int = 1,
+    weights: dict[str, float] | None = None,
+) -> dict:
+    weights = weights or {
+        "quote_confidence": 0.18,
+        "margin_rate": 0.28,
+        "compliance_readiness": 0.18,
+        "logistics_reliability": 0.16,
+        "cost_advantage": 0.10,
+        "scenario_confidence": 0.10,
+    }
+    rows_by_item: dict[str, list[dict[str, float | str]]] = {}
+    for row in panel_rows:
+        rows_by_item.setdefault(str(row["scenario"]), []).append(row)
+    for rows in rows_by_item.values():
+        rows.sort(key=lambda item: str(item["month"]))
+
+    months = sorted({str(row["month"]) for row in panel_rows})
+    monthly_records = []
+    for month_index in range(lookback, len(months) - 1):
+        current_month = months[month_index]
+        next_month = months[month_index + 1]
+
+        quote_confidence: dict[str, float] = {}
+        margin_rate: dict[str, float] = {}
+        compliance_readiness: dict[str, float] = {}
+        logistics_reliability: dict[str, float] = {}
+        cost_advantage: dict[str, float] = {}
+        scenario_confidence: dict[str, float] = {}
+        next_returns: dict[str, float] = {}
+
+        for item, rows in rows_by_item.items():
+            current_row = next((row for row in rows if row["month"] == current_month), None)
+            next_row = next((row for row in rows if row["month"] == next_month), None)
+            history = [row for row in rows if row["month"] < current_month][-lookback:]
+            if not current_row or not next_row or len(history) < lookback:
+                continue
+            margin_baseline = mean(float(row["margin_rate"]) for row in history)
+            logistics_baseline = mean(float(row["logistics_reliability"]) for row in history)
+            quote_confidence[item] = float(current_row["quote_confidence"])
+            margin_rate[item] = float(current_row["margin_rate"]) - margin_baseline
+            compliance_readiness[item] = float(current_row["compliance_readiness"])
+            logistics_reliability[item] = float(current_row["logistics_reliability"]) - logistics_baseline
+            cost_advantage[item] = float(current_row["cost_advantage"])
+            scenario_confidence[item] = float(current_row["scenario_confidence"])
+            next_returns[item] = (
+                float(next_row["realized_margin_index"]) / max(float(current_row["realized_margin_index"]), 1e-9) - 1
+            )
+
+        if len(next_returns) <= top_n:
+            continue
+
+        quote_z = _zscore_map(quote_confidence)
+        margin_z = _zscore_map(margin_rate)
+        compliance_z = _zscore_map(compliance_readiness)
+        logistics_z = _zscore_map(logistics_reliability)
+        cost_z = _zscore_map(cost_advantage)
+        scenario_z = _zscore_map(scenario_confidence)
+
+        scores = {}
+        for item in next_returns:
+            scores[item] = (
+                weights["quote_confidence"] * quote_z[item]
+                + weights["margin_rate"] * margin_z[item]
+                + weights["compliance_readiness"] * compliance_z[item]
+                + weights["logistics_reliability"] * logistics_z[item]
+                + weights["cost_advantage"] * cost_z[item]
+                + weights["scenario_confidence"] * scenario_z[item]
+            )
+
+        ranked = sorted(scores.items(), key=lambda item: item[1], reverse=True)
+        selected = ranked[:top_n]
+        selected_items = [item for item, _ in selected]
+        strategy_return = mean(next_returns[item] for item in selected_items)
+        benchmark_return = mean(next_returns.values())
+        monthly_records.append(
+            {
+                "month": current_month,
+                "next_month": next_month,
+                "selected_items": selected_items,
+                "selected_scores": {item: round(score, 4) for item, score in selected},
+                "strategy_return": round(strategy_return, 4),
+                "benchmark_return": round(benchmark_return, 4),
+                "excess_return": round(strategy_return - benchmark_return, 4),
+            }
+        )
+
+    strategy_returns = [record["strategy_return"] for record in monthly_records]
+    benchmark_returns = [record["benchmark_return"] for record in monthly_records]
+    excess_returns = [record["excess_return"] for record in monthly_records]
+    return {
+        "config": {
+            "lookback_months": lookback,
+            "top_n": top_n,
+            "signal_weights": weights,
+        },
+        "summary": {
+            "periods": len(monthly_records),
+            "avg_strategy_return": round(mean(strategy_returns), 4) if strategy_returns else 0.0,
+            "avg_benchmark_return": round(mean(benchmark_returns), 4) if benchmark_returns else 0.0,
+            "avg_excess_return": round(mean(excess_returns), 4) if excess_returns else 0.0,
+            "hit_rate": round(sum(1 for value in excess_returns if value > 0) / len(excess_returns), 4) if excess_returns else 0.0,
+            "cumulative_strategy_return": round(_cumulative_return(strategy_returns), 4),
+            "cumulative_benchmark_return": round(_cumulative_return(benchmark_returns), 4),
+            "cumulative_excess_return": round(_cumulative_return(strategy_returns) - _cumulative_return(benchmark_returns), 4),
+        },
+        "monthly_records": monthly_records,
+    }
+
+
+def run_part4_channel_backtest(
+    panel_rows: list[dict[str, float | str]],
+    lookback: int = 3,
+    top_n: int = 2,
+    weights: dict[str, float] | None = None,
+) -> dict:
+    weights = weights or {
+        "contribution_margin_rate": 0.24,
+        "repeat_rate": 0.18,
+        "payback_efficiency": 0.18,
+        "inventory_health": 0.12,
+        "loss_resilience": 0.16,
+        "traffic_efficiency": 0.12,
+    }
+    rows_by_item: dict[str, list[dict[str, float | str]]] = {}
+    for row in panel_rows:
+        rows_by_item.setdefault(str(row["channel"]), []).append(row)
+    for rows in rows_by_item.values():
+        rows.sort(key=lambda item: str(item["month"]))
+
+    months = sorted({str(row["month"]) for row in panel_rows})
+    monthly_records = []
+    for month_index in range(lookback, len(months) - 1):
+        current_month = months[month_index]
+        next_month = months[month_index + 1]
+
+        contribution_margin_rate: dict[str, float] = {}
+        repeat_rate: dict[str, float] = {}
+        payback_efficiency: dict[str, float] = {}
+        inventory_health: dict[str, float] = {}
+        loss_resilience: dict[str, float] = {}
+        traffic_efficiency: dict[str, float] = {}
+        next_returns: dict[str, float] = {}
+        for item, rows in rows_by_item.items():
+            current_row = next((row for row in rows if row["month"] == current_month), None)
+            next_row = next((row for row in rows if row["month"] == next_month), None)
+            history = [row for row in rows if row["month"] < current_month][-lookback:]
+            if not current_row or not next_row or len(history) < lookback:
+                continue
+            contribution_margin_rate[item] = float(current_row["contribution_margin_rate"]) - mean(float(row["contribution_margin_rate"]) for row in history)
+            repeat_rate[item] = float(current_row["repeat_rate"])
+            payback_efficiency[item] = float(current_row["payback_efficiency"])
+            inventory_health[item] = float(current_row["inventory_health"])
+            loss_resilience[item] = float(current_row["loss_resilience"])
+            traffic_efficiency[item] = float(current_row["traffic_efficiency"])
+            next_returns[item] = (
+                float(next_row["realized_profit_index"]) / max(float(current_row["realized_profit_index"]), 1e-9) - 1
+            )
+
+        if len(next_returns) <= top_n:
+            continue
+
+        margin_z = _zscore_map(contribution_margin_rate)
+        repeat_z = _zscore_map(repeat_rate)
+        payback_z = _zscore_map(payback_efficiency)
+        inventory_z = _zscore_map(inventory_health)
+        loss_z = _zscore_map(loss_resilience)
+        traffic_z = _zscore_map(traffic_efficiency)
+        scores = {}
+        for item in next_returns:
+            scores[item] = (
+                weights["contribution_margin_rate"] * margin_z[item]
+                + weights["repeat_rate"] * repeat_z[item]
+                + weights["payback_efficiency"] * payback_z[item]
+                + weights["inventory_health"] * inventory_z[item]
+                + weights["loss_resilience"] * loss_z[item]
+                + weights["traffic_efficiency"] * traffic_z[item]
+            )
+
+        ranked = sorted(scores.items(), key=lambda item: item[1], reverse=True)
+        selected = ranked[:top_n]
+        selected_items = [item for item, _ in selected]
+        strategy_return = mean(next_returns[item] for item in selected_items)
+        benchmark_return = mean(next_returns.values())
+        monthly_records.append(
+            {
+                "month": current_month,
+                "next_month": next_month,
+                "selected_items": selected_items,
+                "selected_scores": {item: round(score, 4) for item, score in selected},
+                "strategy_return": round(strategy_return, 4),
+                "benchmark_return": round(benchmark_return, 4),
+                "excess_return": round(strategy_return - benchmark_return, 4),
+            }
+        )
+
+    strategy_returns = [record["strategy_return"] for record in monthly_records]
+    benchmark_returns = [record["benchmark_return"] for record in monthly_records]
+    excess_returns = [record["excess_return"] for record in monthly_records]
+    return {
+        "config": {
+            "lookback_months": lookback,
+            "top_n": top_n,
+            "signal_weights": weights,
+        },
+        "summary": {
+            "periods": len(monthly_records),
+            "avg_strategy_return": round(mean(strategy_returns), 4) if strategy_returns else 0.0,
+            "avg_benchmark_return": round(mean(benchmark_returns), 4) if benchmark_returns else 0.0,
+            "avg_excess_return": round(mean(excess_returns), 4) if excess_returns else 0.0,
+            "hit_rate": round(sum(1 for value in excess_returns if value > 0) / len(excess_returns), 4) if excess_returns else 0.0,
+            "cumulative_strategy_return": round(_cumulative_return(strategy_returns), 4),
+            "cumulative_benchmark_return": round(_cumulative_return(benchmark_returns), 4),
+            "cumulative_excess_return": round(_cumulative_return(strategy_returns) - _cumulative_return(benchmark_returns), 4),
+        },
+        "monthly_records": monthly_records,
+    }
+
+
+def run_part5_operating_backtest(
+    panel_rows: list[dict[str, float | str]],
+    lookback: int = 3,
+    top_n: int = 2,
+    weights: dict[str, float] | None = None,
+) -> dict:
+    weights = weights or {
+        "operating_health": 0.22,
+        "growth_leverage": 0.18,
+        "margin_protection": 0.18,
+        "inventory_readiness": 0.14,
+        "incrementality": 0.16,
+        "alert_relief": 0.12,
+    }
+    rows_by_item: dict[str, list[dict[str, float | str]]] = {}
+    for row in panel_rows:
+        rows_by_item.setdefault(str(row["channel"]), []).append(row)
+    for rows in rows_by_item.values():
+        rows.sort(key=lambda item: str(item["month"]))
+
+    months = sorted({str(row["month"]) for row in panel_rows})
+    monthly_records = []
+    for month_index in range(lookback, len(months) - 1):
+        current_month = months[month_index]
+        next_month = months[month_index + 1]
+        operating_health: dict[str, float] = {}
+        growth_leverage: dict[str, float] = {}
+        margin_protection: dict[str, float] = {}
+        inventory_readiness: dict[str, float] = {}
+        incrementality: dict[str, float] = {}
+        alert_relief: dict[str, float] = {}
+        next_returns: dict[str, float] = {}
+        for item, rows in rows_by_item.items():
+            current_row = next((row for row in rows if row["month"] == current_month), None)
+            next_row = next((row for row in rows if row["month"] == next_month), None)
+            history = [row for row in rows if row["month"] < current_month][-lookback:]
+            if not current_row or not next_row or len(history) < lookback:
+                continue
+            operating_health[item] = float(current_row["operating_health"]) - mean(float(row["operating_health"]) for row in history)
+            growth_leverage[item] = float(current_row["growth_leverage"])
+            margin_protection[item] = float(current_row["margin_protection"])
+            inventory_readiness[item] = float(current_row["inventory_readiness"])
+            incrementality[item] = float(current_row["incrementality"])
+            alert_relief[item] = float(current_row["alert_relief"])
+            next_returns[item] = (
+                float(next_row["realized_operating_index"]) / max(float(current_row["realized_operating_index"]), 1e-9) - 1
+            )
+
+        if len(next_returns) <= top_n:
+            continue
+
+        health_z = _zscore_map(operating_health)
+        growth_z = _zscore_map(growth_leverage)
+        protection_z = _zscore_map(margin_protection)
+        inventory_z = _zscore_map(inventory_readiness)
+        incrementality_z = _zscore_map(incrementality)
+        alert_z = _zscore_map(alert_relief)
+        scores = {}
+        for item in next_returns:
+            scores[item] = (
+                weights["operating_health"] * health_z[item]
+                + weights["growth_leverage"] * growth_z[item]
+                + weights["margin_protection"] * protection_z[item]
+                + weights["inventory_readiness"] * inventory_z[item]
+                + weights["incrementality"] * incrementality_z[item]
+                + weights["alert_relief"] * alert_z[item]
+            )
+
+        ranked = sorted(scores.items(), key=lambda item: item[1], reverse=True)
+        selected = ranked[:top_n]
+        selected_items = [item for item, _ in selected]
+        strategy_return = mean(next_returns[item] for item in selected_items)
+        benchmark_return = mean(next_returns.values())
+        monthly_records.append(
+            {
+                "month": current_month,
+                "next_month": next_month,
+                "selected_items": selected_items,
+                "selected_scores": {item: round(score, 4) for item, score in selected},
+                "strategy_return": round(strategy_return, 4),
+                "benchmark_return": round(benchmark_return, 4),
+                "excess_return": round(strategy_return - benchmark_return, 4),
+            }
+        )
+
+    strategy_returns = [record["strategy_return"] for record in monthly_records]
+    benchmark_returns = [record["benchmark_return"] for record in monthly_records]
+    excess_returns = [record["excess_return"] for record in monthly_records]
+    return {
+        "config": {
+            "lookback_months": lookback,
+            "top_n": top_n,
+            "signal_weights": weights,
+        },
+        "summary": {
+            "periods": len(monthly_records),
+            "avg_strategy_return": round(mean(strategy_returns), 4) if strategy_returns else 0.0,
+            "avg_benchmark_return": round(mean(benchmark_returns), 4) if benchmark_returns else 0.0,
+            "avg_excess_return": round(mean(excess_returns), 4) if excess_returns else 0.0,
+            "hit_rate": round(sum(1 for value in excess_returns if value > 0) / len(excess_returns), 4) if excess_returns else 0.0,
+            "cumulative_strategy_return": round(_cumulative_return(strategy_returns), 4),
+            "cumulative_benchmark_return": round(_cumulative_return(benchmark_returns), 4),
+            "cumulative_excess_return": round(_cumulative_return(strategy_returns) - _cumulative_return(benchmark_returns), 4),
+        },
+        "monthly_records": monthly_records,
+    }
+
+
+def _optimization_objective(result: dict) -> float:
+    summary = result.get("summary", {})
+    avg_excess = float(summary.get("avg_excess_return", 0.0))
+    hit_rate = float(summary.get("hit_rate", 0.0))
+    periods = float(summary.get("periods", 0.0))
+    cumulative_excess = float(summary.get("cumulative_excess_return", 0.0))
+    return avg_excess * 0.55 + hit_rate * 0.25 + cumulative_excess * 0.2 + min(periods / 20.0, 1.0) * 0.02
+
+
+def _panel_train_test_split(
+    panel_rows: list[dict[str, float | str]],
+    lookback: int,
+    train_ratio: float,
+) -> tuple[list[dict[str, float | str]], list[dict[str, float | str]], str]:
+    months = sorted({str(row["month"]) for row in panel_rows})
+    split_index = max(lookback + 1, min(len(months) - 2, int(len(months) * train_ratio)))
+    split_month = months[split_index]
+    history_months = set(months[: split_index + 1])
+    test_months = set(months[max(0, split_index - lookback) :])
+    train_rows = [row for row in panel_rows if str(row["month"]) in history_months]
+    test_rows = [row for row in panel_rows if str(row["month"]) in test_months]
+    return train_rows, test_rows, split_month
+
+
+def optimize_backtest_weights(
+    panel_rows: list[dict[str, float | str]],
+    runner,
+    base_weights: dict[str, float],
+    lookback: int = 3,
+    top_n: int = 2,
+    train_ratio: float = 0.65,
+    multipliers: tuple[float, ...] = (0.75, 1.0, 1.25),
+) -> dict:
+    train_rows, test_rows, split_month = _panel_train_test_split(panel_rows, lookback, train_ratio)
+    weight_keys = list(base_weights.keys())
+    best_weights = dict(base_weights)
+    best_train_result = runner(train_rows, lookback=lookback, top_n=top_n, weights=best_weights)
+    best_objective = _optimization_objective(best_train_result)
+
+    candidates = 1
+    for _ in weight_keys:
+        candidates *= len(multipliers)
+
+    stack = [({}, 0)]
+    while stack:
+        partial, index = stack.pop()
+        if index == len(weight_keys):
+            weights = {
+                key: round(base_weights[key] * partial[key], 6)
+                for key in weight_keys
+            }
+            train_result = runner(train_rows, lookback=lookback, top_n=top_n, weights=weights)
+            objective = _optimization_objective(train_result)
+            if objective > best_objective:
+                best_objective = objective
+                best_weights = weights
+                best_train_result = train_result
+            continue
+        key = weight_keys[index]
+        for multiplier in multipliers:
+            next_partial = dict(partial)
+            next_partial[key] = multiplier
+            stack.append((next_partial, index + 1))
+
+    baseline_train = runner(train_rows, lookback=lookback, top_n=top_n, weights=base_weights)
+    baseline_test = runner(test_rows, lookback=lookback, top_n=top_n, weights=base_weights)
+    optimized_test = runner(test_rows, lookback=lookback, top_n=top_n, weights=best_weights)
+    optimized_full = runner(panel_rows, lookback=lookback, top_n=top_n, weights=best_weights)
+    return {
+        "split_month": split_month,
+        "candidate_count": candidates,
+        "base_weights": base_weights,
+        "optimized_weights": best_weights,
+        "baseline_train": baseline_train,
+        "baseline_test": baseline_test,
+        "optimized_train": best_train_result,
+        "optimized_test": optimized_test,
+        "optimized_full": optimized_full,
+        "improvement": {
+            "train_avg_excess_delta": round(
+                best_train_result["summary"]["avg_excess_return"] - baseline_train["summary"]["avg_excess_return"],
+                4,
+            ) if baseline_train["summary"]["periods"] else 0.0,
+            "test_avg_excess_delta": round(
+                optimized_test["summary"]["avg_excess_return"] - baseline_test["summary"]["avg_excess_return"],
+                4,
+            ) if baseline_test["summary"]["periods"] else 0.0,
+            "test_hit_rate_delta": round(
+                optimized_test["summary"]["hit_rate"] - baseline_test["summary"]["hit_rate"],
+                4,
+            ) if baseline_test["summary"]["periods"] else 0.0,
+        },
     }
 
 
@@ -921,11 +1781,12 @@ def write_backtest_monthly_csv(result: dict, output_path: str | Path) -> Path:
     output_path.parent.mkdir(parents=True, exist_ok=True)
     rows = []
     for record in result.get("monthly_records", []):
+        selected = record.get("selected_categories") or record.get("selected_items") or []
         rows.append(
             {
                 "month": record["month"],
                 "next_month": record["next_month"],
-                "selected_categories": "|".join(record["selected_categories"]),
+                "selected_categories": "|".join(selected),
                 "strategy_return": str(record["strategy_return"]),
                 "benchmark_return": str(record["benchmark_return"]),
                 "excess_return": str(record["excess_return"]),
@@ -979,4 +1840,180 @@ def run_part2_backtest_demo(output_dir: str | Path, seed: int = 42) -> dict:
         "curve_svg": str(chart_path),
         "monthly_csv": str(monthly_csv_path),
         "summary": result["summary"],
+    }
+
+
+def run_part3_backtest_demo(output_dir: str | Path, seed: int = 42) -> dict:
+    output_dir = Path(output_dir)
+    output_dir.mkdir(parents=True, exist_ok=True)
+    panel_path = write_demo_part3_backtest_panel(output_dir / "part3_supply_panel.csv", seed=seed)
+    panel_rows = load_part3_backtest_panel(panel_path)
+    result = run_part3_supply_backtest(panel_rows)
+    summary_path = write_json(output_dir / "part3_backtest_summary.json", result)
+    chart_path = write_backtest_curve_svg(result, output_dir / "part3_backtest_curve.svg")
+    monthly_csv_path = write_backtest_monthly_csv(result, output_dir / "part3_backtest_monthly_returns.csv")
+    return {
+        "panel_csv": str(panel_path),
+        "summary_json": str(summary_path),
+        "curve_svg": str(chart_path),
+        "monthly_csv": str(monthly_csv_path),
+        "summary": result["summary"],
+    }
+
+
+def run_part4_backtest_demo(output_dir: str | Path, seed: int = 42) -> dict:
+    output_dir = Path(output_dir)
+    output_dir.mkdir(parents=True, exist_ok=True)
+    panel_path = write_demo_part4_backtest_panel(output_dir / "part4_channel_panel.csv", seed=seed)
+    panel_rows = load_part4_backtest_panel(panel_path)
+    result = run_part4_channel_backtest(panel_rows)
+    summary_path = write_json(output_dir / "part4_backtest_summary.json", result)
+    chart_path = write_backtest_curve_svg(result, output_dir / "part4_backtest_curve.svg")
+    monthly_csv_path = write_backtest_monthly_csv(result, output_dir / "part4_backtest_monthly_returns.csv")
+    return {
+        "panel_csv": str(panel_path),
+        "summary_json": str(summary_path),
+        "curve_svg": str(chart_path),
+        "monthly_csv": str(monthly_csv_path),
+        "summary": result["summary"],
+    }
+
+
+def run_part5_backtest_demo(output_dir: str | Path, seed: int = 42) -> dict:
+    output_dir = Path(output_dir)
+    output_dir.mkdir(parents=True, exist_ok=True)
+    panel_path = write_demo_part5_backtest_panel(output_dir / "part5_operating_panel.csv", seed=seed)
+    panel_rows = load_part5_backtest_panel(panel_path)
+    result = run_part5_operating_backtest(panel_rows)
+    summary_path = write_json(output_dir / "part5_backtest_summary.json", result)
+    chart_path = write_backtest_curve_svg(result, output_dir / "part5_backtest_curve.svg")
+    monthly_csv_path = write_backtest_monthly_csv(result, output_dir / "part5_backtest_monthly_returns.csv")
+    return {
+        "panel_csv": str(panel_path),
+        "summary_json": str(summary_path),
+        "curve_svg": str(chart_path),
+        "monthly_csv": str(monthly_csv_path),
+        "summary": result["summary"],
+    }
+
+
+def run_full_backtest_suite(output_dir: str | Path, seed: int = 42) -> dict:
+    output_dir = Path(output_dir)
+    output_dir.mkdir(parents=True, exist_ok=True)
+
+    part1_panel = load_backtest_panel(write_demo_backtest_panel(output_dir / "part1_panel.csv", seed=seed))
+    part2_panel = load_part2_backtest_panel(write_demo_part2_backtest_panel(output_dir / "part2_panel.csv", seed=seed))
+    part3_panel = load_part3_backtest_panel(write_demo_part3_backtest_panel(output_dir / "part3_panel.csv", seed=seed))
+    part4_panel = load_part4_backtest_panel(write_demo_part4_backtest_panel(output_dir / "part4_panel.csv", seed=seed))
+    part5_panel = load_part5_backtest_panel(write_demo_part5_backtest_panel(output_dir / "part5_panel.csv", seed=seed))
+
+    suite = {
+        "part1": {
+            "name": "Market Opportunity",
+            "optimization": optimize_backtest_weights(
+                part1_panel,
+                run_market_opportunity_backtest,
+                {
+                    "demand_momentum": 0.35,
+                    "channel_roas": 0.25,
+                    "price_realization_rate": 0.20,
+                    "supply_pressure": -0.10,
+                    "hhi": -0.10,
+                },
+            ),
+        },
+        "part2": {
+            "name": "Competition Structure",
+            "optimization": optimize_backtest_weights(
+                part2_panel,
+                run_part2_competition_backtest,
+                {
+                    "top_sku_share_improvement": 0.15,
+                    "sweet_spot_share": 0.25,
+                    "whitespace_score_delta": 0.25,
+                    "negative_review_rate": 0.15,
+                    "median_lifetime_days": 0.12,
+                    "exit_risk": 0.05,
+                    "discount_efficiency": 0.03,
+                },
+            ),
+        },
+        "part3": {
+            "name": "Supply Path",
+            "optimization": optimize_backtest_weights(
+                part3_panel,
+                run_part3_supply_backtest,
+                {
+                    "quote_confidence": 0.18,
+                    "margin_rate": 0.28,
+                    "compliance_readiness": 0.18,
+                    "logistics_reliability": 0.16,
+                    "cost_advantage": 0.10,
+                    "scenario_confidence": 0.10,
+                },
+                top_n=1,
+            ),
+        },
+        "part4": {
+            "name": "Channel Selection",
+            "optimization": optimize_backtest_weights(
+                part4_panel,
+                run_part4_channel_backtest,
+                {
+                    "contribution_margin_rate": 0.24,
+                    "repeat_rate": 0.18,
+                    "payback_efficiency": 0.18,
+                    "inventory_health": 0.12,
+                    "loss_resilience": 0.16,
+                    "traffic_efficiency": 0.12,
+                },
+            ),
+        },
+        "part5": {
+            "name": "Operating Scale",
+            "optimization": optimize_backtest_weights(
+                part5_panel,
+                run_part5_operating_backtest,
+                {
+                    "operating_health": 0.22,
+                    "growth_leverage": 0.18,
+                    "margin_protection": 0.18,
+                    "inventory_readiness": 0.14,
+                    "incrementality": 0.16,
+                    "alert_relief": 0.12,
+                },
+            ),
+        },
+    }
+
+    summary_rows = []
+    for part_key, payload in suite.items():
+        optimized_full = payload["optimization"]["optimized_full"]
+        baseline_test = payload["optimization"]["baseline_test"]
+        optimized_test = payload["optimization"]["optimized_test"]
+        curve_path = write_backtest_curve_svg(optimized_full, output_dir / f"{part_key}_optimized_curve.svg")
+        monthly_path = write_backtest_monthly_csv(optimized_full, output_dir / f"{part_key}_optimized_monthly.csv")
+        payload["optimization_json"] = str(write_json(output_dir / f"{part_key}_optimization.json", payload["optimization"]))
+        payload["curve_svg"] = str(curve_path)
+        payload["monthly_csv"] = str(monthly_path)
+        summary_rows.append(
+            {
+                "part": part_key,
+                "name": payload["name"],
+                "baseline_test_avg_excess_return": baseline_test["summary"]["avg_excess_return"],
+                "optimized_test_avg_excess_return": optimized_test["summary"]["avg_excess_return"],
+                "optimized_test_hit_rate": optimized_test["summary"]["hit_rate"],
+                "optimized_full_cumulative_excess_return": optimized_full["summary"]["cumulative_excess_return"],
+            }
+        )
+
+    suite_summary = {
+        "seed": seed,
+        "parts": summary_rows,
+    }
+    summary_json = write_json(output_dir / "suite_summary.json", suite_summary)
+    return {
+        "output_dir": str(output_dir),
+        "suite_summary_json": str(summary_json),
+        "parts": suite,
     }

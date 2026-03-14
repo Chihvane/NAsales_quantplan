@@ -8,17 +8,24 @@ from contextlib import redirect_stdout
 from pathlib import Path
 
 from quant_framework.charts import (
+    generate_horizontal_system_chart_assets,
+    generate_part0_chart_assets,
     generate_part1_chart_assets,
     generate_part2_chart_assets,
     generate_part3_chart_assets,
     generate_part4_chart_assets,
+    generate_part5_chart_assets,
 )
 from quant_framework.backtest import (
     build_part2_backtest_panel_from_directory,
     load_part2_backtest_panel,
+    run_full_backtest_suite,
     run_backtest_demo,
     run_part2_backtest_demo,
     run_part2_competition_backtest,
+    run_part3_backtest_demo,
+    run_part4_backtest_demo,
+    run_part5_backtest_demo,
 )
 from quant_framework.cleaners import (
     combine_part2_bundles,
@@ -36,11 +43,24 @@ from quant_framework.cleaners import (
     normalize_tiktok_channels_export,
 )
 from quant_framework.cli import main as cli_main
+from quant_framework.gate_engine import evaluate_gate
+from quant_framework.horizontal_pipeline import (
+    DEFAULT_HORIZONTAL_SYSTEM_ASSUMPTIONS,
+    build_horizontal_system_dataset_from_directory,
+)
+from quant_framework.horizontal_system import build_horizontal_system_report
 from quant_framework.io_utils import read_csv_rows
+from quant_framework.part0 import build_part0_quant_report
 from quant_framework.part1 import build_part1_quant_report
 from quant_framework.part2 import build_part2_quant_report
 from quant_framework.part3 import build_part3_quant_report
 from quant_framework.part4 import build_part4_quant_report
+from quant_framework.part5 import build_part5_quant_report
+from quant_framework.part0_pipeline import (
+    DEFAULT_PART0_ASSUMPTIONS,
+    build_part0_dataset_from_directory,
+)
+from quant_framework.part5_etl import run_part5_etl_skeleton
 from quant_framework.part2_pipeline import (
     DEFAULT_PART2_ASSUMPTIONS,
     build_part2_dataset_from_directory,
@@ -53,14 +73,21 @@ from quant_framework.part4_pipeline import (
     DEFAULT_PART4_ASSUMPTIONS,
     build_part4_dataset_from_directory,
 )
+from quant_framework.part5_pipeline import (
+    DEFAULT_PART5_ASSUMPTIONS,
+    build_part5_dataset_from_directory,
+)
 from quant_framework.pipeline import DEFAULT_ASSUMPTIONS, build_dataset_from_directory
 
 
 ROOT = Path(__file__).resolve().parents[1]
 EXAMPLES = ROOT / "examples"
+PART0_EXAMPLES = EXAMPLES / "part0_demo"
+HORIZONTAL_EXAMPLES = EXAMPLES / "horizontal_system_demo"
 PART2_EXAMPLES = EXAMPLES / "part2_demo"
 PART3_EXAMPLES = EXAMPLES / "part3_demo"
 PART4_EXAMPLES = EXAMPLES / "part4_demo"
+PART5_EXAMPLES = EXAMPLES / "part5_demo"
 EXTERNAL_INPUTS = ROOT / "external_inputs"
 
 
@@ -72,17 +99,159 @@ def _assert_standard_report_contract(test_case: unittest.TestCase, report: dict)
     test_case.assertIn("table_inventory", report["metadata"])
     test_case.assertIn("validation_summary", report["overview"])
     test_case.assertIn("headline_metrics", report["overview"])
+    test_case.assertIn("connected_channel_scope", report["overview"])
+    test_case.assertIn("control_tower_binding", report["overview"])
     test_case.assertIsInstance(report["overview"]["headline_metrics"], list)
     for section_id, section_payload in report["sections"].items():
         test_case.assertEqual(section_payload["id"], section_id)
         test_case.assertIn("required_tables", section_payload)
         test_case.assertIn("metric_ids", section_payload)
+        test_case.assertIn("granularity", section_payload)
+        test_case.assertIn("channel_scope", section_payload)
+        test_case.assertIn("master_data_ref", section_payload)
+        test_case.assertIn("evidence_ref", section_payload)
+        test_case.assertIn("rule_ref", section_payload)
+        test_case.assertIn("gate_result", section_payload)
         test_case.assertIn("data_quality", section_payload)
         test_case.assertIn("confidence", section_payload)
         test_case.assertIn("metrics", section_payload)
         test_case.assertIn("record_counts", section_payload["data_quality"])
         test_case.assertIn("quality_score", section_payload["data_quality"])
         test_case.assertIn("score", section_payload["confidence"])
+
+
+class Part0PipelineTests(unittest.TestCase):
+    def test_build_part0_report_from_examples(self) -> None:
+        dataset = build_part0_dataset_from_directory(PART0_EXAMPLES)
+        report = build_part0_quant_report(dataset, DEFAULT_PART0_ASSUMPTIONS)
+
+        _assert_standard_report_contract(self, report)
+        self.assertEqual(report["validation"]["summary"]["fail_count"], 0)
+        self.assertEqual(report["validation"]["summary"]["review_count"], 0)
+        self.assertIn("uncertainty", report)
+        self.assertIn("governance_quality_band", report["uncertainty"])
+        self.assertIn("decision_summary", report["overview"])
+        self.assertIn(
+            report["overview"]["decision_signal"],
+            {"ready_for_execution_system", "governance_needs_hardening", "not_ready"},
+        )
+        self.assertEqual(len(report["overview"]["decision_summary"]["scorecard"]), 3)
+        self.assertGreater(report["sections"]["0.1"]["metrics"]["decision_node_count"], 0)
+        self.assertLessEqual(report["sections"]["0.1"]["metrics"]["decision_tree_score"], 1.0)
+        self.assertGreater(report["sections"]["0.4"]["metrics"]["gate_operability_score"], 0)
+        self.assertGreater(report["sections"]["0.4"]["metrics"]["strategic_gate_score"], 0)
+        self.assertEqual(
+            report["sections"]["0.4"]["metrics"]["strategic_metric_family_coverage_ratio"],
+            1.0,
+        )
+        self.assertGreater(report["sections"]["0.7"]["metrics"]["naming_compliance_ratio"], 0)
+
+    def test_generate_part0_charts(self) -> None:
+        dataset = build_part0_dataset_from_directory(PART0_EXAMPLES)
+        report = build_part0_quant_report(dataset, DEFAULT_PART0_ASSUMPTIONS)
+
+        with tempfile.TemporaryDirectory() as temp_dir:
+            chart_paths = generate_part0_chart_assets(report, temp_dir)
+            for chart_path in chart_paths.values():
+                content = Path(chart_path).read_text(encoding="utf-8")
+                self.assertIn("<svg", content)
+
+    def test_cli_part0_report_and_chart_commands(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            temp_path = Path(temp_dir)
+            report_path = temp_path / "part0_report.json"
+            charts_dir = temp_path / "part0_charts"
+
+            with redirect_stdout(io.StringIO()):
+                report_exit_code = cli_main(
+                    [
+                        "report-part0",
+                        "--data-dir",
+                        str(PART0_EXAMPLES),
+                        "--output-json",
+                        str(report_path),
+                    ]
+                )
+                chart_exit_code = cli_main(
+                    [
+                        "charts-part0",
+                        "--data-dir",
+                        str(PART0_EXAMPLES),
+                        "--output-dir",
+                        str(charts_dir),
+                    ]
+                )
+
+            self.assertEqual(report_exit_code, 0)
+            self.assertEqual(chart_exit_code, 0)
+            report = json.loads(report_path.read_text(encoding="utf-8"))
+            self.assertIn("validation", report)
+            self.assertTrue((charts_dir / "confidence_grade_mix.svg").exists())
+            self.assertTrue((charts_dir / "governance_scorecard.svg").exists())
+
+
+class HorizontalSystemPipelineTests(unittest.TestCase):
+    def test_build_horizontal_report_from_examples(self) -> None:
+        dataset = build_horizontal_system_dataset_from_directory(HORIZONTAL_EXAMPLES)
+        report = build_horizontal_system_report(dataset, DEFAULT_HORIZONTAL_SYSTEM_ASSUMPTIONS)
+
+        _assert_standard_report_contract(self, report)
+        self.assertEqual(report["validation"]["summary"]["fail_count"], 0)
+        self.assertEqual(report["validation"]["summary"]["review_count"], 0)
+        self.assertIn("uncertainty", report)
+        self.assertIn("master_data_band", report["uncertainty"])
+        self.assertIn("decision_summary", report["overview"])
+        self.assertIn(
+            report["overview"]["decision_signal"],
+            {"control_tower_ready", "control_tower_needs_hardening", "control_tower_not_ready"},
+        )
+        self.assertGreater(report["sections"]["H1"]["metrics"]["master_data_health_score"], 0.8)
+        self.assertGreater(report["sections"]["H2"]["metrics"]["traceback_sla_ratio"], 0.8)
+        self.assertEqual(report["sections"]["H3"]["metrics"]["scenario_coverage_ratio"], 1.0)
+
+    def test_generate_horizontal_charts(self) -> None:
+        dataset = build_horizontal_system_dataset_from_directory(HORIZONTAL_EXAMPLES)
+        report = build_horizontal_system_report(dataset, DEFAULT_HORIZONTAL_SYSTEM_ASSUMPTIONS)
+
+        with tempfile.TemporaryDirectory() as temp_dir:
+            chart_paths = generate_horizontal_system_chart_assets(report, temp_dir)
+            for chart_path in chart_paths.values():
+                content = Path(chart_path).read_text(encoding="utf-8")
+                self.assertIn("<svg", content)
+
+    def test_cli_horizontal_report_and_chart_commands(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            temp_path = Path(temp_dir)
+            report_path = temp_path / "horizontal_report.json"
+            charts_dir = temp_path / "horizontal_charts"
+
+            with redirect_stdout(io.StringIO()):
+                report_exit_code = cli_main(
+                    [
+                        "report-horizontal",
+                        "--data-dir",
+                        str(HORIZONTAL_EXAMPLES),
+                        "--output-json",
+                        str(report_path),
+                    ]
+                )
+                chart_exit_code = cli_main(
+                    [
+                        "charts-horizontal",
+                        "--data-dir",
+                        str(HORIZONTAL_EXAMPLES),
+                        "--output-dir",
+                        str(charts_dir),
+                    ]
+                )
+
+            self.assertEqual(report_exit_code, 0)
+            self.assertEqual(chart_exit_code, 0)
+            report = json.loads(report_path.read_text(encoding="utf-8"))
+            self.assertIn("validation", report)
+            self.assertTrue((charts_dir / "master_data_governance.svg").exists())
+            self.assertTrue((charts_dir / "evidence_audit_chain.svg").exists())
+            self.assertTrue((charts_dir / "decision_threshold_system.svg").exists())
 
 
 class Part1PipelineTests(unittest.TestCase):
@@ -106,6 +275,10 @@ class Part1PipelineTests(unittest.TestCase):
             report["sections"]["1.3"]["metrics"]["bottom_up"]["concentration_level"],
             "highly_concentrated",
         )
+        self.assertGreater(
+            report["sections"]["1.3"]["metrics"]["market_size_inputs"]["consistency_ratio"],
+            0.9,
+        )
         self.assertLessEqual(
             report["sections"]["1.3"]["metrics"]["bottom_up"]["sample_monthly_gmv"],
             report["sections"]["1.3"]["metrics"]["bottom_up"]["sample_monthly_gmv_raw"],
@@ -115,6 +288,15 @@ class Part1PipelineTests(unittest.TestCase):
             0.1213,
             places=4,
         )
+        self.assertEqual(
+            report["sections"]["1.4"]["metrics"]["totals"]["benchmark_coverage_ratio"],
+            0.8,
+        )
+        self.assertIn("event_library", report["metadata"]["table_inventory"])
+        self.assertIn("source_registry", report["metadata"]["table_inventory"])
+        self.assertIn("part1_threshold_registry", report["metadata"]["table_inventory"])
+        self.assertEqual(report["metadata"]["table_inventory"]["event_library"]["record_count"], 4)
+        self.assertEqual(report["sections"]["1.1"]["data_quality"]["record_counts"]["event_library"], 4)
 
     def test_generate_charts(self) -> None:
         dataset = build_dataset_from_directory(EXAMPLES)
@@ -521,6 +703,9 @@ class Part4PipelineTests(unittest.TestCase):
         self.assertEqual(report["validation"]["summary"]["review_count"], 0)
         self.assertIn("uncertainty", report)
         self.assertIn("roi_monte_carlo", report["uncertainty"])
+        self.assertIn("decision_summary", report["overview"])
+        self.assertIn(report["overview"]["decision_signal"], {"go", "pilot", "hold"})
+        self.assertEqual(len(report["overview"]["decision_summary"]["scorecard"]), 4)
         self.assertIn("monte_carlo", report["sections"]["4.5"]["metrics"])
         self.assertGreater(
             report["sections"]["4.5"]["metrics"]["blended"]["revenue"],
@@ -573,6 +758,267 @@ class Part4PipelineTests(unittest.TestCase):
             self.assertIn("validation", report)
             self.assertTrue((charts_dir / "channel_contribution_margin.svg").exists())
             self.assertTrue((charts_dir / "roi_band.svg").exists())
+
+
+class Part5PipelineTests(unittest.TestCase):
+    def test_build_part5_report_from_examples(self) -> None:
+        dataset = build_part5_dataset_from_directory(PART5_EXAMPLES)
+        report = build_part5_quant_report(dataset, DEFAULT_PART5_ASSUMPTIONS)
+
+        _assert_standard_report_contract(self, report)
+        self.assertEqual(report["validation"]["summary"]["fail_count"], 0)
+        self.assertEqual(report["validation"]["summary"]["review_count"], 0)
+        self.assertIn("uncertainty", report)
+        self.assertIn("daily_contribution_margin_rate", report["uncertainty"])
+        self.assertIn("operating_health_score", report["sections"]["5.1"]["metrics"])
+        self.assertIn(
+            report["sections"]["5.7"]["metrics"]["expansion_gate_status"],
+            {"scale_up", "hold_and_optimize", "pilot_only", "rollback"},
+        )
+        self.assertGreater(
+            len(report["sections"]["5.1"]["metrics"]["channel_health_rows"]),
+            0,
+        )
+        self.assertGreater(
+            report["sections"]["5.6"]["metrics"]["sample_size_guidance"]["sample_size_per_variant"],
+            0,
+        )
+        self.assertIn("audit_pack", report)
+        self.assertIn("data_contract", report["overview"])
+        self.assertIn("data_contract", report["sections"]["5.2"]["metrics"])
+        self.assertIn(
+            "customer_identity_available",
+            report["overview"]["data_contract"]["data_availability_flags"],
+        )
+        self.assertIn("weekly_channel_pnl", report["sections"]["5.2"]["metrics"])
+        self.assertIn("fee_version_binding_rows", report["sections"]["5.2"]["metrics"])
+        self.assertIn("weekly_contribution_profit", report["sections"]["5.2"]["metrics"])
+        self.assertIn("readouts", report["sections"]["5.6"]["metrics"])
+        self.assertGreater(
+            report["sections"]["5.6"]["metrics"]["readouts"]["readout_count"],
+            0,
+        )
+        self.assertGreater(
+            report["sections"]["5.6"]["metrics"]["readouts"]["average_posterior_win_probability"],
+            0,
+        )
+        self.assertGreater(
+            report["sections"]["5.6"]["metrics"]["readouts"]["average_hierarchical_win_probability"],
+            0,
+        )
+        self.assertGreaterEqual(
+            report["sections"]["5.6"]["metrics"]["readouts"]["temporal_consistency_score"],
+            0,
+        )
+        self.assertGreater(
+            report["sections"]["5.6"]["metrics"]["incrementality_score"],
+            0,
+        )
+        self.assertIn("auto_stop_policy", report["sections"]["5.6"]["metrics"])
+        self.assertIn("auto_stop_summary", report["sections"]["5.6"]["metrics"]["readouts"])
+        self.assertIn("experiments_without_readouts", report["sections"]["5.6"]["metrics"]["readouts"])
+        first_readout = report["sections"]["5.6"]["metrics"]["readouts"]["experiment_readouts"][0]
+        self.assertIn("bayesian_status", first_readout)
+        self.assertIn("hierarchical_status", first_readout)
+        self.assertIn("posterior_probability_treatment_best", first_readout)
+        self.assertIn("hierarchical_probability_treatment_best", first_readout)
+        self.assertIn("slice_readouts", first_readout)
+        self.assertIn("auto_stop_decision", first_readout)
+        alerts = report["sections"]["5.7"]["metrics"]["alerts"]
+        self.assertIn("change_signal_count", alerts)
+        if alerts["alerts"]:
+            self.assertIn("runbook_action", alerts["alerts"][0])
+        self.assertIn(
+            first_readout["auto_stop_decision"],
+            {"ship_winner", "stop_for_loss", "stop_for_futility", "prepare_rollout", "watch_for_loss", "continue_collecting"},
+        )
+
+    def test_generate_part5_charts(self) -> None:
+        dataset = build_part5_dataset_from_directory(PART5_EXAMPLES)
+        report = build_part5_quant_report(dataset, DEFAULT_PART5_ASSUMPTIONS)
+
+        with tempfile.TemporaryDirectory() as temp_dir:
+            chart_paths = generate_part5_chart_assets(report, temp_dir)
+            for chart_path in chart_paths.values():
+                content = Path(chart_path).read_text(encoding="utf-8")
+                self.assertIn("<svg", content)
+
+    def test_cli_part5_report_and_chart_commands(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            temp_path = Path(temp_dir)
+            report_path = temp_path / "part5_report.json"
+            charts_dir = temp_path / "part5_charts"
+
+            with redirect_stdout(io.StringIO()):
+                report_exit_code = cli_main(
+                    [
+                        "report-part5",
+                        "--data-dir",
+                        str(PART5_EXAMPLES),
+                        "--output-json",
+                        str(report_path),
+                    ]
+                )
+                chart_exit_code = cli_main(
+                    [
+                        "charts-part5",
+                        "--data-dir",
+                        str(PART5_EXAMPLES),
+                        "--output-dir",
+                        str(charts_dir),
+                    ]
+                )
+
+            self.assertEqual(report_exit_code, 0)
+            self.assertEqual(chart_exit_code, 0)
+            report = json.loads(report_path.read_text(encoding="utf-8"))
+            self.assertIn("validation", report)
+            self.assertTrue((charts_dir / "operating_health_by_channel.svg").exists())
+            self.assertTrue((charts_dir / "budget_allocation.svg").exists())
+            self.assertTrue((charts_dir / "weekly_contribution_profit.svg").exists())
+
+    def test_part5_etl_skeleton_and_cli(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            temp_path = Path(temp_dir)
+            etl_dir = temp_path / "part5_etl"
+
+            payload = run_part5_etl_skeleton(
+                PART5_EXAMPLES,
+                etl_dir,
+                batch_id="test-batch",
+                connector="export_drop",
+            )
+            self.assertTrue(Path(payload["manifest_json"]).exists())
+            self.assertTrue(Path(payload["run_log_json"]).exists())
+            self.assertTrue((etl_dir / "raw" / "test-batch" / "kpi_daily_snapshots.csv").exists())
+            self.assertTrue((etl_dir / "curated" / "test-batch" / "experiment_metrics.csv").exists())
+            first_manifest = json.loads(Path(payload["manifest_json"]).read_text(encoding="utf-8"))
+            self.assertEqual(first_manifest["connector"], "export_drop")
+            self.assertIn("manifest_diff", first_manifest)
+
+            second_payload = run_part5_etl_skeleton(
+                PART5_EXAMPLES,
+                etl_dir,
+                batch_id="test-batch-2",
+                previous_manifest=payload["manifest_json"],
+            )
+            second_manifest = json.loads(Path(second_payload["manifest_json"]).read_text(encoding="utf-8"))
+            self.assertEqual(second_manifest["manifest_diff"]["changed_files"], [])
+            self.assertIn("experiment_metrics.csv", second_manifest["manifest_diff"]["unchanged_files"])
+
+            with redirect_stdout(io.StringIO()):
+                exit_code = cli_main(
+                    [
+                        "etl-part5",
+                        "--source-dir",
+                        str(PART5_EXAMPLES),
+                        "--output-dir",
+                        str(temp_path / "cli_etl"),
+                        "--batch-id",
+                        "cli-batch",
+                        "--connector",
+                        "api_cache",
+                        "--max-retries",
+                        "2",
+                    ]
+                )
+            self.assertEqual(exit_code, 0)
+            self.assertTrue((temp_path / "cli_etl" / "audit" / "part5_etl_manifest_cli-batch.json").exists())
+            self.assertTrue((temp_path / "cli_etl" / "audit" / "part5_etl_run_log_cli-batch.json").exists())
+
+
+class BacktestSuiteTests(unittest.TestCase):
+    def test_part3_part4_part5_backtests_and_suite(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            temp_path = Path(temp_dir)
+
+            with redirect_stdout(io.StringIO()):
+                part3_payload = run_part3_backtest_demo(temp_path / "part3", seed=42)
+                part4_payload = run_part4_backtest_demo(temp_path / "part4", seed=42)
+                part5_payload = run_part5_backtest_demo(temp_path / "part5", seed=42)
+                suite_payload = run_full_backtest_suite(temp_path / "suite", seed=42)
+
+            for payload in (part3_payload, part4_payload, part5_payload):
+                self.assertTrue(Path(payload["panel_csv"]).exists())
+                self.assertTrue(Path(payload["summary_json"]).exists())
+                self.assertTrue(Path(payload["curve_svg"]).exists())
+                self.assertTrue(Path(payload["monthly_csv"]).exists())
+                self.assertGreater(payload["summary"]["periods"], 10)
+
+            self.assertTrue(Path(suite_payload["suite_summary_json"]).exists())
+            self.assertIn("part1", suite_payload["parts"])
+            self.assertIn("part5", suite_payload["parts"])
+
+
+class DecisionOSPackageTests(unittest.TestCase):
+    def test_gate_engine_go_path(self) -> None:
+        gate_config = {
+            "gate_schema": {
+                "gate_id": "GATE-MARKET-ENTRY-01",
+                "schema_version": "2.0",
+                "logic": "AND",
+                "trigger": {
+                    "conditions": [
+                        {"source": "metric", "ref": "profit_p50", "operator": ">=", "value": 0.0},
+                        {"source": "metric", "ref": "loss_probability", "operator": "<=", "value": 0.25},
+                        {"source": "factor", "ref": "FAC-MARKET-ATTRACT-01", "operator": ">=", "value": 0.5},
+                    ]
+                },
+                "capital_constraint": {"lhs": "required_capital", "operator": "<=", "rhs": "capital_free"},
+                "risk_budget": {"lhs": "expected_drawdown", "operator": "<=", "rhs": "risk_limit"},
+            }
+        }
+        result = evaluate_gate(
+            gate_config,
+            model_outputs={"profit_p50": 0.18, "loss_probability": 0.12},
+            factor_outputs={"FAC-MARKET-ATTRACT-01": 0.64},
+            capital_state={"required_capital": 400000, "capital_free": 1300000},
+            risk_state={"expected_drawdown": 0.09, "risk_limit": 0.2},
+        )
+        self.assertEqual(result.status, "GO")
+        self.assertEqual(result.failed_conditions, ())
+
+    def test_gate_engine_capital_block(self) -> None:
+        gate_config = {
+            "gate_schema": {
+                "gate_id": "GATE-SCALE-01",
+                "schema_version": "2.0",
+                "logic": "AND",
+                "trigger": {
+                    "conditions": [
+                        {"source": "metric", "ref": "profit_p50", "operator": ">=", "value": 0.0},
+                    ]
+                },
+                "capital_constraint": {"lhs": "required_capital", "operator": "<=", "rhs": "capital_free"},
+            }
+        }
+        result = evaluate_gate(
+            gate_config,
+            model_outputs={"profit_p50": 0.05},
+            capital_state={"required_capital": 900000, "capital_free": 250000},
+        )
+        self.assertEqual(result.status, "NO_GO_CAPITAL")
+
+    def test_gate_engine_risk_block(self) -> None:
+        gate_config = {
+            "gate_schema": {
+                "gate_id": "GATE-OPERATE-01",
+                "schema_version": "2.0",
+                "logic": "AND",
+                "trigger": {
+                    "conditions": [
+                        {"source": "metric", "ref": "profit_p50", "operator": ">=", "value": 0.0},
+                    ]
+                },
+                "risk_budget": {"lhs": "expected_drawdown", "operator": "<=", "rhs": "risk_limit"},
+            }
+        }
+        result = evaluate_gate(
+            gate_config,
+            model_outputs={"profit_p50": 0.03},
+            risk_state={"expected_drawdown": 0.34, "risk_limit": 0.2},
+        )
+        self.assertEqual(result.status, "NO_GO_RISK")
 
 
 if __name__ == "__main__":

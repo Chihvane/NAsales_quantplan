@@ -1,0 +1,13 @@
+field_name,field_group,definition,data_type,naming_style,source_table,reusable_flag,required_flag
+project_name,identity,Project display name,string,snake_case,projects,true,true
+target_market,market,Primary geographic market,string,snake_case,projects,true,true
+decision_signal,governance,Top-level gate result,string,snake_case,reports,true,true
+decision_score,governance,Normalized decision score,float,snake_case,reports,true,true
+confidence_grade,evidence,Source confidence grade,string,snake_case,evidence_sources,true,true
+gate_id,governance,Stage gate identifier,string,snake_case,gate_thresholds,true,true
+threshold_value,governance,Threshold value for a gate metric,float,snake_case,gate_thresholds,true,true
+owner_role,governance,Responsible role name,string,snake_case,multiple,true,true
+update_frequency_days,policy,Refresh interval in days,int,snake_case,update_policies,true,true
+expiry_days,policy,Expiry window in days,int,snake_case,update_policies,true,true
+field_name,metadata,Standard reusable field name,string,snake_case,field_dictionary,true,true
+source_table,metadata,Upstream canonical table for the field,string,snake_case,field_dictionary,true,true

@@ -1,0 +1,8 @@
+metric_schema:
+  metric_id: M-TAM-GROWTH
+  schema_version: 2.0
+  ref_key: metric.market_growth
+  formula: "(tam_current - tam_prev) / tam_prev"
+  depends_on:
+    - F-TAM-001
+  aggregation: yearly

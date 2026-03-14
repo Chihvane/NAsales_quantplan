@@ -1,0 +1,12 @@
+schema_version: 3.0
+entity_type: gate
+required_fields:
+  - gate_id
+  - schema_version
+  - logic
+  - conditions
+field_types:
+  gate_id: str
+  logic: str
+validation_rules:
+  - not_null: [gate_id, logic, conditions]

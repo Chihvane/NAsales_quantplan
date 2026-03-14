@@ -1,0 +1,13 @@
+date,channel,campaign_id,traffic_source,spend,impressions,clicks,attributed_orders,attributed_revenue
+2026-02-01,DTC,CMP-DTC-01,paid_search,1800,220000,6800,8,5440
+2026-02-01,DTC,CMP-DTC-02,paid_social,1400,260000,5200,6,4074
+2026-02-01,DTC,CMP-DTC-03,email,120,18000,1400,4,2716
+2026-02-01,Amazon,CMP-AMZ-01,amazon_ads,2100,310000,9200,15,9885
+2026-02-01,Amazon,CMP-AMZ-02,organic_search,0,0,0,6,4194
+2026-02-01,TikTok Shop,CMP-TTS-01,tiktok_ads,1700,420000,11000,11,7379
+2026-02-01,TikTok Shop,CMP-TTS-02,organic_social,0,0,0,4,2596
+2026-02-01,eBay,CMP-EBY-01,ebay_promoted,780,95000,3100,5,3315
+2026-02-01,eBay,CMP-EBY-02,organic_search,0,0,0,2,1382
+2026-02-01,Walmart,CMP-WMT-01,walmart_ads,960,122000,3600,7,4543
+2026-02-01,Walmart,CMP-WMT-02,organic_search,0,0,0,3,2067
+2026-02-01,B2B,CMP-B2B-01,affiliate,420,18000,420,2,2388

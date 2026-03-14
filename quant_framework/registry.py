@@ -11,6 +11,102 @@ class MetricSpec:
     output_note: str
 
 
+PART0_METRICS: tuple[MetricSpec, ...] = (
+    MetricSpec(
+        section_id="0.1",
+        metric_id="decision_tree_governance",
+        label="全局决策树覆盖",
+        required_tables=("decision_nodes",),
+        formula="统计节点数、Gate 覆盖率、域覆盖率、叶子节点数与 owner 绑定率。",
+        output_note="用于确认整个研究体系是否已经从章节目录升级为决策树。",
+    ),
+    MetricSpec(
+        section_id="0.2",
+        metric_id="data_confidence_versioning",
+        label="数据置信度与版本控制",
+        required_tables=("evidence_sources",),
+        formula="按 A/B/C/D 统计来源占比，并计算版本覆盖率、状态覆盖率和时效合规率。",
+        output_note="用于衡量研究输入是否具备稳定、可追溯的数据治理基础。",
+    ),
+    MetricSpec(
+        section_id="0.3",
+        metric_id="assumption_register",
+        label="策略假设登记与验证进度",
+        required_tables=("assumptions_register",),
+        formula="统计假设数量、已验证占比、owner 覆盖率、验证方法覆盖率与过期假设数量。",
+        output_note="用于控制假设漂移，避免拍脑袋推进。",
+    ),
+    MetricSpec(
+        section_id="0.4",
+        metric_id="gate_threshold_operability",
+        label="Gate 阈值可执行性",
+        required_tables=("gate_thresholds",),
+        formula="统计 Gate1-5 覆盖率、阈值完整率、审批人覆盖率、fail-action 覆盖率及战略 Gate 家族覆盖。",
+        output_note="用于保证 Go / Hold / Kill 决策不是口号，而是可操作规则。",
+    ),
+    MetricSpec(
+        section_id="0.4",
+        metric_id="strategic_gate_family_coverage",
+        label="战略 Gate 家族覆盖",
+        required_tables=("gate_thresholds",),
+        formula="按资本回报、市场结构、需求稳定、回本周期、风险控制五类识别 Gate 指标覆盖率。",
+        output_note="用于确认 Part 0 是否真的把 ROIC/HHI/热度波动/Payback/风险阈值纳入治理。",
+    ),
+    MetricSpec(
+        section_id="0.5",
+        metric_id="signature_chain_integrity",
+        label="责任链与签字流完整性",
+        required_tables=("approval_chain", "gate_thresholds"),
+        formula="统计 gate 签字覆盖、最小签字步数通过率、veto 覆盖率和已签署比例。",
+        output_note="用于保证关键节点有明确 owner 和审批痕迹。",
+    ),
+    MetricSpec(
+        section_id="0.6",
+        metric_id="update_expiration_policy",
+        label="更新频率与失效规则",
+        required_tables=("update_policies",),
+        formula="统计 scope 覆盖、expiry 规则覆盖、event trigger 覆盖和 refresh/expiry 对齐率。",
+        output_note="用于控制研究结论何时应刷新、何时应失效。",
+    ),
+    MetricSpec(
+        section_id="0.7",
+        metric_id="field_dictionary_reuse",
+        label="字段字典与复用规范",
+        required_tables=("field_dictionary",),
+        formula="统计定义覆盖、类型覆盖、来源表覆盖、命名风格一致率和复用字段占比。",
+        output_note="用于控制跨项目主数据与命名口径不漂移。",
+    ),
+)
+
+
+HORIZONTAL_SYSTEM_METRICS: tuple[MetricSpec, ...] = (
+    MetricSpec(
+        section_id="H1",
+        metric_id="master_data_governance",
+        label="数据字典与主数据治理",
+        required_tables=("master_data_entities", "data_dictionary_fields"),
+        formula="统计实体类型覆盖、字典审批率、版本覆盖率、重复率与必填字段缺失率。",
+        output_note="用于保证跨品类、跨平台、跨团队复用的数据口径不会漂移。",
+    ),
+    MetricSpec(
+        section_id="H2",
+        metric_id="evidence_audit_chain",
+        label="证据链与审计链完整性",
+        required_tables=("evidence_lineage", "audit_events"),
+        formula="统计血缘覆盖、可复现实验率、审批关联率、不可篡改日志占比与追溯 SLA。",
+        output_note="用于确保关键结论和字段能回溯到数据来源、脚本版本和审批人。",
+    ),
+    MetricSpec(
+        section_id="H3",
+        metric_id="decision_threshold_system",
+        label="决策门槛系统",
+        required_tables=("decision_rules", "decision_triggers"),
+        formula="统计规则场景覆盖、止损规则覆盖、触发闭环解决率、审批路由覆盖与激活规则占比。",
+        output_note="用于把 Go/No-Go 规则从报告描述升级成可执行的控制系统。",
+    ),
+)
+
+
 PART1_METRICS: tuple[MetricSpec, ...] = (
     MetricSpec(
         section_id="1.1",
@@ -27,6 +123,14 @@ PART1_METRICS: tuple[MetricSpec, ...] = (
         required_tables=("search_trends",),
         formula="月均兴趣值 / 全期均值 * 100",
         output_note="高于 120 视为旺季，低于 80 视为淡季。",
+    ),
+    MetricSpec(
+        section_id="1.1",
+        metric_id="market_heat_coefficient",
+        label="市场热度波动系数",
+        required_tables=("search_trends",),
+        formula="热度时间序列标准差 / 均值，并输出需求热度与交易量的领先滞后关系。",
+        output_note="用于识别昙花一现的热点和更稳定的需求型市场。",
     ),
     MetricSpec(
         section_id="1.1",
@@ -69,6 +173,14 @@ PART1_METRICS: tuple[MetricSpec, ...] = (
         output_note="用于判断市场分散度和进入难度。",
     ),
     MetricSpec(
+        section_id="1.3",
+        metric_id="market_size_reference_panel",
+        label="市场规模参考面板",
+        required_tables=("market_size_inputs",),
+        formula="对显式输入的 TAM/SAM/SOM 面板计算一致性、来源置信度和与默认假设的偏差。",
+        output_note="用于把 Top-Down 假设从单点参数升级成可审计的参考面板。",
+    ),
+    MetricSpec(
         section_id="1.4",
         metric_id="channel_share",
         label="渠道收入占比",
@@ -83,6 +195,14 @@ PART1_METRICS: tuple[MetricSpec, ...] = (
         required_tables=("channels",),
         formula="订单数 / 访问量",
         output_note="用于比较平台成交效率。",
+    ),
+    MetricSpec(
+        section_id="1.4",
+        metric_id="channel_benchmark_gap",
+        label="渠道基准偏差",
+        required_tables=("channels", "channel_benchmarks"),
+        formula="渠道实际 conversion/AOV/ROAS/CAC 与基准值比较，输出 gap 和 above/near/below 状态。",
+        output_note="用于把渠道判断从绝对值比较升级成相对行业基准比较。",
     ),
     MetricSpec(
         section_id="1.5",

@@ -1,0 +1,10 @@
+feedback_record:
+  decision_id: DEC-0001
+  portfolio_id: PF-0001
+  predicted_profit: 0
+  actual_profit: 0
+  predicted_loss_probability: 0
+  actual_loss_probability: 0
+  predicted_drawdown: 0
+  actual_drawdown: 0
+  recalibration_required: false

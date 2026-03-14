@@ -1,0 +1,13 @@
+schedules:
+  market_ingestion:
+    cron: "0 2 * * *"
+    task: worker.tasks_market.fetch_market_snapshot
+  external_ingestion:
+    cron: "15 2 * * *"
+    task: worker.tasks_market.ingest_external_sources
+  model_refresh:
+    cron: "30 2 * * *"
+    task: worker.tasks_model.run_model_simulation
+  report_generation:
+    cron: "0 6 * * *"
+    task: worker.tasks_report.build_report

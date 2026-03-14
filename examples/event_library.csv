@@ -1,0 +1,5 @@
+event_id,event_date,event_type,market_scope,event_name,severity,expected_direction,source_ref
+EVT-001,2025-06-01,seasonal,portable_generators_na,Hurricane Preparedness Season,0.8,up,google_trends
+EVT-002,2025-11-25,promo,portable_generators_na,Black Friday,0.9,up,amazon_promo_calendar
+EVT-003,2025-07-15,platform,portable_generators_na,Prime Day,0.7,up,amazon_events
+EVT-004,2025-09-10,weather,portable_generators_na,Regional Storm Outages,0.6,up,weather_event_feed

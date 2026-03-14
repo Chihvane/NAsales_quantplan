@@ -2,7 +2,7 @@
   "metadata": {
     "report_id": "part1_quant_report",
     "report_version": "2026.03",
-    "generated_at": "2026-03-13T13:26:24.436950+00:00",
+    "generated_at": "2026-03-13T16:52:29.952289+00:00",
     "section_order": [
       "1.1",
       "1.2",
@@ -20,13 +20,33 @@
         ],
         "metric_ids": [
           "demand_growth_rate",
+          "market_heat_coefficient",
           "seasonality_index",
-          "regional_demand_share"
+          "regional_demand_share",
+          "demand_sales_lag_signal"
         ],
         "quality_targets": {
           "search_trends": 12,
           "region_demand": 5
-        }
+        },
+        "analysis_grain": "month x keyword / region",
+        "entity_grain": "keyword / region",
+        "time_grain": "month",
+        "channel_scope": [
+          "marketwide"
+        ],
+        "master_data_refs": [
+          "mdm.calendar",
+          "mdm.region"
+        ],
+        "evidence_refs": [
+          "evidence.search_trends",
+          "evidence.region_demand"
+        ],
+        "rule_refs": [
+          "gate.market_entry",
+          "gate.demand_stability"
+        ]
       },
       "1.2": {
         "title": "客户画像分析",
@@ -38,34 +58,97 @@
         ],
         "quality_targets": {
           "customer_segments": 12
-        }
+        },
+        "analysis_grain": "segment bucket",
+        "entity_grain": "customer segment",
+        "time_grain": "study window",
+        "channel_scope": [
+          "marketwide"
+        ],
+        "master_data_refs": [
+          "mdm.customer_segment"
+        ],
+        "evidence_refs": [
+          "evidence.customer_segments"
+        ],
+        "rule_refs": [
+          "gate.customer_fit"
+        ]
       },
       "1.3": {
         "title": "市场规模分析",
         "required_tables": [
-          "listings"
+          "listings",
+          "market_size_inputs"
         ],
         "metric_ids": [
           "bottom_up_market_size",
           "top_down_market_size",
+          "market_size_reference_panel",
           "market_hhi"
         ],
         "quality_targets": {
-          "listings": 8
-        }
+          "listings": 8,
+          "market_size_inputs": 2
+        },
+        "analysis_grain": "listing sample / market panel row",
+        "entity_grain": "market segment",
+        "time_grain": "annualized window",
+        "channel_scope": [
+          "Amazon",
+          "eBay",
+          "TikTok Shop",
+          "Walmart"
+        ],
+        "master_data_refs": [
+          "mdm.sku",
+          "mdm.price_metric"
+        ],
+        "evidence_refs": [
+          "evidence.listings",
+          "evidence.market_size_inputs"
+        ],
+        "rule_refs": [
+          "gate.market_entry",
+          "gate.market_scale"
+        ]
       },
       "1.4": {
         "title": "购买渠道分析",
         "required_tables": [
-          "channels"
+          "channels",
+          "channel_benchmarks"
         ],
         "metric_ids": [
           "channel_share",
-          "channel_conversion_rate"
+          "channel_conversion_rate",
+          "channel_benchmark_gap"
         ],
         "quality_targets": {
-          "channels": 4
-        }
+          "channels": 4,
+          "channel_benchmarks": 3
+        },
+        "analysis_grain": "channel",
+        "entity_grain": "channel",
+        "time_grain": "analysis window",
+        "channel_scope": [
+          "DTC",
+          "Amazon",
+          "TikTok Shop",
+          "eBay",
+          "Walmart",
+          "B2B"
+        ],
+        "master_data_refs": [
+          "mdm.channel"
+        ],
+        "evidence_refs": [
+          "evidence.channel_metrics",
+          "evidence.channel_benchmarks"
+        ],
+        "rule_refs": [
+          "gate.channel_selection"
+        ]
       },
       "1.5": {
         "title": "货架商品价格分析",
@@ -78,7 +161,26 @@
         ],
         "quality_targets": {
           "listings": 8
-        }
+        },
+        "analysis_grain": "listing",
+        "entity_grain": "sku x platform",
+        "time_grain": "snapshot window",
+        "channel_scope": [
+          "Amazon",
+          "eBay",
+          "TikTok Shop",
+          "Walmart"
+        ],
+        "master_data_refs": [
+          "mdm.sku",
+          "mdm.price_metric"
+        ],
+        "evidence_refs": [
+          "evidence.listings"
+        ],
+        "rule_refs": [
+          "gate.price_band_fit"
+        ]
       },
       "1.6": {
         "title": "实际成交价格分析",
@@ -92,7 +194,27 @@
         ],
         "quality_targets": {
           "transactions": 12
-        }
+        },
+        "analysis_grain": "transaction row",
+        "entity_grain": "sku x platform",
+        "time_grain": "transaction date",
+        "channel_scope": [
+          "Amazon",
+          "eBay",
+          "TikTok Shop",
+          "Walmart"
+        ],
+        "master_data_refs": [
+          "mdm.sku",
+          "mdm.price_metric",
+          "mdm.channel"
+        ],
+        "evidence_refs": [
+          "evidence.transactions"
+        ],
+        "rule_refs": [
+          "gate.price_realization"
+        ]
       }
     },
     "metric_specs": [
@@ -115,6 +237,16 @@
         ],
         "formula": "月均兴趣值 / 全期均值 * 100",
         "output_note": "高于 120 视为旺季，低于 80 视为淡季。"
+      },
+      {
+        "section_id": "1.1",
+        "metric_id": "market_heat_coefficient",
+        "label": "市场热度波动系数",
+        "required_tables": [
+          "search_trends"
+        ],
+        "formula": "热度时间序列标准差 / 均值，并输出需求热度与交易量的领先滞后关系。",
+        "output_note": "用于识别昙花一现的热点和更稳定的需求型市场。"
       },
       {
         "section_id": "1.1",
@@ -165,6 +297,16 @@
         "output_note": "用于判断市场分散度和进入难度。"
       },
       {
+        "section_id": "1.3",
+        "metric_id": "market_size_reference_panel",
+        "label": "市场规模参考面板",
+        "required_tables": [
+          "market_size_inputs"
+        ],
+        "formula": "对显式输入的 TAM/SAM/SOM 面板计算一致性、来源置信度和与默认假设的偏差。",
+        "output_note": "用于把 Top-Down 假设从单点参数升级成可审计的参考面板。"
+      },
+      {
         "section_id": "1.4",
         "metric_id": "channel_share",
         "label": "渠道收入占比",
@@ -183,6 +325,17 @@
         ],
         "formula": "订单数 / 访问量",
         "output_note": "用于比较平台成交效率。"
+      },
+      {
+        "section_id": "1.4",
+        "metric_id": "channel_benchmark_gap",
+        "label": "渠道基准偏差",
+        "required_tables": [
+          "channels",
+          "channel_benchmarks"
+        ],
+        "formula": "渠道实际 conversion/AOV/ROAS/CAC 与基准值比较，输出 gap 和 above/near/below 状态。",
+        "output_note": "用于把渠道判断从绝对值比较升级成相对行业基准比较。"
       },
       {
         "section_id": "1.5",
@@ -240,7 +393,11 @@
       "online_penetration": 0.48,
       "importable_share": 0.58,
       "target_capture_share": 0.03,
-      "sample_coverage": 0.28
+      "sample_coverage": 0.28,
+      "preferred_hhi_ceiling": 2000.0,
+      "triangulation_gap_review_threshold": 0.15,
+      "max_heat_volatility": 0.25,
+      "benchmark_gap_tolerance": 0.2
     },
     "table_inventory": {
       "search_trends": {
@@ -266,6 +423,14 @@
       "channels": {
         "record_count": 5,
         "available": true
+      },
+      "market_size_inputs": {
+        "record_count": 2,
+        "available": true
+      },
+      "channel_benchmarks": {
+        "record_count": 4,
+        "available": true
       }
     }
   },
@@ -276,6 +441,26 @@
       "high": 6,
       "medium": 0,
       "low": 0
+    },
+    "connected_channel_scope": [
+      "Amazon",
+      "B2B",
+      "DTC",
+      "TikTok Shop",
+      "Walmart",
+      "eBay",
+      "marketwide"
+    ],
+    "control_tower_binding": {
+      "master_data_ref_coverage_ratio": 1.0,
+      "evidence_ref_coverage_ratio": 1.0,
+      "rule_ref_coverage_ratio": 1.0,
+      "gate_status_mix": {
+        "pass": 0,
+        "review": 0,
+        "fail": 0,
+        "not_applicable": 6
+      }
     },
     "headline_metrics": [
       {
@@ -303,6 +488,12 @@
         "unit": "channel"
       },
       {
+        "key": "heat_volatility_coefficient",
+        "label": "市场热度波动系数",
+        "value": 0.1128,
+        "unit": "ratio"
+      },
+      {
         "key": "average_actual_price",
         "label": "平均实际成交价",
         "value": 271.69,
@@ -311,18 +502,18 @@
     ],
     "decision_summary": {
       "decision_signal": "attractive",
-      "decision_score": 0.7803,
+      "decision_score": 0.807,
       "scorecard": {
         "demand_strength": {
           "score": 0.9098,
           "level": "high"
         },
         "market_accessibility": {
-          "score": 0.5548,
+          "score": 0.6616,
           "level": "medium"
         },
         "channel_efficiency": {
-          "score": 0.8911,
+          "score": 0.8909,
           "level": "high"
         },
         "pricing_power": {
@@ -331,9 +522,9 @@
         }
       },
       "key_findings": [
-        "需求端当前 CAGR 为 16.8%，重点区域集中在 Texas。",
-        "市场年化规模约 26,195,036 USD，集中度为 highly_concentrated。",
-        "当前主成交渠道为 Amazon，平均实际成交价为 271.69 USD。"
+        "需求端当前 CAGR 为 16.8%，热度波动系数为 11.3%，重点区域集中在 Texas。",
+        "市场年化规模约 26,195,036 USD，集中度为 highly_concentrated，Top-Down 与参考面板偏差为 0.1%。",
+        "当前主成交渠道为 Amazon，渠道领先滞后信号为 样本不足，平均实际成交价为 271.69 USD。"
       ],
       "risk_flags": [
         "市场集中度较高，头部品牌挤压明显。"
@@ -341,9 +532,9 @@
       "recommended_next_step": "进入 Part 2，继续做 SKU 结构、价格甜蜜带和白空间扫描。"
     },
     "decision_signal": "attractive",
-    "decision_score": 0.7803,
+    "decision_score": 0.807,
     "validation_summary": {
-      "pass_count": 10,
+      "pass_count": 12,
       "review_count": 0,
       "fail_count": 0
     },
@@ -363,9 +554,37 @@
       ],
       "metric_ids": [
         "demand_growth_rate",
+        "market_heat_coefficient",
         "seasonality_index",
-        "regional_demand_share"
+        "regional_demand_share",
+        "demand_sales_lag_signal"
       ],
+      "granularity": {
+        "analysis_grain": "month x keyword / region",
+        "entity_grain": "keyword / region",
+        "time_grain": "month"
+      },
+      "channel_scope": [
+        "marketwide"
+      ],
+      "master_data_ref": [
+        "mdm.calendar",
+        "mdm.region"
+      ],
+      "evidence_ref": [
+        "evidence.search_trends",
+        "evidence.region_demand"
+      ],
+      "rule_ref": [
+        "gate.market_entry",
+        "gate.demand_stability"
+      ],
+      "gate_result": {
+        "status": "not_applicable",
+        "source": "",
+        "raw_value": "",
+        "failed_items": []
+      },
       "data_quality": {
         "record_counts": {
           "search_trends": 12,
@@ -419,6 +638,7 @@
           "growth_rate": 0.1528,
           "cagr": 0.1678,
           "volatility": 0.1128,
+          "heat_volatility_coefficient": 0.1128,
           "three_month_momentum": -0.121
         },
         "seasonality_index": {
@@ -455,6 +675,11 @@
           "months_covered": 12,
           "keyword_count": 1,
           "google_trends_index_range_check": true
+        },
+        "lag_analysis": {
+          "best_lag_months": null,
+          "best_lag_correlation": null,
+          "candidate_lags": []
         }
       }
     },
@@ -467,6 +692,29 @@
       "metric_ids": [
         "customer_distribution"
       ],
+      "granularity": {
+        "analysis_grain": "segment bucket",
+        "entity_grain": "customer segment",
+        "time_grain": "study window"
+      },
+      "channel_scope": [
+        "marketwide"
+      ],
+      "master_data_ref": [
+        "mdm.customer_segment"
+      ],
+      "evidence_ref": [
+        "evidence.customer_segments"
+      ],
+      "rule_ref": [
+        "gate.customer_fit"
+      ],
+      "gate_result": {
+        "status": "not_applicable",
+        "source": "",
+        "raw_value": "",
+        "failed_items": []
+      },
       "data_quality": {
         "record_counts": {
           "customer_segments": 14
@@ -601,19 +849,52 @@
       "id": "1.3",
       "title": "市场规模分析",
       "required_tables": [
-        "listings"
+        "listings",
+        "market_size_inputs"
       ],
       "metric_ids": [
         "bottom_up_market_size",
         "top_down_market_size",
+        "market_size_reference_panel",
         "market_hhi"
       ],
+      "granularity": {
+        "analysis_grain": "listing sample / market panel row",
+        "entity_grain": "market segment",
+        "time_grain": "annualized window"
+      },
+      "channel_scope": [
+        "Amazon",
+        "eBay",
+        "TikTok Shop",
+        "Walmart"
+      ],
+      "master_data_ref": [
+        "mdm.sku",
+        "mdm.price_metric"
+      ],
+      "evidence_ref": [
+        "evidence.listings",
+        "evidence.market_size_inputs"
+      ],
+      "rule_ref": [
+        "gate.market_entry",
+        "gate.market_scale"
+      ],
+      "gate_result": {
+        "status": "not_applicable",
+        "source": "",
+        "raw_value": "",
+        "failed_items": []
+      },
       "data_quality": {
         "record_counts": {
-          "listings": 8
+          "listings": 8,
+          "market_size_inputs": 2
         },
         "available_tables": [
-          "listings"
+          "listings",
+          "market_size_inputs"
         ],
         "missing_tables": [],
         "completeness_ratio": 1.0,
@@ -670,6 +951,50 @@
             "winsorization_ratio": 0.0082
           }
         },
+        "market_size_inputs": {
+          "rows": [
+            {
+              "market_segment": "portable_generators_na",
+              "tam": 98000000.0,
+              "sam": 27244000.0,
+              "som": 817320.0,
+              "ecommerce_penetration": 0.49,
+              "importable_share": 0.567,
+              "cagr": 0.082,
+              "source": "Statista_2025",
+              "confidence_grade": "A",
+              "waterfall_valid": true,
+              "implied_sam_gap_ratio": 0.0006
+            },
+            {
+              "market_segment": "portable_generators_ecommerce",
+              "tam": 94000000.0,
+              "sam": 25584000.0,
+              "som": 767520.0,
+              "ecommerce_penetration": 0.47,
+              "importable_share": 0.579,
+              "cagr": 0.076,
+              "source": "IBISWorld_2025",
+              "confidence_grade": "B",
+              "waterfall_valid": true,
+              "implied_sam_gap_ratio": 0.0001
+            }
+          ],
+          "reference_panel": {
+            "average_tam": 96000000.0,
+            "average_sam": 26414000.0,
+            "average_som": 792420.0,
+            "average_cagr": 0.079
+          },
+          "confidence_mix": {
+            "A": 0.5,
+            "B": 0.5
+          },
+          "consistency_ratio": 1.0,
+          "average_implied_sam_gap_ratio": 0.0004,
+          "assumption_vs_reference_gap_ratio": 0.0013,
+          "average_confidence_score": 0.9
+        },
         "triangulation": {
           "top_down_vs_bottom_up_gap_ratio": 0.0096
         }
@@ -679,18 +1004,51 @@
       "id": "1.4",
       "title": "购买渠道分析",
       "required_tables": [
-        "channels"
+        "channels",
+        "channel_benchmarks"
       ],
       "metric_ids": [
         "channel_share",
-        "channel_conversion_rate"
+        "channel_conversion_rate",
+        "channel_benchmark_gap"
       ],
+      "granularity": {
+        "analysis_grain": "channel",
+        "entity_grain": "channel",
+        "time_grain": "analysis window"
+      },
+      "channel_scope": [
+        "DTC",
+        "Amazon",
+        "TikTok Shop",
+        "eBay",
+        "Walmart",
+        "B2B"
+      ],
+      "master_data_ref": [
+        "mdm.channel"
+      ],
+      "evidence_ref": [
+        "evidence.channel_metrics",
+        "evidence.channel_benchmarks"
+      ],
+      "rule_ref": [
+        "gate.channel_selection"
+      ],
+      "gate_result": {
+        "status": "not_applicable",
+        "source": "",
+        "raw_value": "",
+        "failed_items": []
+      },
       "data_quality": {
         "record_counts": {
-          "channels": 5
+          "channels": 5,
+          "channel_benchmarks": 4
         },
         "available_tables": [
-          "channels"
+          "channels",
+          "channel_benchmarks"
         ],
         "missing_tables": [],
         "completeness_ratio": 1.0,
@@ -710,7 +1068,9 @@
           "ad_spend": 865000.0,
           "overall_conversion_rate": 0.0802,
           "overall_average_order_value": 277.19,
-          "overall_roas": 8.77
+          "overall_roas": 8.77,
+          "benchmark_coverage_ratio": 0.8,
+          "over_benchmark_channel_ratio": 1.0
         },
         "channels": [
           {
@@ -728,7 +1088,16 @@
             "roas": 8.26,
             "cost_per_order": 34.07,
             "efficiency_index": 1.5347,
-            "net_revenue_after_ads": 4500000.0
+            "net_revenue_after_ads": 4500000.0,
+            "benchmark_conversion_rate": 0.11,
+            "benchmark_average_order_value": 270.0,
+            "benchmark_roas": 7.5,
+            "benchmark_cac": 35.0,
+            "conversion_rate_gap": 0.1027,
+            "average_order_value_gap": 0.0419,
+            "roas_gap": 0.1013,
+            "cac_gap": 0.0266,
+            "benchmark_status": "above_benchmark"
           },
           {
             "channel": "Offline Dealers",
@@ -745,7 +1114,16 @@
             "roas": null,
             "cost_per_order": null,
             "efficiency_index": null,
-            "net_revenue_after_ads": 980000.0
+            "net_revenue_after_ads": 980000.0,
+            "benchmark_conversion_rate": null,
+            "benchmark_average_order_value": null,
+            "benchmark_roas": null,
+            "benchmark_cac": null,
+            "conversion_rate_gap": null,
+            "average_order_value_gap": null,
+            "roas_gap": null,
+            "cac_gap": null,
+            "benchmark_status": "unbenchmarked"
           },
           {
             "channel": "Independent Site",
@@ -762,7 +1140,16 @@
             "roas": 4.58,
             "cost_per_order": 75.0,
             "efficiency_index": 0.3086,
-            "net_revenue_after_ads": 472000.0
+            "net_revenue_after_ads": 472000.0,
+            "benchmark_conversion_rate": 0.018,
+            "benchmark_average_order_value": 320.0,
+            "benchmark_roas": 4.2,
+            "benchmark_cac": 75.0,
+            "conversion_rate_gap": 0.1111,
+            "average_order_value_gap": 0.0724,
+            "roas_gap": 0.0905,
+            "cac_gap": 0.0,
+            "benchmark_status": "above_benchmark"
           },
           {
             "channel": "eBay",
@@ -779,7 +1166,16 @@
             "roas": 13.11,
             "cost_per_order": 18.1,
             "efficiency_index": 0.5331,
-            "net_revenue_after_ads": 460000.0
+            "net_revenue_after_ads": 460000.0,
+            "benchmark_conversion_rate": 0.045,
+            "benchmark_average_order_value": 220.0,
+            "benchmark_roas": 6.5,
+            "benchmark_cac": 22.0,
+            "conversion_rate_gap": 0.1111,
+            "average_order_value_gap": 0.0779,
+            "roas_gap": 1.0169,
+            "cac_gap": 0.1773,
+            "benchmark_status": "above_benchmark"
           },
           {
             "channel": "TikTok Shop",
@@ -796,7 +1192,16 @@
             "roas": 5.09,
             "cost_per_order": 25.86,
             "efficiency_index": 0.2816,
-            "net_revenue_after_ads": 307000.0
+            "net_revenue_after_ads": 307000.0,
+            "benchmark_conversion_rate": 0.04,
+            "benchmark_average_order_value": 125.0,
+            "benchmark_roas": 4.5,
+            "benchmark_cac": 28.0,
+            "conversion_rate_gap": 0.1875,
+            "average_order_value_gap": 0.0538,
+            "roas_gap": 0.1311,
+            "cac_gap": 0.0764,
+            "benchmark_status": "above_benchmark"
           }
         ]
       }
@@ -811,6 +1216,33 @@
         "listed_price_bands",
         "brand_premium"
       ],
+      "granularity": {
+        "analysis_grain": "listing",
+        "entity_grain": "sku x platform",
+        "time_grain": "snapshot window"
+      },
+      "channel_scope": [
+        "Amazon",
+        "eBay",
+        "TikTok Shop",
+        "Walmart"
+      ],
+      "master_data_ref": [
+        "mdm.sku",
+        "mdm.price_metric"
+      ],
+      "evidence_ref": [
+        "evidence.listings"
+      ],
+      "rule_ref": [
+        "gate.price_band_fit"
+      ],
+      "gate_result": {
+        "status": "not_applicable",
+        "source": "",
+        "raw_value": "",
+        "failed_items": []
+      },
       "data_quality": {
         "record_counts": {
           "listings": 8
@@ -887,6 +1319,34 @@
         "average_discount_rate",
         "price_elasticity"
       ],
+      "granularity": {
+        "analysis_grain": "transaction row",
+        "entity_grain": "sku x platform",
+        "time_grain": "transaction date"
+      },
+      "channel_scope": [
+        "Amazon",
+        "eBay",
+        "TikTok Shop",
+        "Walmart"
+      ],
+      "master_data_ref": [
+        "mdm.sku",
+        "mdm.price_metric",
+        "mdm.channel"
+      ],
+      "evidence_ref": [
+        "evidence.transactions"
+      ],
+      "rule_ref": [
+        "gate.price_realization"
+      ],
+      "gate_result": {
+        "status": "not_applicable",
+        "source": "",
+        "raw_value": "",
+        "failed_items": []
+      },
       "data_quality": {
         "record_counts": {
           "transactions": 16
@@ -1074,7 +1534,7 @@
   },
   "validation": {
     "summary": {
-      "pass_count": 10,
+      "pass_count": 12,
       "review_count": 0,
       "fail_count": 0
     },
@@ -1148,6 +1608,20 @@
         }
       },
       {
+        "check_id": "market_size_reference_panel_consistency",
+        "status": "pass",
+        "source": {
+          "label": "HolonIQ - Market Sizing 101",
+          "url": "https://www.holoniq.com/notes/market-sizing-101"
+        },
+        "method": "Explicit TAM/SAM/SOM reference rows should preserve the TAM>=SAM>=SOM waterfall and bounded penetration assumptions.",
+        "evidence": {
+          "consistency_ratio": 1.0,
+          "assumption_vs_reference_gap_ratio": 0.0013,
+          "missing_input": false
+        }
+      },
+      {
         "check_id": "market_size_winsorization_sanity",
         "status": "pass",
         "source": {
@@ -1185,6 +1659,20 @@
         "evidence": {
           "channel": "Amazon",
           "roas": 8.26,
+          "missing_input": false
+        }
+      },
+      {
+        "check_id": "channel_benchmark_gap_formula",
+        "status": "pass",
+        "source": {
+          "label": "Google Ads Help - About conversion tracking",
+          "url": "https://support.google.com/google-ads/answer/1722022"
+        },
+        "method": "Channel benchmark gap is modeled as actual conversion divided by benchmark conversion minus one.",
+        "evidence": {
+          "channel": "Amazon",
+          "conversion_rate_gap": 0.1027,
           "missing_input": false
         }
       },

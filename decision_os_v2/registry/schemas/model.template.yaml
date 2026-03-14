@@ -1,0 +1,13 @@
+model_schema:
+  model_id: MOD-LANDED-COST-DISTRIBUTION
+  schema_version: 2.0
+  ref_key: model.landed_cost_distribution
+  type: simulation
+  distribution_type: lognormal
+  inputs:
+    - F-FACTORY-PRICE
+    - F-SHIPPING-COST
+    - F-TARIFF
+  outputs:
+    - cost_p50
+    - cost_p90

@@ -1,0 +1,45 @@
+{
+  "seed": 42,
+  "parts": [
+    {
+      "part": "part1",
+      "name": "Market Opportunity",
+      "baseline_test_avg_excess_return": 0.0019,
+      "optimized_test_avg_excess_return": 0.0019,
+      "optimized_test_hit_rate": 0.5,
+      "optimized_full_cumulative_excess_return": 0.2371
+    },
+    {
+      "part": "part2",
+      "name": "Competition Structure",
+      "baseline_test_avg_excess_return": 0.0123,
+      "optimized_test_avg_excess_return": 0.017,
+      "optimized_test_hit_rate": 0.875,
+      "optimized_full_cumulative_excess_return": 0.7635
+    },
+    {
+      "part": "part3",
+      "name": "Supply Path",
+      "baseline_test_avg_excess_return": 0.0409,
+      "optimized_test_avg_excess_return": 0.0409,
+      "optimized_test_hit_rate": 1.0,
+      "optimized_full_cumulative_excess_return": 6.7002
+    },
+    {
+      "part": "part4",
+      "name": "Channel Selection",
+      "baseline_test_avg_excess_return": 0.0111,
+      "optimized_test_avg_excess_return": 0.0134,
+      "optimized_test_hit_rate": 1.0,
+      "optimized_full_cumulative_excess_return": 2.1099
+    },
+    {
+      "part": "part5",
+      "name": "Operating Scale",
+      "baseline_test_avg_excess_return": 0.0031,
+      "optimized_test_avg_excess_return": 0.0097,
+      "optimized_test_hit_rate": 1.0,
+      "optimized_full_cumulative_excess_return": 1.763
+    }
+  ]
+}

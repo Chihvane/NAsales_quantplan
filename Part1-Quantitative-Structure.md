@@ -47,6 +47,13 @@
 
 这一步的目的，是让后续所有品类都使用同一套字段和同一套计算函数。
 
+在本轮细化后，第一部分不再只吃“基础六张表”，而是升级为：
+
+- 基础观测表：`search_trends / region_demand / customer_segments / listings / transactions / channels`
+- 参考治理表：`market_size_inputs / channel_benchmarks / event_library / source_registry / part1_threshold_registry`
+
+前者回答“市场发生了什么”，后者回答“这些结论是否有外部基准和可审计参考”。
+
 ### 2.3 指标引擎层
 
 指标引擎负责把标准表计算成固定的量化结论。  
@@ -144,6 +151,34 @@
 - `revenue`
 - `ad_spend`
 
+### 3.7 `market_size_inputs`
+
+用途：把 TAM / SAM / SOM 的 Top-Down 估算从单点假设升级成可审计参考面板。
+
+建议字段：
+
+- `market_segment`
+- `tam`
+- `sam`
+- `som`
+- `ecommerce_penetration`
+- `importable_share`
+- `cagr`
+- `source`
+- `confidence_grade`
+
+### 3.8 `channel_benchmarks`
+
+用途：把渠道判断从“绝对值”升级成“相对行业基准”。
+
+建议字段：
+
+- `channel`
+- `benchmark_conversion_rate`
+- `benchmark_average_order_value`
+- `benchmark_roas`
+- `benchmark_cac`
+
 ---
 
 ## 四、第一部分章节与指标映射
@@ -155,9 +190,11 @@
 - 需求增长率
 - CAGR
 - 波动率
+- 市场热度波动系数
 - 季节性指数
 - 旺季/淡季月份
 - 区域需求占比
+- 需求热度与销量滞后关系
 
 主要输入表：
 
@@ -185,6 +222,8 @@
 - TAM
 - SAM
 - SOM
+- 市场规模参考面板一致性
+- 假设值与参考面板偏差
 - 样本月 GMV
 - 推算年度市场规模
 - 品牌收入份额
@@ -193,6 +232,7 @@
 主要输入表：
 
 - `listings`
+- `market_size_inputs`
 
 额外假设参数：
 
@@ -210,10 +250,14 @@
 - 转化率
 - 平均客单价
 - ROAS
+- 渠道基准偏差
+- 基准覆盖率
+- 高于基准渠道占比
 
 主要输入表：
 
 - `channels`
+- `channel_benchmarks`
 
 ### 4.5 `1.5 货架商品价格分析`
 
@@ -287,11 +331,15 @@
 - 需求趋势计算
 - 3 个月移动平均趋势
 - 季节性指数
+- 市场热度波动系数
+- 搜索热度与成交量领先滞后扫描
 - 客户分布
 - 市场规模 Top-Down / Bottom-Up
+- 市场规模参考面板一致性
 - HHI
 - 市场规模双口径 triangulation gap
 - 渠道效率
+- 渠道基准 gap
 - IQR 异常值识别
 - 分位数价格带
 - 品牌溢价

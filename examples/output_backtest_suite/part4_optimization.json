@@ -1,0 +1,1055 @@
+{
+  "split_month": "2025-04",
+  "candidate_count": 729,
+  "base_weights": {
+    "contribution_margin_rate": 0.24,
+    "repeat_rate": 0.18,
+    "payback_efficiency": 0.18,
+    "inventory_health": 0.12,
+    "loss_resilience": 0.16,
+    "traffic_efficiency": 0.12
+  },
+  "optimized_weights": {
+    "contribution_margin_rate": 0.24,
+    "repeat_rate": 0.225,
+    "payback_efficiency": 0.225,
+    "inventory_health": 0.15,
+    "loss_resilience": 0.2,
+    "traffic_efficiency": 0.09
+  },
+  "baseline_train": {
+    "config": {
+      "lookback_months": 3,
+      "top_n": 2,
+      "signal_weights": {
+        "contribution_margin_rate": 0.24,
+        "repeat_rate": 0.18,
+        "payback_efficiency": 0.18,
+        "inventory_health": 0.12,
+        "loss_resilience": 0.16,
+        "traffic_efficiency": 0.12
+      }
+    },
+    "summary": {
+      "periods": 12,
+      "avg_strategy_return": 0.1152,
+      "avg_benchmark_return": 0.1038,
+      "avg_excess_return": 0.0114,
+      "hit_rate": 1.0,
+      "cumulative_strategy_return": 2.6989,
+      "cumulative_benchmark_return": 2.2694,
+      "cumulative_excess_return": 0.4295
+    },
+    "monthly_records": [
+      {
+        "month": "2024-04",
+        "next_month": "2024-05",
+        "selected_items": [
+          "B2B",
+          "DTC"
+        ],
+        "selected_scores": {
+          "B2B": 0.3992,
+          "DTC": 0.3818
+        },
+        "strategy_return": 0.12,
+        "benchmark_return": 0.1064,
+        "excess_return": 0.0137
+      },
+      {
+        "month": "2024-05",
+        "next_month": "2024-06",
+        "selected_items": [
+          "B2B",
+          "DTC"
+        ],
+        "selected_scores": {
+          "B2B": 0.9657,
+          "DTC": 0.1556
+        },
+        "strategy_return": 0.12,
+        "benchmark_return": 0.1033,
+        "excess_return": 0.0167
+      },
+      {
+        "month": "2024-06",
+        "next_month": "2024-07",
+        "selected_items": [
+          "B2B",
+          "DTC"
+        ],
+        "selected_scores": {
+          "B2B": 0.6461,
+          "DTC": 0.2804
+        },
+        "strategy_return": 0.1125,
+        "benchmark_return": 0.1025,
+        "excess_return": 0.01
+      },
+      {
+        "month": "2024-07",
+        "next_month": "2024-08",
+        "selected_items": [
+          "B2B",
+          "Amazon"
+        ],
+        "selected_scores": {
+          "B2B": 0.414,
+          "Amazon": 0.3335
+        },
+        "strategy_return": 0.1124,
+        "benchmark_return": 0.1036,
+        "excess_return": 0.0088
+      },
+      {
+        "month": "2024-08",
+        "next_month": "2024-09",
+        "selected_items": [
+          "DTC",
+          "Amazon"
+        ],
+        "selected_scores": {
+          "DTC": 0.4861,
+          "Amazon": 0.2095
+        },
+        "strategy_return": 0.1043,
+        "benchmark_return": 0.0968,
+        "excess_return": 0.0075
+      },
+      {
+        "month": "2024-09",
+        "next_month": "2024-10",
+        "selected_items": [
+          "B2B",
+          "DTC"
+        ],
+        "selected_scores": {
+          "B2B": 0.7243,
+          "DTC": 0.3133
+        },
+        "strategy_return": 0.1192,
+        "benchmark_return": 0.1024,
+        "excess_return": 0.0168
+      },
+      {
+        "month": "2024-10",
+        "next_month": "2024-11",
+        "selected_items": [
+          "B2B",
+          "Amazon"
+        ],
+        "selected_scores": {
+          "B2B": 0.592,
+          "Amazon": 0.2056
+        },
+        "strategy_return": 0.1158,
+        "benchmark_return": 0.1077,
+        "excess_return": 0.0081
+      },
+      {
+        "month": "2024-11",
+        "next_month": "2024-12",
+        "selected_items": [
+          "B2B",
+          "DTC"
+        ],
+        "selected_scores": {
+          "B2B": 0.3596,
+          "DTC": 0.0257
+        },
+        "strategy_return": 0.12,
+        "benchmark_return": 0.1021,
+        "excess_return": 0.0179
+      },
+      {
+        "month": "2024-12",
+        "next_month": "2025-01",
+        "selected_items": [
+          "DTC",
+          "B2B"
+        ],
+        "selected_scores": {
+          "DTC": 0.5667,
+          "B2B": 0.2708
+        },
+        "strategy_return": 0.1156,
+        "benchmark_return": 0.102,
+        "excess_return": 0.0136
+      },
+      {
+        "month": "2025-01",
+        "next_month": "2025-02",
+        "selected_items": [
+          "B2B",
+          "DTC"
+        ],
+        "selected_scores": {
+          "B2B": 0.9622,
+          "DTC": 0.3751
+        },
+        "strategy_return": 0.12,
+        "benchmark_return": 0.1006,
+        "excess_return": 0.0194
+      },
+      {
+        "month": "2025-02",
+        "next_month": "2025-03",
+        "selected_items": [
+          "B2B",
+          "TikTok Shop"
+        ],
+        "selected_scores": {
+          "B2B": 0.8929,
+          "TikTok Shop": -0.0626
+        },
+        "strategy_return": 0.1117,
+        "benchmark_return": 0.11,
+        "excess_return": 0.0017
+      },
+      {
+        "month": "2025-03",
+        "next_month": "2025-04",
+        "selected_items": [
+          "B2B",
+          "Amazon"
+        ],
+        "selected_scores": {
+          "B2B": 0.759,
+          "Amazon": 0.1968
+        },
+        "strategy_return": 0.1106,
+        "benchmark_return": 0.1077,
+        "excess_return": 0.0029
+      }
+    ]
+  },
+  "baseline_test": {
+    "config": {
+      "lookback_months": 3,
+      "top_n": 2,
+      "signal_weights": {
+        "contribution_margin_rate": 0.24,
+        "repeat_rate": 0.18,
+        "payback_efficiency": 0.18,
+        "inventory_health": 0.12,
+        "loss_resilience": 0.16,
+        "traffic_efficiency": 0.12
+      }
+    },
+    "summary": {
+      "periods": 8,
+      "avg_strategy_return": 0.1169,
+      "avg_benchmark_return": 0.1058,
+      "avg_excess_return": 0.0111,
+      "hit_rate": 0.875,
+      "cumulative_strategy_return": 1.4223,
+      "cumulative_benchmark_return": 1.2358,
+      "cumulative_excess_return": 0.1865
+    },
+    "monthly_records": [
+      {
+        "month": "2025-04",
+        "next_month": "2025-05",
+        "selected_items": [
+          "B2B",
+          "DTC"
+        ],
+        "selected_scores": {
+          "B2B": 0.1466,
+          "DTC": 0.102
+        },
+        "strategy_return": 0.12,
+        "benchmark_return": 0.1101,
+        "excess_return": 0.0099
+      },
+      {
+        "month": "2025-05",
+        "next_month": "2025-06",
+        "selected_items": [
+          "DTC",
+          "B2B"
+        ],
+        "selected_scores": {
+          "DTC": 0.2978,
+          "B2B": 0.2559
+        },
+        "strategy_return": 0.12,
+        "benchmark_return": 0.1069,
+        "excess_return": 0.0131
+      },
+      {
+        "month": "2025-06",
+        "next_month": "2025-07",
+        "selected_items": [
+          "B2B",
+          "DTC"
+        ],
+        "selected_scores": {
+          "B2B": 0.8656,
+          "DTC": 0.3984
+        },
+        "strategy_return": 0.12,
+        "benchmark_return": 0.0992,
+        "excess_return": 0.0208
+      },
+      {
+        "month": "2025-07",
+        "next_month": "2025-08",
+        "selected_items": [
+          "B2B",
+          "DTC"
+        ],
+        "selected_scores": {
+          "B2B": 0.9623,
+          "DTC": 0.2998
+        },
+        "strategy_return": 0.12,
+        "benchmark_return": 0.0976,
+        "excess_return": 0.0224
+      },
+      {
+        "month": "2025-08",
+        "next_month": "2025-09",
+        "selected_items": [
+          "DTC",
+          "B2B"
+        ],
+        "selected_scores": {
+          "DTC": 0.57,
+          "B2B": 0.3743
+        },
+        "strategy_return": 0.1173,
+        "benchmark_return": 0.109,
+        "excess_return": 0.0084
+      },
+      {
+        "month": "2025-09",
+        "next_month": "2025-10",
+        "selected_items": [
+          "B2B",
+          "Walmart"
+        ],
+        "selected_scores": {
+          "B2B": 0.4215,
+          "Walmart": 0.0323
+        },
+        "strategy_return": 0.1019,
+        "benchmark_return": 0.1091,
+        "excess_return": -0.0073
+      },
+      {
+        "month": "2025-10",
+        "next_month": "2025-11",
+        "selected_items": [
+          "B2B",
+          "DTC"
+        ],
+        "selected_scores": {
+          "B2B": 0.5652,
+          "DTC": 0.3342
+        },
+        "strategy_return": 0.1196,
+        "benchmark_return": 0.1062,
+        "excess_return": 0.0134
+      },
+      {
+        "month": "2025-11",
+        "next_month": "2025-12",
+        "selected_items": [
+          "B2B",
+          "Amazon"
+        ],
+        "selected_scores": {
+          "B2B": 0.3772,
+          "Amazon": 0.2617
+        },
+        "strategy_return": 0.1168,
+        "benchmark_return": 0.1084,
+        "excess_return": 0.0084
+      }
+    ]
+  },
+  "optimized_train": {
+    "config": {
+      "lookback_months": 3,
+      "top_n": 2,
+      "signal_weights": {
+        "contribution_margin_rate": 0.24,
+        "repeat_rate": 0.225,
+        "payback_efficiency": 0.225,
+        "inventory_health": 0.15,
+        "loss_resilience": 0.2,
+        "traffic_efficiency": 0.09
+      }
+    },
+    "summary": {
+      "periods": 12,
+      "avg_strategy_return": 0.1183,
+      "avg_benchmark_return": 0.1038,
+      "avg_excess_return": 0.0146,
+      "hit_rate": 1.0,
+      "cumulative_strategy_return": 2.8258,
+      "cumulative_benchmark_return": 2.2694,
+      "cumulative_excess_return": 0.5564
+    },
+    "monthly_records": [
+      {
+        "month": "2024-04",
+        "next_month": "2024-05",
+        "selected_items": [
+          "B2B",
+          "DTC"
+        ],
+        "selected_scores": {
+          "B2B": 0.6329,
+          "DTC": 0.4282
+        },
+        "strategy_return": 0.12,
+        "benchmark_return": 0.1064,
+        "excess_return": 0.0137
+      },
+      {
+        "month": "2024-05",
+        "next_month": "2024-06",
+        "selected_items": [
+          "B2B",
+          "DTC"
+        ],
+        "selected_scores": {
+          "B2B": 1.1943,
+          "DTC": 0.2319
+        },
+        "strategy_return": 0.12,
+        "benchmark_return": 0.1033,
+        "excess_return": 0.0167
+      },
+      {
+        "month": "2024-06",
+        "next_month": "2024-07",
+        "selected_items": [
+          "B2B",
+          "DTC"
+        ],
+        "selected_scores": {
+          "B2B": 0.8562,
+          "DTC": 0.3584
+        },
+        "strategy_return": 0.1125,
+        "benchmark_return": 0.1025,
+        "excess_return": 0.01
+      },
+      {
+        "month": "2024-07",
+        "next_month": "2024-08",
+        "selected_items": [
+          "B2B",
+          "Amazon"
+        ],
+        "selected_scores": {
+          "B2B": 0.6801,
+          "Amazon": 0.2914
+        },
+        "strategy_return": 0.1124,
+        "benchmark_return": 0.1036,
+        "excess_return": 0.0088
+      },
+      {
+        "month": "2024-08",
+        "next_month": "2024-09",
+        "selected_items": [
+          "DTC",
+          "B2B"
+        ],
+        "selected_scores": {
+          "DTC": 0.5323,
+          "B2B": 0.4242
+        },
+        "strategy_return": 0.12,
+        "benchmark_return": 0.0968,
+        "excess_return": 0.0232
+      },
+      {
+        "month": "2024-09",
+        "next_month": "2024-10",
+        "selected_items": [
+          "B2B",
+          "DTC"
+        ],
+        "selected_scores": {
+          "B2B": 0.9879,
+          "DTC": 0.3383
+        },
+        "strategy_return": 0.1192,
+        "benchmark_return": 0.1024,
+        "excess_return": 0.0168
+      },
+      {
+        "month": "2024-10",
+        "next_month": "2024-11",
+        "selected_items": [
+          "B2B",
+          "DTC"
+        ],
+        "selected_scores": {
+          "B2B": 0.8207,
+          "DTC": 0.1376
+        },
+        "strategy_return": 0.12,
+        "benchmark_return": 0.1077,
+        "excess_return": 0.0123
+      },
+      {
+        "month": "2024-11",
+        "next_month": "2024-12",
+        "selected_items": [
+          "B2B",
+          "DTC"
+        ],
+        "selected_scores": {
+          "B2B": 0.6151,
+          "DTC": 0.0954
+        },
+        "strategy_return": 0.12,
+        "benchmark_return": 0.1021,
+        "excess_return": 0.0179
+      },
+      {
+        "month": "2024-12",
+        "next_month": "2025-01",
+        "selected_items": [
+          "DTC",
+          "B2B"
+        ],
+        "selected_scores": {
+          "DTC": 0.6068,
+          "B2B": 0.5297
+        },
+        "strategy_return": 0.1156,
+        "benchmark_return": 0.102,
+        "excess_return": 0.0136
+      },
+      {
+        "month": "2025-01",
+        "next_month": "2025-02",
+        "selected_items": [
+          "B2B",
+          "DTC"
+        ],
+        "selected_scores": {
+          "B2B": 1.2171,
+          "DTC": 0.4478
+        },
+        "strategy_return": 0.12,
+        "benchmark_return": 0.1006,
+        "excess_return": 0.0194
+      },
+      {
+        "month": "2025-02",
+        "next_month": "2025-03",
+        "selected_items": [
+          "B2B",
+          "DTC"
+        ],
+        "selected_scores": {
+          "B2B": 1.1508,
+          "DTC": -0.0803
+        },
+        "strategy_return": 0.12,
+        "benchmark_return": 0.11,
+        "excess_return": 0.01
+      },
+      {
+        "month": "2025-03",
+        "next_month": "2025-04",
+        "selected_items": [
+          "B2B",
+          "DTC"
+        ],
+        "selected_scores": {
+          "B2B": 0.9783,
+          "DTC": 0.2019
+        },
+        "strategy_return": 0.12,
+        "benchmark_return": 0.1077,
+        "excess_return": 0.0123
+      }
+    ]
+  },
+  "optimized_test": {
+    "config": {
+      "lookback_months": 3,
+      "top_n": 2,
+      "signal_weights": {
+        "contribution_margin_rate": 0.24,
+        "repeat_rate": 0.225,
+        "payback_efficiency": 0.225,
+        "inventory_health": 0.15,
+        "loss_resilience": 0.2,
+        "traffic_efficiency": 0.09
+      }
+    },
+    "summary": {
+      "periods": 8,
+      "avg_strategy_return": 0.1192,
+      "avg_benchmark_return": 0.1058,
+      "avg_excess_return": 0.0134,
+      "hit_rate": 1.0,
+      "cumulative_strategy_return": 1.4621,
+      "cumulative_benchmark_return": 1.2358,
+      "cumulative_excess_return": 0.2263
+    },
+    "monthly_records": [
+      {
+        "month": "2025-04",
+        "next_month": "2025-05",
+        "selected_items": [
+          "B2B",
+          "DTC"
+        ],
+        "selected_scores": {
+          "B2B": 0.3666,
+          "DTC": 0.1369
+        },
+        "strategy_return": 0.12,
+        "benchmark_return": 0.1101,
+        "excess_return": 0.0099
+      },
+      {
+        "month": "2025-05",
+        "next_month": "2025-06",
+        "selected_items": [
+          "B2B",
+          "DTC"
+        ],
+        "selected_scores": {
+          "B2B": 0.493,
+          "DTC": 0.3673
+        },
+        "strategy_return": 0.12,
+        "benchmark_return": 0.1069,
+        "excess_return": 0.0131
+      },
+      {
+        "month": "2025-06",
+        "next_month": "2025-07",
+        "selected_items": [
+          "B2B",
+          "DTC"
+        ],
+        "selected_scores": {
+          "B2B": 1.0988,
+          "DTC": 0.4684
+        },
+        "strategy_return": 0.12,
+        "benchmark_return": 0.0992,
+        "excess_return": 0.0208
+      },
+      {
+        "month": "2025-07",
+        "next_month": "2025-08",
+        "selected_items": [
+          "B2B",
+          "DTC"
+        ],
+        "selected_scores": {
+          "B2B": 1.1995,
+          "DTC": 0.3714
+        },
+        "strategy_return": 0.12,
+        "benchmark_return": 0.0976,
+        "excess_return": 0.0224
+      },
+      {
+        "month": "2025-08",
+        "next_month": "2025-09",
+        "selected_items": [
+          "B2B",
+          "DTC"
+        ],
+        "selected_scores": {
+          "B2B": 0.6357,
+          "DTC": 0.6043
+        },
+        "strategy_return": 0.1173,
+        "benchmark_return": 0.109,
+        "excess_return": 0.0084
+      },
+      {
+        "month": "2025-09",
+        "next_month": "2025-10",
+        "selected_items": [
+          "B2B",
+          "DTC"
+        ],
+        "selected_scores": {
+          "B2B": 0.654,
+          "DTC": 0.053
+        },
+        "strategy_return": 0.12,
+        "benchmark_return": 0.1091,
+        "excess_return": 0.0109
+      },
+      {
+        "month": "2025-10",
+        "next_month": "2025-11",
+        "selected_items": [
+          "B2B",
+          "DTC"
+        ],
+        "selected_scores": {
+          "B2B": 0.7857,
+          "DTC": 0.3889
+        },
+        "strategy_return": 0.1196,
+        "benchmark_return": 0.1062,
+        "excess_return": 0.0134
+      },
+      {
+        "month": "2025-11",
+        "next_month": "2025-12",
+        "selected_items": [
+          "B2B",
+          "Amazon"
+        ],
+        "selected_scores": {
+          "B2B": 0.6414,
+          "Amazon": 0.2199
+        },
+        "strategy_return": 0.1168,
+        "benchmark_return": 0.1084,
+        "excess_return": 0.0084
+      }
+    ]
+  },
+  "optimized_full": {
+    "config": {
+      "lookback_months": 3,
+      "top_n": 2,
+      "signal_weights": {
+        "contribution_margin_rate": 0.24,
+        "repeat_rate": 0.225,
+        "payback_efficiency": 0.225,
+        "inventory_health": 0.15,
+        "loss_resilience": 0.2,
+        "traffic_efficiency": 0.09
+      }
+    },
+    "summary": {
+      "periods": 20,
+      "avg_strategy_return": 0.1187,
+      "avg_benchmark_return": 0.1046,
+      "avg_excess_return": 0.0141,
+      "hit_rate": 1.0,
+      "cumulative_strategy_return": 8.4193,
+      "cumulative_benchmark_return": 6.3095,
+      "cumulative_excess_return": 2.1099
+    },
+    "monthly_records": [
+      {
+        "month": "2024-04",
+        "next_month": "2024-05",
+        "selected_items": [
+          "B2B",
+          "DTC"
+        ],
+        "selected_scores": {
+          "B2B": 0.6329,
+          "DTC": 0.4282
+        },
+        "strategy_return": 0.12,
+        "benchmark_return": 0.1064,
+        "excess_return": 0.0137
+      },
+      {
+        "month": "2024-05",
+        "next_month": "2024-06",
+        "selected_items": [
+          "B2B",
+          "DTC"
+        ],
+        "selected_scores": {
+          "B2B": 1.1943,
+          "DTC": 0.2319
+        },
+        "strategy_return": 0.12,
+        "benchmark_return": 0.1033,
+        "excess_return": 0.0167
+      },
+      {
+        "month": "2024-06",
+        "next_month": "2024-07",
+        "selected_items": [
+          "B2B",
+          "DTC"
+        ],
+        "selected_scores": {
+          "B2B": 0.8562,
+          "DTC": 0.3584
+        },
+        "strategy_return": 0.1125,
+        "benchmark_return": 0.1025,
+        "excess_return": 0.01
+      },
+      {
+        "month": "2024-07",
+        "next_month": "2024-08",
+        "selected_items": [
+          "B2B",
+          "Amazon"
+        ],
+        "selected_scores": {
+          "B2B": 0.6801,
+          "Amazon": 0.2914
+        },
+        "strategy_return": 0.1124,
+        "benchmark_return": 0.1036,
+        "excess_return": 0.0088
+      },
+      {
+        "month": "2024-08",
+        "next_month": "2024-09",
+        "selected_items": [
+          "DTC",
+          "B2B"
+        ],
+        "selected_scores": {
+          "DTC": 0.5323,
+          "B2B": 0.4242
+        },
+        "strategy_return": 0.12,
+        "benchmark_return": 0.0968,
+        "excess_return": 0.0232
+      },
+      {
+        "month": "2024-09",
+        "next_month": "2024-10",
+        "selected_items": [
+          "B2B",
+          "DTC"
+        ],
+        "selected_scores": {
+          "B2B": 0.9879,
+          "DTC": 0.3383
+        },
+        "strategy_return": 0.1192,
+        "benchmark_return": 0.1024,
+        "excess_return": 0.0168
+      },
+      {
+        "month": "2024-10",
+        "next_month": "2024-11",
+        "selected_items": [
+          "B2B",
+          "DTC"
+        ],
+        "selected_scores": {
+          "B2B": 0.8207,
+          "DTC": 0.1376
+        },
+        "strategy_return": 0.12,
+        "benchmark_return": 0.1077,
+        "excess_return": 0.0123
+      },
+      {
+        "month": "2024-11",
+        "next_month": "2024-12",
+        "selected_items": [
+          "B2B",
+          "DTC"
+        ],
+        "selected_scores": {
+          "B2B": 0.6151,
+          "DTC": 0.0954
+        },
+        "strategy_return": 0.12,
+        "benchmark_return": 0.1021,
+        "excess_return": 0.0179
+      },
+      {
+        "month": "2024-12",
+        "next_month": "2025-01",
+        "selected_items": [
+          "DTC",
+          "B2B"
+        ],
+        "selected_scores": {
+          "DTC": 0.6068,
+          "B2B": 0.5297
+        },
+        "strategy_return": 0.1156,
+        "benchmark_return": 0.102,
+        "excess_return": 0.0136
+      },
+      {
+        "month": "2025-01",
+        "next_month": "2025-02",
+        "selected_items": [
+          "B2B",
+          "DTC"
+        ],
+        "selected_scores": {
+          "B2B": 1.2171,
+          "DTC": 0.4478
+        },
+        "strategy_return": 0.12,
+        "benchmark_return": 0.1006,
+        "excess_return": 0.0194
+      },
+      {
+        "month": "2025-02",
+        "next_month": "2025-03",
+        "selected_items": [
+          "B2B",
+          "DTC"
+        ],
+        "selected_scores": {
+          "B2B": 1.1508,
+          "DTC": -0.0803
+        },
+        "strategy_return": 0.12,
+        "benchmark_return": 0.11,
+        "excess_return": 0.01
+      },
+      {
+        "month": "2025-03",
+        "next_month": "2025-04",
+        "selected_items": [
+          "B2B",
+          "DTC"
+        ],
+        "selected_scores": {
+          "B2B": 0.9783,
+          "DTC": 0.2019
+        },
+        "strategy_return": 0.12,
+        "benchmark_return": 0.1077,
+        "excess_return": 0.0123
+      },
+      {
+        "month": "2025-04",
+        "next_month": "2025-05",
+        "selected_items": [
+          "B2B",
+          "DTC"
+        ],
+        "selected_scores": {
+          "B2B": 0.3666,
+          "DTC": 0.1369
+        },
+        "strategy_return": 0.12,
+        "benchmark_return": 0.1101,
+        "excess_return": 0.0099
+      },
+      {
+        "month": "2025-05",
+        "next_month": "2025-06",
+        "selected_items": [
+          "B2B",
+          "DTC"
+        ],
+        "selected_scores": {
+          "B2B": 0.493,
+          "DTC": 0.3673
+        },
+        "strategy_return": 0.12,
+        "benchmark_return": 0.1069,
+        "excess_return": 0.0131
+      },
+      {
+        "month": "2025-06",
+        "next_month": "2025-07",
+        "selected_items": [
+          "B2B",
+          "DTC"
+        ],
+        "selected_scores": {
+          "B2B": 1.0988,
+          "DTC": 0.4684
+        },
+        "strategy_return": 0.12,
+        "benchmark_return": 0.0992,
+        "excess_return": 0.0208
+      },
+      {
+        "month": "2025-07",
+        "next_month": "2025-08",
+        "selected_items": [
+          "B2B",
+          "DTC"
+        ],
+        "selected_scores": {
+          "B2B": 1.1995,
+          "DTC": 0.3714
+        },
+        "strategy_return": 0.12,
+        "benchmark_return": 0.0976,
+        "excess_return": 0.0224
+      },
+      {
+        "month": "2025-08",
+        "next_month": "2025-09",
+        "selected_items": [
+          "B2B",
+          "DTC"
+        ],
+        "selected_scores": {
+          "B2B": 0.6357,
+          "DTC": 0.6043
+        },
+        "strategy_return": 0.1173,
+        "benchmark_return": 0.109,
+        "excess_return": 0.0084
+      },
+      {
+        "month": "2025-09",
+        "next_month": "2025-10",
+        "selected_items": [
+          "B2B",
+          "DTC"
+        ],
+        "selected_scores": {
+          "B2B": 0.654,
+          "DTC": 0.053
+        },
+        "strategy_return": 0.12,
+        "benchmark_return": 0.1091,
+        "excess_return": 0.0109
+      },
+      {
+        "month": "2025-10",
+        "next_month": "2025-11",
+        "selected_items": [
+          "B2B",
+          "DTC"
+        ],
+        "selected_scores": {
+          "B2B": 0.7857,
+          "DTC": 0.3889
+        },
+        "strategy_return": 0.1196,
+        "benchmark_return": 0.1062,
+        "excess_return": 0.0134
+      },
+      {
+        "month": "2025-11",
+        "next_month": "2025-12",
+        "selected_items": [
+          "B2B",
+          "Amazon"
+        ],
+        "selected_scores": {
+          "B2B": 0.6414,
+          "Amazon": 0.2199
+        },
+        "strategy_return": 0.1168,
+        "benchmark_return": 0.1084,
+        "excess_return": 0.0084
+      }
+    ]
+  },
+  "improvement": {
+    "train_avg_excess_delta": 0.0032,
+    "test_avg_excess_delta": 0.0023,
+    "test_hit_rate_delta": 0.125
+  }
+}

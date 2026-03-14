@@ -3,20 +3,36 @@ from __future__ import annotations
 from pathlib import Path
 
 from .models import (
+    ApprovalChainRecord,
+    AuditEventRecord,
     B2BAccountRecord,
     CashFlowSnapshotRecord,
     ChannelRecord,
+    ChannelBenchmarkRecord,
     ChannelRateCardRecord,
     ComplianceRequirementRecord,
+    DecisionNodeRecord,
+    DecisionRuleRecord,
+    DecisionTriggerRecord,
+    DataDictionaryFieldRecord,
+    EventLibraryRecord,
+    EvidenceSourceRecord,
+    EvidenceLineageRecord,
     CustomerCohortRecord,
     CustomerSegmentRecord,
     ExperimentRecord,
+    ExperimentAssignmentRecord,
+    ExperimentMetricRecord,
+    FieldDictionaryRecord,
+    GateThresholdRecord,
     InventoryPositionRecord,
     KPIDailySnapshotRecord,
     LandedCostScenarioRecord,
     ListingRecord,
     ListingSnapshotRecord,
     LogisticsQuoteRecord,
+    MasterDataEntityRecord,
+    MarketSizeInputRecord,
     MarketingSpendRecord,
     PolicyChangeLogRecord,
     PricingActionRecord,
@@ -30,9 +46,11 @@ from .models import (
     ShipmentEventRecord,
     SoldTransactionRecord,
     SupplierRecord,
+    StrategyAssumptionRecord,
     TariffTaxRecord,
     TrafficSessionRecord,
     TransactionRecord,
+    UpdatePolicyRecord,
 )
 from .io_utils import read_csv_rows
 
@@ -46,6 +64,125 @@ def _parse_bool(value: str | bool | None) -> bool:
         return value
     normalized = str(value or "").strip().lower()
     return normalized in {"1", "true", "yes", "y", "active"}
+
+
+def load_decision_nodes(path: str | Path) -> list[DecisionNodeRecord]:
+    return [
+        DecisionNodeRecord(
+            node_id=row["node_id"],
+            parent_id=row.get("parent_id", ""),
+            gate_id=row.get("gate_id", ""),
+            stage=row.get("stage", ""),
+            decision_question=row.get("decision_question", ""),
+            domain=row.get("domain", ""),
+            metric_ref=row.get("metric_ref", ""),
+            owner_role=row.get("owner_role", ""),
+            go_path=row.get("go_path", ""),
+            hold_path=row.get("hold_path", ""),
+            kill_path=row.get("kill_path", ""),
+        )
+        for row in _read_csv(path)
+    ]
+
+
+def load_evidence_sources(path: str | Path) -> list[EvidenceSourceRecord]:
+    return [
+        EvidenceSourceRecord(
+            source_id=row["source_id"],
+            topic=row.get("topic", ""),
+            source_name=row.get("source_name", ""),
+            source_type=row.get("source_type", ""),
+            confidence_grade=row.get("confidence_grade", ""),
+            collected_at=row.get("collected_at", ""),
+            freshness_days=int(row.get("freshness_days", 0) or 0),
+            version=row.get("version", ""),
+            status=row.get("status", ""),
+            owner_role=row.get("owner_role", ""),
+        )
+        for row in _read_csv(path)
+    ]
+
+
+def load_strategy_assumptions(path: str | Path) -> list[StrategyAssumptionRecord]:
+    return [
+        StrategyAssumptionRecord(
+            assumption_id=row["assumption_id"],
+            domain=row.get("domain", ""),
+            assumption_text=row.get("assumption_text", ""),
+            rationale=row.get("rationale", ""),
+            confidence_grade=row.get("confidence_grade", ""),
+            owner_role=row.get("owner_role", ""),
+            validation_method=row.get("validation_method", ""),
+            status=row.get("status", ""),
+            due_date=row.get("due_date", ""),
+        )
+        for row in _read_csv(path)
+    ]
+
+
+def load_gate_thresholds(path: str | Path) -> list[GateThresholdRecord]:
+    return [
+        GateThresholdRecord(
+            gate_id=row["gate_id"],
+            gate_name=row.get("gate_name", ""),
+            metric_name=row.get("metric_name", ""),
+            operator=row.get("operator", ""),
+            threshold_value=float(row.get("threshold_value", 0) or 0),
+            unit=row.get("unit", ""),
+            source_grade_min=row.get("source_grade_min", ""),
+            approver_role=row.get("approver_role", ""),
+            decision_if_fail=row.get("decision_if_fail", ""),
+        )
+        for row in _read_csv(path)
+    ]
+
+
+def load_approval_chain(path: str | Path) -> list[ApprovalChainRecord]:
+    return [
+        ApprovalChainRecord(
+            gate_id=row["gate_id"],
+            step_order=int(row.get("step_order", 0) or 0),
+            role_name=row.get("role_name", ""),
+            owner_name=row.get("owner_name", ""),
+            action_type=row.get("action_type", ""),
+            status=row.get("status", ""),
+            signed_at=row.get("signed_at", ""),
+            veto_flag=_parse_bool(row.get("veto_flag", False)),
+        )
+        for row in _read_csv(path)
+    ]
+
+
+def load_update_policies(path: str | Path) -> list[UpdatePolicyRecord]:
+    return [
+        UpdatePolicyRecord(
+            scope_id=row["scope_id"],
+            scope_name=row.get("scope_name", ""),
+            update_frequency_days=int(row.get("update_frequency_days", 0) or 0),
+            expiry_days=int(row.get("expiry_days", 0) or 0),
+            event_trigger=row.get("event_trigger", ""),
+            owner_role=row.get("owner_role", ""),
+            sla_days=int(row.get("sla_days", 0) or 0),
+            status=row.get("status", ""),
+        )
+        for row in _read_csv(path)
+    ]
+
+
+def load_field_dictionary(path: str | Path) -> list[FieldDictionaryRecord]:
+    return [
+        FieldDictionaryRecord(
+            field_name=row["field_name"],
+            field_group=row.get("field_group", ""),
+            definition=row.get("definition", ""),
+            data_type=row.get("data_type", ""),
+            naming_style=row.get("naming_style", ""),
+            source_table=row.get("source_table", ""),
+            reusable_flag=_parse_bool(row.get("reusable_flag", False)),
+            required_flag=_parse_bool(row.get("required_flag", False)),
+        )
+        for row in _read_csv(path)
+    ]
 
 
 def load_search_trends(path: str | Path) -> list[SearchTrendRecord]:
@@ -117,6 +254,157 @@ def load_channels(path: str | Path) -> list[ChannelRecord]:
             orders=int(row["orders"]),
             revenue=float(row["revenue"]),
             ad_spend=float(row.get("ad_spend", 0) or 0),
+        )
+        for row in _read_csv(path)
+    ]
+
+
+def load_market_size_inputs(path: str | Path) -> list[MarketSizeInputRecord]:
+    return [
+        MarketSizeInputRecord(
+            market_segment=row["market_segment"],
+            tam=float(row["tam"]),
+            sam=float(row["sam"]),
+            som=float(row["som"]),
+            ecommerce_penetration=float(row.get("ecommerce_penetration", 0) or 0),
+            importable_share=float(row.get("importable_share", 0) or 0),
+            cagr=float(row.get("cagr", 0) or 0),
+            source=row.get("source", ""),
+            confidence_grade=row.get("confidence_grade", ""),
+        )
+        for row in _read_csv(path)
+    ]
+
+
+def load_channel_benchmarks(path: str | Path) -> list[ChannelBenchmarkRecord]:
+    return [
+        ChannelBenchmarkRecord(
+            channel=row["channel"],
+            benchmark_conversion_rate=float(row.get("benchmark_conversion_rate", 0) or 0),
+            benchmark_average_order_value=float(row.get("benchmark_average_order_value", 0) or 0),
+            benchmark_roas=float(row.get("benchmark_roas", 0) or 0),
+            benchmark_cac=float(row.get("benchmark_cac", 0) or 0),
+        )
+        for row in _read_csv(path)
+    ]
+
+
+def load_event_library(path: str | Path) -> list[EventLibraryRecord]:
+    return [
+        EventLibraryRecord(
+            event_id=row["event_id"],
+            event_date=row["event_date"],
+            event_type=row.get("event_type", ""),
+            market_scope=row.get("market_scope", ""),
+            event_name=row.get("event_name", ""),
+            severity=float(row.get("severity", 0) or 0),
+            expected_direction=row.get("expected_direction", ""),
+            source_ref=row.get("source_ref", ""),
+        )
+        for row in _read_csv(path)
+    ]
+
+
+def load_master_data_entities(path: str | Path) -> list[MasterDataEntityRecord]:
+    return [
+        MasterDataEntityRecord(
+            entity_type=row["entity_type"],
+            entity_id=row["entity_id"],
+            entity_name=row.get("entity_name", ""),
+            owner_role=row.get("owner_role", ""),
+            version=row.get("version", ""),
+            approved_flag=_parse_bool(row.get("approved_flag", False)),
+            active_flag=_parse_bool(row.get("active_flag", False)),
+            duplicate_flag=_parse_bool(row.get("duplicate_flag", False)),
+            missing_required_field_count=int(row.get("missing_required_field_count", 0) or 0),
+            updated_at=row.get("updated_at", ""),
+        )
+        for row in _read_csv(path)
+    ]
+
+
+def load_data_dictionary_fields(path: str | Path) -> list[DataDictionaryFieldRecord]:
+    return [
+        DataDictionaryFieldRecord(
+            field_name=row["field_name"],
+            field_group=row.get("field_group", ""),
+            entity_type=row.get("entity_type", ""),
+            data_type=row.get("data_type", ""),
+            required_flag=_parse_bool(row.get("required_flag", False)),
+            enum_flag=_parse_bool(row.get("enum_flag", False)),
+            validation_rule=row.get("validation_rule", ""),
+            version=row.get("version", ""),
+            approved_flag=_parse_bool(row.get("approved_flag", False)),
+        )
+        for row in _read_csv(path)
+    ]
+
+
+def load_evidence_lineage(path: str | Path) -> list[EvidenceLineageRecord]:
+    return [
+        EvidenceLineageRecord(
+            lineage_id=row["lineage_id"],
+            source_id=row.get("source_id", ""),
+            target_metric_id=row.get("target_metric_id", ""),
+            dataset_version=row.get("dataset_version", ""),
+            transform_step_count=int(row.get("transform_step_count", 0) or 0),
+            script_version=row.get("script_version", ""),
+            generated_at=row.get("generated_at", ""),
+            approval_ref=row.get("approval_ref", ""),
+            reproducible_flag=_parse_bool(row.get("reproducible_flag", False)),
+            reconstruction_minutes=int(row.get("reconstruction_minutes", 0) or 0),
+        )
+        for row in _read_csv(path)
+    ]
+
+
+def load_audit_events(path: str | Path) -> list[AuditEventRecord]:
+    return [
+        AuditEventRecord(
+            audit_id=row["audit_id"],
+            event_type=row.get("event_type", ""),
+            object_type=row.get("object_type", ""),
+            object_id=row.get("object_id", ""),
+            actor_role=row.get("actor_role", ""),
+            happened_at=row.get("happened_at", ""),
+            immutable_flag=_parse_bool(row.get("immutable_flag", False)),
+            approval_ref=row.get("approval_ref", ""),
+            status=row.get("status", ""),
+        )
+        for row in _read_csv(path)
+    ]
+
+
+def load_decision_rules(path: str | Path) -> list[DecisionRuleRecord]:
+    return [
+        DecisionRuleRecord(
+            rule_id=row["rule_id"],
+            scenario=row.get("scenario", ""),
+            gate_name=row.get("gate_name", ""),
+            metric_name=row.get("metric_name", ""),
+            operator=row.get("operator", ""),
+            threshold_value=float(row.get("threshold_value", 0) or 0),
+            severity=row.get("severity", ""),
+            approver_role=row.get("approver_role", ""),
+            active_flag=_parse_bool(row.get("active_flag", False)),
+            version=row.get("version", ""),
+            stop_loss_flag=_parse_bool(row.get("stop_loss_flag", False)),
+        )
+        for row in _read_csv(path)
+    ]
+
+
+def load_decision_triggers(path: str | Path) -> list[DecisionTriggerRecord]:
+    return [
+        DecisionTriggerRecord(
+            trigger_id=row["trigger_id"],
+            rule_id=row.get("rule_id", ""),
+            object_scope=row.get("object_scope", ""),
+            triggered_at=row.get("triggered_at", ""),
+            observed_value=float(row.get("observed_value", 0) or 0),
+            decision_status=row.get("decision_status", ""),
+            resolved_flag=_parse_bool(row.get("resolved_flag", False)),
+            approval_ref=row.get("approval_ref", ""),
         )
         for row in _read_csv(path)
     ]
@@ -442,6 +730,36 @@ def load_experiment_registry(path: str | Path) -> list[ExperimentRecord]:
             split_ratio=float(row.get("split_ratio", 0) or 0),
             stop_rule=row.get("stop_rule", ""),
             status=row.get("status", ""),
+        )
+        for row in _read_csv(path)
+    ]
+
+
+def load_experiment_assignments(path: str | Path) -> list[ExperimentAssignmentRecord]:
+    return [
+        ExperimentAssignmentRecord(
+            experiment_id=row["experiment_id"],
+            entity_id=row["entity_id"],
+            variant=row["variant"],
+            assigned_at=row["assigned_at"],
+            channel=row.get("channel", ""),
+        )
+        for row in _read_csv(path)
+    ]
+
+
+def load_experiment_metrics(path: str | Path) -> list[ExperimentMetricRecord]:
+    return [
+        ExperimentMetricRecord(
+            experiment_id=row["experiment_id"],
+            date=row["date"],
+            variant=row["variant"],
+            metric_name=row["metric_name"],
+            exposures=int(row.get("exposures", 0) or 0),
+            conversions=int(row.get("conversions", 0) or 0),
+            value=float(row.get("value", 0) or 0),
+            ci_low=float(row.get("ci_low", 0) or 0),
+            ci_high=float(row.get("ci_high", 0) or 0),
         )
         for row in _read_csv(path)
     ]

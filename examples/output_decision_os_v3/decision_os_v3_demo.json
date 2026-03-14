@@ -1,0 +1,121 @@
+{
+  "system": {
+    "decision_os": {
+      "system_id": "DOS-V3-NA-001",
+      "schema_version": 3.0,
+      "namespace": "north_america_niche_goods",
+      "governance_owner": "strategy_committee",
+      "capital_pool_ref": "CAP-POOL-001",
+      "risk_budget_ref": "RSK-BUDGET-001",
+      "gate_engine_version": 3.0,
+      "feedback_engine_version": 2.0
+    },
+    "id_system": {
+      "field": "F-XXXX",
+      "metric": "M-XXXX",
+      "factor": "FAC-XXXX",
+      "model": "MOD-XXXX",
+      "gate": "GATE-XXXX",
+      "decision": "DEC-XXXX",
+      "capital": "CAP-XXXX",
+      "risk": "RSK-XXXX",
+      "portfolio": "PF-XXXX"
+    }
+  },
+  "gate_result": {
+    "gate_id": "GATE-MARKET-ENTRY",
+    "status": "GO",
+    "failed_conditions": [],
+    "evaluated_condition_count": 4,
+    "capital_blocked": false,
+    "risk_blocked": false
+  },
+  "decision_record": {
+    "decision_id": "DEC-V3-0001",
+    "gate_id": "GATE-MARKET-ENTRY",
+    "model_version": "3.0.0",
+    "capital_version": "3.0",
+    "risk_version": "3.0",
+    "status": "GO",
+    "failed_conditions": [],
+    "portfolio_id": "PF-0001",
+    "approved_by": "strategy_committee",
+    "approved_at": "2026-03-14T12:00:00Z",
+    "notes": "Initial market-entry portfolio decision.",
+    "hash_signature": "571fc1c126c444cd"
+  },
+  "portfolio": {
+    "portfolio_id": "PF-0001",
+    "accepted_count": 3,
+    "rejected_count": 1,
+    "allocated_capital": 1300000,
+    "remaining_capital": 1600000.0,
+    "capital_utilization_rate": 0.4483,
+    "expected_profit_proxy": 328100.0,
+    "channel_allocation_share": {
+      "Amazon": 0.1552,
+      "DTC": 0.1138,
+      "TikTok Shop": 0.1793
+    },
+    "rows": [
+      {
+        "portfolio_id": "PF-0001",
+        "opportunity_id": "OPP-V3-002",
+        "channel": "DTC",
+        "allocated_capital": 330000,
+        "expected_return": 0.21,
+        "expected_drawdown": 0.08,
+        "objective_score": 0.012001,
+        "accepted": true,
+        "reject_reason": ""
+      },
+      {
+        "portfolio_id": "PF-0001",
+        "opportunity_id": "OPP-V3-001",
+        "channel": "Amazon",
+        "allocated_capital": 450000,
+        "expected_return": 0.24,
+        "expected_drawdown": 0.09,
+        "objective_score": -0.000999,
+        "accepted": true,
+        "reject_reason": ""
+      },
+      {
+        "portfolio_id": "PF-0001",
+        "opportunity_id": "OPP-V3-003",
+        "channel": "TikTok Shop",
+        "allocated_capital": 520000,
+        "expected_return": 0.29,
+        "expected_drawdown": 0.12,
+        "objective_score": -0.009999,
+        "accepted": true,
+        "reject_reason": ""
+      },
+      {
+        "portfolio_id": "PF-0001",
+        "opportunity_id": "OPP-V3-004",
+        "channel": "Amazon",
+        "allocated_capital": 0.0,
+        "expected_return": 0.32,
+        "expected_drawdown": 0.18,
+        "objective_score": -0.148,
+        "accepted": false,
+        "reject_reason": "loss_probability_limit"
+      }
+    ]
+  },
+  "feedback": {
+    "decision_id": "DEC-V3-0001",
+    "portfolio_id": "PF-0001",
+    "predicted_profit": 205000.0,
+    "actual_profit": 156000.0,
+    "predicted_loss_probability": 0.11,
+    "actual_loss_probability": 0.17,
+    "predicted_drawdown": 0.12,
+    "actual_drawdown": 0.18,
+    "model_prediction_error": -49000.0,
+    "loss_probability_gap": 0.06,
+    "drawdown_gap": 0.06,
+    "recalibration_required": true
+  }
+}

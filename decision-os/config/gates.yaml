@@ -1,0 +1,13 @@
+gates:
+  - gate_id: GATE-MARKET-ENTRY
+    schema_version: 3.0
+    logic: AND
+    conditions:
+      - source: model_output
+        ref: profit_p50
+        operator: ">="
+        value: 0
+      - source: model_output
+        ref: loss_probability
+        operator: "<="
+        budget_ref: risk.max_loss_probability

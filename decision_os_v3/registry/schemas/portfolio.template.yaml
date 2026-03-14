@@ -1,0 +1,8 @@
+portfolio:
+  portfolio_id: PF-0001
+  schema_version: 3.0
+  objective: maximize_expected_return
+  constraints:
+    - total_capital <= capital_pool.free_capital
+    - expected_loss_probability <= risk_budget.max_loss_probability
+    - expected_drawdown <= risk_budget.max_drawdown

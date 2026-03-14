@@ -1,0 +1,7 @@
+risk_budget:
+  risk_id: RISK-BUDGET-001
+  schema_version: 2.0
+  max_loss_probability: 0.30
+  max_drawdown: 0.20
+  max_inventory_exposure: 0.25
+  max_channel_dependency: 0.60

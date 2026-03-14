@@ -2,7 +2,7 @@
   "metadata": {
     "report_id": "part2_quant_report",
     "report_version": "2026.03",
-    "generated_at": "2026-03-13T13:26:24.444861+00:00",
+    "generated_at": "2026-03-13T16:50:04.979278+00:00",
     "section_order": [
       "2.1",
       "2.2",
@@ -24,7 +24,27 @@
         "quality_targets": {
           "listing_snapshots": 20,
           "sold_transactions": 20
-        }
+        },
+        "analysis_grain": "listing x transaction",
+        "entity_grain": "sku x platform",
+        "time_grain": "listing snapshot / sold date",
+        "channel_scope": [
+          "Amazon",
+          "eBay",
+          "TikTok Shop",
+          "Walmart"
+        ],
+        "master_data_refs": [
+          "mdm.sku",
+          "mdm.channel"
+        ],
+        "evidence_refs": [
+          "evidence.listing_snapshots",
+          "evidence.sold_transactions"
+        ],
+        "rule_refs": [
+          "gate.competition_density"
+        ]
       },
       "2.2": {
         "title": "成交价格带与折扣深度",
@@ -38,7 +58,27 @@
         "quality_targets": {
           "listing_snapshots": 20,
           "sold_transactions": 20
-        }
+        },
+        "analysis_grain": "transaction price event",
+        "entity_grain": "sku x platform",
+        "time_grain": "sold date",
+        "channel_scope": [
+          "Amazon",
+          "eBay",
+          "TikTok Shop",
+          "Walmart"
+        ],
+        "master_data_refs": [
+          "mdm.sku",
+          "mdm.price_metric"
+        ],
+        "evidence_refs": [
+          "evidence.listing_snapshots",
+          "evidence.sold_transactions"
+        ],
+        "rule_refs": [
+          "gate.sweet_spot_fit"
+        ]
       },
       "2.3": {
         "title": "价格-评分价值矩阵",
@@ -52,7 +92,27 @@
         "quality_targets": {
           "listing_snapshots": 20,
           "sold_transactions": 20
-        }
+        },
+        "analysis_grain": "price x rating bucket",
+        "entity_grain": "sku x platform",
+        "time_grain": "sold date",
+        "channel_scope": [
+          "Amazon",
+          "eBay",
+          "TikTok Shop",
+          "Walmart"
+        ],
+        "master_data_refs": [
+          "mdm.sku",
+          "mdm.price_metric"
+        ],
+        "evidence_refs": [
+          "evidence.listing_snapshots",
+          "evidence.sold_transactions"
+        ],
+        "rule_refs": [
+          "gate.value_gap"
+        ]
       },
       "2.4": {
         "title": "属性画像与白空间机会",
@@ -66,7 +126,27 @@
         "quality_targets": {
           "product_catalog": 8,
           "sold_transactions": 20
-        }
+        },
+        "analysis_grain": "attribute token x sold item",
+        "entity_grain": "canonical sku x attribute",
+        "time_grain": "sold date",
+        "channel_scope": [
+          "Amazon",
+          "eBay",
+          "TikTok Shop",
+          "Walmart"
+        ],
+        "master_data_refs": [
+          "mdm.sku",
+          "mdm.attribute_taxonomy"
+        ],
+        "evidence_refs": [
+          "evidence.product_catalog",
+          "evidence.sold_transactions"
+        ],
+        "rule_refs": [
+          "gate.whitespace_opportunity"
+        ]
       },
       "2.5": {
         "title": "评论情绪与痛点主题",
@@ -78,7 +158,25 @@
         ],
         "quality_targets": {
           "reviews": 16
-        }
+        },
+        "analysis_grain": "review row",
+        "entity_grain": "sku x review theme",
+        "time_grain": "review date",
+        "channel_scope": [
+          "Amazon",
+          "eBay",
+          "TikTok Shop",
+          "Walmart"
+        ],
+        "master_data_refs": [
+          "mdm.sku"
+        ],
+        "evidence_refs": [
+          "evidence.reviews"
+        ],
+        "rule_refs": [
+          "gate.voc_risk"
+        ]
       },
       "2.6": {
         "title": "货架动态与生存分析",
@@ -90,7 +188,26 @@
         ],
         "quality_targets": {
           "listing_snapshots": 20
-        }
+        },
+        "analysis_grain": "listing survival event",
+        "entity_grain": "listing x platform",
+        "time_grain": "snapshot date",
+        "channel_scope": [
+          "Amazon",
+          "eBay",
+          "TikTok Shop",
+          "Walmart"
+        ],
+        "master_data_refs": [
+          "mdm.sku",
+          "mdm.channel"
+        ],
+        "evidence_refs": [
+          "evidence.listing_snapshots"
+        ],
+        "rule_refs": [
+          "gate.shelf_stability"
+        ]
       }
     },
     "metric_specs": [
@@ -193,6 +310,23 @@
       "medium": 0,
       "low": 0
     },
+    "connected_channel_scope": [
+      "Amazon",
+      "TikTok Shop",
+      "Walmart",
+      "eBay"
+    ],
+    "control_tower_binding": {
+      "master_data_ref_coverage_ratio": 1.0,
+      "evidence_ref_coverage_ratio": 1.0,
+      "rule_ref_coverage_ratio": 1.0,
+      "gate_status_mix": {
+        "pass": 0,
+        "review": 0,
+        "fail": 0,
+        "not_applicable": 6
+      }
+    },
     "headline_metrics": [
       {
         "key": "total_gmv",
@@ -282,6 +416,34 @@
       "metric_ids": [
         "sku_gmv_leaderboard"
       ],
+      "granularity": {
+        "analysis_grain": "listing x transaction",
+        "entity_grain": "sku x platform",
+        "time_grain": "listing snapshot / sold date"
+      },
+      "channel_scope": [
+        "Amazon",
+        "eBay",
+        "TikTok Shop",
+        "Walmart"
+      ],
+      "master_data_ref": [
+        "mdm.sku",
+        "mdm.channel"
+      ],
+      "evidence_ref": [
+        "evidence.listing_snapshots",
+        "evidence.sold_transactions"
+      ],
+      "rule_ref": [
+        "gate.competition_density"
+      ],
+      "gate_result": {
+        "status": "not_applicable",
+        "source": "",
+        "raw_value": "",
+        "failed_items": []
+      },
       "data_quality": {
         "record_counts": {
           "listing_snapshots": 23,
@@ -407,6 +569,34 @@
       "metric_ids": [
         "realized_price_distribution"
       ],
+      "granularity": {
+        "analysis_grain": "transaction price event",
+        "entity_grain": "sku x platform",
+        "time_grain": "sold date"
+      },
+      "channel_scope": [
+        "Amazon",
+        "eBay",
+        "TikTok Shop",
+        "Walmart"
+      ],
+      "master_data_ref": [
+        "mdm.sku",
+        "mdm.price_metric"
+      ],
+      "evidence_ref": [
+        "evidence.listing_snapshots",
+        "evidence.sold_transactions"
+      ],
+      "rule_ref": [
+        "gate.sweet_spot_fit"
+      ],
+      "gate_result": {
+        "status": "not_applicable",
+        "source": "",
+        "raw_value": "",
+        "failed_items": []
+      },
       "data_quality": {
         "record_counts": {
           "listing_snapshots": 23,
@@ -484,6 +674,34 @@
       "metric_ids": [
         "price_rating_matrix"
       ],
+      "granularity": {
+        "analysis_grain": "price x rating bucket",
+        "entity_grain": "sku x platform",
+        "time_grain": "sold date"
+      },
+      "channel_scope": [
+        "Amazon",
+        "eBay",
+        "TikTok Shop",
+        "Walmart"
+      ],
+      "master_data_ref": [
+        "mdm.sku",
+        "mdm.price_metric"
+      ],
+      "evidence_ref": [
+        "evidence.listing_snapshots",
+        "evidence.sold_transactions"
+      ],
+      "rule_ref": [
+        "gate.value_gap"
+      ],
+      "gate_result": {
+        "status": "not_applicable",
+        "source": "",
+        "raw_value": "",
+        "failed_items": []
+      },
       "data_quality": {
         "record_counts": {
           "listing_snapshots": 23,
@@ -647,6 +865,34 @@
       "metric_ids": [
         "attribute_outperformance"
       ],
+      "granularity": {
+        "analysis_grain": "attribute token x sold item",
+        "entity_grain": "canonical sku x attribute",
+        "time_grain": "sold date"
+      },
+      "channel_scope": [
+        "Amazon",
+        "eBay",
+        "TikTok Shop",
+        "Walmart"
+      ],
+      "master_data_ref": [
+        "mdm.sku",
+        "mdm.attribute_taxonomy"
+      ],
+      "evidence_ref": [
+        "evidence.product_catalog",
+        "evidence.sold_transactions"
+      ],
+      "rule_ref": [
+        "gate.whitespace_opportunity"
+      ],
+      "gate_result": {
+        "status": "not_applicable",
+        "source": "",
+        "raw_value": "",
+        "failed_items": []
+      },
       "data_quality": {
         "record_counts": {
           "product_catalog": 8,
@@ -844,6 +1090,32 @@
       "metric_ids": [
         "review_sentiment_topics"
       ],
+      "granularity": {
+        "analysis_grain": "review row",
+        "entity_grain": "sku x review theme",
+        "time_grain": "review date"
+      },
+      "channel_scope": [
+        "Amazon",
+        "eBay",
+        "TikTok Shop",
+        "Walmart"
+      ],
+      "master_data_ref": [
+        "mdm.sku"
+      ],
+      "evidence_ref": [
+        "evidence.reviews"
+      ],
+      "rule_ref": [
+        "gate.voc_risk"
+      ],
+      "gate_result": {
+        "status": "not_applicable",
+        "source": "",
+        "raw_value": "",
+        "failed_items": []
+      },
       "data_quality": {
         "record_counts": {
           "reviews": 20
@@ -965,6 +1237,33 @@
       "metric_ids": [
         "listing_survival_dynamics"
       ],
+      "granularity": {
+        "analysis_grain": "listing survival event",
+        "entity_grain": "listing x platform",
+        "time_grain": "snapshot date"
+      },
+      "channel_scope": [
+        "Amazon",
+        "eBay",
+        "TikTok Shop",
+        "Walmart"
+      ],
+      "master_data_ref": [
+        "mdm.sku",
+        "mdm.channel"
+      ],
+      "evidence_ref": [
+        "evidence.listing_snapshots"
+      ],
+      "rule_ref": [
+        "gate.shelf_stability"
+      ],
+      "gate_result": {
+        "status": "not_applicable",
+        "source": "",
+        "raw_value": "",
+        "failed_items": []
+      },
       "data_quality": {
         "record_counts": {
           "listing_snapshots": 23

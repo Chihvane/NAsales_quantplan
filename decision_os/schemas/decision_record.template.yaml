@@ -1,0 +1,14 @@
+decision_record:
+  decision_record_id: DEC-20260314-0001
+  schema_version: 1.0
+  gate_id: GATE-MARKET-ENTRY-01
+  gate_version: 2.0
+  model_version: 1.3
+  capital_config_ref: CAPITAL-CONFIG-001
+  risk_config_ref: RISK-CONFIG-001
+  status: GO
+  failed_conditions: []
+  capital_check: pass
+  risk_check: pass
+  approved_by: strategy_committee
+  generated_at: "2026-03-14T12:00:00Z"

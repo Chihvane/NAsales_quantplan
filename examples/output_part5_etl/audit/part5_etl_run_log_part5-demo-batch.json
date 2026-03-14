@@ -1,0 +1,169 @@
+{
+  "batch_id": "part5-demo-batch",
+  "connector": "bundle_sync",
+  "generated_at": "2026-03-13T14:45:55.468531+00:00",
+  "max_retries": 3,
+  "staged_file_count": 19,
+  "staging_log": [
+    {
+      "attempt": 1,
+      "status": "success",
+      "started_at": "2026-03-13T14:45:55.451781+00:00",
+      "connector": "bundle_sync",
+      "file_name": "b2b_accounts.csv"
+    },
+    {
+      "attempt": 1,
+      "status": "success",
+      "started_at": "2026-03-13T14:45:55.453198+00:00",
+      "connector": "bundle_sync",
+      "file_name": "cash_flow_snapshots.csv"
+    },
+    {
+      "attempt": 1,
+      "status": "success",
+      "started_at": "2026-03-13T14:45:55.453735+00:00",
+      "connector": "bundle_sync",
+      "file_name": "channel_rate_cards.csv"
+    },
+    {
+      "attempt": 1,
+      "status": "success",
+      "started_at": "2026-03-13T14:45:55.454259+00:00",
+      "connector": "bundle_sync",
+      "file_name": "customer_cohorts.csv"
+    },
+    {
+      "attempt": 1,
+      "status": "success",
+      "started_at": "2026-03-13T14:45:55.454633+00:00",
+      "connector": "bundle_sync",
+      "file_name": "experiment_assignments.csv"
+    },
+    {
+      "attempt": 1,
+      "status": "success",
+      "started_at": "2026-03-13T14:45:55.455164+00:00",
+      "connector": "bundle_sync",
+      "file_name": "experiment_metrics.csv"
+    },
+    {
+      "attempt": 1,
+      "status": "success",
+      "started_at": "2026-03-13T14:45:55.455718+00:00",
+      "connector": "bundle_sync",
+      "file_name": "experiment_registry.csv"
+    },
+    {
+      "attempt": 1,
+      "status": "success",
+      "started_at": "2026-03-13T14:45:55.456094+00:00",
+      "connector": "bundle_sync",
+      "file_name": "inventory_positions.csv"
+    },
+    {
+      "attempt": 1,
+      "status": "success",
+      "started_at": "2026-03-13T14:45:55.456495+00:00",
+      "connector": "bundle_sync",
+      "file_name": "kpi_daily_snapshots.csv"
+    },
+    {
+      "attempt": 1,
+      "status": "success",
+      "started_at": "2026-03-13T14:45:55.456849+00:00",
+      "connector": "bundle_sync",
+      "file_name": "landed_cost_scenarios.csv"
+    },
+    {
+      "attempt": 1,
+      "status": "success",
+      "started_at": "2026-03-13T14:45:55.457688+00:00",
+      "connector": "bundle_sync",
+      "file_name": "listing_snapshots.csv"
+    },
+    {
+      "attempt": 1,
+      "status": "success",
+      "started_at": "2026-03-13T14:45:55.458052+00:00",
+      "connector": "bundle_sync",
+      "file_name": "marketing_spend.csv"
+    },
+    {
+      "attempt": 1,
+      "status": "success",
+      "started_at": "2026-03-13T14:45:55.458390+00:00",
+      "connector": "bundle_sync",
+      "file_name": "policy_change_log.csv"
+    },
+    {
+      "attempt": 1,
+      "status": "success",
+      "started_at": "2026-03-13T14:45:55.458697+00:00",
+      "connector": "bundle_sync",
+      "file_name": "pricing_actions.csv"
+    },
+    {
+      "attempt": 1,
+      "status": "success",
+      "started_at": "2026-03-13T14:45:55.458992+00:00",
+      "connector": "bundle_sync",
+      "file_name": "product_catalog.csv"
+    },
+    {
+      "attempt": 1,
+      "status": "success",
+      "started_at": "2026-03-13T14:45:55.459281+00:00",
+      "connector": "bundle_sync",
+      "file_name": "reorder_plan.csv"
+    },
+    {
+      "attempt": 1,
+      "status": "success",
+      "started_at": "2026-03-13T14:45:55.459578+00:00",
+      "connector": "bundle_sync",
+      "file_name": "returns_claims.csv"
+    },
+    {
+      "attempt": 1,
+      "status": "success",
+      "started_at": "2026-03-13T14:45:55.459893+00:00",
+      "connector": "bundle_sync",
+      "file_name": "sold_transactions.csv"
+    },
+    {
+      "attempt": 1,
+      "status": "success",
+      "started_at": "2026-03-13T14:45:55.460204+00:00",
+      "connector": "bundle_sync",
+      "file_name": "traffic_sessions.csv"
+    }
+  ],
+  "manifest_diff": {
+    "previous_manifest": "",
+    "added_files": [
+      "b2b_accounts.csv",
+      "cash_flow_snapshots.csv",
+      "channel_rate_cards.csv",
+      "customer_cohorts.csv",
+      "experiment_assignments.csv",
+      "experiment_metrics.csv",
+      "experiment_registry.csv",
+      "inventory_positions.csv",
+      "kpi_daily_snapshots.csv",
+      "landed_cost_scenarios.csv",
+      "listing_snapshots.csv",
+      "marketing_spend.csv",
+      "policy_change_log.csv",
+      "pricing_actions.csv",
+      "product_catalog.csv",
+      "reorder_plan.csv",
+      "returns_claims.csv",
+      "sold_transactions.csv",
+      "traffic_sessions.csv"
+    ],
+    "removed_files": [],
+    "changed_files": [],
+    "unchanged_files": []
+  }
+}

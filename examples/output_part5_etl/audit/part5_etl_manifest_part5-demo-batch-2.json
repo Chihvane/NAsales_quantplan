@@ -1,0 +1,649 @@
+{
+  "batch_id": "part5-demo-batch-2",
+  "generated_at": "2026-03-13T14:46:55.438427+00:00",
+  "source_dir": "examples/part5_demo",
+  "connector": "export_drop",
+  "connector_metadata": {
+    "supports_incremental": true,
+    "description": "Ingest a local folder that simulates a manual platform export drop."
+  },
+  "required_tables": [
+    "listing_snapshots.csv",
+    "sold_transactions.csv",
+    "product_catalog.csv",
+    "landed_cost_scenarios.csv",
+    "channel_rate_cards.csv",
+    "marketing_spend.csv",
+    "traffic_sessions.csv",
+    "returns_claims.csv",
+    "customer_cohorts.csv",
+    "inventory_positions.csv",
+    "experiment_registry.csv",
+    "b2b_accounts.csv",
+    "kpi_daily_snapshots.csv",
+    "pricing_actions.csv",
+    "reorder_plan.csv",
+    "policy_change_log.csv",
+    "cash_flow_snapshots.csv"
+  ],
+  "optional_tables": [
+    "experiment_assignments.csv",
+    "experiment_metrics.csv"
+  ],
+  "raw": {
+    "raw_dir": "examples/output_part5_etl/raw/part5-demo-batch-2",
+    "connector": "export_drop",
+    "connector_metadata": {
+      "supports_incremental": true,
+      "description": "Ingest a local folder that simulates a manual platform export drop."
+    },
+    "staged_files": [
+      {
+        "file_name": "b2b_accounts.csv",
+        "bytes": 246,
+        "sha256": "7682172445a702a03194f9c9211ad786909bc1fd683feeafb99532cc0033341b",
+        "record_count": 3,
+        "attempts": 1,
+        "attempt_logs": [
+          {
+            "attempt": 1,
+            "status": "success",
+            "started_at": "2026-03-13T14:46:55.423693+00:00",
+            "connector": "export_drop",
+            "file_name": "b2b_accounts.csv"
+          }
+        ]
+      },
+      {
+        "file_name": "cash_flow_snapshots.csv",
+        "bytes": 404,
+        "sha256": "74ae25c3a38e4110b72c3b068cd5f8a4bfe996c23070c52f1647bef342655061",
+        "record_count": 8,
+        "attempts": 1,
+        "attempt_logs": [
+          {
+            "attempt": 1,
+            "status": "success",
+            "started_at": "2026-03-13T14:46:55.424853+00:00",
+            "connector": "export_drop",
+            "file_name": "cash_flow_snapshots.csv"
+          }
+        ]
+      },
+      {
+        "file_name": "channel_rate_cards.csv",
+        "bytes": 1323,
+        "sha256": "af96e36eed24610a00f4fc46307e604162d9028b3a4d43becae8272016c31b02",
+        "record_count": 18,
+        "attempts": 1,
+        "attempt_logs": [
+          {
+            "attempt": 1,
+            "status": "success",
+            "started_at": "2026-03-13T14:46:55.425210+00:00",
+            "connector": "export_drop",
+            "file_name": "channel_rate_cards.csv"
+          }
+        ]
+      },
+      {
+        "file_name": "customer_cohorts.csv",
+        "bytes": 252,
+        "sha256": "7508861357dba9167282465f64c2e7811e201694428d564e4270e63f92cb4cc2",
+        "record_count": 6,
+        "attempts": 1,
+        "attempt_logs": [
+          {
+            "attempt": 1,
+            "status": "success",
+            "started_at": "2026-03-13T14:46:55.425553+00:00",
+            "connector": "export_drop",
+            "file_name": "customer_cohorts.csv"
+          }
+        ]
+      },
+      {
+        "file_name": "experiment_assignments.csv",
+        "bytes": 454,
+        "sha256": "58e2273f0f86126ce30fb9c834596a3f57319cf4be9f734b51b0dac28ab21f4e",
+        "record_count": 10,
+        "attempts": 1,
+        "attempt_logs": [
+          {
+            "attempt": 1,
+            "status": "success",
+            "started_at": "2026-03-13T14:46:55.426025+00:00",
+            "connector": "export_drop",
+            "file_name": "experiment_assignments.csv"
+          }
+        ]
+      },
+      {
+        "file_name": "experiment_metrics.csv",
+        "bytes": 1591,
+        "sha256": "3883d5d7b2d6b94d0f686b9239f22a5c3ffa3e1c8e2ce16c0bc0e279caf5feef",
+        "record_count": 20,
+        "attempts": 1,
+        "attempt_logs": [
+          {
+            "attempt": 1,
+            "status": "success",
+            "started_at": "2026-03-13T14:46:55.426550+00:00",
+            "connector": "export_drop",
+            "file_name": "experiment_metrics.csv"
+          }
+        ]
+      },
+      {
+        "file_name": "experiment_registry.csv",
+        "bytes": 881,
+        "sha256": "d78d19676a4838c89f8d5446d4cb17584229df9bfc55bf5543cd121cd26f8cf5",
+        "record_count": 6,
+        "attempts": 1,
+        "attempt_logs": [
+          {
+            "attempt": 1,
+            "status": "success",
+            "started_at": "2026-03-13T14:46:55.426939+00:00",
+            "connector": "export_drop",
+            "file_name": "experiment_registry.csv"
+          }
+        ]
+      },
+      {
+        "file_name": "inventory_positions.csv",
+        "bytes": 618,
+        "sha256": "ac72f9cfbcb6f1a1a8f5b4fd5cb4e7c7c1a30d6a057b629b09c3ee85b4e118bc",
+        "record_count": 12,
+        "attempts": 1,
+        "attempt_logs": [
+          {
+            "attempt": 1,
+            "status": "success",
+            "started_at": "2026-03-13T14:46:55.427321+00:00",
+            "connector": "export_drop",
+            "file_name": "inventory_positions.csv"
+          }
+        ]
+      },
+      {
+        "file_name": "kpi_daily_snapshots.csv",
+        "bytes": 782,
+        "sha256": "37989de706177926c1a2339a89a5b5a9bc783e9e421b34d15d29a4141b0acd7a",
+        "record_count": 14,
+        "attempts": 1,
+        "attempt_logs": [
+          {
+            "attempt": 1,
+            "status": "success",
+            "started_at": "2026-03-13T14:46:55.427751+00:00",
+            "connector": "export_drop",
+            "file_name": "kpi_daily_snapshots.csv"
+          }
+        ]
+      },
+      {
+        "file_name": "landed_cost_scenarios.csv",
+        "bytes": 800,
+        "sha256": "921ded5eb988b3af8e66c214d31c20569c8afe7a567a235a6b2ad3530eb83e52",
+        "record_count": 12,
+        "attempts": 1,
+        "attempt_logs": [
+          {
+            "attempt": 1,
+            "status": "success",
+            "started_at": "2026-03-13T14:46:55.428220+00:00",
+            "connector": "export_drop",
+            "file_name": "landed_cost_scenarios.csv"
+          }
+        ]
+      },
+      {
+        "file_name": "listing_snapshots.csv",
+        "bytes": 1321,
+        "sha256": "90effa4fac9205be88418d09c9dcaf3642177e2df9e916eae933b05ef24e1460",
+        "record_count": 12,
+        "attempts": 1,
+        "attempt_logs": [
+          {
+            "attempt": 1,
+            "status": "success",
+            "started_at": "2026-03-13T14:46:55.428669+00:00",
+            "connector": "export_drop",
+            "file_name": "listing_snapshots.csv"
+          }
+        ]
+      },
+      {
+        "file_name": "marketing_spend.csv",
+        "bytes": 833,
+        "sha256": "10f4e9bf4237396732b9708dcda0d5ab6bc73431494de118bf76fc2778f33917",
+        "record_count": 12,
+        "attempts": 1,
+        "attempt_logs": [
+          {
+            "attempt": 1,
+            "status": "success",
+            "started_at": "2026-03-13T14:46:55.429023+00:00",
+            "connector": "export_drop",
+            "file_name": "marketing_spend.csv"
+          }
+        ]
+      },
+      {
+        "file_name": "policy_change_log.csv",
+        "bytes": 312,
+        "sha256": "7f127f52a9bca90d9cf85501d986f8932fe35f384b4d17e6b74f73c249fb3347",
+        "record_count": 2,
+        "attempts": 1,
+        "attempt_logs": [
+          {
+            "attempt": 1,
+            "status": "success",
+            "started_at": "2026-03-13T14:46:55.429353+00:00",
+            "connector": "export_drop",
+            "file_name": "policy_change_log.csv"
+          }
+        ]
+      },
+      {
+        "file_name": "pricing_actions.csv",
+        "bytes": 480,
+        "sha256": "c7513570a677ab3593e3e3416845a417252bd9b3265a0f7a214dc16bcfca138f",
+        "record_count": 6,
+        "attempts": 1,
+        "attempt_logs": [
+          {
+            "attempt": 1,
+            "status": "success",
+            "started_at": "2026-03-13T14:46:55.429639+00:00",
+            "connector": "export_drop",
+            "file_name": "pricing_actions.csv"
+          }
+        ]
+      },
+      {
+        "file_name": "product_catalog.csv",
+        "bytes": 334,
+        "sha256": "67bd53344e20e43b37398e807011787b8a72cf935c843ff89fa70281cfd8ea9a",
+        "record_count": 2,
+        "attempts": 1,
+        "attempt_logs": [
+          {
+            "attempt": 1,
+            "status": "success",
+            "started_at": "2026-03-13T14:46:55.429955+00:00",
+            "connector": "export_drop",
+            "file_name": "product_catalog.csv"
+          }
+        ]
+      },
+      {
+        "file_name": "reorder_plan.csv",
+        "bytes": 385,
+        "sha256": "8d9310004711f6057c1e10cb9600a1de6e83d0cf0fb0fa9d18c678f2185bd6b4",
+        "record_count": 6,
+        "attempts": 1,
+        "attempt_logs": [
+          {
+            "attempt": 1,
+            "status": "success",
+            "started_at": "2026-03-13T14:46:55.430240+00:00",
+            "connector": "export_drop",
+            "file_name": "reorder_plan.csv"
+          }
+        ]
+      },
+      {
+        "file_name": "returns_claims.csv",
+        "bytes": 591,
+        "sha256": "7e712add851a2a7b59cf88d64104a83b547692550e0177a6cf081e518b59b701",
+        "record_count": 8,
+        "attempts": 1,
+        "attempt_logs": [
+          {
+            "attempt": 1,
+            "status": "success",
+            "started_at": "2026-03-13T14:46:55.430544+00:00",
+            "connector": "export_drop",
+            "file_name": "returns_claims.csv"
+          }
+        ]
+      },
+      {
+        "file_name": "sold_transactions.csv",
+        "bytes": 773,
+        "sha256": "a59c175c256442197bbda8265e594c5c32bd1ca3df252293b3ae7da62f962e71",
+        "record_count": 12,
+        "attempts": 1,
+        "attempt_logs": [
+          {
+            "attempt": 1,
+            "status": "success",
+            "started_at": "2026-03-13T14:46:55.430846+00:00",
+            "connector": "export_drop",
+            "file_name": "sold_transactions.csv"
+          }
+        ]
+      },
+      {
+        "file_name": "traffic_sessions.csv",
+        "bytes": 760,
+        "sha256": "d63c6cc5b86d31b41cb025ea90c977a49d975f6d84d012d4edd6047903a44891",
+        "record_count": 14,
+        "attempts": 1,
+        "attempt_logs": [
+          {
+            "attempt": 1,
+            "status": "success",
+            "started_at": "2026-03-13T14:46:55.431167+00:00",
+            "connector": "export_drop",
+            "file_name": "traffic_sessions.csv"
+          }
+        ]
+      }
+    ],
+    "staging_log": [
+      {
+        "attempt": 1,
+        "status": "success",
+        "started_at": "2026-03-13T14:46:55.423693+00:00",
+        "connector": "export_drop",
+        "file_name": "b2b_accounts.csv"
+      },
+      {
+        "attempt": 1,
+        "status": "success",
+        "started_at": "2026-03-13T14:46:55.424853+00:00",
+        "connector": "export_drop",
+        "file_name": "cash_flow_snapshots.csv"
+      },
+      {
+        "attempt": 1,
+        "status": "success",
+        "started_at": "2026-03-13T14:46:55.425210+00:00",
+        "connector": "export_drop",
+        "file_name": "channel_rate_cards.csv"
+      },
+      {
+        "attempt": 1,
+        "status": "success",
+        "started_at": "2026-03-13T14:46:55.425553+00:00",
+        "connector": "export_drop",
+        "file_name": "customer_cohorts.csv"
+      },
+      {
+        "attempt": 1,
+        "status": "success",
+        "started_at": "2026-03-13T14:46:55.426025+00:00",
+        "connector": "export_drop",
+        "file_name": "experiment_assignments.csv"
+      },
+      {
+        "attempt": 1,
+        "status": "success",
+        "started_at": "2026-03-13T14:46:55.426550+00:00",
+        "connector": "export_drop",
+        "file_name": "experiment_metrics.csv"
+      },
+      {
+        "attempt": 1,
+        "status": "success",
+        "started_at": "2026-03-13T14:46:55.426939+00:00",
+        "connector": "export_drop",
+        "file_name": "experiment_registry.csv"
+      },
+      {
+        "attempt": 1,
+        "status": "success",
+        "started_at": "2026-03-13T14:46:55.427321+00:00",
+        "connector": "export_drop",
+        "file_name": "inventory_positions.csv"
+      },
+      {
+        "attempt": 1,
+        "status": "success",
+        "started_at": "2026-03-13T14:46:55.427751+00:00",
+        "connector": "export_drop",
+        "file_name": "kpi_daily_snapshots.csv"
+      },
+      {
+        "attempt": 1,
+        "status": "success",
+        "started_at": "2026-03-13T14:46:55.428220+00:00",
+        "connector": "export_drop",
+        "file_name": "landed_cost_scenarios.csv"
+      },
+      {
+        "attempt": 1,
+        "status": "success",
+        "started_at": "2026-03-13T14:46:55.428669+00:00",
+        "connector": "export_drop",
+        "file_name": "listing_snapshots.csv"
+      },
+      {
+        "attempt": 1,
+        "status": "success",
+        "started_at": "2026-03-13T14:46:55.429023+00:00",
+        "connector": "export_drop",
+        "file_name": "marketing_spend.csv"
+      },
+      {
+        "attempt": 1,
+        "status": "success",
+        "started_at": "2026-03-13T14:46:55.429353+00:00",
+        "connector": "export_drop",
+        "file_name": "policy_change_log.csv"
+      },
+      {
+        "attempt": 1,
+        "status": "success",
+        "started_at": "2026-03-13T14:46:55.429639+00:00",
+        "connector": "export_drop",
+        "file_name": "pricing_actions.csv"
+      },
+      {
+        "attempt": 1,
+        "status": "success",
+        "started_at": "2026-03-13T14:46:55.429955+00:00",
+        "connector": "export_drop",
+        "file_name": "product_catalog.csv"
+      },
+      {
+        "attempt": 1,
+        "status": "success",
+        "started_at": "2026-03-13T14:46:55.430240+00:00",
+        "connector": "export_drop",
+        "file_name": "reorder_plan.csv"
+      },
+      {
+        "attempt": 1,
+        "status": "success",
+        "started_at": "2026-03-13T14:46:55.430544+00:00",
+        "connector": "export_drop",
+        "file_name": "returns_claims.csv"
+      },
+      {
+        "attempt": 1,
+        "status": "success",
+        "started_at": "2026-03-13T14:46:55.430846+00:00",
+        "connector": "export_drop",
+        "file_name": "sold_transactions.csv"
+      },
+      {
+        "attempt": 1,
+        "status": "success",
+        "started_at": "2026-03-13T14:46:55.431167+00:00",
+        "connector": "export_drop",
+        "file_name": "traffic_sessions.csv"
+      }
+    ]
+  },
+  "curated": {
+    "curated_dir": "examples/output_part5_etl/curated/part5-demo-batch-2",
+    "files": [
+      {
+        "file_name": "listing_snapshots.csv",
+        "bytes": 1334,
+        "sha256": "291307252152e106aa844e85d62b99ceb7912cbf47fe26c33578d40e2655bddd",
+        "record_count": 12
+      },
+      {
+        "file_name": "sold_transactions.csv",
+        "bytes": 786,
+        "sha256": "062cc642c220c5097061035951b1fd6e856faf42473c03a8ca2c15e2d0566710",
+        "record_count": 12
+      },
+      {
+        "file_name": "product_catalog.csv",
+        "bytes": 337,
+        "sha256": "fa716c1bef1625915f9f5002111d40419e72c7da9c69b1889ef88b1494f66877",
+        "record_count": 2
+      },
+      {
+        "file_name": "landed_cost_scenarios.csv",
+        "bytes": 813,
+        "sha256": "fd307bb83366236816a6e25111c8d9dd06c29c177ce85b1bc332a8c5acb755db",
+        "record_count": 12
+      },
+      {
+        "file_name": "channel_rate_cards.csv",
+        "bytes": 1342,
+        "sha256": "a45982baad0a3c74a10dec3dd375cae940ee8185215b5b9d788305e6b0dab4ef",
+        "record_count": 18
+      },
+      {
+        "file_name": "marketing_spend.csv",
+        "bytes": 846,
+        "sha256": "8aac589203699e3477199239b71556f162525e943cf719e0b65928686b1d5531",
+        "record_count": 12
+      },
+      {
+        "file_name": "traffic_sessions.csv",
+        "bytes": 775,
+        "sha256": "bacda7c6e717fd5ebf771f4446810410a83737356b2699621cd5b7ea05c89b12",
+        "record_count": 14
+      },
+      {
+        "file_name": "returns_claims.csv",
+        "bytes": 600,
+        "sha256": "89210a9d8ce5d1b09c2cdbd40f82ddc091f2fdc557ea75a3ccda9377df43f8b0",
+        "record_count": 8
+      },
+      {
+        "file_name": "customer_cohorts.csv",
+        "bytes": 259,
+        "sha256": "5eab021297b6331c8bd695b06c9696d99ea441fd653d4cf3950366357c16dd45",
+        "record_count": 6
+      },
+      {
+        "file_name": "inventory_positions.csv",
+        "bytes": 631,
+        "sha256": "b84b8589570f31428cbc341b202ab38bc27e41b64dd3c18936f5b2c37a8df302",
+        "record_count": 12
+      },
+      {
+        "file_name": "experiment_registry.csv",
+        "bytes": 888,
+        "sha256": "6aef94b0083c00c75110557774b7ba0ec009f60e55d1d0a1651fb3789e5c33e5",
+        "record_count": 6
+      },
+      {
+        "file_name": "b2b_accounts.csv",
+        "bytes": 250,
+        "sha256": "35cd10923d9b47e198b25818a3e77555f80da4358a08692edd8a32a759558efa",
+        "record_count": 3
+      },
+      {
+        "file_name": "kpi_daily_snapshots.csv",
+        "bytes": 797,
+        "sha256": "cfacda7ddba159541fe508dd136f08ae514aab3625ceefb8af1899cf9a0db302",
+        "record_count": 14
+      },
+      {
+        "file_name": "pricing_actions.csv",
+        "bytes": 487,
+        "sha256": "f66bfbc869bccb2c8c59837dd70e1525245ba043bda64c24b699a6ef4aca9eae",
+        "record_count": 6
+      },
+      {
+        "file_name": "reorder_plan.csv",
+        "bytes": 392,
+        "sha256": "965e005e3a22e78ec9c4d5b4b45c8d14198864845b54d053476a3878074988ae",
+        "record_count": 6
+      },
+      {
+        "file_name": "policy_change_log.csv",
+        "bytes": 315,
+        "sha256": "b239e8828887e6c13d12dcc7d1b3ca42521e14dda73c5abd2a0cb859f35c9f6d",
+        "record_count": 2
+      },
+      {
+        "file_name": "cash_flow_snapshots.csv",
+        "bytes": 413,
+        "sha256": "7dc02f0a8ee8acb2706e4119178eaf5cfcd0de9d55dbbcae1774d0e1d4902ea3",
+        "record_count": 8
+      },
+      {
+        "file_name": "experiment_assignments.csv",
+        "bytes": 465,
+        "sha256": "8ee0a996b1667972df1599428d3051b906eccca86f92e1665b678c977b2e4f4f",
+        "record_count": 10
+      },
+      {
+        "file_name": "experiment_metrics.csv",
+        "bytes": 1612,
+        "sha256": "835985b22bfeec68caa4ac3c77f346f21c28938fcb03ceba062ceee339466a04",
+        "record_count": 20
+      }
+    ],
+    "table_inventory": {
+      "listing_snapshots": 12,
+      "sold_transactions": 12,
+      "product_catalog": 2,
+      "landed_cost_scenarios": 12,
+      "channel_rate_cards": 18,
+      "marketing_spend": 12,
+      "traffic_sessions": 14,
+      "returns_claims": 8,
+      "customer_cohorts": 6,
+      "inventory_positions": 12,
+      "experiment_registry": 6,
+      "experiment_assignments": 10,
+      "experiment_metrics": 20,
+      "b2b_accounts": 3,
+      "kpi_daily_snapshots": 14,
+      "pricing_actions": 6,
+      "reorder_plan": 6,
+      "policy_change_log": 2,
+      "cash_flow_snapshots": 8
+    }
+  },
+  "manifest_diff": {
+    "previous_manifest": "examples/output_part5_etl/audit/part5_etl_manifest_part5-demo-batch.json",
+    "added_files": [],
+    "removed_files": [],
+    "changed_files": [],
+    "unchanged_files": [
+      "b2b_accounts.csv",
+      "cash_flow_snapshots.csv",
+      "channel_rate_cards.csv",
+      "customer_cohorts.csv",
+      "experiment_assignments.csv",
+      "experiment_metrics.csv",
+      "experiment_registry.csv",
+      "inventory_positions.csv",
+      "kpi_daily_snapshots.csv",
+      "landed_cost_scenarios.csv",
+      "listing_snapshots.csv",
+      "marketing_spend.csv",
+      "policy_change_log.csv",
+      "pricing_actions.csv",
+      "product_catalog.csv",
+      "reorder_plan.csv",
+      "returns_claims.csv",
+      "sold_transactions.csv",
+      "traffic_sessions.csv"
+    ]
+  }
+}

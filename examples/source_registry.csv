@@ -1,0 +1,6 @@
+source_id,topic,source_name,source_type,confidence_grade,collected_at,freshness_days,version,status,owner_role
+google_trends,demand,Google Trends,official,A,2026-03-14,7,v1,active,analytics_team
+amazon_promo_calendar,promo,Amazon Promo Calendar,platform,B,2026-03-14,30,v1,active,market_team
+amazon_events,platform,Amazon Event Tracker,platform,B,2026-03-14,30,v1,active,market_team
+weather_event_feed,weather,NOAA Event Feed,official,A,2026-03-14,3,v1,active,analytics_team
+statista_market_size,market_size,Statista,third_party,B,2026-03-14,90,v1,active,strategy_team
