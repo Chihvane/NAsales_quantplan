@@ -23,7 +23,7 @@ def render_model_view(snapshot_payload: dict, summary_payload: dict) -> None:
     st.subheader("Factor Inputs")
     field_data = snapshot_payload.get("field_data", {})
     if field_data:
-        st.dataframe(pd.DataFrame([field_data]), use_container_width=True, hide_index=True)
+        st.dataframe(pd.DataFrame([field_data]), width="stretch", hide_index=True)
 
     st.subheader("Optimization")
     optimization = summary_payload.get("summary", {}).get("optimization_summary", {})

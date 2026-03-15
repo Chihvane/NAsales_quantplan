@@ -15,7 +15,7 @@ def render_audit_view(audit_payload: dict, summary_payload: dict, snapshot_paylo
     st.subheader("Audit Log")
     logs = audit_payload.get("logs", [])
     if logs:
-        st.dataframe(pd.DataFrame(logs), use_container_width=True, hide_index=True)
+        st.dataframe(pd.DataFrame(logs), width="stretch", hide_index=True)
 
     reports = summary_payload.get("reports_overview", [])
     if reports:
@@ -32,4 +32,4 @@ def render_audit_view(audit_payload: dict, summary_payload: dict, snapshot_paylo
                     "Fail": validation.get("fail_count", 0),
                 }
             )
-        st.dataframe(pd.DataFrame(validation_rows), use_container_width=True, hide_index=True)
+        st.dataframe(pd.DataFrame(validation_rows), width="stretch", hide_index=True)

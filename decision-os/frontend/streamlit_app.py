@@ -165,8 +165,8 @@ def main() -> None:
             "Workspace",
             ["Overview", "Reports", "Backtest", "Gate & Capital", "Audit"],
         )
-        run_pipeline = st.button("Run Full Chain", type="primary", use_container_width=True)
-        refresh_summary = st.button("Refresh State", use_container_width=True)
+        run_pipeline = st.button("Run Full Chain", type="primary", width="stretch")
+        refresh_summary = st.button("Refresh State", width="stretch")
 
     if run_pipeline:
         with st.spinner("Running full system chain..."):
@@ -199,14 +199,14 @@ def main() -> None:
             st.subheader("Candidate Features")
             st.dataframe(
                 [{"feature": key, "value": value} for key, value in snapshot.get("candidate_features", {}).items()],
-                use_container_width=True,
+                width="stretch",
                 hide_index=True,
             )
         with right:
             st.subheader("Gate Thresholds")
             st.dataframe(
                 [{"threshold": key, "value": value} for key, value in snapshot.get("gate_thresholds", {}).items()],
-                use_container_width=True,
+                width="stretch",
                 hide_index=True,
             )
             st.subheader("Capital State")

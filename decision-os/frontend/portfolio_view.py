@@ -11,7 +11,7 @@ def render_portfolio_view(snapshot_payload: dict, summary_payload: dict) -> None
 
     st.subheader("Current Portfolio Recommendation")
     if portfolio_rows:
-        st.dataframe(pd.DataFrame(portfolio_rows), use_container_width=True, hide_index=True)
+        st.dataframe(pd.DataFrame(portfolio_rows), width="stretch", hide_index=True)
 
     st.subheader("Backtest Allocation Health")
     cols = st.columns(4)
@@ -34,5 +34,5 @@ def render_portfolio_view(snapshot_payload: dict, summary_payload: dict) -> None
                 }
             )
         frame = pd.DataFrame(scenario_rows)
-        st.dataframe(frame, use_container_width=True, hide_index=True)
-        st.bar_chart(frame.set_index("scenario_id")[["score"]], use_container_width=True)
+        st.dataframe(frame, width="stretch", hide_index=True)
+        st.bar_chart(frame.set_index("scenario_id")[["score"]], width="stretch")

@@ -31,7 +31,7 @@ def render_executive_view(summary_payload: dict, snapshot_payload: dict) -> None
         }
     )
     if not curves.empty:
-        st.line_chart(curves, use_container_width=True)
+        st.line_chart(curves, width="stretch")
 
     drawdowns = pd.DataFrame(
         {
@@ -40,4 +40,4 @@ def render_executive_view(summary_payload: dict, snapshot_payload: dict) -> None
         }
     )
     if not drawdowns.empty:
-        st.line_chart(drawdowns, use_container_width=True)
+        st.line_chart(drawdowns, width="stretch")

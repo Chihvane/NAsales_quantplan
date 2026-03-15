@@ -23,7 +23,7 @@ def render_reports_view(payload: dict) -> None:
                 "Validation Pass": report.get("validation", {}).get("pass_count", 0),
             }
         )
-    st.dataframe(pd.DataFrame(summary_rows), use_container_width=True, hide_index=True)
+    st.dataframe(pd.DataFrame(summary_rows), width="stretch", hide_index=True)
 
     for report in reports:
         with st.expander(f"{report.get('label', '')} · {report.get('decision_signal', '')}", expanded=False):
@@ -37,4 +37,3 @@ def render_reports_view(payload: dict) -> None:
             if proxy_flags:
                 st.write("Proxy Flags")
                 st.write(", ".join(proxy_flags))
-
