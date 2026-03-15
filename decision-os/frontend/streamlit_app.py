@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 import os
 import sys
 from pathlib import Path
@@ -29,7 +30,12 @@ except ModuleNotFoundError:
     from reports_view import render_reports_view
 
 
-DEFAULT_API_BASE = os.environ.get("DECISION_OS_API_BASE", "http://localhost:8000")
+WORKSPACE_ROOT = ROOT.parent
+FULL_SYSTEM_ROOT = WORKSPACE_ROOT / "artifacts" / "full_system_run"
+FULL_SYSTEM_SUMMARY_PATH = FULL_SYSTEM_ROOT / "full_system_run_summary.json"
+BRIDGE_BUNDLE_PATH = WORKSPACE_ROOT / "artifacts" / "decision_os_bridge" / "integrated_market_product_bundle.json"
+
+DEFAULT_API_BASE = os.environ.get("DECISION_OS_API_BASE", "")
 
 
 def _inject_theme() -> None:
@@ -92,21 +98,132 @@ def _request_json(api_base: str, method: str, path: str) -> dict[str, Any]:
     return response.json()
 
 
-def _load_local_state(*, refresh_summary: bool = False, run_full_chain: bool = False) -> tuple[dict[str, Any], dict[str, Any], dict[str, Any]]:
-    from backend.audit.audit_logger import sample_audit_log
-    from backend.services.system_flow import (
-        build_system_snapshot_payload,
-        load_or_run_full_chain_payload,
-        run_full_chain_payload,
-    )
+def _read_json(path: Path) -> dict[str, Any]:
+    return json.loads(path.read_text(encoding="utf-8"))
 
-    if run_full_chain:
-        summary = run_full_chain_payload()
-    else:
-        summary = load_or_run_full_chain_payload(refresh=refresh_summary)
-    snapshot = build_system_snapshot_payload()
-    audit = {"logs": sample_audit_log()}
-    return summary, snapshot, audit
+
+def _extract_report_overview(label: str, report_path: str) -> dict[str, Any]:
+    report = _read_json(Path(report_path))
+    overview = report.get("overview", {})
+    confidence_band = report.get("confidence_band", {})
+    validation_summary = report.get("validation", {}).get("summary", {})
+    return {
+        "label": label,
+        "report_id": report.get("metadata", {}).get("report_id", ""),
+        "path": report_path,
+        "decision_signal": overview.get("decision_signal", ""),
+        "decision_score": overview.get("decision_score", 0.0),
+        "headline_metrics": overview.get("headline_metrics", []),
+        "confidence_label": confidence_band.get("label", ""),
+        "confidence_score": confidence_band.get("score", 0.0),
+        "factor_snapshot_count": len(report.get("factor_snapshots", {})),
+        "proxy_usage_flags": report.get("proxy_usage_flags", []),
+        "validation": validation_summary,
+    }
+
+
+def _build_reports_overview(summary: dict[str, Any]) -> list[dict[str, Any]]:
+    label_map = {
+        "part0": "Part 0",
+        "horizontal": "Horizontal",
+        "part1": "Part 1",
+        "part2": "Part 2",
+        "part3": "Part 3",
+        "part4": "Part 4",
+        "part5": "Part 5",
+    }
+    report_paths = summary.get("report_paths", {})
+    rows: list[dict[str, Any]] = []
+    for key, label in label_map.items():
+        report_path = report_paths.get(key)
+        if report_path:
+            rows.append(_extract_report_overview(label, report_path))
+    return rows
+
+
+def _build_local_snapshot(summary: dict[str, Any], bridge_bundle: dict[str, Any]) -> dict[str, Any]:
+    gate_inputs = bridge_bundle.get("gate_inputs", {})
+    field_data = bridge_bundle.get("field_data_proxy", {})
+    signal_cards = {
+        "governance_readiness_score": gate_inputs.get("governance_readiness_score", 0.0),
+        "control_tower_score": gate_inputs.get("control_tower_score", 0.0),
+        "operating_system_readiness_score": gate_inputs.get("operating_system_readiness_score", 0.0),
+        "integrated_factor_score": gate_inputs.get("integrated_factor_score", 0.0),
+        "signal_regime": gate_inputs.get("signal_regime", ""),
+    }
+    portfolio_rows = []
+    for signal in (
+        bridge_bundle.get("part4_channel_signals", {}),
+        bridge_bundle.get("part5_operating_signals", {}),
+    ):
+        if signal:
+            for key, value in signal.items():
+                if isinstance(value, (int, float, str)):
+                    portfolio_rows.append({"channel": key, "score": value, "allocated_capital": ""})
+            break
+    return {
+        "source_mode": summary.get("snapshot", {}).get("source_mode", "local_artifacts"),
+        "decision": summary.get("snapshot", {}).get("decision", "UNKNOWN"),
+        "factor_score": summary.get("snapshot", {}).get("factor_score", gate_inputs.get("integrated_factor_score", 0.0)),
+        "required_capital": summary.get("snapshot", {}).get("required_capital", 0.0),
+        "field_data": field_data,
+        "model_outputs": {
+            "profit_p10": gate_inputs.get("channel_margin_rate_var_95", 0.0),
+            "profit_p50": gate_inputs.get("channel_risk_adjusted_profit", 0.0),
+            "profit_p90": gate_inputs.get("localized_market_selection_score", 0.0),
+            "loss_probability": gate_inputs.get("channel_loss_probability_weighted", 0.0),
+        },
+        "capital_state": {
+            "required_capital": summary.get("snapshot", {}).get("required_capital", 0.0),
+            "mode": "artifact_proxy",
+        },
+        "risk_state": {
+            "drift_risk_score": gate_inputs.get("drift_risk_score", 0.0),
+            "supply_tail_risk_score": gate_inputs.get("supply_tail_risk_score", 0.0),
+            "channel_tail_shortfall_severity": gate_inputs.get("channel_tail_shortfall_severity", 0.0),
+        },
+        "candidate_features": {**field_data, **gate_inputs},
+        "gate_thresholds": summary.get("backtest_summary", {}).get("gate_params", {}),
+        "portfolio_rows": portfolio_rows,
+        "bridge_meta": {
+            "tenant_id": bridge_bundle.get("tenant_id", ""),
+            "as_of_date": bridge_bundle.get("as_of_date", ""),
+            "report_refs": bridge_bundle.get("report_refs", {}),
+            "factor_panel_count": len(bridge_bundle.get("factor_panel", [])),
+        },
+        "signal_cards": signal_cards,
+    }
+
+
+def _load_local_state(*, refresh_summary: bool = False, run_full_chain: bool = False) -> tuple[dict[str, Any], dict[str, Any], dict[str, Any]]:
+    summary = _read_json(FULL_SYSTEM_SUMMARY_PATH)
+    bridge_bundle = _read_json(BRIDGE_BUNDLE_PATH)
+    reports_overview = _build_reports_overview(summary)
+    payload = {
+        "status": "loaded" if not run_full_chain else "artifact_fallback",
+        "artifacts": {
+            "summary_json": str(FULL_SYSTEM_SUMMARY_PATH),
+            "bridge_json": str(BRIDGE_BUNDLE_PATH),
+            "optimizer_json": str(FULL_SYSTEM_ROOT / "optimization" / "strategy_optimization.json"),
+        },
+        "summary": summary,
+        "reports_overview": reports_overview,
+    }
+    snapshot = _build_local_snapshot(summary, bridge_bundle)
+    audit = {
+        "logs": [
+            {
+                "timestamp": "artifact-fallback",
+                "module": "frontend.local_fallback",
+                "action": "load_artifacts",
+                "entity_id": "FULL-SYSTEM-RUN",
+                "user": "system",
+                "version": "local-artifact",
+                "status": "ok",
+            }
+        ]
+    }
+    return payload, snapshot, audit
 
 
 def _load_app_state(api_base: str, *, refresh_summary: bool = False) -> tuple[dict[str, Any], dict[str, Any], dict[str, Any]]:
