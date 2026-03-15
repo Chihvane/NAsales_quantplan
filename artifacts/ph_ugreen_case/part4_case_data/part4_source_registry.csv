@@ -1,0 +1,4 @@
+source_id,topic,source_name,source_type,confidence_grade,collected_at,freshness_days,version,status,owner_role
+PHSRC001,livestream_sessions,UGREEN PH livestream xlsx export,platform_export,A,2025-11-30,1,v1,active,growth_analyst
+PHSRC002,channel_fees,PH live commerce proxy fee model,proxy_model,C,2025-11-30,30,v1,active,finance_ops
+PHSRC003,landed_cost,UGREEN accessory landed cost proxy,proxy_model,C,2025-11-30,30,v1,active,supply_analyst

@@ -48,6 +48,37 @@ This repository now exposes a production-oriented structure:
 
 Legacy `src/` remains as an earlier phase scaffold and can be retired once the `backend/` path fully replaces it.
 
+## Local App Mode
+
+If you want a one-click local desktop launcher on macOS instead of running commands manually:
+
+```bash
+cd /Users/zhiwenxiang/Documents/Playground/北美市场量化报告/decision-os
+./scripts/build_macos_app.sh
+```
+
+This generates:
+
+- [Decision OS.app](/Users/zhiwenxiang/Documents/Playground/北美市场量化报告/decision-os/artifacts/mac_app/Decision%20OS.app)
+- [Launch Decision OS.command](/Users/zhiwenxiang/Documents/Playground/北美市场量化报告/decision-os/artifacts/mac_app/Launch%20Decision%20OS.command)
+
+You can double-click either one on the local machine to launch:
+
+- FastAPI backend
+- Streamlit frontend
+- browser auto-open to the local app
+
+To package the launcher as a local `.dmg`:
+
+```bash
+cd /Users/zhiwenxiang/Documents/Playground/北美市场量化报告/decision-os
+./scripts/build_macos_dmg.sh
+```
+
+This generates:
+
+- [Decision-OS.dmg](/Users/zhiwenxiang/Documents/Playground/北美市场量化报告/decision-os/artifacts/mac_app/Decision-OS.dmg)
+
 ## Production Blueprints Included
 
 - Database ER design: [Database-ER-Design.md](/Users/zhiwenxiang/Documents/Playground/北美市场量化报告/decision-os/docs/Database-ER-Design.md)

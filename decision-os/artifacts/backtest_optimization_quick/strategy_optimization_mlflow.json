@@ -1,0 +1,41 @@
+{
+  "integration": "mlflow",
+  "run_name": "decision_os_backtest_optimization",
+  "package_available": false,
+  "params": {
+    "min_factor_score": 0.55,
+    "max_loss_probability": 0.1,
+    "min_profit_p50": 0.0,
+    "min_margin_p50_ratio": 0.18,
+    "max_volatility": 0.2,
+    "max_supply_tail_risk_score": 0.45,
+    "min_supply_optimizer_feasible_ratio": 0.25,
+    "min_channel_portfolio_resilience_score": 0.55,
+    "min_channel_optimizer_feasible_ratio": 0.25,
+    "min_channel_stress_robustness_score": 0.6,
+    "max_channel_gate_flip_count": 1.0,
+    "max_positions_per_period": 3
+  },
+  "metrics": {
+    "train_alpha": -1.078617,
+    "test_alpha": -0.115107,
+    "train_composite_score": 1.963962,
+    "test_composite_score": 3.09691,
+    "train_hit_rate": 0.980952,
+    "test_hit_rate": 1.0,
+    "train_forecast_backtest_score": 0.719815,
+    "test_forecast_backtest_score": 0.727938,
+    "train_calibration_brier_score": 0.094453,
+    "test_calibration_brier_score": 0.09437,
+    "train_supply_tail_risk_score": 0.329286,
+    "test_supply_tail_risk_score": 0.30372,
+    "train_supply_feasible_ratio": 0.76895,
+    "test_supply_feasible_ratio": 0.80869,
+    "train_channel_resilience_score": 0.815647,
+    "test_channel_resilience_score": 0.835157,
+    "train_channel_feasible_ratio": 0.74173,
+    "test_channel_feasible_ratio": 0.758744,
+    "train_channel_stress_robustness_score": 0.756526,
+    "test_channel_stress_robustness_score": 0.775952
+  }
+}

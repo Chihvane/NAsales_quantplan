@@ -1,0 +1,2 @@
+platform,listing_id,canonical_sku,brand,seller_id,captured_at,list_price,sale_price,currency,shipping_fee,rating_avg,review_count,sold_count_window,sales_rank,active_flag,seller_type,fulfillment_type
+TikTok Shop,PH-TTS-UGREEN-LIVE,UGREEN-PH-LIVE-001,UGREEN,64923682,2025-11-30 12:48:00,428.39,396.66,PHP,0,4.7,3673,4315,1,true,brand,cross_border

@@ -8,14 +8,26 @@
     "min_profit_p50": 0.0,
     "min_margin_p50_ratio": 0.18,
     "max_volatility": 0.24,
-    "max_positions_per_period": 4
+    "max_supply_tail_risk_score": 0.55,
+    "max_supply_margin_floor_breach_probability": 0.25,
+    "min_supply_optimizer_feasible_ratio": 0.25,
+    "min_supply_execution_confidence_score": 0.55,
+    "max_positions_per_period": 3
   },
   "metrics": {
-    "train_alpha": -0.108294,
-    "test_alpha": 0.516287,
-    "train_composite_score": 0.82975,
-    "test_composite_score": 1.61223,
-    "train_hit_rate": 0.94,
-    "test_hit_rate": 1.0
+    "train_alpha": -0.488481,
+    "test_alpha": 0.044139,
+    "train_composite_score": 1.874946,
+    "test_composite_score": 2.61818,
+    "train_hit_rate": 0.96,
+    "test_hit_rate": 1.0,
+    "train_forecast_backtest_score": 0.712566,
+    "test_forecast_backtest_score": 0.713561,
+    "train_calibration_brier_score": 0.095938,
+    "test_calibration_brier_score": 0.094421,
+    "train_supply_tail_risk_score": 0.374087,
+    "test_supply_tail_risk_score": 0.305176,
+    "train_supply_feasible_ratio": 0.727275,
+    "test_supply_feasible_ratio": 0.80652
   }
 }

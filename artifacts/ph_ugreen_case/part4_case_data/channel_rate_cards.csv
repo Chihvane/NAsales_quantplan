@@ -1,0 +1,3 @@
+channel,fee_type,fee_basis,fee_rate,fixed_fee,effective_date,source_ref,notes
+TikTok Shop,platform_commission,revenue,0.05,0,2025-11-30,proxy-ph-live-rate,proxy based on live-commerce fee assumption
+TikTok Shop,payment_processing,revenue,0.025,0,2025-11-30,proxy-ph-live-rate,proxy payment fee

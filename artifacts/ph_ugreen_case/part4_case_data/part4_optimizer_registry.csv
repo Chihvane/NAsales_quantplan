@@ -1,0 +1,2 @@
+optimizer_id,objective_name,objective_type,risk_measure,max_loss_probability,min_contribution_margin_rate,min_priority_score,max_payback_months,max_paid_share,capital_limit,objective_lambda,turnover_penalty_lambda,max_single_channel_weight,active_flag
+PHOPT001,maximize_live_margin_under_proxy_risk,constraint_rank,loss_probability,0.3,0.08,0.08,8,0.85,150000,0.35,0.1,0.9,1

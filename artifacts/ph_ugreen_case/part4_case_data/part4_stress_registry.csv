@@ -1,0 +1,3 @@
+scenario_id,scenario_name,shock_target,shock_multiplier,severity,channel_scope,active_flag,notes
+PHSTR001,Live Revenue Compression,revenue,0.9,high,TikTok Shop,1,Stress weaker live conversion day
+PHSTR002,Platform Fee Shock,acquisition_cost,1.3,medium,TikTok Shop,1,Stress fee or subsidy change

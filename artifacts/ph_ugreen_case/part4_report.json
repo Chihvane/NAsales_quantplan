@@ -1,0 +1,2044 @@
+{
+  "metadata": {
+    "report_id": "part4_quant_report",
+    "report_version": "2026.03",
+    "generated_at": "2026-03-15T00:49:16.796299+00:00",
+    "section_order": [
+      "4.1",
+      "4.2",
+      "4.3",
+      "4.4",
+      "4.5",
+      "4.6",
+      "4.7"
+    ],
+    "section_structure": {
+      "4.1": {
+        "title": "独立站模式可行性分析",
+        "required_tables": [
+          "traffic_sessions",
+          "marketing_spend",
+          "customer_cohorts",
+          "landed_cost_scenarios"
+        ],
+        "metric_ids": [
+          "dtc_feasibility"
+        ],
+        "quality_targets": {
+          "traffic_sessions": 8,
+          "marketing_spend": 8,
+          "customer_cohorts": 4,
+          "landed_cost_scenarios": 6
+        },
+        "analysis_grain": "channel x cohort window",
+        "entity_grain": "DTC",
+        "time_grain": "week / cohort month",
+        "channel_scope": [
+          "DTC"
+        ],
+        "master_data_refs": [
+          "mdm.channel",
+          "mdm.customer_segment",
+          "mdm.sku"
+        ],
+        "evidence_refs": [
+          "evidence.traffic_sessions",
+          "evidence.marketing_spend",
+          "evidence.customer_cohorts"
+        ],
+        "rule_refs": [
+          "gate.dtc_feasibility"
+        ]
+      },
+      "4.2": {
+        "title": "平台电商模式可行性分析",
+        "required_tables": [
+          "sold_transactions",
+          "traffic_sessions",
+          "marketing_spend",
+          "channel_rate_cards",
+          "landed_cost_scenarios",
+          "part4_source_registry",
+          "part4_benchmark_registry"
+        ],
+        "metric_ids": [
+          "platform_channel_fit"
+        ],
+        "quality_targets": {
+          "sold_transactions": 10,
+          "traffic_sessions": 8,
+          "marketing_spend": 8,
+          "channel_rate_cards": 10,
+          "landed_cost_scenarios": 6,
+          "part4_source_registry": 3,
+          "part4_benchmark_registry": 3
+        },
+        "analysis_grain": "channel x transaction window",
+        "entity_grain": "platform channel",
+        "time_grain": "week",
+        "channel_scope": [
+          "Amazon",
+          "TikTok Shop",
+          "eBay",
+          "Walmart"
+        ],
+        "master_data_refs": [
+          "mdm.channel",
+          "mdm.sku",
+          "mdm.price_metric"
+        ],
+        "evidence_refs": [
+          "evidence.sold_transactions",
+          "evidence.channel_rate_cards",
+          "evidence.marketing_spend",
+          "evidence.part4_source_registry",
+          "evidence.part4_benchmark_registry"
+        ],
+        "rule_refs": [
+          "gate.platform_selection",
+          "gate.part4_threshold_registry"
+        ]
+      },
+      "4.3": {
+        "title": "线下经销商与 ToB 模式分析",
+        "required_tables": [
+          "b2b_accounts",
+          "landed_cost_scenarios",
+          "sold_transactions"
+        ],
+        "metric_ids": [
+          "b2b_channel_viability"
+        ],
+        "quality_targets": {
+          "b2b_accounts": 3,
+          "landed_cost_scenarios": 2,
+          "sold_transactions": 10
+        },
+        "analysis_grain": "account x transaction window",
+        "entity_grain": "B2B account",
+        "time_grain": "week / quarter",
+        "channel_scope": [
+          "B2B"
+        ],
+        "master_data_refs": [
+          "mdm.channel",
+          "mdm.account",
+          "mdm.sku"
+        ],
+        "evidence_refs": [
+          "evidence.b2b_accounts",
+          "evidence.sold_transactions"
+        ],
+        "rule_refs": [
+          "gate.b2b_viability"
+        ]
+      },
+      "4.4": {
+        "title": "曝光、获客与流量结构分析",
+        "required_tables": [
+          "traffic_sessions",
+          "marketing_spend",
+          "part4_source_registry"
+        ],
+        "metric_ids": [
+          "traffic_structure"
+        ],
+        "quality_targets": {
+          "traffic_sessions": 8,
+          "marketing_spend": 8,
+          "part4_source_registry": 3
+        },
+        "analysis_grain": "channel x source",
+        "entity_grain": "channel x traffic source",
+        "time_grain": "day / week",
+        "channel_scope": [
+          "DTC",
+          "Amazon",
+          "TikTok Shop",
+          "eBay",
+          "Walmart",
+          "B2B"
+        ],
+        "master_data_refs": [
+          "mdm.channel",
+          "mdm.traffic_source"
+        ],
+        "evidence_refs": [
+          "evidence.traffic_sessions",
+          "evidence.marketing_spend",
+          "evidence.part4_source_registry"
+        ],
+        "rule_refs": [
+          "gate.traffic_efficiency"
+        ]
+      },
+      "4.5": {
+        "title": "转化效率与 ROI 模型分析",
+        "required_tables": [
+          "sold_transactions",
+          "marketing_spend",
+          "returns_claims",
+          "inventory_positions",
+          "landed_cost_scenarios",
+          "channel_rate_cards",
+          "part4_threshold_registry",
+          "part4_benchmark_registry",
+          "part4_stress_registry"
+        ],
+        "metric_ids": [
+          "roi_unit_economics"
+        ],
+        "quality_targets": {
+          "sold_transactions": 10,
+          "marketing_spend": 8,
+          "returns_claims": 6,
+          "inventory_positions": 8,
+          "landed_cost_scenarios": 6,
+          "channel_rate_cards": 10,
+          "part4_threshold_registry": 2,
+          "part4_benchmark_registry": 3,
+          "part4_stress_registry": 3
+        },
+        "analysis_grain": "channel x roi scenario",
+        "entity_grain": "channel",
+        "time_grain": "week",
+        "channel_scope": [
+          "DTC",
+          "Amazon",
+          "TikTok Shop",
+          "eBay",
+          "Walmart",
+          "B2B"
+        ],
+        "master_data_refs": [
+          "mdm.channel",
+          "mdm.price_metric",
+          "mdm.sku"
+        ],
+        "evidence_refs": [
+          "evidence.sold_transactions",
+          "evidence.channel_rate_cards",
+          "evidence.returns_claims",
+          "evidence.part4_benchmark_registry",
+          "evidence.part4_stress_registry"
+        ],
+        "rule_refs": [
+          "gate.margin_gate",
+          "gate.payback_gate",
+          "gate.loss_gate",
+          "gate.part4_threshold_registry"
+        ]
+      },
+      "4.6": {
+        "title": "运营门槛与组织能力要求分析",
+        "required_tables": [
+          "experiment_registry",
+          "returns_claims",
+          "inventory_positions",
+          "traffic_sessions"
+        ],
+        "metric_ids": [
+          "operating_readiness"
+        ],
+        "quality_targets": {
+          "experiment_registry": 4,
+          "returns_claims": 6,
+          "inventory_positions": 8,
+          "traffic_sessions": 8
+        },
+        "analysis_grain": "capability score",
+        "entity_grain": "channel operating model",
+        "time_grain": "planning window",
+        "channel_scope": [
+          "DTC",
+          "Amazon",
+          "TikTok Shop",
+          "eBay",
+          "Walmart",
+          "B2B"
+        ],
+        "master_data_refs": [
+          "mdm.channel",
+          "mdm.experiment_registry"
+        ],
+        "evidence_refs": [
+          "evidence.experiment_registry",
+          "evidence.inventory_positions",
+          "evidence.returns_claims"
+        ],
+        "rule_refs": [
+          "gate.readiness_gate"
+        ]
+      },
+      "4.7": {
+        "title": "推荐进入路径与 90 天销售执行方案",
+        "required_tables": [
+          "landed_cost_scenarios",
+          "traffic_sessions",
+          "marketing_spend",
+          "b2b_accounts",
+          "experiment_registry",
+          "part4_threshold_registry",
+          "part4_optimizer_registry",
+          "part4_stress_registry"
+        ],
+        "metric_ids": [
+          "entry_plan"
+        ],
+        "quality_targets": {
+          "landed_cost_scenarios": 6,
+          "traffic_sessions": 8,
+          "marketing_spend": 8,
+          "b2b_accounts": 3,
+          "experiment_registry": 4,
+          "part4_threshold_registry": 2,
+          "part4_optimizer_registry": 1,
+          "part4_stress_registry": 3
+        },
+        "analysis_grain": "entry plan scenario",
+        "entity_grain": "channel portfolio",
+        "time_grain": "90-day plan",
+        "channel_scope": [
+          "DTC",
+          "Amazon",
+          "TikTok Shop",
+          "eBay",
+          "Walmart",
+          "B2B"
+        ],
+        "master_data_refs": [
+          "mdm.channel",
+          "mdm.sku",
+          "mdm.account"
+        ],
+        "evidence_refs": [
+          "evidence.landed_cost_scenarios",
+          "evidence.traffic_sessions",
+          "evidence.marketing_spend",
+          "evidence.part4_optimizer_registry",
+          "evidence.part4_stress_registry"
+        ],
+        "rule_refs": [
+          "gate.margin_gate",
+          "gate.payback_gate",
+          "gate.loss_gate",
+          "gate.readiness_gate",
+          "gate.part4_threshold_registry",
+          "gate.part4_optimizer_registry"
+        ],
+        "gate_status_key": "recommendation"
+      }
+    },
+    "metric_specs": [
+      {
+        "section_id": "4.1",
+        "metric_id": "dtc_feasibility",
+        "label": "独立站模式可行性",
+        "required_tables": [
+          "traffic_sessions",
+          "marketing_spend",
+          "customer_cohorts",
+          "landed_cost_scenarios"
+        ],
+        "formula": "基于 DTC 渠道流量漏斗、获客成本、复购率、贡献毛利和回本周期综合构建 DTC fit score。",
+        "output_note": "用于判断独立站是否适合作为首发或品牌沉淀渠道。"
+      },
+      {
+        "section_id": "4.2",
+        "metric_id": "platform_channel_fit",
+        "label": "平台电商模式可行性",
+        "required_tables": [
+          "sold_transactions",
+          "traffic_sessions",
+          "marketing_spend",
+          "channel_rate_cards",
+          "landed_cost_scenarios"
+        ],
+        "formula": "按渠道输出 GMV、转化率、CAC、贡献毛利、退货率和回本周期，并形成平台适配度得分。",
+        "output_note": "用于比较 Amazon、TikTok Shop、eBay、Walmart 等平台的优先级。"
+      },
+      {
+        "section_id": "4.3",
+        "metric_id": "b2b_channel_viability",
+        "label": "线下经销与 ToB 模式",
+        "required_tables": [
+          "b2b_accounts",
+          "landed_cost_scenarios",
+          "sold_transactions"
+        ],
+        "formula": "基于经销折扣、返利、账期和订单目标计算 B2B 单位利润、现金占用和渠道价值。",
+        "output_note": "用于判断经销模式是否适合作为补充渠道或主攻渠道。"
+      },
+      {
+        "section_id": "4.4",
+        "metric_id": "traffic_structure",
+        "label": "曝光、获客与流量结构",
+        "required_tables": [
+          "traffic_sessions",
+          "marketing_spend"
+        ],
+        "formula": "按 traffic source 汇总曝光、点击、会话、加购、结账和订单，计算漏斗转化及 paid/owned 结构。",
+        "output_note": "用于判断流量获取是否可持续且是否过度依赖付费流量。"
+      },
+      {
+        "section_id": "4.5",
+        "metric_id": "roi_unit_economics",
+        "label": "转化效率与 ROI 模型",
+        "required_tables": [
+          "sold_transactions",
+          "marketing_spend",
+          "returns_claims",
+          "inventory_positions",
+          "landed_cost_scenarios",
+          "channel_rate_cards"
+        ],
+        "formula": "按渠道级 P&L 汇总收入、到岸成本、平台费、履约费、营销费、退货与库存成本，计算 ROI 与 payback。",
+        "output_note": "用于识别哪个渠道最赚钱、风险是否在可控区间内。"
+      },
+      {
+        "section_id": "4.6",
+        "metric_id": "operating_readiness",
+        "label": "运营门槛与组织能力",
+        "required_tables": [
+          "experiment_registry",
+          "returns_claims",
+          "inventory_positions",
+          "traffic_sessions"
+        ],
+        "formula": "基于实验覆盖、库存周转、退货争议、付费流量依赖和渠道复杂度构建 readiness score。",
+        "output_note": "用于判断团队是否具备承接该渠道组合的能力。"
+      },
+      {
+        "section_id": "4.7",
+        "metric_id": "entry_plan",
+        "label": "推荐进入路径与 90 天执行方案",
+        "required_tables": [
+          "landed_cost_scenarios",
+          "traffic_sessions",
+          "marketing_spend",
+          "b2b_accounts",
+          "experiment_registry"
+        ],
+        "formula": "综合门禁、渠道适配、ROI 风险带和团队 readiness 输出 Go/No-Go、主次渠道和预算节奏。",
+        "output_note": "用于形成可执行的分阶段进入建议。"
+      }
+    ],
+    "assumptions": {
+      "target_payback_months": 6.0,
+      "max_loss_probability": 0.25,
+      "min_contribution_margin_rate": 0.08,
+      "target_repeat_rate": 0.18,
+      "target_inventory_days": 45.0,
+      "risk_penalty_lambda": 0.4,
+      "minimum_experiment_days": 7
+    },
+    "table_inventory": {
+      "listing_snapshots": {
+        "record_count": 1,
+        "available": true
+      },
+      "sold_transactions": {
+        "record_count": 94,
+        "available": true
+      },
+      "product_catalog": {
+        "record_count": 1,
+        "available": true
+      },
+      "landed_cost_scenarios": {
+        "record_count": 1,
+        "available": true
+      },
+      "channel_rate_cards": {
+        "record_count": 2,
+        "available": true
+      },
+      "marketing_spend": {
+        "record_count": 90,
+        "available": true
+      },
+      "traffic_sessions": {
+        "record_count": 90,
+        "available": true
+      },
+      "returns_claims": {
+        "record_count": 0,
+        "available": false
+      },
+      "customer_cohorts": {
+        "record_count": 1,
+        "available": true
+      },
+      "inventory_positions": {
+        "record_count": 1,
+        "available": true
+      },
+      "experiment_registry": {
+        "record_count": 0,
+        "available": false
+      },
+      "b2b_accounts": {
+        "record_count": 0,
+        "available": false
+      },
+      "part4_source_registry": {
+        "record_count": 3,
+        "available": true
+      },
+      "part4_threshold_registry": {
+        "record_count": 3,
+        "available": true
+      },
+      "part4_benchmark_registry": {
+        "record_count": 1,
+        "available": true
+      },
+      "part4_optimizer_registry": {
+        "record_count": 1,
+        "available": true
+      },
+      "part4_stress_registry": {
+        "record_count": 2,
+        "available": true
+      }
+    }
+  },
+  "overview": {
+    "section_count": 7,
+    "average_confidence_score": 0.7471,
+    "confidence_mix": {
+      "high": 4,
+      "medium": 2,
+      "low": 1
+    },
+    "connected_channel_scope": [
+      "Amazon",
+      "B2B",
+      "DTC",
+      "TikTok Shop",
+      "Walmart",
+      "eBay"
+    ],
+    "control_tower_binding": {
+      "master_data_ref_coverage_ratio": 1.0,
+      "evidence_ref_coverage_ratio": 1.0,
+      "rule_ref_coverage_ratio": 1.0,
+      "gate_status_mix": {
+        "pass": 0,
+        "review": 1,
+        "fail": 0,
+        "not_applicable": 6
+      }
+    },
+    "decision_summary": {
+      "decision_signal": "pilot",
+      "decision_score": 0.6912,
+      "scorecard": {
+        "channel_optionality": {
+          "score": 0.7333,
+          "level": "medium"
+        },
+        "traffic_quality": {
+          "score": 0.45,
+          "level": "low"
+        },
+        "unit_economics": {
+          "score": 0.9972,
+          "level": "high"
+        },
+        "operating_readiness": {
+          "score": 0.41,
+          "level": "low"
+        }
+      },
+      "key_findings": [
+        "当前推荐状态为 pilot_first，主攻渠道为 TikTok Shop。",
+        "最佳平台为 TikTok Shop，综合贡献毛利率约 28.6%。",
+        "组织承接分为 35.0%，总体亏损概率为 0.0%。"
+      ],
+      "risk_flags": [
+        "组织承接能力不足，履约、实验或服务链路还不能稳定支持放量。",
+        "当前仍有未通过的进入门禁：inventory_gate, readiness_gate。"
+      ],
+      "recommended_next_step": "只做小规模试点，优先验证流量质量与单位经济。"
+    },
+    "decision_signal": "pilot",
+    "decision_score": 0.6912,
+    "headline_metrics": [
+      {
+        "key": "recommendation",
+        "label": "进入建议",
+        "value": "pilot_first",
+        "unit": "enum"
+      },
+      {
+        "key": "primary_channel",
+        "label": "主攻渠道",
+        "value": "TikTok Shop",
+        "unit": "channel"
+      },
+      {
+        "key": "best_platform",
+        "label": "最佳平台",
+        "value": "TikTok Shop",
+        "unit": "channel"
+      },
+      {
+        "key": "blended_margin_rate",
+        "label": "综合贡献毛利率",
+        "value": 0.286,
+        "unit": "ratio"
+      },
+      {
+        "key": "loss_probability",
+        "label": "总体亏损概率",
+        "value": 0.0,
+        "unit": "ratio"
+      },
+      {
+        "key": "readiness_score",
+        "label": "组织承接分",
+        "value": 0.35,
+        "unit": "score"
+      },
+      {
+        "key": "portfolio_resilience_factor",
+        "label": "组合韧性因子",
+        "value": 1.0,
+        "unit": "score"
+      },
+      {
+        "key": "execution_friction_factor",
+        "label": "执行摩擦因子",
+        "value": 0.0,
+        "unit": "score"
+      }
+    ],
+    "factor_snapshot_count": 6,
+    "confidence_band": "medium",
+    "proxy_usage_flag_count": 2,
+    "execution_friction_flag_count": 5,
+    "optimizer_run_count": 1,
+    "validation_summary": {
+      "pass_count": 8,
+      "review_count": 0,
+      "fail_count": 0
+    },
+    "uncertainty_keys": [
+      "channel_margin_rate",
+      "channel_payback_period",
+      "channel_repeat_rate",
+      "roi_monte_carlo"
+    ]
+  },
+  "sections": {
+    "4.1": {
+      "id": "4.1",
+      "title": "独立站模式可行性分析",
+      "required_tables": [
+        "traffic_sessions",
+        "marketing_spend",
+        "customer_cohorts",
+        "landed_cost_scenarios"
+      ],
+      "metric_ids": [
+        "dtc_feasibility"
+      ],
+      "granularity": {
+        "analysis_grain": "channel x cohort window",
+        "entity_grain": "DTC",
+        "time_grain": "week / cohort month"
+      },
+      "channel_scope": [
+        "DTC"
+      ],
+      "master_data_ref": [
+        "mdm.channel",
+        "mdm.customer_segment",
+        "mdm.sku"
+      ],
+      "evidence_ref": [
+        "evidence.traffic_sessions",
+        "evidence.marketing_spend",
+        "evidence.customer_cohorts"
+      ],
+      "rule_ref": [
+        "gate.dtc_feasibility"
+      ],
+      "gate_result": {
+        "status": "not_applicable",
+        "source": "",
+        "raw_value": "",
+        "failed_items": []
+      },
+      "data_quality": {
+        "record_counts": {
+          "traffic_sessions": 90,
+          "marketing_spend": 90,
+          "customer_cohorts": 1,
+          "landed_cost_scenarios": 1
+        },
+        "available_tables": [
+          "traffic_sessions",
+          "marketing_spend",
+          "customer_cohorts",
+          "landed_cost_scenarios"
+        ],
+        "missing_tables": [],
+        "completeness_ratio": 1.0,
+        "richness_ratio": 0.6042,
+        "quality_score": 0.8615,
+        "quality_level": "high"
+      },
+      "confidence": {
+        "score": 0.8615,
+        "level": "high"
+      },
+      "metrics": {}
+    },
+    "4.2": {
+      "id": "4.2",
+      "title": "平台电商模式可行性分析",
+      "required_tables": [
+        "sold_transactions",
+        "traffic_sessions",
+        "marketing_spend",
+        "channel_rate_cards",
+        "landed_cost_scenarios",
+        "part4_source_registry",
+        "part4_benchmark_registry"
+      ],
+      "metric_ids": [
+        "platform_channel_fit"
+      ],
+      "granularity": {
+        "analysis_grain": "channel x transaction window",
+        "entity_grain": "platform channel",
+        "time_grain": "week"
+      },
+      "channel_scope": [
+        "Amazon",
+        "TikTok Shop",
+        "eBay",
+        "Walmart"
+      ],
+      "master_data_ref": [
+        "mdm.channel",
+        "mdm.sku",
+        "mdm.price_metric"
+      ],
+      "evidence_ref": [
+        "evidence.sold_transactions",
+        "evidence.channel_rate_cards",
+        "evidence.marketing_spend",
+        "evidence.part4_source_registry",
+        "evidence.part4_benchmark_registry"
+      ],
+      "rule_ref": [
+        "gate.platform_selection",
+        "gate.part4_threshold_registry"
+      ],
+      "gate_result": {
+        "status": "not_applicable",
+        "source": "",
+        "raw_value": "",
+        "failed_items": []
+      },
+      "data_quality": {
+        "record_counts": {
+          "sold_transactions": 94,
+          "traffic_sessions": 90,
+          "marketing_spend": 90,
+          "channel_rate_cards": 2,
+          "landed_cost_scenarios": 1,
+          "part4_source_registry": 3,
+          "part4_benchmark_registry": 1
+        },
+        "available_tables": [
+          "sold_transactions",
+          "traffic_sessions",
+          "marketing_spend",
+          "channel_rate_cards",
+          "landed_cost_scenarios",
+          "part4_source_registry",
+          "part4_benchmark_registry"
+        ],
+        "missing_tables": [],
+        "completeness_ratio": 1.0,
+        "richness_ratio": 0.6714,
+        "quality_score": 0.885,
+        "quality_level": "high"
+      },
+      "confidence": {
+        "score": 0.885,
+        "level": "high"
+      },
+      "metrics": {
+        "platforms": [
+          {
+            "channel": "TikTok Shop",
+            "channel_family": "platform",
+            "impressions": 658052,
+            "clicks": 104623,
+            "sessions": 587547,
+            "product_page_views": 104623,
+            "add_to_cart": 24981,
+            "checkout_start": 16237,
+            "orders": 94,
+            "units": 4315,
+            "revenue": 1804110.97,
+            "avg_sell_price": 418.1,
+            "aov": 19192.67,
+            "landed_cost_total": 1044057.4,
+            "landed_cost_unit_p10": 218.16,
+            "landed_cost_unit_p50": 241.96,
+            "landed_cost_unit_p90": 269.72,
+            "channel_fees_total": 90205.55,
+            "fulfillment_cost_total": 0.0,
+            "payment_cost_total": 45102.77,
+            "storage_cost_total": 9584.91,
+            "acquisition_cost_total": 99226.18,
+            "refund_and_return_total": 0.0,
+            "contribution_profit": 515934.16,
+            "contribution_margin_rate": 0.286,
+            "roi": 0.4005,
+            "conversion_rate": 0.0002,
+            "page_view_rate": 0.1781,
+            "add_to_cart_rate": 0.2388,
+            "checkout_start_rate": 0.65,
+            "checkout_completion_rate": 0.0058,
+            "cac": 1055.6,
+            "repeat_rate": 0.1199,
+            "ltv": 6476.06,
+            "payback_period_months": 0.17,
+            "return_rate": 0.0,
+            "dispute_rate": 0.0,
+            "avg_inventory_units": 7767.0,
+            "inventory_days": 59.25,
+            "scenario_confidence_score": 0.42,
+            "fee_version_count": 2,
+            "latest_fee_effective_date": "2025-11-30",
+            "platform_fit_score": 1.0
+          }
+        ],
+        "best_platform": "TikTok Shop",
+        "best_platform_fit_score": 1.0,
+        "platform_count": 1,
+        "weighted_platform_margin_rate": 0.286
+      }
+    },
+    "4.3": {
+      "id": "4.3",
+      "title": "线下经销商与 ToB 模式分析",
+      "required_tables": [
+        "b2b_accounts",
+        "landed_cost_scenarios",
+        "sold_transactions"
+      ],
+      "metric_ids": [
+        "b2b_channel_viability"
+      ],
+      "granularity": {
+        "analysis_grain": "account x transaction window",
+        "entity_grain": "B2B account",
+        "time_grain": "week / quarter"
+      },
+      "channel_scope": [
+        "B2B"
+      ],
+      "master_data_ref": [
+        "mdm.channel",
+        "mdm.account",
+        "mdm.sku"
+      ],
+      "evidence_ref": [
+        "evidence.b2b_accounts",
+        "evidence.sold_transactions"
+      ],
+      "rule_ref": [
+        "gate.b2b_viability"
+      ],
+      "gate_result": {
+        "status": "not_applicable",
+        "source": "",
+        "raw_value": "",
+        "failed_items": []
+      },
+      "data_quality": {
+        "record_counts": {
+          "b2b_accounts": 0,
+          "landed_cost_scenarios": 1,
+          "sold_transactions": 94
+        },
+        "available_tables": [
+          "landed_cost_scenarios",
+          "sold_transactions"
+        ],
+        "missing_tables": [
+          "b2b_accounts"
+        ],
+        "completeness_ratio": 0.6667,
+        "richness_ratio": 0.5,
+        "quality_score": 0.6083,
+        "quality_level": "medium"
+      },
+      "confidence": {
+        "score": 0.6083,
+        "level": "medium"
+      },
+      "metrics": {}
+    },
+    "4.4": {
+      "id": "4.4",
+      "title": "曝光、获客与流量结构分析",
+      "required_tables": [
+        "traffic_sessions",
+        "marketing_spend",
+        "part4_source_registry"
+      ],
+      "metric_ids": [
+        "traffic_structure"
+      ],
+      "granularity": {
+        "analysis_grain": "channel x source",
+        "entity_grain": "channel x traffic source",
+        "time_grain": "day / week"
+      },
+      "channel_scope": [
+        "DTC",
+        "Amazon",
+        "TikTok Shop",
+        "eBay",
+        "Walmart",
+        "B2B"
+      ],
+      "master_data_ref": [
+        "mdm.channel",
+        "mdm.traffic_source"
+      ],
+      "evidence_ref": [
+        "evidence.traffic_sessions",
+        "evidence.marketing_spend",
+        "evidence.part4_source_registry"
+      ],
+      "rule_ref": [
+        "gate.traffic_efficiency"
+      ],
+      "gate_result": {
+        "status": "not_applicable",
+        "source": "",
+        "raw_value": "",
+        "failed_items": []
+      },
+      "data_quality": {
+        "record_counts": {
+          "traffic_sessions": 90,
+          "marketing_spend": 90,
+          "part4_source_registry": 3
+        },
+        "available_tables": [
+          "traffic_sessions",
+          "marketing_spend",
+          "part4_source_registry"
+        ],
+        "missing_tables": [],
+        "completeness_ratio": 1.0,
+        "richness_ratio": 1.0,
+        "quality_score": 1.0,
+        "quality_level": "high"
+      },
+      "confidence": {
+        "score": 1.0,
+        "level": "high"
+      },
+      "metrics": {
+        "source_rows": [
+          {
+            "traffic_source": "livestream",
+            "source_family": "other",
+            "sessions": 587547,
+            "session_share": 1.0,
+            "orders": 3552,
+            "order_share": 1.0,
+            "spend": 99226.18,
+            "spend_share": 1.0,
+            "impressions": 658052,
+            "clicks": 104623,
+            "ctr": 0.159,
+            "cpc": 0.95,
+            "cpa": 27.94
+          }
+        ],
+        "traffic_source_sessions_share": {
+          "livestream": 1.0
+        },
+        "paid_vs_owned": {
+          "paid": 0.0,
+          "owned": 0.0,
+          "other": 1.0
+        },
+        "funnel": {
+          "sessions": 587547,
+          "product_page_views": 104623,
+          "add_to_cart": 24981,
+          "checkout_start": 16237,
+          "orders": 94,
+          "page_view_rate": 0.1781,
+          "add_to_cart_rate": 0.2388,
+          "checkout_start_rate": 0.65,
+          "checkout_completion_rate": 0.0058
+        }
+      }
+    },
+    "4.5": {
+      "id": "4.5",
+      "title": "转化效率与 ROI 模型分析",
+      "required_tables": [
+        "sold_transactions",
+        "marketing_spend",
+        "returns_claims",
+        "inventory_positions",
+        "landed_cost_scenarios",
+        "channel_rate_cards",
+        "part4_threshold_registry",
+        "part4_benchmark_registry",
+        "part4_stress_registry"
+      ],
+      "metric_ids": [
+        "roi_unit_economics"
+      ],
+      "granularity": {
+        "analysis_grain": "channel x roi scenario",
+        "entity_grain": "channel",
+        "time_grain": "week"
+      },
+      "channel_scope": [
+        "DTC",
+        "Amazon",
+        "TikTok Shop",
+        "eBay",
+        "Walmart",
+        "B2B"
+      ],
+      "master_data_ref": [
+        "mdm.channel",
+        "mdm.price_metric",
+        "mdm.sku"
+      ],
+      "evidence_ref": [
+        "evidence.sold_transactions",
+        "evidence.channel_rate_cards",
+        "evidence.returns_claims",
+        "evidence.part4_benchmark_registry",
+        "evidence.part4_stress_registry"
+      ],
+      "rule_ref": [
+        "gate.margin_gate",
+        "gate.payback_gate",
+        "gate.loss_gate",
+        "gate.part4_threshold_registry"
+      ],
+      "gate_result": {
+        "status": "not_applicable",
+        "source": "",
+        "raw_value": "",
+        "failed_items": []
+      },
+      "data_quality": {
+        "record_counts": {
+          "sold_transactions": 94,
+          "marketing_spend": 90,
+          "returns_claims": 0,
+          "inventory_positions": 1,
+          "landed_cost_scenarios": 1,
+          "channel_rate_cards": 2,
+          "part4_threshold_registry": 3,
+          "part4_benchmark_registry": 1,
+          "part4_stress_registry": 2
+        },
+        "available_tables": [
+          "sold_transactions",
+          "marketing_spend",
+          "inventory_positions",
+          "landed_cost_scenarios",
+          "channel_rate_cards",
+          "part4_threshold_registry",
+          "part4_benchmark_registry",
+          "part4_stress_registry"
+        ],
+        "missing_tables": [
+          "returns_claims"
+        ],
+        "completeness_ratio": 0.8889,
+        "richness_ratio": 0.4991,
+        "quality_score": 0.7525,
+        "quality_level": "high"
+      },
+      "confidence": {
+        "score": 0.7525,
+        "level": "high"
+      },
+      "metrics": {
+        "channel_pnl": [
+          {
+            "channel": "TikTok Shop",
+            "channel_family": "platform",
+            "impressions": 658052,
+            "clicks": 104623,
+            "sessions": 587547,
+            "product_page_views": 104623,
+            "add_to_cart": 24981,
+            "checkout_start": 16237,
+            "orders": 94,
+            "units": 4315,
+            "revenue": 1804110.97,
+            "avg_sell_price": 418.1,
+            "aov": 19192.67,
+            "landed_cost_total": 1044057.4,
+            "landed_cost_unit_p10": 218.16,
+            "landed_cost_unit_p50": 241.96,
+            "landed_cost_unit_p90": 269.72,
+            "channel_fees_total": 90205.55,
+            "fulfillment_cost_total": 0.0,
+            "payment_cost_total": 45102.77,
+            "storage_cost_total": 9584.91,
+            "acquisition_cost_total": 99226.18,
+            "refund_and_return_total": 0.0,
+            "contribution_profit": 515934.16,
+            "contribution_margin_rate": 0.286,
+            "roi": 0.4005,
+            "conversion_rate": 0.0002,
+            "page_view_rate": 0.1781,
+            "add_to_cart_rate": 0.2388,
+            "checkout_start_rate": 0.65,
+            "checkout_completion_rate": 0.0058,
+            "cac": 1055.6,
+            "repeat_rate": 0.1199,
+            "ltv": 6476.06,
+            "payback_period_months": 0.17,
+            "return_rate": 0.0,
+            "dispute_rate": 0.0,
+            "avg_inventory_units": 7767.0,
+            "inventory_days": 59.25,
+            "scenario_confidence_score": 0.42,
+            "fee_version_count": 2,
+            "latest_fee_effective_date": "2025-11-30"
+          }
+        ],
+        "blended": {
+          "revenue": 1804110.97,
+          "contribution_profit": 515934.16,
+          "contribution_margin_rate": 0.286,
+          "acquisition_cost_total": 99226.18,
+          "roi": 5.1996,
+          "payback_period_months": 0.17
+        },
+        "best_channel": {
+          "channel": "TikTok Shop",
+          "contribution_margin_rate": 0.286,
+          "roi": 0.4005,
+          "payback_period_months": 0.17
+        },
+        "monte_carlo": {
+          "iterations": 1200,
+          "seed": 42,
+          "overall": {
+            "roi": {
+              "p10": 0.1924,
+              "p50": 0.3131,
+              "p90": 0.4424
+            },
+            "contribution_margin_rate": {
+              "p10": 0.1614,
+              "p50": 0.2384,
+              "p90": 0.3067
+            },
+            "contribution_profit": {
+              "p10": 273042.5236,
+              "p50": 425624.1429,
+              "p90": 582107.034
+            },
+            "loss_probability": 0.0,
+            "loss_probability_weighted_channels": 0.0,
+            "target_payback_months": 6.0,
+            "tail_risk": {
+              "contribution_profit_var_95": 230123.98,
+              "contribution_profit_es_95": 186547.68,
+              "contribution_profit_cvar_95": 186547.68,
+              "margin_rate_var_95": 0.1396,
+              "margin_rate_es_95": 0.1145,
+              "margin_rate_cvar_95": 0.1145,
+              "tail_shortfall_severity": 0.0092
+            },
+            "risk_adjusted": {
+              "margin_rate_sharpe_like": 2.7904,
+              "margin_rate_sortino_like": 178.8844,
+              "margin_rate_calmar_like": 0.7091,
+              "margin_rate_ulcer_index": 0.4024,
+              "margin_rate_drawdown_duration": 829,
+              "margin_rate_tail_ratio": 2.3225,
+              "margin_rate_omega_ratio": 3386.49,
+              "roi_sharpe_like": 3.2932,
+              "roi_sortino_like": 0.0,
+              "roi_calmar_like": 0.549,
+              "roi_ulcer_index": 0.5038,
+              "roi_drawdown_duration": 829,
+              "roi_omega_ratio": 0.0
+            }
+          },
+          "channels": {
+            "TikTok Shop": {
+              "roi": {
+                "p10": 0.1924,
+                "p50": 0.3131,
+                "p90": 0.4424
+              },
+              "contribution_margin_rate": {
+                "p10": 0.1614,
+                "p50": 0.2384,
+                "p90": 0.3067
+              },
+              "contribution_profit": {
+                "p10": 273042.5236,
+                "p50": 425624.1429,
+                "p90": 582107.034
+              },
+              "loss_probability": 0.0,
+              "base_margin_rate": 0.286,
+              "base_roi": 0.4005,
+              "tail_risk": {
+                "contribution_profit_var_95": 230123.98,
+                "contribution_profit_es_95": 186547.68,
+                "contribution_profit_cvar_95": 186547.68,
+                "margin_rate_var_95": 0.1396,
+                "margin_rate_es_95": 0.1145,
+                "margin_rate_cvar_95": 0.1145,
+                "tail_shortfall_severity": 0.0682
+              },
+              "risk_adjusted": {
+                "margin_rate_sharpe_like": -0.8991,
+                "margin_rate_sortino_like": -0.6818,
+                "margin_rate_calmar_like": 0.7091,
+                "margin_rate_ulcer_index": 0.4024,
+                "margin_rate_drawdown_duration": 829,
+                "margin_rate_tail_ratio": 2.3225,
+                "margin_rate_omega_ratio": 0.0908
+              }
+            }
+          },
+          "sensitivity": [
+            {
+              "driver": "revenue",
+              "base_roi": 0.4005,
+              "base_margin_rate": 0.286,
+              "downside_roi": 0.2605,
+              "downside_margin_rate": 0.2066,
+              "downside_impact": -0.0793,
+              "upside_roi": 0.4845,
+              "upside_margin_rate": 0.3264,
+              "upside_impact": 0.0404
+            },
+            {
+              "driver": "landed",
+              "base_roi": 0.4005,
+              "base_margin_rate": 0.286,
+              "downside_roi": 0.2955,
+              "downside_margin_rate": 0.2281,
+              "downside_impact": -0.0579,
+              "upside_roi": 0.4597,
+              "upside_margin_rate": 0.3149,
+              "upside_impact": 0.0289
+            },
+            {
+              "driver": "spend",
+              "base_roi": 0.4005,
+              "base_margin_rate": 0.286,
+              "downside_roi": 0.3814,
+              "downside_margin_rate": 0.2761,
+              "downside_impact": -0.0099,
+              "upside_roi": 0.4114,
+              "upside_margin_rate": 0.2915,
+              "upside_impact": 0.0055
+            },
+            {
+              "driver": "fee",
+              "base_roi": 0.4005,
+              "base_margin_rate": 0.286,
+              "downside_roi": 0.3888,
+              "downside_margin_rate": 0.28,
+              "downside_impact": -0.006,
+              "upside_roi": 0.4064,
+              "upside_margin_rate": 0.289,
+              "upside_impact": 0.003
+            },
+            {
+              "driver": "refund",
+              "base_roi": 0.4005,
+              "base_margin_rate": 0.286,
+              "downside_roi": 0.4005,
+              "downside_margin_rate": 0.286,
+              "downside_impact": 0.0,
+              "upside_roi": 0.4005,
+              "upside_margin_rate": 0.286,
+              "upside_impact": 0.0
+            }
+          ]
+        },
+        "channel_performance_metrics": {
+          "channel_rows": [
+            {
+              "channel": "TikTok Shop",
+              "channel_family": "platform",
+              "benchmark_gap": {
+                "conversion_gap_ratio": -0.974,
+                "aov_gap_ratio": 36.7994,
+                "roi_gap_ratio": -0.818,
+                "cac_gap_ratio": -73.9184
+              },
+              "benchmark_fit_score": 0.0,
+              "risk_adjusted_profit": 0.0,
+              "turnover_penalty_score": 0.3167,
+              "cac_slippage_ratio": 73.9184,
+              "fee_burden_rate": 0.0803,
+              "fee_jump_risk_score": 0.5,
+              "policy_jump_risk_score": 0.5,
+              "execution_friction_score": 1.0,
+              "execution_friction_flags": [
+                "inventory_turnover_penalty",
+                "cac_slippage",
+                "fee_jump_risk",
+                "policy_jump_risk",
+                "execution_friction_high"
+              ],
+              "gate_results": {
+                "margin_gate": true,
+                "benchmark_fit_gate": false,
+                "execution_friction_gate": false
+              }
+            }
+          ],
+          "benchmark_coverage_ratio": 1.0,
+          "threshold_coverage_ratio": 0.3333,
+          "threshold_registry_count": 3,
+          "benchmark_registry_count": 1,
+          "source_registry_count": 3,
+          "source_health": {
+            "coverage_ratio": 0.0,
+            "freshness_score": 0.3222,
+            "confidence_score": 0.7333,
+            "health_score": 0.3006
+          },
+          "average_benchmark_fit_score": 0.0,
+          "average_execution_friction_score": 1.0,
+          "average_turnover_penalty_score": 0.3167,
+          "average_cac_slippage_ratio": 73.9184,
+          "execution_friction_flags": [
+            "cac_slippage",
+            "execution_friction_high",
+            "fee_jump_risk",
+            "inventory_turnover_penalty",
+            "policy_jump_risk"
+          ],
+          "channel_gate_records": [
+            {
+              "channel": "TikTok Shop",
+              "gate_results": {
+                "margin_gate": true,
+                "benchmark_fit_gate": false,
+                "execution_friction_gate": false
+              },
+              "execution_friction_flags": [
+                "inventory_turnover_penalty",
+                "cac_slippage",
+                "fee_jump_risk",
+                "policy_jump_risk",
+                "execution_friction_high"
+              ]
+            }
+          ]
+        },
+        "stress_suite": {
+          "scenario_count": 2,
+          "scenario_rows": [
+            {
+              "scenario_id": "PHSTR001",
+              "scenario_name": "Live Revenue Compression",
+              "shock_target": "revenue",
+              "shock_multiplier": 0.9,
+              "severity": "high",
+              "stressed_contribution_profit": 335523.06,
+              "stressed_margin_rate": 0.2066,
+              "margin_delta": -0.0793,
+              "gate_result": "pass",
+              "gate_flip": false
+            },
+            {
+              "scenario_id": "PHSTR002",
+              "scenario_name": "Platform Fee Shock",
+              "shock_target": "acquisition_cost",
+              "shock_multiplier": 1.3,
+              "severity": "medium",
+              "stressed_contribution_profit": 486166.31,
+              "stressed_margin_rate": 0.2695,
+              "margin_delta": -0.0165,
+              "gate_result": "pass",
+              "gate_flip": false
+            }
+          ],
+          "baseline_margin_rate": 0.286,
+          "worst_case_margin_rate": 0.2066,
+          "robustness_score": 1.0,
+          "robustness_level": "high",
+          "optimizer_feasibility_report": {
+            "pass_count": 2,
+            "fail_count": 0,
+            "pass_ratio": 1.0
+          },
+          "gate_flip_report": {
+            "baseline_gate_result": "pass",
+            "flip_count": 0,
+            "scenario_flips": []
+          }
+        }
+      }
+    },
+    "4.6": {
+      "id": "4.6",
+      "title": "运营门槛与组织能力要求分析",
+      "required_tables": [
+        "experiment_registry",
+        "returns_claims",
+        "inventory_positions",
+        "traffic_sessions"
+      ],
+      "metric_ids": [
+        "operating_readiness"
+      ],
+      "granularity": {
+        "analysis_grain": "capability score",
+        "entity_grain": "channel operating model",
+        "time_grain": "planning window"
+      },
+      "channel_scope": [
+        "DTC",
+        "Amazon",
+        "TikTok Shop",
+        "eBay",
+        "Walmart",
+        "B2B"
+      ],
+      "master_data_ref": [
+        "mdm.channel",
+        "mdm.experiment_registry"
+      ],
+      "evidence_ref": [
+        "evidence.experiment_registry",
+        "evidence.inventory_positions",
+        "evidence.returns_claims"
+      ],
+      "rule_ref": [
+        "gate.readiness_gate"
+      ],
+      "gate_result": {
+        "status": "not_applicable",
+        "source": "",
+        "raw_value": "",
+        "failed_items": []
+      },
+      "data_quality": {
+        "record_counts": {
+          "experiment_registry": 0,
+          "returns_claims": 0,
+          "inventory_positions": 1,
+          "traffic_sessions": 90
+        },
+        "available_tables": [
+          "inventory_positions",
+          "traffic_sessions"
+        ],
+        "missing_tables": [
+          "experiment_registry",
+          "returns_claims"
+        ],
+        "completeness_ratio": 0.5,
+        "richness_ratio": 0.2812,
+        "quality_score": 0.4234,
+        "quality_level": "low"
+      },
+      "confidence": {
+        "score": 0.4234,
+        "level": "low"
+      },
+      "metrics": {
+        "experiment_summary": {
+          "coverage_ratio": 0.0,
+          "completed_count": 0,
+          "active_count": 0,
+          "minimum_duration_pass_rate": 0.0,
+          "channels_covered": []
+        },
+        "paid_dependency_score": 0.0,
+        "inventory_risk_score": 1.0,
+        "service_risk_score": 0.0,
+        "readiness_score": 0.35,
+        "readiness_level": "low"
+      }
+    },
+    "4.7": {
+      "id": "4.7",
+      "title": "推荐进入路径与 90 天销售执行方案",
+      "required_tables": [
+        "landed_cost_scenarios",
+        "traffic_sessions",
+        "marketing_spend",
+        "b2b_accounts",
+        "experiment_registry",
+        "part4_threshold_registry",
+        "part4_optimizer_registry",
+        "part4_stress_registry"
+      ],
+      "metric_ids": [
+        "entry_plan"
+      ],
+      "granularity": {
+        "analysis_grain": "entry plan scenario",
+        "entity_grain": "channel portfolio",
+        "time_grain": "90-day plan"
+      },
+      "channel_scope": [
+        "DTC",
+        "Amazon",
+        "TikTok Shop",
+        "eBay",
+        "Walmart",
+        "B2B"
+      ],
+      "master_data_ref": [
+        "mdm.channel",
+        "mdm.sku",
+        "mdm.account"
+      ],
+      "evidence_ref": [
+        "evidence.landed_cost_scenarios",
+        "evidence.traffic_sessions",
+        "evidence.marketing_spend",
+        "evidence.part4_optimizer_registry",
+        "evidence.part4_stress_registry"
+      ],
+      "rule_ref": [
+        "gate.margin_gate",
+        "gate.payback_gate",
+        "gate.loss_gate",
+        "gate.readiness_gate",
+        "gate.part4_threshold_registry",
+        "gate.part4_optimizer_registry"
+      ],
+      "gate_result": {
+        "status": "review",
+        "source": "recommendation",
+        "raw_value": "pilot_first",
+        "failed_items": []
+      },
+      "data_quality": {
+        "record_counts": {
+          "landed_cost_scenarios": 1,
+          "traffic_sessions": 90,
+          "marketing_spend": 90,
+          "b2b_accounts": 0,
+          "experiment_registry": 0,
+          "part4_threshold_registry": 3,
+          "part4_optimizer_registry": 1,
+          "part4_stress_registry": 2
+        },
+        "available_tables": [
+          "landed_cost_scenarios",
+          "traffic_sessions",
+          "marketing_spend",
+          "part4_threshold_registry",
+          "part4_optimizer_registry",
+          "part4_stress_registry"
+        ],
+        "missing_tables": [
+          "b2b_accounts",
+          "experiment_registry"
+        ],
+        "completeness_ratio": 0.75,
+        "richness_ratio": 0.6042,
+        "quality_score": 0.699,
+        "quality_level": "medium"
+      },
+      "confidence": {
+        "score": 0.699,
+        "level": "medium"
+      },
+      "metrics": {
+        "gate_results": {
+          "margin_gate": true,
+          "payback_gate": true,
+          "loss_gate": true,
+          "repeat_gate": true,
+          "inventory_gate": false,
+          "readiness_gate": false
+        },
+        "recommendation": "pilot_first",
+        "primary_channel": "TikTok Shop",
+        "secondary_channels": [],
+        "budget_allocation": {
+          "TikTok Shop": 1.0
+        },
+        "priority_channels": [
+          {
+            "channel": "TikTok Shop",
+            "channel_family": "platform",
+            "priority_score": 0.3439
+          }
+        ],
+        "top_risks": [
+          "inventory_gate",
+          "readiness_gate"
+        ],
+        "ninety_day_plan": [
+          {
+            "phase": "Day 1-30",
+            "focus": "渠道试点与报价锁定",
+            "target": "TikTok Shop"
+          },
+          {
+            "phase": "Day 31-60",
+            "focus": "投放与页面实验",
+            "target": "提升转化与缩短回本周期"
+          },
+          {
+            "phase": "Day 61-90",
+            "focus": "扩 SKU / 扩渠道",
+            "target": "保留 ROI 达标渠道，淘汰低效率渠道"
+          }
+        ],
+        "dtc_fit_score": 0.0,
+        "best_platform_fit_score": 1.0,
+        "b2b_viability_score": 0.0,
+        "traffic_paid_share": 0.0,
+        "readiness_score": 0.35,
+        "optimizer": {
+          "optimizer_id": "PHOPT001",
+          "objective_name": "maximize_live_margin_under_proxy_risk",
+          "objective_type": "constraint_rank",
+          "feasible_channels_count": 0,
+          "channel_count": 1,
+          "feasible_ratio": 0.0,
+          "best_channel": {},
+          "ranked_channels": [],
+          "recommended_capital_allocation": {},
+          "optimal_budget_mix": {},
+          "risk_adjusted_profit": 0,
+          "portfolio_constraints": {
+            "capital_limit": 150000.0,
+            "max_loss_probability": 0.3,
+            "min_contribution_margin_rate": 0.08,
+            "max_payback_months": 8.0,
+            "max_paid_share": 0.85,
+            "max_single_channel_weight": 0.9,
+            "objective_lambda": 0.35,
+            "turnover_penalty_lambda": 0.1
+          },
+          "capital_fit_status": "pass",
+          "risk_budget_fit_status": "fail",
+          "optimizer_runs": [
+            {
+              "channel": "TikTok Shop",
+              "objective_name": "maximize_live_margin_under_proxy_risk",
+              "objective_type": "constraint_rank",
+              "expected_profit": 425624.14,
+              "profit_variance_proxy": 152581.62,
+              "risk_adjusted_profit": 273616.23,
+              "turnover_penalty_score": 0.3167,
+              "execution_friction_score": 1.0,
+              "capital_required_proxy": 1152868.49,
+              "feasible": false,
+              "infeasible_reasons": [
+                "capital_limit",
+                "execution_friction_limit"
+              ],
+              "priority_score": 0.5044
+            }
+          ],
+          "infeasible_reason_mix": {
+            "capital_limit": 1,
+            "execution_friction_limit": 1
+          },
+          "optimizer_gate_result": "fail",
+          "optimizer_confidence_level": "low"
+        }
+      }
+    }
+  },
+  "uncertainty": {
+    "channel_margin_rate": {
+      "statistic": "mean",
+      "point_estimate": 0.286,
+      "ci_lower": 0.286,
+      "ci_upper": 0.286,
+      "iterations": 400,
+      "alpha": 0.05
+    },
+    "channel_payback_period": {
+      "statistic": "median",
+      "point_estimate": 0.17,
+      "ci_lower": 0.17,
+      "ci_upper": 0.17,
+      "iterations": 400,
+      "alpha": 0.05
+    },
+    "channel_repeat_rate": {
+      "statistic": "mean",
+      "point_estimate": 0.1199,
+      "ci_lower": 0.1199,
+      "ci_upper": 0.1199,
+      "iterations": 400,
+      "alpha": 0.05
+    },
+    "roi_monte_carlo": {
+      "iterations": 1200,
+      "seed": 42,
+      "overall": {
+        "roi": {
+          "p10": 0.1924,
+          "p50": 0.3131,
+          "p90": 0.4424
+        },
+        "contribution_margin_rate": {
+          "p10": 0.1614,
+          "p50": 0.2384,
+          "p90": 0.3067
+        },
+        "contribution_profit": {
+          "p10": 273042.5236,
+          "p50": 425624.1429,
+          "p90": 582107.034
+        },
+        "loss_probability": 0.0,
+        "loss_probability_weighted_channels": 0.0,
+        "target_payback_months": 6.0,
+        "tail_risk": {
+          "contribution_profit_var_95": 230123.98,
+          "contribution_profit_es_95": 186547.68,
+          "contribution_profit_cvar_95": 186547.68,
+          "margin_rate_var_95": 0.1396,
+          "margin_rate_es_95": 0.1145,
+          "margin_rate_cvar_95": 0.1145,
+          "tail_shortfall_severity": 0.0092
+        },
+        "risk_adjusted": {
+          "margin_rate_sharpe_like": 2.7904,
+          "margin_rate_sortino_like": 178.8844,
+          "margin_rate_calmar_like": 0.7091,
+          "margin_rate_ulcer_index": 0.4024,
+          "margin_rate_drawdown_duration": 829,
+          "margin_rate_tail_ratio": 2.3225,
+          "margin_rate_omega_ratio": 3386.49,
+          "roi_sharpe_like": 3.2932,
+          "roi_sortino_like": 0.0,
+          "roi_calmar_like": 0.549,
+          "roi_ulcer_index": 0.5038,
+          "roi_drawdown_duration": 829,
+          "roi_omega_ratio": 0.0
+        }
+      },
+      "channels": {
+        "TikTok Shop": {
+          "roi": {
+            "p10": 0.1924,
+            "p50": 0.3131,
+            "p90": 0.4424
+          },
+          "contribution_margin_rate": {
+            "p10": 0.1614,
+            "p50": 0.2384,
+            "p90": 0.3067
+          },
+          "contribution_profit": {
+            "p10": 273042.5236,
+            "p50": 425624.1429,
+            "p90": 582107.034
+          },
+          "loss_probability": 0.0,
+          "base_margin_rate": 0.286,
+          "base_roi": 0.4005,
+          "tail_risk": {
+            "contribution_profit_var_95": 230123.98,
+            "contribution_profit_es_95": 186547.68,
+            "contribution_profit_cvar_95": 186547.68,
+            "margin_rate_var_95": 0.1396,
+            "margin_rate_es_95": 0.1145,
+            "margin_rate_cvar_95": 0.1145,
+            "tail_shortfall_severity": 0.0682
+          },
+          "risk_adjusted": {
+            "margin_rate_sharpe_like": -0.8991,
+            "margin_rate_sortino_like": -0.6818,
+            "margin_rate_calmar_like": 0.7091,
+            "margin_rate_ulcer_index": 0.4024,
+            "margin_rate_drawdown_duration": 829,
+            "margin_rate_tail_ratio": 2.3225,
+            "margin_rate_omega_ratio": 0.0908
+          }
+        }
+      },
+      "sensitivity": [
+        {
+          "driver": "revenue",
+          "base_roi": 0.4005,
+          "base_margin_rate": 0.286,
+          "downside_roi": 0.2605,
+          "downside_margin_rate": 0.2066,
+          "downside_impact": -0.0793,
+          "upside_roi": 0.4845,
+          "upside_margin_rate": 0.3264,
+          "upside_impact": 0.0404
+        },
+        {
+          "driver": "landed",
+          "base_roi": 0.4005,
+          "base_margin_rate": 0.286,
+          "downside_roi": 0.2955,
+          "downside_margin_rate": 0.2281,
+          "downside_impact": -0.0579,
+          "upside_roi": 0.4597,
+          "upside_margin_rate": 0.3149,
+          "upside_impact": 0.0289
+        },
+        {
+          "driver": "spend",
+          "base_roi": 0.4005,
+          "base_margin_rate": 0.286,
+          "downside_roi": 0.3814,
+          "downside_margin_rate": 0.2761,
+          "downside_impact": -0.0099,
+          "upside_roi": 0.4114,
+          "upside_margin_rate": 0.2915,
+          "upside_impact": 0.0055
+        },
+        {
+          "driver": "fee",
+          "base_roi": 0.4005,
+          "base_margin_rate": 0.286,
+          "downside_roi": 0.3888,
+          "downside_margin_rate": 0.28,
+          "downside_impact": -0.006,
+          "upside_roi": 0.4064,
+          "upside_margin_rate": 0.289,
+          "upside_impact": 0.003
+        },
+        {
+          "driver": "refund",
+          "base_roi": 0.4005,
+          "base_margin_rate": 0.286,
+          "downside_roi": 0.4005,
+          "downside_margin_rate": 0.286,
+          "downside_impact": 0.0,
+          "upside_roi": 0.4005,
+          "upside_margin_rate": 0.286,
+          "upside_impact": 0.0
+        }
+      ]
+    }
+  },
+  "validation": {
+    "summary": {
+      "pass_count": 8,
+      "review_count": 0,
+      "fail_count": 0
+    },
+    "checks": [
+      {
+        "check_id": "traffic_source_share_integrity",
+        "status": "pass",
+        "source": {
+          "label": "Part 4 Traffic Funnel",
+          "url": ""
+        },
+        "method": "Traffic source session shares should reconcile back to 100% of observed traffic.",
+        "evidence": {
+          "source_share_sum": 1.0,
+          "missing_input": false
+        }
+      },
+      {
+        "check_id": "paid_owned_mix_integrity",
+        "status": "pass",
+        "source": {
+          "label": "Part 4 Traffic Funnel",
+          "url": ""
+        },
+        "method": "Paid, owned, and other traffic shares should approximately sum to 100%.",
+        "evidence": {
+          "paid_owned_sum": 1.0,
+          "missing_input": false
+        }
+      },
+      {
+        "check_id": "traffic_funnel_rate_range",
+        "status": "pass",
+        "source": {
+          "label": "Part 4 Traffic Funnel",
+          "url": ""
+        },
+        "method": "Funnel conversion rates must remain within a 0-1 range.",
+        "evidence": {
+          "funnel": {
+            "sessions": 587547,
+            "product_page_views": 104623,
+            "add_to_cart": 24981,
+            "checkout_start": 16237,
+            "orders": 94,
+            "page_view_rate": 0.1781,
+            "add_to_cart_rate": 0.2388,
+            "checkout_start_rate": 0.65,
+            "checkout_completion_rate": 0.0058
+          },
+          "missing_input": false
+        }
+      },
+      {
+        "check_id": "channel_margin_and_payback_range",
+        "status": "pass",
+        "source": {
+          "label": "Part 4 Channel P&L",
+          "url": ""
+        },
+        "method": "Contribution margin should stay within a valid range and payback should not be negative.",
+        "evidence": {
+          "channel_count": 1,
+          "missing_input": false
+        }
+      },
+      {
+        "check_id": "fee_version_coverage",
+        "status": "pass",
+        "source": {
+          "label": "Part 4 Channel P&L",
+          "url": ""
+        },
+        "method": "Each active channel should have at least one effective fee version in the rate-card table.",
+        "evidence": {
+          "channels_missing_fee_versions": [],
+          "missing_input": false
+        }
+      },
+      {
+        "check_id": "roi_monte_carlo_monotonicity",
+        "status": "pass",
+        "source": {
+          "label": "Part 4 ROI Monte Carlo",
+          "url": ""
+        },
+        "method": "Monte Carlo percentile bands should be monotonic and loss probability must stay within a 0-1 range.",
+        "evidence": {
+          "overall_band": {
+            "p10": 0.1614,
+            "p50": 0.2384,
+            "p90": 0.3067
+          },
+          "loss_probability": 0.0,
+          "missing_input": false
+        }
+      },
+      {
+        "check_id": "readiness_score_range",
+        "status": "pass",
+        "source": {
+          "label": "Part 4 Go No-Go Gates",
+          "url": ""
+        },
+        "method": "Readiness score is normalized to 0-1 to align operational gating across categories.",
+        "evidence": {
+          "readiness_score": 0.35
+        }
+      },
+      {
+        "check_id": "go_no_go_gate_integrity",
+        "status": "pass",
+        "source": {
+          "label": "Part 4 Go No-Go Gates",
+          "url": ""
+        },
+        "method": "Go/No-Go gates should remain boolean, recommendation must use the fixed enum, and budget shares should not exceed 100%.",
+        "evidence": {
+          "recommendation": "pilot_first",
+          "budget_sum": 1.0,
+          "missing_input": false
+        }
+      }
+    ]
+  },
+  "factor_snapshots": {
+    "FAC-CHANNEL-FIT": {
+      "label": "渠道适配因子",
+      "value": 1.0,
+      "source_section": "4.1-4.3"
+    },
+    "FAC-TRAFFIC-EFFICIENCY": {
+      "label": "流量效率因子",
+      "value": 0.3558,
+      "source_section": "4.4"
+    },
+    "FAC-UNIT-ECONOMICS": {
+      "label": "单位经济因子",
+      "value": 1.0,
+      "source_section": "4.5"
+    },
+    "FAC-PORTFOLIO-RESILIENCE": {
+      "label": "组合韧性因子",
+      "value": 1.0,
+      "source_section": "4.5"
+    },
+    "FAC-EXECUTION-FRICTION": {
+      "label": "执行摩擦因子",
+      "value": 0.0,
+      "source_section": "4.5-4.6"
+    },
+    "FAC-SCALE-READINESS": {
+      "label": "放量承接因子",
+      "value": 0.425,
+      "source_section": "4.6-4.7"
+    }
+  },
+  "confidence_band": {
+    "score": 0.6934,
+    "label": "medium",
+    "proxy_usage_flags": [
+      "source_health_weak",
+      "stress_suite_thin"
+    ]
+  },
+  "proxy_usage_flags": [
+    "source_health_weak",
+    "stress_suite_thin"
+  ],
+  "execution_friction_flags": [
+    "cac_slippage",
+    "execution_friction_high",
+    "fee_jump_risk",
+    "inventory_turnover_penalty",
+    "policy_jump_risk"
+  ],
+  "part4_optimizer_runs": [
+    {
+      "channel": "TikTok Shop",
+      "objective_name": "maximize_live_margin_under_proxy_risk",
+      "objective_type": "constraint_rank",
+      "expected_profit": 425624.14,
+      "profit_variance_proxy": 152581.62,
+      "risk_adjusted_profit": 273616.23,
+      "turnover_penalty_score": 0.3167,
+      "execution_friction_score": 1.0,
+      "capital_required_proxy": 1152868.49,
+      "feasible": false,
+      "infeasible_reasons": [
+        "capital_limit",
+        "execution_friction_limit"
+      ],
+      "priority_score": 0.5044
+    }
+  ]
+}

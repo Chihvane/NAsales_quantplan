@@ -1,0 +1,380 @@
+{
+  "case_id": "UGREEN-PH-LIVESTREAM-2025-09_to_2025-11",
+  "source_file": "/Users/zhiwenxiang/Library/Containers/com.tencent.xinWeChat/Data/Documents/xwechat_files/wen10141074729261_7dfb/temp/drag/UGREEN 2509-2511.xlsx",
+  "market_code": "PH",
+  "channel": "TikTok Shop",
+  "source_profile": {
+    "session_count": 94,
+    "covered_periods": [
+      "09/01/2025 - 09/30/2025",
+      "10/01/2025 - 10/31/2025",
+      "11/01/2025 - 11/30/2025"
+    ],
+    "covered_months": [
+      "2025-09",
+      "2025-10",
+      "2025-11"
+    ],
+    "host_id": "64923682",
+    "first_session_at": "2025-09-01 16:59:00",
+    "last_session_at": "2025-11-30 12:48:00",
+    "currency": "PHP"
+  },
+  "operating_summary": {
+    "total_confirmed_gmv": 1804112.28,
+    "total_confirmed_orders": 3552,
+    "total_confirmed_units": 4315,
+    "total_viewers": 587547,
+    "total_engaged_viewers": 104623,
+    "engagement_rate": 0.1781,
+    "confirmed_conversion_rate": 0.006,
+    "cart_rate": 0.0425,
+    "confirmed_aov": 507.91,
+    "confirmed_unit_price": 418.1,
+    "average_watch_seconds": 101.8,
+    "contribution_margin_rate_proxy": 0.28
+  },
+  "advanced_quant_signals": {
+    "revenue_fourier": {
+      "observation_count": 90,
+      "dominant_period": 90.0,
+      "dominant_power_share": 0.0796,
+      "spectral_entropy": 0.9258,
+      "seasonality_confidence_score": 0.0059,
+      "top_periods": [
+        {
+          "period": 90.0,
+          "power_share": 0.0796
+        },
+        {
+          "period": 15.0,
+          "power_share": 0.0677
+        },
+        {
+          "period": 45.0,
+          "power_share": 0.048
+        }
+      ]
+    },
+    "order_fourier": {
+      "observation_count": 90,
+      "dominant_period": 30.0,
+      "dominant_power_share": 0.066,
+      "spectral_entropy": 0.9525,
+      "seasonality_confidence_score": 0.0031,
+      "top_periods": [
+        {
+          "period": 30.0,
+          "power_share": 0.066
+        },
+        {
+          "period": 15.0,
+          "power_share": 0.0538
+        },
+        {
+          "period": 22.5,
+          "power_share": 0.0463
+        }
+      ]
+    },
+    "revenue_fibonacci": {
+      "high": 265920.51,
+      "low": 3704.0,
+      "level_236": 204037.4136,
+      "level_382": 165753.8032,
+      "level_500": 134812.255,
+      "level_618": 103870.7068,
+      "level_786": 59818.3331,
+      "latest_position_ratio": 0.0244
+    },
+    "recursive_revenue": {
+      "alpha": 0.35,
+      "series": [
+        18260.03,
+        16643.3695,
+        14399.2327,
+        11229.5722,
+        10682.7,
+        10031.9625,
+        10479.3631,
+        15268.23,
+        23486.4995,
+        22474.3312,
+        16429.3653,
+        13915.8909,
+        12841.0196,
+        13933.0337,
+        15054.1839,
+        14224.8996,
+        14045.7347,
+        13108.1776,
+        11087.8699,
+        11309.1154,
+        11333.9145,
+        10618.793,
+        11587.8859,
+        11526.5043,
+        11210.6453,
+        12581.849,
+        11533.6343,
+        13327.5333,
+        14297.5957,
+        19291.8347,
+        17195.795,
+        15002.2943,
+        13554.8118,
+        10107.0277,
+        11345.8815,
+        10561.8775,
+        10781.7728,
+        10213.0674,
+        11607.8603,
+        17811.1797,
+        16947.2398,
+        15633.9454,
+        13443.3705,
+        13618.8533,
+        15771.5937,
+        17634.1769,
+        14322.856,
+        14730.2329,
+        17003.2229,
+        15401.3699,
+        15771.6244,
+        12685.9669,
+        11197.096,
+        10039.6544,
+        10886.6388,
+        13146.3022,
+        13865.4465,
+        14942.8457,
+        14993.6252,
+        12732.0039,
+        14079.548,
+        16141.3567,
+        13885.3454,
+        16282.532,
+        14647.3278,
+        13502.1006,
+        15010.6039,
+        16800.625,
+        19659.6543,
+        51172.7988,
+        126334.4977,
+        94956.5225,
+        67294.6216,
+        61592.8481,
+        64129.3407,
+        46989.837,
+        34668.83,
+        31549.9275,
+        22208.4529,
+        16854.7609,
+        13961.6501,
+        17780.9725,
+        16716.9822,
+        24105.2889,
+        23167.1878,
+        19850.1721,
+        15763.0743,
+        35184.2613,
+        26060.6674,
+        20477.6503
+      ],
+      "stability_score": 0.7781,
+      "trend_score": 0.5607
+    },
+    "entropy_growth": {
+      "base_entropy": 0.7529,
+      "recent_entropy": 0.3469,
+      "entropy_delta": -0.406,
+      "entropy_growth_score": 1.0
+    },
+    "revenue_shannon_entropy": 0.2457,
+    "revenue_approximate_entropy": 0.6912,
+    "bayesian_revenue_signal": 17920.7573
+  },
+  "localization_summary": {
+    "market_code": "PH",
+    "market_name": "Philippines",
+    "region_group": "Southeast Asia",
+    "analysis_method": "value_mobile",
+    "habit_model_family": "mobile_value",
+    "regulatory_complexity": 0.33,
+    "logistics_complexity": 0.46,
+    "fx_risk": 0.51,
+    "digital_maturity": 0.72,
+    "cross_border_acceptance": 0.84,
+    "region_weight_profile": {
+      "profile_id": "WP-PH-BASE",
+      "factor_weight_channel_efficiency": 0.18,
+      "factor_weight_price_realization": 0.2,
+      "geo_fit_weight": 0.12,
+      "habit_fit_weight": 0.18
+    },
+    "observed_habit_vector_proxy": {
+      "price_sensitivity": 0.9559,
+      "social_proof_dependency": 0.5309,
+      "discount_dependency": 1.0,
+      "content_driven_discovery": 0.3942,
+      "cross_border_affinity": 0.84,
+      "payment_friction_tolerance": 0.5904
+    },
+    "habit_fit_score_proxy": 0.7948,
+    "habit_proxy_flag": true,
+    "localization_score": 0.5942,
+    "localization_notes": [
+      "consumer_habit_vector reference is category-mismatched and treated as proxy",
+      "Philippines is evaluated with Southeast Asia-specific market profile and weights",
+      "livestream commerce behavior is analyzed separately from Europe/Japan/Korea baselines"
+    ]
+  },
+  "part4_framework_result": {
+    "decision_signal": "pilot",
+    "decision_score": 0.6912,
+    "confidence_band": "medium",
+    "best_channel": [
+      {
+        "key": "recommendation",
+        "label": "进入建议",
+        "value": "pilot_first",
+        "unit": "enum"
+      },
+      {
+        "key": "primary_channel",
+        "label": "主攻渠道",
+        "value": "TikTok Shop",
+        "unit": "channel"
+      },
+      {
+        "key": "best_platform",
+        "label": "最佳平台",
+        "value": "TikTok Shop",
+        "unit": "channel"
+      },
+      {
+        "key": "blended_margin_rate",
+        "label": "综合贡献毛利率",
+        "value": 0.286,
+        "unit": "ratio"
+      },
+      {
+        "key": "loss_probability",
+        "label": "总体亏损概率",
+        "value": 0.0,
+        "unit": "ratio"
+      },
+      {
+        "key": "readiness_score",
+        "label": "组织承接分",
+        "value": 0.35,
+        "unit": "score"
+      },
+      {
+        "key": "portfolio_resilience_factor",
+        "label": "组合韧性因子",
+        "value": 1.0,
+        "unit": "score"
+      },
+      {
+        "key": "execution_friction_factor",
+        "label": "执行摩擦因子",
+        "value": 0.0,
+        "unit": "score"
+      }
+    ],
+    "factor_snapshots": {
+      "FAC-CHANNEL-FIT": {
+        "label": "渠道适配因子",
+        "value": 1.0,
+        "source_section": "4.1-4.3"
+      },
+      "FAC-TRAFFIC-EFFICIENCY": {
+        "label": "流量效率因子",
+        "value": 0.3558,
+        "source_section": "4.4"
+      },
+      "FAC-UNIT-ECONOMICS": {
+        "label": "单位经济因子",
+        "value": 1.0,
+        "source_section": "4.5"
+      },
+      "FAC-PORTFOLIO-RESILIENCE": {
+        "label": "组合韧性因子",
+        "value": 1.0,
+        "source_section": "4.5"
+      },
+      "FAC-EXECUTION-FRICTION": {
+        "label": "执行摩擦因子",
+        "value": 0.0,
+        "source_section": "4.5-4.6"
+      },
+      "FAC-SCALE-READINESS": {
+        "label": "放量承接因子",
+        "value": 0.425,
+        "source_section": "4.6-4.7"
+      }
+    }
+  },
+  "part5_framework_result": {
+    "decision_signal": "rollback_risk",
+    "decision_score": 0.6019,
+    "confidence_band": "low",
+    "proxy_usage_flags": [
+      "cohort_repeat_rate_proxy_for_ltv",
+      "experiment_coverage_thin",
+      "platform_level_customer_acquisition_proxy",
+      "policy_monitoring_thin",
+      "registry_only_experiment_tracking",
+      "rollback_pressure_high"
+    ],
+    "factor_snapshots": {
+      "FAC-OPERATING-HEALTH": {
+        "label": "经营健康因子",
+        "value": 0.9367,
+        "source_section": "5.1"
+      },
+      "FAC-DATA-CONTRACT": {
+        "label": "数据契约因子",
+        "value": 0.6433,
+        "source_section": "5.2"
+      },
+      "FAC-GROWTH-LEVERAGE": {
+        "label": "增长杠杆因子",
+        "value": 0.2901,
+        "source_section": "5.3"
+      },
+      "FAC-MARGIN-PROTECTION": {
+        "label": "利润保护因子",
+        "value": 0.5228,
+        "source_section": "5.4"
+      },
+      "FAC-CASH-DISCIPLINE": {
+        "label": "库存现金纪律因子",
+        "value": 0.9115,
+        "source_section": "5.5"
+      },
+      "FAC-EXPERIMENT-CONFIDENCE": {
+        "label": "实验可信度因子",
+        "value": 0.0,
+        "source_section": "5.6"
+      },
+      "FAC-SCALE-CONTROL": {
+        "label": "扩张控制因子",
+        "value": 0.4796,
+        "source_section": "5.7"
+      }
+    }
+  },
+  "proxy_assumptions": {
+    "fee_rate": 0.075,
+    "marketing_rate": 0.055,
+    "return_reserve_rate": 0.03,
+    "landed_cost_proxy_p50": 222.13,
+    "notes": [
+      "No product-level cost file was provided, so landed cost is proxy-derived from observed unit price",
+      "No refund / policy / experiment raw data was provided, so those sections remain proxy-thin",
+      "This run is strongest on TikTok Shop livestream channel / operating diagnostics, not on full market sizing"
+    ]
+  }
+}

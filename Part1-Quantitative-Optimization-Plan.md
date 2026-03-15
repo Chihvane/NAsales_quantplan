@@ -16,6 +16,8 @@
 1. 指标体系已经能出结论，但结论的证据等级、不确定性和适用边界还不够统一。
 2. `Part 1` 仍偏“研究报告入口”，还没有完全升级成 `Decision OS` 的标准因子生产层。
 3. 当前 `Part 1` 回测和 `Decision OS` 回测是两条链，尚未形成统一的市场进入校准闭环。
+4. 指标和阈值还存在双轨命名，`threshold_registry` 与 `decision_summary` 尚未完全统一。
+5. 当前更像可运行 demo，持续量化所需的数据质量、漂移、证据链和校准机制还不够完整。
 
 因此这份计划的目标不是再堆几个指标，而是把 `Part 1` 从“可运行的市场量化报告模块”，升级为：
 
@@ -143,6 +145,15 @@ Part 1 标准表继续保留，但升级成三类：
 - `part1_gate_records`
 - `part1_backtest_panel`
 - `part1_stress_scenarios`
+- `part1_calibration_report`
+- `part1_drift_report`
+
+### D. 持续量化与运行表
+
+- `part1_data_quality_log`
+- `part1_evidence_trace_index`
+- `part1_source_cost_registry`
+- `part1_label_registry`
 
 ---
 
@@ -259,6 +270,7 @@ Part 1 标准表继续保留，但升级成三类：
 - `channel_efficiency_factor`
 - `channel_risk_factor`
 - `channel_dependency_score`
+- `channel_path_score`
 
 ## 5.5 `1.5 货架商品价格分析`
 
@@ -285,6 +297,7 @@ Part 1 标准表继续保留，但升级成三类：
 - `price_band_fit_factor`
 - `brand_premium_clean`
 - `price_white_space_signal`
+- `promo_contamination_flag`
 
 ## 5.6 `1.6 实际成交价格分析`
 
@@ -311,6 +324,7 @@ Part 1 标准表继续保留，但升级成三类：
 - `price_realization_factor`
 - `elasticity_reliability_score`
 - `discount_dependency_score`
+- `realized_margin_proxy`
 
 ---
 
@@ -339,7 +353,66 @@ Part 1 标准表继续保留，但升级成三类：
 
 ---
 
-## 七、验证与回测优化计划
+## 七、Part 1 的持续量化与验证框架
+
+`Part 1` 继续优化后，必须从“能出报告”升级为“能持续校准”。
+
+建议固定接入这些对象：
+
+### 7.1 持续量化监控
+
+- `field_missingness_rate`
+- `freshness_days`
+- `evidence_trace_coverage`
+- `proxy_dependency_ratio`
+- `outlier_rate_iqr`
+
+### 7.2 预测与时序验证
+
+- `forecast_backtest`
+- `rolling_window_error`
+- `event-window stability`
+- `lead_lag stability`
+
+### 7.3 概率与门槛校准
+
+- `gate naming alignment`
+- `decision vs threshold consistency`
+- `probability bucket diagnostics`
+- `gate_flip_report`
+
+### 7.4 漂移监控
+
+- `source drift`
+- `metric drift`
+- `factor drift`
+- `benchmark drift`
+
+---
+
+## 八、Part 1 的外部补强与工具模块
+
+`Part 1` 的持续量化不应只依赖 demo CSV，还应预留外部补强口径。
+
+### 8.1 建议外部补强方向
+
+- `Census / BLS / BEA`
+- `Google Trends`
+- `Amazon SP-API / 平台一方数据`
+- `Keepa / Similarweb / 站外流量工具`
+
+### 8.2 建议新增工具模块
+
+- `part1_market_size_mc`
+- `part1_competition_suite`
+- `part1_forecast_engine`
+- `part1_funnel_metrics`
+- `part1_elasticity_lab`
+- `part1_quality_monitor`
+
+---
+
+## 九、验证与回测优化计划
 
 当前 `Part 1` 已有 demo backtest，但它和 `decision-os/backtest/` 还没有完全打通。下一步必须做成统一回测体系。
 
@@ -372,10 +445,35 @@ Part 1 标准表继续保留，但升级成三类：
 - `part1_gate_records.csv`
 - `part1_alpha_table.csv`
 - `part1_stress_test_summary.json`
+- `part1_calibration_report.json`
+- `part1_drift_report.json`
 
 ---
 
-## 八、实施顺序
+## 十、2-6 周 MVP 路线
+
+### 第 1-2 周
+
+- 完成 `threshold naming alignment`
+- 完成 `data_quality_log / evidence_trace_index`
+- 固化 `event_library / source_registry / threshold_registry`
+
+### 第 3-4 周
+
+- 接入 `forecast_backtest`
+- 补齐 `channel_path_score`
+- 补齐 `promo_contamination_flag / realized_margin_proxy`
+- 输出第一版 `calibration_report`
+
+### 第 5-6 周
+
+- 接入 `drift_report`
+- 接入 `decision vs threshold consistency`
+- 输出 `Part 1 -> Decision OS` 的 gate records
+
+---
+
+## 十一、实施顺序
 
 ### Phase 1：治理与测量收口
 
@@ -402,9 +500,15 @@ Part 1 标准表继续保留，但升级成三类：
 2. 输出标准 `decision_record`
 3. 与 `capital/risk` 约束联动
 
+### Phase 5：持续量化
+
+1. 对齐 threshold 命名
+2. 输出 calibration / drift / evidence trace
+3. 形成持续运行报告与告警
+
 ---
 
-## 九、这轮优化的直接交付要求
+## 十二、这轮优化的直接交付要求
 
 这份计划之后，Part 1 的后续迭代必须优先满足：
 
@@ -420,10 +524,13 @@ Part 1 标准表继续保留，但升级成三类：
 3. 新增图表必须说明：
    - 用于哪个决策问题
    - 是否有误导风险
+4. 新增阈值必须说明：
+   - 与 `decision_summary` 的命名关系
+   - 与 `Gate` 的绑定关系
 
 ---
 
-## 十、与现有文件的对齐关系
+## 十三、与现有文件的对齐关系
 
 - 现有量化结构基线：
   - [Part1-Quantitative-Structure.md](/Users/zhiwenxiang/Documents/Playground/北美市场量化报告/Part1-Quantitative-Structure.md)
@@ -435,6 +542,7 @@ Part 1 标准表继续保留，但升级成三类：
 - Decision OS 回测与生产骨架：
   - [decision-os/docs/Backtesting-Program.md](/Users/zhiwenxiang/Documents/Playground/北美市场量化报告/decision-os/docs/Backtesting-Program.md)
   - [decision-os/database/schema.sql](/Users/zhiwenxiang/Documents/Playground/北美市场量化报告/decision-os/database/schema.sql)
+  - [decision-os/config/part1_quant_plan.yaml](/Users/zhiwenxiang/Documents/Playground/北美市场量化报告/decision-os/config/part1_quant_plan.yaml)
 
 这份文档的作用不是替代原有结构稿，而是作为：
 

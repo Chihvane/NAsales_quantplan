@@ -1,0 +1,2252 @@
+{
+  "metadata": {
+    "report_id": "part5_quant_report",
+    "report_version": "2026.03",
+    "generated_at": "2026-03-15T00:49:16.837008+00:00",
+    "section_order": [
+      "5.1",
+      "5.2",
+      "5.3",
+      "5.4",
+      "5.5",
+      "5.6",
+      "5.7"
+    ],
+    "section_structure": {
+      "5.1": {
+        "title": "运营目标与门禁指标设计",
+        "required_tables": [
+          "kpi_daily_snapshots",
+          "sold_transactions",
+          "returns_claims"
+        ],
+        "metric_ids": [
+          "operating_goals_gates"
+        ],
+        "quality_targets": {
+          "kpi_daily_snapshots": 14,
+          "sold_transactions": 10,
+          "returns_claims": 6
+        },
+        "analysis_grain": "channel x day",
+        "entity_grain": "channel",
+        "time_grain": "day",
+        "channel_scope": [
+          "DTC",
+          "Amazon",
+          "TikTok Shop",
+          "eBay",
+          "Walmart",
+          "B2B"
+        ],
+        "master_data_refs": [
+          "mdm.channel",
+          "mdm.sku",
+          "mdm.price_metric"
+        ],
+        "evidence_refs": [
+          "evidence.kpi_daily_snapshots",
+          "evidence.sold_transactions",
+          "evidence.returns_claims"
+        ],
+        "rule_refs": [
+          "gate.contribution_margin_guardrail",
+          "gate.return_dispute_band",
+          "gate.scale_stop_exit"
+        ]
+      },
+      "5.2": {
+        "title": "数据体系与持续监控机制",
+        "required_tables": [
+          "kpi_daily_snapshots",
+          "marketing_spend",
+          "traffic_sessions",
+          "policy_change_log",
+          "channel_rate_cards"
+        ],
+        "metric_ids": [
+          "data_monitoring_system"
+        ],
+        "quality_targets": {
+          "kpi_daily_snapshots": 14,
+          "marketing_spend": 8,
+          "traffic_sessions": 8,
+          "policy_change_log": 2,
+          "channel_rate_cards": 6
+        },
+        "analysis_grain": "channel x day / week",
+        "entity_grain": "channel x fee version",
+        "time_grain": "day / week",
+        "channel_scope": [
+          "DTC",
+          "Amazon",
+          "TikTok Shop",
+          "eBay",
+          "Walmart",
+          "B2B"
+        ],
+        "master_data_refs": [
+          "mdm.channel",
+          "mdm.fee_version",
+          "mdm.policy_version"
+        ],
+        "evidence_refs": [
+          "evidence.kpi_daily_snapshots",
+          "evidence.channel_rate_cards",
+          "evidence.policy_change_log"
+        ],
+        "rule_refs": [
+          "gate.data_contract",
+          "gate.version_gate",
+          "gate.monitoring_completeness"
+        ]
+      },
+      "5.3": {
+        "title": "获客、转化与留存增长机制",
+        "required_tables": [
+          "traffic_sessions",
+          "marketing_spend",
+          "customer_cohorts",
+          "kpi_daily_snapshots"
+        ],
+        "metric_ids": [
+          "growth_loop"
+        ],
+        "quality_targets": {
+          "traffic_sessions": 8,
+          "marketing_spend": 8,
+          "customer_cohorts": 4,
+          "kpi_daily_snapshots": 14
+        },
+        "analysis_grain": "channel x source x cohort",
+        "entity_grain": "channel x traffic source",
+        "time_grain": "day / cohort month",
+        "channel_scope": [
+          "DTC",
+          "Amazon",
+          "TikTok Shop",
+          "eBay",
+          "Walmart",
+          "B2B"
+        ],
+        "master_data_refs": [
+          "mdm.channel",
+          "mdm.customer_segment",
+          "mdm.traffic_source"
+        ],
+        "evidence_refs": [
+          "evidence.traffic_sessions",
+          "evidence.marketing_spend",
+          "evidence.customer_cohorts"
+        ],
+        "rule_refs": [
+          "gate.growth_quality",
+          "gate.payback_control"
+        ]
+      },
+      "5.4": {
+        "title": "定价、促销与利润保护策略",
+        "required_tables": [
+          "pricing_actions",
+          "sold_transactions",
+          "kpi_daily_snapshots"
+        ],
+        "metric_ids": [
+          "pricing_profit_protection"
+        ],
+        "quality_targets": {
+          "pricing_actions": 6,
+          "sold_transactions": 10,
+          "kpi_daily_snapshots": 14
+        },
+        "analysis_grain": "sku x channel x pricing action",
+        "entity_grain": "sku x channel",
+        "time_grain": "pricing action date",
+        "channel_scope": [
+          "DTC",
+          "Amazon",
+          "TikTok Shop",
+          "eBay",
+          "Walmart",
+          "B2B"
+        ],
+        "master_data_refs": [
+          "mdm.sku",
+          "mdm.channel",
+          "mdm.price_metric"
+        ],
+        "evidence_refs": [
+          "evidence.pricing_actions",
+          "evidence.sold_transactions",
+          "evidence.kpi_daily_snapshots"
+        ],
+        "rule_refs": [
+          "gate.margin_protection",
+          "gate.promo_dependency"
+        ]
+      },
+      "5.5": {
+        "title": "履约、库存与现金周转管理",
+        "required_tables": [
+          "inventory_positions",
+          "reorder_plan",
+          "cash_flow_snapshots"
+        ],
+        "metric_ids": [
+          "inventory_cash_control"
+        ],
+        "quality_targets": {
+          "inventory_positions": 8,
+          "reorder_plan": 4,
+          "cash_flow_snapshots": 8
+        },
+        "analysis_grain": "sku x warehouse x day",
+        "entity_grain": "sku x warehouse",
+        "time_grain": "day",
+        "channel_scope": [
+          "DTC",
+          "Amazon",
+          "TikTok Shop",
+          "eBay",
+          "Walmart",
+          "B2B"
+        ],
+        "master_data_refs": [
+          "mdm.sku",
+          "mdm.warehouse",
+          "mdm.channel"
+        ],
+        "evidence_refs": [
+          "evidence.inventory_positions",
+          "evidence.reorder_plan",
+          "evidence.cash_flow_snapshots"
+        ],
+        "rule_refs": [
+          "gate.inventory_risk",
+          "gate.cash_burn_control"
+        ]
+      },
+      "5.6": {
+        "title": "增量实验与持续优化机制",
+        "required_tables": [
+          "experiment_registry",
+          "experiment_assignments",
+          "experiment_metrics",
+          "traffic_sessions"
+        ],
+        "metric_ids": [
+          "experimentation_system"
+        ],
+        "quality_targets": {
+          "experiment_registry": 4,
+          "experiment_assignments": 8,
+          "experiment_metrics": 8,
+          "traffic_sessions": 8
+        },
+        "analysis_grain": "experiment x variant x day",
+        "entity_grain": "experiment",
+        "time_grain": "experiment day",
+        "channel_scope": [
+          "DTC",
+          "Amazon",
+          "TikTok Shop",
+          "eBay",
+          "Walmart",
+          "B2B"
+        ],
+        "master_data_refs": [
+          "mdm.experiment_registry",
+          "mdm.channel"
+        ],
+        "evidence_refs": [
+          "evidence.experiment_registry",
+          "evidence.experiment_assignments",
+          "evidence.experiment_metrics"
+        ],
+        "rule_refs": [
+          "gate.experiment_readiness",
+          "gate.incrementality_control"
+        ]
+      },
+      "5.7": {
+        "title": "风险监控、复盘机制与扩张节奏",
+        "required_tables": [
+          "policy_change_log",
+          "kpi_daily_snapshots",
+          "cash_flow_snapshots",
+          "returns_claims"
+        ],
+        "metric_ids": [
+          "risk_scale_loop"
+        ],
+        "quality_targets": {
+          "policy_change_log": 2,
+          "kpi_daily_snapshots": 14,
+          "cash_flow_snapshots": 8,
+          "returns_claims": 6
+        },
+        "analysis_grain": "channel x risk event",
+        "entity_grain": "channel",
+        "time_grain": "day / week",
+        "channel_scope": [
+          "DTC",
+          "Amazon",
+          "TikTok Shop",
+          "eBay",
+          "Walmart",
+          "B2B"
+        ],
+        "master_data_refs": [
+          "mdm.channel",
+          "mdm.policy_version"
+        ],
+        "evidence_refs": [
+          "evidence.policy_change_log",
+          "evidence.kpi_daily_snapshots",
+          "evidence.cash_flow_snapshots",
+          "evidence.returns_claims"
+        ],
+        "rule_refs": [
+          "gate.scale_stop_exit",
+          "gate.policy_blocker",
+          "gate.rollback_runbook"
+        ],
+        "gate_status_key": "expansion_gate_status"
+      }
+    },
+    "metric_specs": [
+      {
+        "section_id": "5.1",
+        "metric_id": "operating_goals_gates",
+        "label": "运营目标与门禁指标",
+        "required_tables": [
+          "kpi_daily_snapshots",
+          "sold_transactions",
+          "returns_claims"
+        ],
+        "formula": "按日经营快照与渠道利润、退款、争议、库存信号计算 operating_health_score 与 gate breach rate。",
+        "output_note": "用于判断当前项目处于健康、观察还是暂停状态。"
+      },
+      {
+        "section_id": "5.2",
+        "metric_id": "data_monitoring_system",
+        "label": "数据体系与持续监控",
+        "required_tables": [
+          "kpi_daily_snapshots",
+          "marketing_spend",
+          "traffic_sessions",
+          "policy_change_log"
+        ],
+        "formula": "基于表覆盖、刷新延迟、费率版本覆盖和政策监控完整度计算 data_coverage_score。",
+        "output_note": "用于判断上线后经营数据是否足以支持稳定决策。"
+      },
+      {
+        "section_id": "5.3",
+        "metric_id": "growth_loop",
+        "label": "获客、转化与留存增长",
+        "required_tables": [
+          "traffic_sessions",
+          "marketing_spend",
+          "customer_cohorts",
+          "kpi_daily_snapshots"
+        ],
+        "formula": "按流量来源、漏斗、复购和收入趋势计算 growth_leverage_score。",
+        "output_note": "用于判断增长动作是否可复制而不是只靠一次性投放。"
+      },
+      {
+        "section_id": "5.4",
+        "metric_id": "pricing_profit_protection",
+        "label": "定价、促销与利润保护",
+        "required_tables": [
+          "pricing_actions",
+          "sold_transactions",
+          "kpi_daily_snapshots"
+        ],
+        "formula": "跟踪价格动作、促销占比、价格实现率与利润地板 breach 数量，计算 promo_dependency_score。",
+        "output_note": "用于识别价格战、促销依赖和利润侵蚀。"
+      },
+      {
+        "section_id": "5.5",
+        "metric_id": "inventory_cash_control",
+        "label": "履约、库存与现金周转",
+        "required_tables": [
+          "inventory_positions",
+          "reorder_plan",
+          "cash_flow_snapshots"
+        ],
+        "formula": "基于 days of cover、reorder readiness、inventory cash lock 与 payable/receivable 构建库存现金控制评分。",
+        "output_note": "用于判断业务放量后会不会被库存和现金流拖垮。"
+      },
+      {
+        "section_id": "5.6",
+        "metric_id": "experimentation_system",
+        "label": "增量实验与持续优化",
+        "required_tables": [
+          "experiment_registry",
+          "traffic_sessions"
+        ],
+        "formula": "统计实验覆盖率、测试速度、MDE 可达性和样本量建议，输出 causal_confidence_score。",
+        "output_note": "用于判断优化动作是否能被系统化验证。"
+      },
+      {
+        "section_id": "5.7",
+        "metric_id": "risk_scale_loop",
+        "label": "风险监控、复盘与扩张节奏",
+        "required_tables": [
+          "policy_change_log",
+          "kpi_daily_snapshots",
+          "cash_flow_snapshots",
+          "returns_claims"
+        ],
+        "formula": "综合 alerts、预算燃烧率、库存与实验 readiness 输出 scale_readiness_score 和 expansion gate。",
+        "output_note": "用于形成继续投放、试点维持或回滚的经营建议。"
+      }
+    ],
+    "assumptions": {
+      "target_health_score": 0.65,
+      "min_contribution_margin_rate": 0.08,
+      "max_refund_rate": 0.1,
+      "max_dispute_rate": 0.03,
+      "target_inventory_days": 45.0,
+      "target_repeat_rate": 0.18,
+      "min_experiment_weeks": 1,
+      "max_budget_burn_ratio": 0.4,
+      "budget_allocation_max_share": 0.55,
+      "experiment_ship_threshold": 0.97,
+      "experiment_loss_threshold": 0.05,
+      "experiment_futility_lower": 0.35,
+      "experiment_futility_upper": 0.65,
+      "experiment_effect_floor_share_of_mde": 0.5,
+      "max_fee_version_age_days": 180,
+      "max_policy_age_days": 180,
+      "change_signal_relative_threshold": 0.2,
+      "min_change_signal_points": 2
+    },
+    "table_inventory": {
+      "listing_snapshots": {
+        "record_count": 1,
+        "available": true
+      },
+      "sold_transactions": {
+        "record_count": 94,
+        "available": true
+      },
+      "product_catalog": {
+        "record_count": 1,
+        "available": true
+      },
+      "landed_cost_scenarios": {
+        "record_count": 1,
+        "available": true
+      },
+      "channel_rate_cards": {
+        "record_count": 2,
+        "available": true
+      },
+      "marketing_spend": {
+        "record_count": 90,
+        "available": true
+      },
+      "traffic_sessions": {
+        "record_count": 90,
+        "available": true
+      },
+      "returns_claims": {
+        "record_count": 0,
+        "available": false
+      },
+      "customer_cohorts": {
+        "record_count": 1,
+        "available": true
+      },
+      "inventory_positions": {
+        "record_count": 1,
+        "available": true
+      },
+      "experiment_registry": {
+        "record_count": 0,
+        "available": false
+      },
+      "experiment_assignments": {
+        "record_count": 0,
+        "available": false
+      },
+      "experiment_metrics": {
+        "record_count": 0,
+        "available": false
+      },
+      "b2b_accounts": {
+        "record_count": 0,
+        "available": false
+      },
+      "kpi_daily_snapshots": {
+        "record_count": 90,
+        "available": true
+      },
+      "pricing_actions": {
+        "record_count": 80,
+        "available": true
+      },
+      "reorder_plan": {
+        "record_count": 1,
+        "available": true
+      },
+      "policy_change_log": {
+        "record_count": 0,
+        "available": false
+      },
+      "cash_flow_snapshots": {
+        "record_count": 90,
+        "available": true
+      }
+    }
+  },
+  "overview": {
+    "section_count": 7,
+    "average_confidence_score": 0.7021,
+    "confidence_mix": {
+      "high": 4,
+      "medium": 2,
+      "low": 1
+    },
+    "connected_channel_scope": [
+      "Amazon",
+      "B2B",
+      "DTC",
+      "TikTok Shop",
+      "Walmart",
+      "eBay"
+    ],
+    "control_tower_binding": {
+      "master_data_ref_coverage_ratio": 1.0,
+      "evidence_ref_coverage_ratio": 1.0,
+      "rule_ref_coverage_ratio": 1.0,
+      "gate_status_mix": {
+        "pass": 0,
+        "review": 1,
+        "fail": 1,
+        "not_applicable": 5
+      }
+    },
+    "data_contract": {
+      "data_availability_flags": {
+        "customer_identity_available": false,
+        "new_customer_identification_available": false,
+        "return_reason_available": false,
+        "inventory_eta_available": true,
+        "policy_change_log_available": false,
+        "policy_source_url_available": false,
+        "fee_version_available": true,
+        "experiment_assignment_available": false,
+        "experiment_metric_available": false,
+        "landed_cost_available": true
+      },
+      "proxy_usage_flags": [
+        "cohort_repeat_rate_proxy_for_ltv",
+        "platform_level_customer_acquisition_proxy",
+        "registry_only_experiment_tracking"
+      ],
+      "confidence_downgrade_reason": [
+        "缺少 customer_id，LTV 与生命周期模型降级为 cohort 粒度。",
+        "缺少新客识别字段，CAC 仅能按平台或会话口径近似。",
+        "缺少实验分配表，增量结论只能依赖注册表与聚合结果。",
+        "缺少实验读数表，无法稳定输出 uplift 与显著性结果。",
+        "政策变更缺少来源 URL，风险追溯能力受限。"
+      ],
+      "model_blockers": [
+        "customer_level_ltv",
+        "strict_causal_attribution",
+        "experiment_result_readout"
+      ]
+    },
+    "decision_summary": {
+      "decision_signal": "rollback_risk",
+      "decision_score": 0.6019,
+      "scorecard": {
+        "operating_stability": {
+          "score": 0.8889,
+          "level": "high"
+        },
+        "monitoring_readiness": {
+          "score": 0.58,
+          "level": "medium"
+        },
+        "growth_quality": {
+          "score": 0.3564,
+          "level": "low"
+        },
+        "scale_safety": {
+          "score": 0.5305,
+          "level": "medium"
+        }
+      },
+      "key_findings": [
+        "当前经营健康分为 93.7%，扩张状态为 rollback。",
+        "增长杠杆分为 29.0%，利润保护分为 52.3%。",
+        "当前预算建议优先投向 TikTok Shop，系统共识别 2 条经营预警，其中变点信号 2 条。"
+      ],
+      "risk_flags": [
+        "监控覆盖不足，异常可能无法被及时识别。",
+        "促销依赖度偏高，利润保护能力仍然偏弱。",
+        "实验系统置信度不足，扩张决策仍缺少稳定因果证据。",
+        "近期经营序列已出现变点信号，放量前需要先完成根因排查和回滚动作。",
+        "当前存在高优先级预警，扩张建议已降级为回滚或止损。"
+      ],
+      "recommended_next_step": "暂停扩张，先处理高优先级预警和回滚触发项。"
+    },
+    "decision_signal": "rollback_risk",
+    "decision_score": 0.6019,
+    "headline_metrics": [
+      {
+        "key": "operating_health_score",
+        "label": "经营健康分",
+        "value": 0.9367,
+        "unit": "score"
+      },
+      {
+        "key": "growth_leverage_score",
+        "label": "增长杠杆分",
+        "value": 0.2901,
+        "unit": "score"
+      },
+      {
+        "key": "margin_protection_score",
+        "label": "利润保护分",
+        "value": 0.5228,
+        "unit": "score"
+      },
+      {
+        "key": "scale_readiness_score",
+        "label": "扩张准备度",
+        "value": 0.7378,
+        "unit": "score"
+      },
+      {
+        "key": "expansion_gate_status",
+        "label": "扩张状态",
+        "value": "rollback",
+        "unit": "enum"
+      }
+    ],
+    "validation_summary": {
+      "pass_count": 10,
+      "review_count": 4,
+      "fail_count": 0
+    },
+    "uncertainty_keys": [
+      "daily_contribution_margin_rate",
+      "inventory_cash_lock",
+      "refund_cash_out",
+      "channel_health_score",
+      "forecast_snapshot"
+    ],
+    "factor_snapshot_count": 7,
+    "confidence_band": "low",
+    "proxy_usage_flag_count": 6
+  },
+  "sections": {
+    "5.1": {
+      "id": "5.1",
+      "title": "运营目标与门禁指标设计",
+      "required_tables": [
+        "kpi_daily_snapshots",
+        "sold_transactions",
+        "returns_claims"
+      ],
+      "metric_ids": [
+        "operating_goals_gates"
+      ],
+      "granularity": {
+        "analysis_grain": "channel x day",
+        "entity_grain": "channel",
+        "time_grain": "day"
+      },
+      "channel_scope": [
+        "DTC",
+        "Amazon",
+        "TikTok Shop",
+        "eBay",
+        "Walmart",
+        "B2B"
+      ],
+      "master_data_ref": [
+        "mdm.channel",
+        "mdm.sku",
+        "mdm.price_metric"
+      ],
+      "evidence_ref": [
+        "evidence.kpi_daily_snapshots",
+        "evidence.sold_transactions",
+        "evidence.returns_claims"
+      ],
+      "rule_ref": [
+        "gate.contribution_margin_guardrail",
+        "gate.return_dispute_band",
+        "gate.scale_stop_exit"
+      ],
+      "gate_result": {
+        "status": "review",
+        "source": "gate_results",
+        "raw_value": {
+          "health_gate": true,
+          "margin_gate": true,
+          "refund_gate": true,
+          "dispute_gate": true,
+          "alert_gate": false
+        },
+        "failed_items": [
+          "alert_gate"
+        ]
+      },
+      "data_quality": {
+        "record_counts": {
+          "kpi_daily_snapshots": 90,
+          "sold_transactions": 94,
+          "returns_claims": 0
+        },
+        "available_tables": [
+          "kpi_daily_snapshots",
+          "sold_transactions"
+        ],
+        "missing_tables": [
+          "returns_claims"
+        ],
+        "completeness_ratio": 0.6667,
+        "richness_ratio": 0.6667,
+        "quality_score": 0.6667,
+        "quality_level": "medium"
+      },
+      "confidence": {
+        "score": 0.6667,
+        "level": "medium"
+      },
+      "metrics": {
+        "operating_health_score": 0.9367,
+        "operating_health_level": "high",
+        "channel_health_rows": [
+          {
+            "channel": "TikTok Shop",
+            "health_score": 0.9367,
+            "health_level": "high",
+            "contribution_margin_rate": 0.286,
+            "return_rate": 0.0,
+            "dispute_rate": 0.0,
+            "inventory_days": 59.25
+          }
+        ],
+        "gate_results": {
+          "health_gate": true,
+          "margin_gate": true,
+          "refund_gate": true,
+          "dispute_gate": true,
+          "alert_gate": false
+        },
+        "gate_breach_rate": 0.2,
+        "status_mix": {
+          "healthy": 0.9222,
+          "watch": 0.0778
+        },
+        "primary_kpi_set": [
+          "revenue",
+          "contribution_profit",
+          "return_rate",
+          "inventory_days",
+          "ad_spend"
+        ],
+        "guardrail_kpi_set": [
+          "contribution_margin_rate",
+          "refund_rate",
+          "dispute_rate",
+          "cash_lock"
+        ]
+      }
+    },
+    "5.2": {
+      "id": "5.2",
+      "title": "数据体系与持续监控机制",
+      "required_tables": [
+        "kpi_daily_snapshots",
+        "marketing_spend",
+        "traffic_sessions",
+        "policy_change_log",
+        "channel_rate_cards"
+      ],
+      "metric_ids": [
+        "data_monitoring_system"
+      ],
+      "granularity": {
+        "analysis_grain": "channel x day / week",
+        "entity_grain": "channel x fee version",
+        "time_grain": "day / week"
+      },
+      "channel_scope": [
+        "DTC",
+        "Amazon",
+        "TikTok Shop",
+        "eBay",
+        "Walmart",
+        "B2B"
+      ],
+      "master_data_ref": [
+        "mdm.channel",
+        "mdm.fee_version",
+        "mdm.policy_version"
+      ],
+      "evidence_ref": [
+        "evidence.kpi_daily_snapshots",
+        "evidence.channel_rate_cards",
+        "evidence.policy_change_log"
+      ],
+      "rule_ref": [
+        "gate.data_contract",
+        "gate.version_gate",
+        "gate.monitoring_completeness"
+      ],
+      "gate_result": {
+        "status": "not_applicable",
+        "source": "",
+        "raw_value": "",
+        "failed_items": []
+      },
+      "data_quality": {
+        "record_counts": {
+          "kpi_daily_snapshots": 90,
+          "marketing_spend": 90,
+          "traffic_sessions": 90,
+          "policy_change_log": 0,
+          "channel_rate_cards": 2
+        },
+        "available_tables": [
+          "kpi_daily_snapshots",
+          "marketing_spend",
+          "traffic_sessions",
+          "channel_rate_cards"
+        ],
+        "missing_tables": [
+          "policy_change_log"
+        ],
+        "completeness_ratio": 0.8,
+        "richness_ratio": 0.6667,
+        "quality_score": 0.7533,
+        "quality_level": "high"
+      },
+      "confidence": {
+        "score": 0.7533,
+        "level": "high"
+      },
+      "metrics": {
+        "record_counts": {
+          "kpi_daily_snapshots": 90,
+          "marketing_spend": 90,
+          "traffic_sessions": 90,
+          "inventory_positions": 1,
+          "returns_claims": 0,
+          "policy_change_log": 0
+        },
+        "data_coverage_score": 0.6,
+        "data_coverage_level": "medium",
+        "fee_version_coverage": 1.0,
+        "fee_source_ref_coverage": 1.0,
+        "policy_monitoring_completeness": 0.0,
+        "policy_source_url_coverage": 0.0,
+        "latest_fee_effective_date": "2025-11-30",
+        "latest_policy_effective_date": "",
+        "stale_fee_version_ratio": 0.0,
+        "stale_policy_monitoring_ratio": 1.0,
+        "fee_version_binding_rows": [
+          {
+            "channel": "TikTok Shop",
+            "fee_type_count": 2,
+            "latest_effective_date": "2025-11-30",
+            "fee_version_age_days": 0,
+            "source_ref_coverage": 1.0,
+            "stale_flag": false
+          }
+        ],
+        "policy_monitoring_rows": [
+          {
+            "platform": "TikTok Shop",
+            "policy_event_count": 0,
+            "latest_effective_date": "",
+            "policy_age_days": null,
+            "high_impact_count": 0,
+            "stale_flag": true
+          }
+        ],
+        "weekly_channel_pnl": [
+          {
+            "week": "2025-W36",
+            "channel": "TikTok Shop",
+            "revenue": 77276.42,
+            "contribution_profit": 2493.67,
+            "ad_spend": 4250.2,
+            "refunds": 0.0,
+            "days_observed": 7,
+            "contribution_margin_rate": 0.0323
+          },
+          {
+            "week": "2025-W37",
+            "channel": "TikTok Shop",
+            "revenue": 124762.32999999999,
+            "contribution_profit": 30831.069999999996,
+            "ad_spend": 6861.9400000000005,
+            "refunds": 0.0,
+            "days_observed": 7,
+            "contribution_margin_rate": 0.2471
+          },
+          {
+            "week": "2025-W38",
+            "channel": "TikTok Shop",
+            "revenue": 85336.95999999999,
+            "contribution_profit": 8153.87,
+            "ad_spend": 4693.54,
+            "refunds": 0.0,
+            "days_observed": 7,
+            "contribution_margin_rate": 0.0955
+          },
+          {
+            "week": "2025-W39",
+            "channel": "TikTok Shop",
+            "revenue": 86089.28,
+            "contribution_profit": 14561.2,
+            "ad_spend": 4734.91,
+            "refunds": 0.0,
+            "days_observed": 7,
+            "contribution_margin_rate": 0.1691
+          },
+          {
+            "week": "2025-W40",
+            "channel": "TikTok Shop",
+            "revenue": 97115.03,
+            "contribution_profit": 28043.29,
+            "ad_spend": 5341.32,
+            "refunds": 0.0,
+            "days_observed": 7,
+            "contribution_margin_rate": 0.2888
+          },
+          {
+            "week": "2025-W41",
+            "channel": "TikTok Shop",
+            "revenue": 101520.49,
+            "contribution_profit": 24413.6,
+            "ad_spend": 5583.620000000001,
+            "refunds": 0.0,
+            "days_observed": 7,
+            "contribution_margin_rate": 0.2405
+          },
+          {
+            "week": "2025-W42",
+            "channel": "TikTok Shop",
+            "revenue": 109067.24999999999,
+            "contribution_profit": 25643.89,
+            "ad_spend": 5998.6900000000005,
+            "refunds": 0.0,
+            "days_observed": 7,
+            "contribution_margin_rate": 0.2351
+          },
+          {
+            "week": "2025-W43",
+            "channel": "TikTok Shop",
+            "revenue": 64622.98,
+            "contribution_profit": 19631.03,
+            "ad_spend": 3554.2699999999995,
+            "refunds": 0.0,
+            "days_observed": 6,
+            "contribution_margin_rate": 0.3038
+          },
+          {
+            "week": "2025-W44",
+            "channel": "TikTok Shop",
+            "revenue": 109659.89000000001,
+            "contribution_profit": 42801.450000000004,
+            "ad_spend": 6031.3,
+            "refunds": 0.0,
+            "days_observed": 7,
+            "contribution_margin_rate": 0.3903
+          },
+          {
+            "week": "2025-W45",
+            "channel": "TikTok Shop",
+            "revenue": 116322.17,
+            "contribution_profit": 41511.729999999996,
+            "ad_spend": 6397.719999999999,
+            "refunds": 0.0,
+            "days_observed": 7,
+            "contribution_margin_rate": 0.3569
+          },
+          {
+            "week": "2025-W46",
+            "channel": "TikTok Shop",
+            "revenue": 563226.52,
+            "contribution_profit": 226545.95,
+            "ad_spend": 30977.46,
+            "refunds": 0.0,
+            "days_observed": 7,
+            "contribution_margin_rate": 0.4022
+          },
+          {
+            "week": "2025-W47",
+            "channel": "TikTok Shop",
+            "revenue": 97520.56,
+            "contribution_profit": 30160.989999999998,
+            "ad_spend": 5363.62,
+            "refunds": 0.0,
+            "days_observed": 7,
+            "contribution_margin_rate": 0.3093
+          },
+          {
+            "week": "2025-W48",
+            "channel": "TikTok Shop",
+            "revenue": 171592.4,
+            "contribution_profit": 62171.630000000005,
+            "ad_spend": 9437.59,
+            "refunds": 0.0,
+            "days_observed": 7,
+            "contribution_margin_rate": 0.3623
+          }
+        ],
+        "weekly_contribution_profit": {
+          "2025-W36": 2493.67,
+          "2025-W37": 30831.07,
+          "2025-W38": 8153.87,
+          "2025-W39": 14561.2,
+          "2025-W40": 28043.29,
+          "2025-W41": 24413.6,
+          "2025-W42": 25643.89,
+          "2025-W43": 19631.03,
+          "2025-W44": 42801.45,
+          "2025-W45": 41511.73,
+          "2025-W46": 226545.95,
+          "2025-W47": 30160.99,
+          "2025-W48": 62171.63
+        },
+        "refresh_latency_proxy_days": 1,
+        "metric_consistency_score": 0.8667,
+        "data_contract": {
+          "data_availability_flags": {
+            "customer_identity_available": false,
+            "new_customer_identification_available": false,
+            "return_reason_available": false,
+            "inventory_eta_available": true,
+            "policy_change_log_available": false,
+            "policy_source_url_available": false,
+            "fee_version_available": true,
+            "experiment_assignment_available": false,
+            "experiment_metric_available": false,
+            "landed_cost_available": true
+          },
+          "proxy_usage_flags": [
+            "cohort_repeat_rate_proxy_for_ltv",
+            "platform_level_customer_acquisition_proxy",
+            "registry_only_experiment_tracking"
+          ],
+          "confidence_downgrade_reason": [
+            "缺少 customer_id，LTV 与生命周期模型降级为 cohort 粒度。",
+            "缺少新客识别字段，CAC 仅能按平台或会话口径近似。",
+            "缺少实验分配表，增量结论只能依赖注册表与聚合结果。",
+            "缺少实验读数表，无法稳定输出 uplift 与显著性结果。",
+            "政策变更缺少来源 URL，风险追溯能力受限。"
+          ],
+          "model_blockers": [
+            "customer_level_ltv",
+            "strict_causal_attribution",
+            "experiment_result_readout"
+          ]
+        }
+      }
+    },
+    "5.3": {
+      "id": "5.3",
+      "title": "获客、转化与留存增长机制",
+      "required_tables": [
+        "traffic_sessions",
+        "marketing_spend",
+        "customer_cohorts",
+        "kpi_daily_snapshots"
+      ],
+      "metric_ids": [
+        "growth_loop"
+      ],
+      "granularity": {
+        "analysis_grain": "channel x source x cohort",
+        "entity_grain": "channel x traffic source",
+        "time_grain": "day / cohort month"
+      },
+      "channel_scope": [
+        "DTC",
+        "Amazon",
+        "TikTok Shop",
+        "eBay",
+        "Walmart",
+        "B2B"
+      ],
+      "master_data_ref": [
+        "mdm.channel",
+        "mdm.customer_segment",
+        "mdm.traffic_source"
+      ],
+      "evidence_ref": [
+        "evidence.traffic_sessions",
+        "evidence.marketing_spend",
+        "evidence.customer_cohorts"
+      ],
+      "rule_ref": [
+        "gate.growth_quality",
+        "gate.payback_control"
+      ],
+      "gate_result": {
+        "status": "not_applicable",
+        "source": "",
+        "raw_value": "",
+        "failed_items": []
+      },
+      "data_quality": {
+        "record_counts": {
+          "traffic_sessions": 90,
+          "marketing_spend": 90,
+          "customer_cohorts": 1,
+          "kpi_daily_snapshots": 90
+        },
+        "available_tables": [
+          "traffic_sessions",
+          "marketing_spend",
+          "customer_cohorts",
+          "kpi_daily_snapshots"
+        ],
+        "missing_tables": [],
+        "completeness_ratio": 1.0,
+        "richness_ratio": 0.8125,
+        "quality_score": 0.9344,
+        "quality_level": "high"
+      },
+      "confidence": {
+        "score": 0.9344,
+        "level": "high"
+      },
+      "metrics": {
+        "traffic_mix": {
+          "livestream": 1.0
+        },
+        "funnel_conversion_matrix": {
+          "page_view_rate": 0.1781,
+          "add_to_cart_rate": 0.2388,
+          "checkout_rate": 0.65,
+          "order_rate": 0.2188
+        },
+        "new_customer_efficiency": {
+          "total_sessions": 587547,
+          "total_orders": 3552,
+          "session_to_order_rate": 0.006
+        },
+        "repeat_rate": 0.1199,
+        "retention_curve": {
+          "TikTok Shop": 0.1199
+        },
+        "forecast_summary": {
+          "daily_revenue": {
+            "2025-09-01": 18260.03,
+            "2025-09-02": 13641.0,
+            "2025-09-03": 10231.55,
+            "2025-09-04": 5343.06,
+            "2025-09-05": 9667.08,
+            "2025-09-06": 8823.45,
+            "2025-09-07": 11310.25,
+            "2025-09-08": 24161.84,
+            "2025-09-09": 38749.0,
+            "2025-09-10": 20594.59,
+            "2025-09-11": 5203.0,
+            "2025-09-12": 9248.01,
+            "2025-09-13": 10844.83,
+            "2025-09-14": 15961.06,
+            "2025-09-15": 17136.32,
+            "2025-09-16": 12684.8,
+            "2025-09-17": 13713.0,
+            "2025-09-18": 11367.0,
+            "2025-09-19": 7335.87,
+            "2025-09-20": 11720.0,
+            "2025-09-21": 11379.97,
+            "2025-09-22": 9290.71,
+            "2025-09-23": 13387.63,
+            "2025-09-24": 11412.51,
+            "2025-09-25": 10624.05,
+            "2025-09-26": 15128.37,
+            "2025-09-27": 9586.95,
+            "2025-09-28": 16659.06,
+            "2025-09-29": 16099.14,
+            "2025-09-30": 28566.85,
+            "2025-10-01": 13303.15,
+            "2025-10-02": 10928.65,
+            "2025-10-03": 10866.63,
+            "2025-10-04": 3704.0,
+            "2025-10-05": 13646.61,
+            "2025-10-06": 9105.87,
+            "2025-10-07": 11190.15,
+            "2025-10-08": 9156.9,
+            "2025-10-09": 14198.19,
+            "2025-10-10": 29331.63,
+            "2025-10-11": 15342.78,
+            "2025-10-12": 13194.97,
+            "2025-10-13": 9375.16,
+            "2025-10-14": 13944.75,
+            "2025-10-15": 19769.54,
+            "2025-10-16": 21093.26,
+            "2025-10-17": 8173.26,
+            "2025-10-18": 15486.79,
+            "2025-10-19": 21224.49,
+            "2025-10-20": 12426.5,
+            "2025-10-21": 16459.24,
+            "2025-10-23": 6955.46,
+            "2025-10-24": 8432.05,
+            "2025-10-25": 7890.12,
+            "2025-10-26": 12459.61,
+            "2025-10-27": 17342.82,
+            "2025-10-28": 15201.0,
+            "2025-10-29": 16943.73,
+            "2025-10-30": 15087.93,
+            "2025-10-31": 8531.85,
+            "2025-11-01": 16582.13,
+            "2025-11-02": 19970.43,
+            "2025-11-03": 9695.61,
+            "2025-11-04": 20734.45,
+            "2025-11-05": 11610.52,
+            "2025-11-06": 11375.25,
+            "2025-11-07": 17812.11,
+            "2025-11-08": 20124.95,
+            "2025-11-09": 24969.28,
+            "2025-11-10": 109697.21,
+            "2025-11-11": 265920.51,
+            "2025-11-12": 36683.14,
+            "2025-11-13": 15922.52,
+            "2025-11-14": 51003.84,
+            "2025-11-15": 68839.97,
+            "2025-11-16": 15159.33,
+            "2025-11-17": 11786.96,
+            "2025-11-18": 25757.68,
+            "2025-11-19": 4860.0,
+            "2025-11-20": 6912.19,
+            "2025-11-21": 8588.73,
+            "2025-11-22": 24874.0,
+            "2025-11-23": 14741.0,
+            "2025-11-24": 37826.43,
+            "2025-11-25": 21425.0,
+            "2025-11-26": 13690.0,
+            "2025-11-27": 8172.75,
+            "2025-11-28": 71252.18,
+            "2025-11-29": 9116.85,
+            "2025-11-30": 10109.19
+          },
+          "daily_contribution_profit": {
+            "2025-09-01": 899.98,
+            "2025-09-02": 1684.73,
+            "2025-09-03": -957.1,
+            "2025-09-04": 267.7,
+            "2025-09-05": -2097.63,
+            "2025-09-06": 2080.58,
+            "2025-09-07": 615.41,
+            "2025-09-08": 4524.71,
+            "2025-09-09": 12557.46,
+            "2025-09-10": 4638.05,
+            "2025-09-11": 1038.57,
+            "2025-09-12": 3325.73,
+            "2025-09-13": 1335.11,
+            "2025-09-14": 3411.44,
+            "2025-09-15": -710.33,
+            "2025-09-16": -2006.17,
+            "2025-09-17": 3300.11,
+            "2025-09-18": 2217.99,
+            "2025-09-19": 1497.4,
+            "2025-09-20": 2292.38,
+            "2025-09-21": 1562.49,
+            "2025-09-22": 696.04,
+            "2025-09-23": 2582.54,
+            "2025-09-24": 923.43,
+            "2025-09-25": 483.27,
+            "2025-09-26": 5155.41,
+            "2025-09-27": 1611.27,
+            "2025-09-28": 3109.24,
+            "2025-09-29": 6415.12,
+            "2025-09-30": 10001.96,
+            "2025-10-01": 3844.36,
+            "2025-10-02": 4071.07,
+            "2025-10-03": 1353.42,
+            "2025-10-04": -1997.63,
+            "2025-10-05": 4354.99,
+            "2025-10-06": -125.62,
+            "2025-10-07": 2735.83,
+            "2025-10-08": 1694.28,
+            "2025-10-09": 6151.1,
+            "2025-10-10": 7978.82,
+            "2025-10-11": 2669.96,
+            "2025-10-12": 3309.23,
+            "2025-10-13": 766.98,
+            "2025-10-14": 3050.52,
+            "2025-10-15": 4611.39,
+            "2025-10-16": 6167.58,
+            "2025-10-17": 1090.16,
+            "2025-10-18": 3901.58,
+            "2025-10-19": 6055.68,
+            "2025-10-20": 5551.4,
+            "2025-10-21": 1608.61,
+            "2025-10-23": 1622.12,
+            "2025-10-24": 2640.33,
+            "2025-10-25": 2851.49,
+            "2025-10-26": 5357.08,
+            "2025-10-27": 10347.5,
+            "2025-10-28": 6327.07,
+            "2025-10-29": 5791.79,
+            "2025-10-30": 5565.7,
+            "2025-10-31": 2502.02,
+            "2025-11-01": 4821.66,
+            "2025-11-02": 7445.71,
+            "2025-11-03": 4590.23,
+            "2025-11-04": 8753.88,
+            "2025-11-05": 3311.06,
+            "2025-11-06": 1780.66,
+            "2025-11-07": 7187.62,
+            "2025-11-08": 6242.72,
+            "2025-11-09": 9645.56,
+            "2025-11-10": 52384.38,
+            "2025-11-11": 103200.89,
+            "2025-11-12": 13931.96,
+            "2025-11-13": 3601.19,
+            "2025-11-14": 19297.44,
+            "2025-11-15": 30281.45,
+            "2025-11-16": 3848.64,
+            "2025-11-17": 4792.06,
+            "2025-11-18": 9197.17,
+            "2025-11-19": 84.06,
+            "2025-11-20": -413.4,
+            "2025-11-21": 2105.55,
+            "2025-11-22": 9121.27,
+            "2025-11-23": 5274.28,
+            "2025-11-24": 14003.81,
+            "2025-11-25": 6890.49,
+            "2025-11-26": 4169.31,
+            "2025-11-27": 1089.73,
+            "2025-11-28": 30086.41,
+            "2025-11-29": 2771.29,
+            "2025-11-30": 3160.59
+          },
+          "revenue_ma_7d": {
+            "2025-09-01": 18260.03,
+            "2025-09-02": 15950.51,
+            "2025-09-03": 14044.19,
+            "2025-09-04": 11868.91,
+            "2025-09-05": 11428.54,
+            "2025-09-06": 10994.36,
+            "2025-09-07": 11039.49,
+            "2025-09-08": 11882.6,
+            "2025-09-09": 15469.46,
+            "2025-09-10": 16949.9,
+            "2025-09-11": 16929.89,
+            "2025-09-12": 16870.02,
+            "2025-09-13": 17158.79,
+            "2025-09-14": 17823.19,
+            "2025-09-15": 16819.54,
+            "2025-09-16": 13096.09,
+            "2025-09-17": 12113.0,
+            "2025-09-18": 12993.57,
+            "2025-09-19": 12720.41,
+            "2025-09-20": 12845.44,
+            "2025-09-21": 12190.99,
+            "2025-09-22": 11070.19,
+            "2025-09-23": 11170.6,
+            "2025-09-24": 10841.96,
+            "2025-09-25": 10735.82,
+            "2025-09-26": 11849.03,
+            "2025-09-27": 11544.31,
+            "2025-09-28": 12298.47,
+            "2025-09-29": 13271.1,
+            "2025-09-30": 15439.56,
+            "2025-10-01": 15709.65,
+            "2025-10-02": 15753.17,
+            "2025-10-03": 15144.35,
+            "2025-10-04": 14303.93,
+            "2025-10-05": 13873.58,
+            "2025-10-06": 12874.54,
+            "2025-10-07": 10392.15,
+            "2025-10-08": 9799.83,
+            "2025-10-09": 10266.91,
+            "2025-10-10": 12904.76,
+            "2025-10-11": 14567.45,
+            "2025-10-12": 14502.93,
+            "2025-10-13": 14541.4,
+            "2025-10-14": 14934.91,
+            "2025-10-15": 16451.0,
+            "2025-10-16": 17436.01,
+            "2025-10-17": 14413.39,
+            "2025-10-18": 14433.96,
+            "2025-10-19": 15581.04,
+            "2025-10-20": 16016.94,
+            "2025-10-21": 16376.15,
+            "2025-10-23": 14545.57,
+            "2025-10-24": 12736.83,
+            "2025-10-25": 12696.38,
+            "2025-10-26": 12263.92,
+            "2025-10-27": 11709.4,
+            "2025-10-28": 12105.76,
+            "2025-10-29": 12174.97,
+            "2025-10-30": 13336.75,
+            "2025-10-31": 13351.01,
+            "2025-11-01": 14592.72,
+            "2025-11-02": 15665.7,
+            "2025-11-03": 14573.24,
+            "2025-11-04": 15363.73,
+            "2025-11-05": 14601.85,
+            "2025-11-06": 14071.46,
+            "2025-11-07": 15397.21,
+            "2025-11-08": 15903.33,
+            "2025-11-09": 16617.45,
+            "2025-11-10": 30903.4,
+            "2025-11-11": 65929.98,
+            "2025-11-12": 69511.78,
+            "2025-11-13": 70161.39,
+            "2025-11-14": 74903.06,
+            "2025-11-15": 81862.35,
+            "2025-11-16": 80460.93,
+            "2025-11-17": 66473.75,
+            "2025-11-18": 32164.78,
+            "2025-11-19": 27618.61,
+            "2025-11-20": 26331.42,
+            "2025-11-21": 20272.12,
+            "2025-11-22": 13991.27,
+            "2025-11-23": 13931.51,
+            "2025-11-24": 17651.43,
+            "2025-11-25": 17032.48,
+            "2025-11-26": 18293.91,
+            "2025-11-27": 18473.99,
+            "2025-11-28": 27425.91,
+            "2025-11-29": 25174.89,
+            "2025-11-30": 24513.2
+          },
+          "profit_ma_7d": {
+            "2025-09-01": 899.98,
+            "2025-09-02": 1292.36,
+            "2025-09-03": 542.54,
+            "2025-09-04": 473.83,
+            "2025-09-05": -40.46,
+            "2025-09-06": 313.04,
+            "2025-09-07": 356.24,
+            "2025-09-08": 874.06,
+            "2025-09-09": 2427.3,
+            "2025-09-10": 3226.61,
+            "2025-09-11": 3336.74,
+            "2025-09-12": 4111.5,
+            "2025-09-13": 4005.01,
+            "2025-09-14": 4404.44,
+            "2025-09-15": 3656.58,
+            "2025-09-16": 1576.06,
+            "2025-09-17": 1384.92,
+            "2025-09-18": 1553.41,
+            "2025-09-19": 1292.22,
+            "2025-09-20": 1428.97,
+            "2025-09-21": 1164.84,
+            "2025-09-22": 1365.75,
+            "2025-09-23": 2021.28,
+            "2025-09-24": 1681.75,
+            "2025-09-25": 1433.94,
+            "2025-09-26": 1956.51,
+            "2025-09-27": 1859.21,
+            "2025-09-28": 2080.17,
+            "2025-09-29": 2897.18,
+            "2025-09-30": 3957.1,
+            "2025-10-01": 4374.38,
+            "2025-10-02": 4886.92,
+            "2025-10-03": 4343.78,
+            "2025-10-04": 3828.22,
+            "2025-10-05": 4006.18,
+            "2025-10-06": 3071.79,
+            "2025-10-07": 2033.77,
+            "2025-10-08": 1726.62,
+            "2025-10-09": 2023.77,
+            "2025-10-10": 2970.25,
+            "2025-10-11": 3637.05,
+            "2025-10-12": 3487.66,
+            "2025-10-13": 3615.17,
+            "2025-10-14": 3660.13,
+            "2025-10-15": 4076.86,
+            "2025-10-16": 4079.21,
+            "2025-10-17": 3095.12,
+            "2025-10-18": 3271.06,
+            "2025-10-19": 3663.41,
+            "2025-10-20": 4346.9,
+            "2025-10-21": 4140.91,
+            "2025-10-23": 3713.88,
+            "2025-10-24": 3209.98,
+            "2025-10-25": 3461.6,
+            "2025-10-26": 3669.53,
+            "2025-10-27": 4282.65,
+            "2025-10-28": 4393.46,
+            "2025-10-29": 4991.05,
+            "2025-10-30": 5554.42,
+            "2025-10-31": 5534.66,
+            "2025-11-01": 5816.12,
+            "2025-11-02": 6114.49,
+            "2025-11-03": 5292.03,
+            "2025-11-04": 5638.71,
+            "2025-11-05": 5284.32,
+            "2025-11-06": 4743.6,
+            "2025-11-07": 5412.97,
+            "2025-11-08": 5615.98,
+            "2025-11-09": 5930.25,
+            "2025-11-10": 12757.98,
+            "2025-11-11": 26250.41,
+            "2025-11-12": 27767.68,
+            "2025-11-13": 28027.76,
+            "2025-11-14": 29757.73,
+            "2025-11-15": 33191.84,
+            "2025-11-16": 32363.71,
+            "2025-11-17": 25564.8,
+            "2025-11-18": 12135.7,
+            "2025-11-19": 10157.43,
+            "2025-11-20": 9583.92,
+            "2025-11-21": 7127.93,
+            "2025-11-22": 4105.05,
+            "2025-11-23": 4308.71,
+            "2025-11-24": 5624.68,
+            "2025-11-25": 5295.15,
+            "2025-11-26": 5878.76,
+            "2025-11-27": 6093.49,
+            "2025-11-28": 10090.76,
+            "2025-11-29": 9183.62,
+            "2025-11-30": 8881.66
+          },
+          "trend_direction": "down",
+          "average_daily_revenue_7d": 24513.2,
+          "average_daily_profit_7d": 8881.66,
+          "forecast_next_7d_revenue": 171592.4,
+          "forecast_next_7d_profit": 62171.63
+        },
+        "growth_leverage_score": 0.2901,
+        "growth_leverage_level": "low"
+      }
+    },
+    "5.4": {
+      "id": "5.4",
+      "title": "定价、促销与利润保护策略",
+      "required_tables": [
+        "pricing_actions",
+        "sold_transactions",
+        "kpi_daily_snapshots"
+      ],
+      "metric_ids": [
+        "pricing_profit_protection"
+      ],
+      "granularity": {
+        "analysis_grain": "sku x channel x pricing action",
+        "entity_grain": "sku x channel",
+        "time_grain": "pricing action date"
+      },
+      "channel_scope": [
+        "DTC",
+        "Amazon",
+        "TikTok Shop",
+        "eBay",
+        "Walmart",
+        "B2B"
+      ],
+      "master_data_ref": [
+        "mdm.sku",
+        "mdm.channel",
+        "mdm.price_metric"
+      ],
+      "evidence_ref": [
+        "evidence.pricing_actions",
+        "evidence.sold_transactions",
+        "evidence.kpi_daily_snapshots"
+      ],
+      "rule_ref": [
+        "gate.margin_protection",
+        "gate.promo_dependency"
+      ],
+      "gate_result": {
+        "status": "not_applicable",
+        "source": "",
+        "raw_value": "",
+        "failed_items": []
+      },
+      "data_quality": {
+        "record_counts": {
+          "pricing_actions": 80,
+          "sold_transactions": 94,
+          "kpi_daily_snapshots": 90
+        },
+        "available_tables": [
+          "pricing_actions",
+          "sold_transactions",
+          "kpi_daily_snapshots"
+        ],
+        "missing_tables": [],
+        "completeness_ratio": 1.0,
+        "richness_ratio": 1.0,
+        "quality_score": 1.0,
+        "quality_level": "high"
+      },
+      "confidence": {
+        "score": 1.0,
+        "level": "high"
+      },
+      "metrics": {
+        "pricing_action_count": 80,
+        "promo_action_share": 1.0,
+        "bundle_action_share": 0.0,
+        "average_price_change_rate": 0.0552,
+        "discount_depth_band": {
+          "p10": -0.4813,
+          "p50": 0.0552,
+          "p90": 1.6482
+        },
+        "promo_dependency_score": 1.0,
+        "price_realization_rate": 1.0089,
+        "margin_floor_breach_count": 7,
+        "margin_protection_score": 0.5228,
+        "margin_protection_level": "medium"
+      }
+    },
+    "5.5": {
+      "id": "5.5",
+      "title": "履约、库存与现金周转管理",
+      "required_tables": [
+        "inventory_positions",
+        "reorder_plan",
+        "cash_flow_snapshots"
+      ],
+      "metric_ids": [
+        "inventory_cash_control"
+      ],
+      "granularity": {
+        "analysis_grain": "sku x warehouse x day",
+        "entity_grain": "sku x warehouse",
+        "time_grain": "day"
+      },
+      "channel_scope": [
+        "DTC",
+        "Amazon",
+        "TikTok Shop",
+        "eBay",
+        "Walmart",
+        "B2B"
+      ],
+      "master_data_ref": [
+        "mdm.sku",
+        "mdm.warehouse",
+        "mdm.channel"
+      ],
+      "evidence_ref": [
+        "evidence.inventory_positions",
+        "evidence.reorder_plan",
+        "evidence.cash_flow_snapshots"
+      ],
+      "rule_ref": [
+        "gate.inventory_risk",
+        "gate.cash_burn_control"
+      ],
+      "gate_result": {
+        "status": "not_applicable",
+        "source": "",
+        "raw_value": "",
+        "failed_items": []
+      },
+      "data_quality": {
+        "record_counts": {
+          "inventory_positions": 1,
+          "reorder_plan": 1,
+          "cash_flow_snapshots": 90
+        },
+        "available_tables": [
+          "inventory_positions",
+          "reorder_plan",
+          "cash_flow_snapshots"
+        ],
+        "missing_tables": [],
+        "completeness_ratio": 1.0,
+        "richness_ratio": 0.4583,
+        "quality_score": 0.8104,
+        "quality_level": "high"
+      },
+      "confidence": {
+        "score": 0.8104,
+        "level": "high"
+      },
+      "metrics": {
+        "inventory_days": 59.25,
+        "stockout_risk": 0.0,
+        "overstock_risk": 0.0,
+        "cash_lock_days": 4.4273,
+        "receivable_mean": 3608.22,
+        "payable_mean": 3727.46,
+        "reorder_readiness_score": 1.0,
+        "reorder_readiness_level": "high"
+      }
+    },
+    "5.6": {
+      "id": "5.6",
+      "title": "增量实验与持续优化机制",
+      "required_tables": [
+        "experiment_registry",
+        "experiment_assignments",
+        "experiment_metrics",
+        "traffic_sessions"
+      ],
+      "metric_ids": [
+        "experimentation_system"
+      ],
+      "granularity": {
+        "analysis_grain": "experiment x variant x day",
+        "entity_grain": "experiment",
+        "time_grain": "experiment day"
+      },
+      "channel_scope": [
+        "DTC",
+        "Amazon",
+        "TikTok Shop",
+        "eBay",
+        "Walmart",
+        "B2B"
+      ],
+      "master_data_ref": [
+        "mdm.experiment_registry",
+        "mdm.channel"
+      ],
+      "evidence_ref": [
+        "evidence.experiment_registry",
+        "evidence.experiment_assignments",
+        "evidence.experiment_metrics"
+      ],
+      "rule_ref": [
+        "gate.experiment_readiness",
+        "gate.incrementality_control"
+      ],
+      "gate_result": {
+        "status": "not_applicable",
+        "source": "",
+        "raw_value": "",
+        "failed_items": []
+      },
+      "data_quality": {
+        "record_counts": {
+          "experiment_registry": 0,
+          "experiment_assignments": 0,
+          "experiment_metrics": 0,
+          "traffic_sessions": 90
+        },
+        "available_tables": [
+          "traffic_sessions"
+        ],
+        "missing_tables": [
+          "experiment_registry",
+          "experiment_assignments",
+          "experiment_metrics"
+        ],
+        "completeness_ratio": 0.25,
+        "richness_ratio": 0.25,
+        "quality_score": 0.25,
+        "quality_level": "low"
+      },
+      "confidence": {
+        "score": 0.25,
+        "level": "low"
+      },
+      "metrics": {}
+    },
+    "5.7": {
+      "id": "5.7",
+      "title": "风险监控、复盘机制与扩张节奏",
+      "required_tables": [
+        "policy_change_log",
+        "kpi_daily_snapshots",
+        "cash_flow_snapshots",
+        "returns_claims"
+      ],
+      "metric_ids": [
+        "risk_scale_loop"
+      ],
+      "granularity": {
+        "analysis_grain": "channel x risk event",
+        "entity_grain": "channel",
+        "time_grain": "day / week"
+      },
+      "channel_scope": [
+        "DTC",
+        "Amazon",
+        "TikTok Shop",
+        "eBay",
+        "Walmart",
+        "B2B"
+      ],
+      "master_data_ref": [
+        "mdm.channel",
+        "mdm.policy_version"
+      ],
+      "evidence_ref": [
+        "evidence.policy_change_log",
+        "evidence.kpi_daily_snapshots",
+        "evidence.cash_flow_snapshots",
+        "evidence.returns_claims"
+      ],
+      "rule_ref": [
+        "gate.scale_stop_exit",
+        "gate.policy_blocker",
+        "gate.rollback_runbook"
+      ],
+      "gate_result": {
+        "status": "fail",
+        "source": "expansion_gate_status",
+        "raw_value": "rollback",
+        "failed_items": []
+      },
+      "data_quality": {
+        "record_counts": {
+          "policy_change_log": 0,
+          "kpi_daily_snapshots": 90,
+          "cash_flow_snapshots": 90,
+          "returns_claims": 0
+        },
+        "available_tables": [
+          "kpi_daily_snapshots",
+          "cash_flow_snapshots"
+        ],
+        "missing_tables": [
+          "policy_change_log",
+          "returns_claims"
+        ],
+        "completeness_ratio": 0.5,
+        "richness_ratio": 0.5,
+        "quality_score": 0.5,
+        "quality_level": "medium"
+      },
+      "confidence": {
+        "score": 0.5,
+        "level": "medium"
+      },
+      "metrics": {
+        "risk_alert_count": 2,
+        "rollback_trigger_rate": 1.0,
+        "scale_readiness_score": 0.7378,
+        "scale_readiness_level": "medium",
+        "expansion_gate_status": "rollback",
+        "budget_allocation": {
+          "TikTok Shop": 1.0
+        },
+        "budget_allocation_method": "heuristic",
+        "policy_high_impact_count": 0,
+        "change_signal_count": 2,
+        "channels_with_change_signals": [
+          "TikTok Shop"
+        ],
+        "runbook_actions": {
+          "inspect_channel_funnel_and_pause_scale": 1,
+          "rebuild_unit_economics_and_review_price": 1
+        },
+        "alerts": {
+          "alerts": [
+            {
+              "alert_type": "revenue_change_point",
+              "severity": "high",
+              "channel": "TikTok Shop",
+              "message": "最新收入显著低于历史均值，触发收入变点预警。",
+              "alert_family": "change_point",
+              "runbook_action": "inspect_channel_funnel_and_pause_scale"
+            },
+            {
+              "alert_type": "profit_change_point",
+              "severity": "high",
+              "channel": "TikTok Shop",
+              "message": "最新贡献利润显著低于历史均值，触发利润变点预警。",
+              "alert_family": "change_point",
+              "runbook_action": "rebuild_unit_economics_and_review_price"
+            }
+          ],
+          "alert_count": 2,
+          "alert_type_mix": {
+            "revenue_change_point": 1,
+            "profit_change_point": 1
+          },
+          "severity_mix": {
+            "high": 2
+          },
+          "alert_family_mix": {
+            "change_point": 2
+          },
+          "rollback_trigger_count": 2,
+          "change_signal_count": 2,
+          "channels_with_change_signals": [
+            "TikTok Shop"
+          ],
+          "runbook_actions": {
+            "inspect_channel_funnel_and_pause_scale": 1,
+            "rebuild_unit_economics_and_review_price": 1
+          }
+        }
+      }
+    }
+  },
+  "uncertainty": {
+    "daily_contribution_margin_rate": {
+      "statistic": "mean",
+      "point_estimate": 0.2384,
+      "ci_lower": 0.2047,
+      "ci_upper": 0.273,
+      "iterations": 600,
+      "alpha": 0.05
+    },
+    "inventory_cash_lock": {
+      "statistic": "median",
+      "point_estimate": 11661.82,
+      "ci_lower": 10828.835,
+      "ci_upper": 13161.2,
+      "iterations": 600,
+      "alpha": 0.05
+    },
+    "refund_cash_out": {
+      "statistic": "mean",
+      "point_estimate": 0.0,
+      "ci_lower": 0.0,
+      "ci_upper": 0.0,
+      "iterations": 600,
+      "alpha": 0.05
+    },
+    "channel_health_score": {
+      "statistic": "mean",
+      "point_estimate": 0.9367,
+      "ci_lower": 0.9367,
+      "ci_upper": 0.9367,
+      "iterations": 600,
+      "alpha": 0.05
+    },
+    "forecast_snapshot": {
+      "trend_direction": "down",
+      "forecast_next_7d_revenue": 171592.4,
+      "forecast_next_7d_profit": 62171.63
+    }
+  },
+  "validation": {
+    "summary": {
+      "pass_count": 10,
+      "review_count": 4,
+      "fail_count": 0
+    },
+    "checks": [
+      {
+        "check_id": "operating_health_and_gate_range",
+        "status": "pass",
+        "source": {
+          "label": "Part 5 Operating Gate Design",
+          "url": ""
+        },
+        "method": "Operating health and gate breach rate are normalized to a 0-1 range for cross-channel comparability.",
+        "evidence": {
+          "operating_health_score": 0.9367,
+          "gate_breach_rate": 0.2
+        }
+      },
+      {
+        "check_id": "monitoring_coverage_range",
+        "status": "pass",
+        "source": {
+          "label": "Part 5 Monitoring and Data Reliability",
+          "url": ""
+        },
+        "method": "Coverage-style monitoring metrics remain bounded between 0 and 1.",
+        "evidence": {
+          "data_coverage_score": 0.6,
+          "fee_version_coverage": 1.0,
+          "policy_source_url_coverage": 0.0
+        }
+      },
+      {
+        "check_id": "weekly_pnl_reconciliation",
+        "status": "pass",
+        "source": {
+          "label": "Part 5 Monitoring and Data Reliability",
+          "url": ""
+        },
+        "method": "Weekly contribution-profit totals should reconcile between weekly rollup rows and chart-ready week totals.",
+        "evidence": {
+          "weekly_profit_sum": 556963.37,
+          "weekly_row_profit_sum": 556963.37,
+          "weekly_row_count": 13
+        }
+      },
+      {
+        "check_id": "data_contract_presence",
+        "status": "pass",
+        "source": {
+          "label": "Part 5 Monitoring and Data Reliability",
+          "url": ""
+        },
+        "method": "When key inputs are missing, the report must explicitly declare availability, proxy usage, downgrade reasons, and blockers.",
+        "evidence": {
+          "data_contract_present": true,
+          "availability_flag_count": 10,
+          "proxy_usage_count": 3
+        }
+      },
+      {
+        "check_id": "growth_funnel_range",
+        "status": "pass",
+        "source": {
+          "label": "Part 5 Growth Loop",
+          "url": ""
+        },
+        "method": "Funnel rates are modeled as conditional conversion rates and should remain within a 0-1 range.",
+        "evidence": {
+          "funnel_conversion_matrix": {
+            "page_view_rate": 0.1781,
+            "add_to_cart_rate": 0.2388,
+            "checkout_rate": 0.65,
+            "order_rate": 0.2188
+          },
+          "missing_input": false
+        }
+      },
+      {
+        "check_id": "pricing_control_range",
+        "status": "pass",
+        "source": {
+          "label": "Part 5 Pricing and Margin Protection",
+          "url": ""
+        },
+        "method": "Promotion, bundle, and price realization ratios should stay within realistic retail ranges.",
+        "evidence": {
+          "promo_action_share": 1.0,
+          "bundle_action_share": 0.0,
+          "price_realization_rate": 1.0089
+        }
+      },
+      {
+        "check_id": "inventory_cash_range",
+        "status": "pass",
+        "source": {
+          "label": "Part 5 Inventory and Cash Control",
+          "url": ""
+        },
+        "method": "Inventory and reorder readiness metrics are normalized risk scores and should remain within a 0-1 range.",
+        "evidence": {
+          "stockout_risk": 0.0,
+          "overstock_risk": 0.0,
+          "reorder_readiness_score": 1.0
+        }
+      },
+      {
+        "check_id": "experiment_design_integrity",
+        "status": "review",
+        "source": {
+          "label": "Part 5 Experimentation System",
+          "url": ""
+        },
+        "method": "Experimentation output requires positive sample size guidance and a bounded confidence score.",
+        "evidence": {
+          "sample_size_per_variant": null,
+          "causal_confidence_score": null,
+          "minimum_runtime_days": null
+        }
+      },
+      {
+        "check_id": "experiment_readout_range",
+        "status": "review",
+        "source": {
+          "label": "Part 5 Experimentation System",
+          "url": ""
+        },
+        "method": "Experiment readout coverage, assignment coverage, and incrementality score are normalized to a 0-1 range.",
+        "evidence": {
+          "readout_coverage_ratio": null,
+          "assignment_coverage_ratio": null,
+          "incrementality_score": null
+        }
+      },
+      {
+        "check_id": "experiment_posterior_range",
+        "status": "review",
+        "source": {
+          "label": "Part 5 Experimentation System",
+          "url": ""
+        },
+        "method": "Posterior win probability and temporal consistency score are normalized to a 0-1 range.",
+        "evidence": {
+          "average_posterior_win_probability": null,
+          "average_hierarchical_win_probability": null,
+          "temporal_consistency_score": null
+        }
+      },
+      {
+        "check_id": "experiment_auto_stop_integrity",
+        "status": "review",
+        "source": {
+          "label": "Part 5 Experimentation System",
+          "url": ""
+        },
+        "method": "Auto-stop bucket counts should reconcile to the number of readable experiments.",
+        "evidence": {
+          "auto_stop_summary": {},
+          "readout_count": null
+        }
+      },
+      {
+        "check_id": "scale_gate_integrity",
+        "status": "pass",
+        "source": {
+          "label": "Part 5 Scale Gate",
+          "url": ""
+        },
+        "method": "Scale-gate output uses a fixed enum, normalized rollback rate, and budget shares that reconcile back to 100%.",
+        "evidence": {
+          "expansion_gate_status": "rollback",
+          "budget_sum": 1.0,
+          "rollback_trigger_rate": 1.0
+        }
+      },
+      {
+        "check_id": "alert_mix_consistency",
+        "status": "pass",
+        "source": {
+          "label": "Part 5 Scale Gate",
+          "url": ""
+        },
+        "method": "Alert type counts should reconcile back to the total alert count.",
+        "evidence": {
+          "alert_count": 2,
+          "alert_type_sum": 2
+        }
+      },
+      {
+        "check_id": "alert_runbook_coverage",
+        "status": "pass",
+        "source": {
+          "label": "Part 5 Scale Gate",
+          "url": ""
+        },
+        "method": "Each operational alert should carry a runbook action so risk signals can be executed, not just reported.",
+        "evidence": {
+          "alert_count": 2,
+          "alerts_missing_runbook": 0
+        }
+      }
+    ]
+  },
+  "audit_pack": {
+    "table_batches": {
+      "kpi_daily_snapshots": 90,
+      "pricing_actions": 80,
+      "reorder_plan": 1,
+      "policy_change_log": 0,
+      "cash_flow_snapshots": 90
+    },
+    "fee_version_audit": {
+      "latest_versions": [
+        {
+          "channel": "TikTok Shop",
+          "effective_date": "2025-11-30",
+          "fee_type": "payment_processing",
+          "source_ref": "proxy-ph-live-rate"
+        }
+      ],
+      "source_ref_coverage": {
+        "TikTok Shop": [
+          "proxy-ph-live-rate"
+        ]
+      }
+    },
+    "policy_change_audit": {
+      "latest_changes": [],
+      "source_url_count": 0
+    },
+    "experiment_audit": {
+      "experiment_count": 0,
+      "assignment_count": 0,
+      "metric_row_count": 0,
+      "channels_covered": [],
+      "completed_count": 0,
+      "active_count": 0
+    },
+    "data_contract": {
+      "data_availability_flags": {
+        "customer_identity_available": false,
+        "new_customer_identification_available": false,
+        "return_reason_available": false,
+        "inventory_eta_available": true,
+        "policy_change_log_available": false,
+        "policy_source_url_available": false,
+        "fee_version_available": true,
+        "experiment_assignment_available": false,
+        "experiment_metric_available": false,
+        "landed_cost_available": true
+      },
+      "proxy_usage_flags": [
+        "cohort_repeat_rate_proxy_for_ltv",
+        "platform_level_customer_acquisition_proxy",
+        "registry_only_experiment_tracking"
+      ],
+      "confidence_downgrade_reason": [
+        "缺少 customer_id，LTV 与生命周期模型降级为 cohort 粒度。",
+        "缺少新客识别字段，CAC 仅能按平台或会话口径近似。",
+        "缺少实验分配表，增量结论只能依赖注册表与聚合结果。",
+        "缺少实验读数表，无法稳定输出 uplift 与显著性结果。",
+        "政策变更缺少来源 URL，风险追溯能力受限。"
+      ],
+      "model_blockers": [
+        "customer_level_ltv",
+        "strict_causal_attribution",
+        "experiment_result_readout"
+      ]
+    }
+  },
+  "factor_snapshots": {
+    "FAC-OPERATING-HEALTH": {
+      "label": "经营健康因子",
+      "value": 0.9367,
+      "source_section": "5.1"
+    },
+    "FAC-DATA-CONTRACT": {
+      "label": "数据契约因子",
+      "value": 0.6433,
+      "source_section": "5.2"
+    },
+    "FAC-GROWTH-LEVERAGE": {
+      "label": "增长杠杆因子",
+      "value": 0.2901,
+      "source_section": "5.3"
+    },
+    "FAC-MARGIN-PROTECTION": {
+      "label": "利润保护因子",
+      "value": 0.5228,
+      "source_section": "5.4"
+    },
+    "FAC-CASH-DISCIPLINE": {
+      "label": "库存现金纪律因子",
+      "value": 0.9115,
+      "source_section": "5.5"
+    },
+    "FAC-EXPERIMENT-CONFIDENCE": {
+      "label": "实验可信度因子",
+      "value": 0.0,
+      "source_section": "5.6"
+    },
+    "FAC-SCALE-CONTROL": {
+      "label": "扩张控制因子",
+      "value": 0.4796,
+      "source_section": "5.7"
+    }
+  },
+  "confidence_band": {
+    "score": 0.5015,
+    "label": "low",
+    "proxy_usage_flags": [
+      "cohort_repeat_rate_proxy_for_ltv",
+      "experiment_coverage_thin",
+      "platform_level_customer_acquisition_proxy",
+      "policy_monitoring_thin",
+      "registry_only_experiment_tracking",
+      "rollback_pressure_high"
+    ]
+  },
+  "proxy_usage_flags": [
+    "cohort_repeat_rate_proxy_for_ltv",
+    "experiment_coverage_thin",
+    "platform_level_customer_acquisition_proxy",
+    "policy_monitoring_thin",
+    "registry_only_experiment_tracking",
+    "rollback_pressure_high"
+  ]
+}

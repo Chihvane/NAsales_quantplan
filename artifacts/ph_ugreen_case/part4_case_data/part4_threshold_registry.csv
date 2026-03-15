@@ -1,0 +1,4 @@
+gate_id,gate_name,metric_name,operator,threshold_value,unit,source_grade_min,approver_role,decision_if_fail
+PHGATE001,Margin Gate,contribution_margin_rate,>=,0.08,ratio,C,strategy_director,pilot_first
+PHGATE002,Loss Gate,loss_probability,<=,0.3,ratio,C,risk_officer,no_go
+PHGATE003,Payback Gate,payback_period_months,<=,8,months,C,finance_director,pilot_first

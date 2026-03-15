@@ -1,0 +1,2 @@
+scenario_id,canonical_sku,channel,mode,landed_cost_p10,landed_cost_p50,landed_cost_p90,sell_price,working_capital_cost,return_reserve,scenario_confidence_score
+PH-LC-001,UGREEN-PH-LIVE-001,TikTok Shop,cross_border_live_commerce_proxy,198.33,222.13,249.89,396.66,7.93,11.9,0.42

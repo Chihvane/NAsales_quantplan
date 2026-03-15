@@ -1,0 +1,2 @@
+date,sku_id,warehouse,reorder_point,safety_stock,target_cover_days,planned_units,eta
+2025-11-30,UGREEN-PH-LIVE-001,PH-CROSSBORDER,1510,777,28,4746,2025-12-18
