@@ -2,7 +2,7 @@
   "metadata": {
     "report_id": "part3_quant_report",
     "report_version": "2026.03",
-    "generated_at": "2026-03-13T16:50:04.983340+00:00",
+    "generated_at": "2026-03-14T18:51:56.400097+00:00",
     "section_order": [
       "3.1",
       "3.2",
@@ -44,14 +44,16 @@
         "title": "国内采购与报价策略分析",
         "required_tables": [
           "rfq_quotes",
-          "suppliers"
+          "suppliers",
+          "part3_source_registry"
         ],
         "metric_ids": [
           "rfq_quote_structure"
         ],
         "quality_targets": {
           "rfq_quotes": 10,
-          "suppliers": 10
+          "suppliers": 10,
+          "part3_source_registry": 3
         },
         "analysis_grain": "supplier x quote",
         "entity_grain": "supplier x incoterm x moq tier",
@@ -65,7 +67,8 @@
         ],
         "evidence_refs": [
           "evidence.rfq_quotes",
-          "evidence.suppliers"
+          "evidence.suppliers",
+          "evidence.part3_source_registry"
         ],
         "rule_refs": [
           "gate.procurement_feasibility"
@@ -135,7 +138,9 @@
           "rfq_quotes",
           "logistics_quotes",
           "compliance_requirements",
-          "tariff_tax"
+          "tariff_tax",
+          "part3_threshold_registry",
+          "part3_scenario_registry"
         ],
         "metric_ids": [
           "landed_cost_margin"
@@ -144,7 +149,9 @@
           "rfq_quotes": 10,
           "logistics_quotes": 5,
           "compliance_requirements": 5,
-          "tariff_tax": 2
+          "tariff_tax": 2,
+          "part3_threshold_registry": 2,
+          "part3_scenario_registry": 3
         },
         "analysis_grain": "scenario row",
         "entity_grain": "supplier x route x incoterm",
@@ -160,11 +167,13 @@
         "evidence_refs": [
           "evidence.rfq_quotes",
           "evidence.logistics_quotes",
-          "evidence.tariff_tax"
+          "evidence.tariff_tax",
+          "evidence.part3_scenario_registry"
         ],
         "rule_refs": [
           "gate.margin_safety",
-          "gate.landed_cost_control"
+          "gate.landed_cost_control",
+          "gate.part3_threshold_registry"
         ]
       },
       "3.6": {
@@ -208,7 +217,10 @@
         "required_tables": [
           "rfq_quotes",
           "logistics_quotes",
-          "suppliers"
+          "suppliers",
+          "part3_threshold_registry",
+          "part3_scenario_registry",
+          "part3_optimizer_registry"
         ],
         "metric_ids": [
           "entry_strategy"
@@ -216,7 +228,10 @@
         "quality_targets": {
           "rfq_quotes": 10,
           "logistics_quotes": 5,
-          "suppliers": 10
+          "suppliers": 10,
+          "part3_threshold_registry": 2,
+          "part3_scenario_registry": 3,
+          "part3_optimizer_registry": 1
         },
         "analysis_grain": "entry scenario",
         "entity_grain": "supplier x route x incoterm",
@@ -232,12 +247,14 @@
         "evidence_refs": [
           "evidence.rfq_quotes",
           "evidence.logistics_quotes",
-          "evidence.suppliers"
+          "evidence.suppliers",
+          "evidence.part3_optimizer_registry"
         ],
         "rule_refs": [
           "gate.supplier_readiness",
           "gate.margin_safety",
-          "gate.risk_control"
+          "gate.risk_control",
+          "gate.part3_optimizer_registry"
         ],
         "gate_status_key": "recommendation"
       }
@@ -332,7 +349,9 @@
       "marketing_fee_rate": 0.08,
       "return_rate": 0.04,
       "return_cost_per_unit": 24.0,
-      "working_capital_rate": 0.02
+      "working_capital_rate": 0.02,
+      "target_margin_floor": 0.15,
+      "max_loss_probability": 0.25
     },
     "table_inventory": {
       "suppliers": {
@@ -358,12 +377,28 @@
       "shipment_events": {
         "record_count": 5,
         "available": true
+      },
+      "part3_source_registry": {
+        "record_count": 3,
+        "available": true
+      },
+      "part3_threshold_registry": {
+        "record_count": 2,
+        "available": true
+      },
+      "part3_scenario_registry": {
+        "record_count": 4,
+        "available": true
+      },
+      "part3_optimizer_registry": {
+        "record_count": 1,
+        "available": true
       }
     }
   },
   "overview": {
     "section_count": 7,
-    "average_confidence_score": 0.9475,
+    "average_confidence_score": 0.9583,
     "confidence_mix": {
       "high": 7,
       "medium": 0,
@@ -411,7 +446,7 @@
       {
         "key": "recommended_path",
         "label": "推荐路径",
-        "value": "S002 / DDP / included_in_quote",
+        "value": "S004 / DDP / included_in_quote",
         "unit": "path"
       }
     ],
@@ -460,7 +495,10 @@
       "best_net_margin",
       "best_net_margin_rate",
       "monte_carlo"
-    ]
+    ],
+    "factor_snapshot_count": 6,
+    "confidence_band": "high",
+    "proxy_usage_flag_count": 0
   },
   "sections": {
     "3.1": {
@@ -576,7 +614,8 @@
       "title": "国内采购与报价策略分析",
       "required_tables": [
         "rfq_quotes",
-        "suppliers"
+        "suppliers",
+        "part3_source_registry"
       ],
       "metric_ids": [
         "rfq_quote_structure"
@@ -595,7 +634,8 @@
       ],
       "evidence_ref": [
         "evidence.rfq_quotes",
-        "evidence.suppliers"
+        "evidence.suppliers",
+        "evidence.part3_source_registry"
       ],
       "rule_ref": [
         "gate.procurement_feasibility"
@@ -609,20 +649,22 @@
       "data_quality": {
         "record_counts": {
           "rfq_quotes": 8,
-          "suppliers": 6
+          "suppliers": 6,
+          "part3_source_registry": 3
         },
         "available_tables": [
           "rfq_quotes",
-          "suppliers"
+          "suppliers",
+          "part3_source_registry"
         ],
         "missing_tables": [],
         "completeness_ratio": 1.0,
-        "richness_ratio": 0.7,
-        "quality_score": 0.895,
+        "richness_ratio": 0.8,
+        "quality_score": 0.93,
         "quality_level": "high"
       },
       "confidence": {
-        "score": 0.895,
+        "score": 0.93,
         "level": "high"
       },
       "metrics": {
@@ -1101,7 +1143,9 @@
         "rfq_quotes",
         "logistics_quotes",
         "compliance_requirements",
-        "tariff_tax"
+        "tariff_tax",
+        "part3_threshold_registry",
+        "part3_scenario_registry"
       ],
       "metric_ids": [
         "landed_cost_margin"
@@ -1122,11 +1166,13 @@
       "evidence_ref": [
         "evidence.rfq_quotes",
         "evidence.logistics_quotes",
-        "evidence.tariff_tax"
+        "evidence.tariff_tax",
+        "evidence.part3_scenario_registry"
       ],
       "rule_ref": [
         "gate.margin_safety",
-        "gate.landed_cost_control"
+        "gate.landed_cost_control",
+        "gate.part3_threshold_registry"
       ],
       "gate_result": {
         "status": "not_applicable",
@@ -1139,22 +1185,26 @@
           "rfq_quotes": 8,
           "logistics_quotes": 5,
           "compliance_requirements": 5,
-          "tariff_tax": 2
+          "tariff_tax": 2,
+          "part3_threshold_registry": 2,
+          "part3_scenario_registry": 4
         },
         "available_tables": [
           "rfq_quotes",
           "logistics_quotes",
           "compliance_requirements",
-          "tariff_tax"
+          "tariff_tax",
+          "part3_threshold_registry",
+          "part3_scenario_registry"
         ],
         "missing_tables": [],
         "completeness_ratio": 1.0,
-        "richness_ratio": 0.95,
-        "quality_score": 0.9825,
+        "richness_ratio": 0.9667,
+        "quality_score": 0.9883,
         "quality_level": "high"
       },
       "confidence": {
-        "score": 0.9825,
+        "score": 0.9883,
         "level": "high"
       },
       "metrics": {
@@ -1171,6 +1221,8 @@
           "shipping_mode": "included_in_quote",
           "route_id": "included",
           "moq_tier": 300,
+          "lead_time_days": 30,
+          "route_volatility_score": 0.2,
           "procurement_cost": 308.6,
           "china_inland_cost": 0.0,
           "export_fees": 0.0,
@@ -1196,6 +1248,8 @@
           "net_margin": 167.56,
           "net_margin_rate": 0.2397,
           "break_even_price": 481.39,
+          "capital_required": 108737.4,
+          "scenario_loss_proxy": 0.0974,
           "scenario_confidence_score": 0.8629,
           "scenario_confidence_level": "high",
           "assumption_flags": [
@@ -1214,6 +1268,8 @@
             "shipping_mode": "included_in_quote",
             "route_id": "included",
             "moq_tier": 300,
+            "lead_time_days": 30,
+            "route_volatility_score": 0.2,
             "procurement_cost": 308.6,
             "china_inland_cost": 0.0,
             "export_fees": 0.0,
@@ -1239,6 +1295,8 @@
             "net_margin": 167.56,
             "net_margin_rate": 0.2397,
             "break_even_price": 481.39,
+            "capital_required": 108737.4,
+            "scenario_loss_proxy": 0.0974,
             "scenario_confidence_score": 0.8629,
             "scenario_confidence_level": "high",
             "assumption_flags": [
@@ -1256,6 +1314,8 @@
             "shipping_mode": "sea_fcl",
             "route_id": "R001",
             "moq_tier": 500,
+            "lead_time_days": 24,
+            "route_volatility_score": 0.18,
             "procurement_cost": 262.7,
             "china_inland_cost": 0.0,
             "export_fees": 0.0,
@@ -1281,6 +1341,8 @@
             "net_margin": 157.76,
             "net_margin_rate": 0.2257,
             "break_even_price": 494.12,
+            "capital_required": 186035.0,
+            "scenario_loss_proxy": 0.0737,
             "scenario_confidence_score": 0.9466,
             "scenario_confidence_level": "high",
             "assumption_flags": [
@@ -1297,6 +1359,8 @@
             "shipping_mode": "sea_fcl",
             "route_id": "R001",
             "moq_tier": 500,
+            "lead_time_days": 24,
+            "route_volatility_score": 0.18,
             "procurement_cost": 266.02,
             "china_inland_cost": 0.0,
             "export_fees": 0.0,
@@ -1322,6 +1386,8 @@
             "net_margin": 154.03,
             "net_margin_rate": 0.2204,
             "break_even_price": 498.96,
+            "capital_required": 187861.0,
+            "scenario_loss_proxy": 0.0754,
             "scenario_confidence_score": 0.9378,
             "scenario_confidence_level": "high",
             "assumption_flags": [
@@ -1338,6 +1404,8 @@
             "shipping_mode": "sea_fcl",
             "route_id": "R003",
             "moq_tier": 500,
+            "lead_time_days": 29,
+            "route_volatility_score": 0.17,
             "procurement_cost": 262.7,
             "china_inland_cost": 0.0,
             "export_fees": 0.0,
@@ -1363,6 +1431,8 @@
             "net_margin": 151.64,
             "net_margin_rate": 0.2169,
             "break_even_price": 502.07,
+            "capital_required": 189035.0,
+            "scenario_loss_proxy": 0.0699,
             "scenario_confidence_score": 0.9481,
             "scenario_confidence_level": "high",
             "assumption_flags": [
@@ -1379,6 +1449,8 @@
             "shipping_mode": "included_in_quote",
             "route_id": "included",
             "moq_tier": 50,
+            "lead_time_days": 18,
+            "route_volatility_score": 0.2,
             "procurement_cost": 325.6,
             "china_inland_cost": 0.0,
             "export_fees": 0.0,
@@ -1404,12 +1476,648 @@
             "net_margin": 149.7,
             "net_margin_rate": 0.2142,
             "break_even_price": 504.58,
+            "capital_required": 18998.4,
+            "scenario_loss_proxy": 0.1067,
             "scenario_confidence_score": 0.8167,
             "scenario_confidence_level": "high",
             "assumption_flags": [
               "warehousing_not_separately_sourced",
               "last_mile_not_separately_sourced",
               "ddp_transparency_risk"
+            ]
+          }
+        ],
+        "scenario_table": [
+          {
+            "supplier_id": "S002",
+            "supplier_name": "Zhejiang GridWorks",
+            "supplier_type": "factory",
+            "quote_id": "Q004",
+            "incoterm": "DDP",
+            "shipping_mode": "included_in_quote",
+            "route_id": "included",
+            "moq_tier": 300,
+            "lead_time_days": 30,
+            "route_volatility_score": 0.2,
+            "procurement_cost": 308.6,
+            "china_inland_cost": 0.0,
+            "export_fees": 0.0,
+            "origin_handling_cost": 0.0,
+            "international_freight_cost": 0.0,
+            "insurance_cost": 0.0,
+            "destination_handling_cost": 0.0,
+            "compliance_cost": 44.6,
+            "logistics_cost": 0.0,
+            "duty_cost": 0.0,
+            "brokerage_cost": 0.0,
+            "port_cost": 0.0,
+            "ddp_risk_premium": 9.26,
+            "fees_cost": 9.26,
+            "warehousing_cost": 0.0,
+            "last_mile_cost": 0.0,
+            "landed_cost": 362.46,
+            "working_capital_cost": 7.25,
+            "return_reserve": 0.96,
+            "sellable_cost": 370.67,
+            "channel_fee": 104.85,
+            "marketing_fee": 55.92,
+            "net_margin": 167.56,
+            "net_margin_rate": 0.2397,
+            "break_even_price": 481.39,
+            "capital_required": 108737.4,
+            "scenario_loss_proxy": 0.0974,
+            "scenario_confidence_score": 0.8629,
+            "scenario_confidence_level": "high",
+            "assumption_flags": [
+              "warehousing_not_separately_sourced",
+              "last_mile_not_separately_sourced",
+              "ddp_transparency_risk"
+            ]
+          },
+          {
+            "supplier_id": "S001",
+            "supplier_name": "Fujian Powertek",
+            "supplier_type": "factory",
+            "quote_id": "Q002",
+            "incoterm": "FOB",
+            "shipping_mode": "sea_fcl",
+            "route_id": "R001",
+            "moq_tier": 500,
+            "lead_time_days": 24,
+            "route_volatility_score": 0.18,
+            "procurement_cost": 262.7,
+            "china_inland_cost": 0.0,
+            "export_fees": 0.0,
+            "origin_handling_cost": 0.0,
+            "international_freight_cost": 22.12,
+            "insurance_cost": 0.84,
+            "destination_handling_cost": 5.04,
+            "compliance_cost": 44.6,
+            "logistics_cost": 28.0,
+            "duty_cost": 26.27,
+            "brokerage_cost": 4.5,
+            "port_cost": 6.0,
+            "ddp_risk_premium": 0.0,
+            "fees_cost": 10.5,
+            "warehousing_cost": 0.0,
+            "last_mile_cost": 0.0,
+            "landed_cost": 372.07,
+            "working_capital_cost": 7.44,
+            "return_reserve": 0.96,
+            "sellable_cost": 380.47,
+            "channel_fee": 104.85,
+            "marketing_fee": 55.92,
+            "net_margin": 157.76,
+            "net_margin_rate": 0.2257,
+            "break_even_price": 494.12,
+            "capital_required": 186035.0,
+            "scenario_loss_proxy": 0.0737,
+            "scenario_confidence_score": 0.9466,
+            "scenario_confidence_level": "high",
+            "assumption_flags": [
+              "warehousing_not_separately_sourced",
+              "last_mile_not_separately_sourced"
+            ]
+          },
+          {
+            "supplier_id": "S005",
+            "supplier_name": "Chongqing EngineLab",
+            "supplier_type": "factory",
+            "quote_id": "Q007",
+            "incoterm": "FOB",
+            "shipping_mode": "sea_fcl",
+            "route_id": "R001",
+            "moq_tier": 500,
+            "lead_time_days": 24,
+            "route_volatility_score": 0.18,
+            "procurement_cost": 266.02,
+            "china_inland_cost": 0.0,
+            "export_fees": 0.0,
+            "origin_handling_cost": 0.0,
+            "international_freight_cost": 22.12,
+            "insurance_cost": 0.84,
+            "destination_handling_cost": 5.04,
+            "compliance_cost": 44.6,
+            "logistics_cost": 28.0,
+            "duty_cost": 26.6,
+            "brokerage_cost": 4.5,
+            "port_cost": 6.0,
+            "ddp_risk_premium": 0.0,
+            "fees_cost": 10.5,
+            "warehousing_cost": 0.0,
+            "last_mile_cost": 0.0,
+            "landed_cost": 375.72,
+            "working_capital_cost": 7.51,
+            "return_reserve": 0.96,
+            "sellable_cost": 384.2,
+            "channel_fee": 104.85,
+            "marketing_fee": 55.92,
+            "net_margin": 154.03,
+            "net_margin_rate": 0.2204,
+            "break_even_price": 498.96,
+            "capital_required": 187861.0,
+            "scenario_loss_proxy": 0.0754,
+            "scenario_confidence_score": 0.9378,
+            "scenario_confidence_level": "high",
+            "assumption_flags": [
+              "warehousing_not_separately_sourced",
+              "last_mile_not_separately_sourced"
+            ]
+          },
+          {
+            "supplier_id": "S001",
+            "supplier_name": "Fujian Powertek",
+            "supplier_type": "factory",
+            "quote_id": "Q002",
+            "incoterm": "FOB",
+            "shipping_mode": "sea_fcl",
+            "route_id": "R003",
+            "moq_tier": 500,
+            "lead_time_days": 29,
+            "route_volatility_score": 0.17,
+            "procurement_cost": 262.7,
+            "china_inland_cost": 0.0,
+            "export_fees": 0.0,
+            "origin_handling_cost": 0.0,
+            "international_freight_cost": 26.86,
+            "insurance_cost": 1.02,
+            "destination_handling_cost": 6.12,
+            "compliance_cost": 44.6,
+            "logistics_cost": 34.0,
+            "duty_cost": 26.27,
+            "brokerage_cost": 4.5,
+            "port_cost": 6.0,
+            "ddp_risk_premium": 0.0,
+            "fees_cost": 10.5,
+            "warehousing_cost": 0.0,
+            "last_mile_cost": 0.0,
+            "landed_cost": 378.07,
+            "working_capital_cost": 7.56,
+            "return_reserve": 0.96,
+            "sellable_cost": 386.59,
+            "channel_fee": 104.85,
+            "marketing_fee": 55.92,
+            "net_margin": 151.64,
+            "net_margin_rate": 0.2169,
+            "break_even_price": 502.07,
+            "capital_required": 189035.0,
+            "scenario_loss_proxy": 0.0699,
+            "scenario_confidence_score": 0.9481,
+            "scenario_confidence_level": "high",
+            "assumption_flags": [
+              "warehousing_not_separately_sourced",
+              "last_mile_not_separately_sourced"
+            ]
+          },
+          {
+            "supplier_id": "S004",
+            "supplier_name": "Jiangsu ReadyStock",
+            "supplier_type": "wholesaler",
+            "quote_id": "Q006",
+            "incoterm": "DDP",
+            "shipping_mode": "included_in_quote",
+            "route_id": "included",
+            "moq_tier": 50,
+            "lead_time_days": 18,
+            "route_volatility_score": 0.2,
+            "procurement_cost": 325.6,
+            "china_inland_cost": 0.0,
+            "export_fees": 0.0,
+            "origin_handling_cost": 0.0,
+            "international_freight_cost": 0.0,
+            "insurance_cost": 0.0,
+            "destination_handling_cost": 0.0,
+            "compliance_cost": 44.6,
+            "logistics_cost": 0.0,
+            "duty_cost": 0.0,
+            "brokerage_cost": 0.0,
+            "port_cost": 0.0,
+            "ddp_risk_premium": 9.77,
+            "fees_cost": 9.77,
+            "warehousing_cost": 0.0,
+            "last_mile_cost": 0.0,
+            "landed_cost": 379.97,
+            "working_capital_cost": 7.6,
+            "return_reserve": 0.96,
+            "sellable_cost": 388.53,
+            "channel_fee": 104.85,
+            "marketing_fee": 55.92,
+            "net_margin": 149.7,
+            "net_margin_rate": 0.2142,
+            "break_even_price": 504.58,
+            "capital_required": 18998.4,
+            "scenario_loss_proxy": 0.1067,
+            "scenario_confidence_score": 0.8167,
+            "scenario_confidence_level": "high",
+            "assumption_flags": [
+              "warehousing_not_separately_sourced",
+              "last_mile_not_separately_sourced",
+              "ddp_transparency_risk"
+            ]
+          },
+          {
+            "supplier_id": "S005",
+            "supplier_name": "Chongqing EngineLab",
+            "supplier_type": "factory",
+            "quote_id": "Q007",
+            "incoterm": "FOB",
+            "shipping_mode": "sea_fcl",
+            "route_id": "R003",
+            "moq_tier": 500,
+            "lead_time_days": 29,
+            "route_volatility_score": 0.17,
+            "procurement_cost": 266.02,
+            "china_inland_cost": 0.0,
+            "export_fees": 0.0,
+            "origin_handling_cost": 0.0,
+            "international_freight_cost": 26.86,
+            "insurance_cost": 1.02,
+            "destination_handling_cost": 6.12,
+            "compliance_cost": 44.6,
+            "logistics_cost": 34.0,
+            "duty_cost": 26.6,
+            "brokerage_cost": 4.5,
+            "port_cost": 6.0,
+            "ddp_risk_premium": 0.0,
+            "fees_cost": 10.5,
+            "warehousing_cost": 0.0,
+            "last_mile_cost": 0.0,
+            "landed_cost": 381.72,
+            "working_capital_cost": 7.63,
+            "return_reserve": 0.96,
+            "sellable_cost": 390.32,
+            "channel_fee": 104.85,
+            "marketing_fee": 55.92,
+            "net_margin": 147.91,
+            "net_margin_rate": 0.2116,
+            "break_even_price": 506.9,
+            "capital_required": 190861.0,
+            "scenario_loss_proxy": 0.0716,
+            "scenario_confidence_score": 0.9393,
+            "scenario_confidence_level": "high",
+            "assumption_flags": [
+              "warehousing_not_separately_sourced",
+              "last_mile_not_separately_sourced"
+            ]
+          },
+          {
+            "supplier_id": "S002",
+            "supplier_name": "Zhejiang GridWorks",
+            "supplier_type": "factory",
+            "quote_id": "Q003",
+            "incoterm": "FOB",
+            "shipping_mode": "sea_fcl",
+            "route_id": "R001",
+            "moq_tier": 300,
+            "lead_time_days": 24,
+            "route_volatility_score": 0.18,
+            "procurement_cost": 271.6,
+            "china_inland_cost": 0.0,
+            "export_fees": 0.0,
+            "origin_handling_cost": 0.0,
+            "international_freight_cost": 22.12,
+            "insurance_cost": 0.84,
+            "destination_handling_cost": 5.04,
+            "compliance_cost": 44.6,
+            "logistics_cost": 28.0,
+            "duty_cost": 27.16,
+            "brokerage_cost": 4.5,
+            "port_cost": 6.0,
+            "ddp_risk_premium": 0.0,
+            "fees_cost": 10.5,
+            "warehousing_cost": 0.0,
+            "last_mile_cost": 0.0,
+            "landed_cost": 381.86,
+            "working_capital_cost": 7.64,
+            "return_reserve": 0.96,
+            "sellable_cost": 390.46,
+            "channel_fee": 104.85,
+            "marketing_fee": 55.92,
+            "net_margin": 147.77,
+            "net_margin_rate": 0.2114,
+            "break_even_price": 507.09,
+            "capital_required": 114558.0,
+            "scenario_loss_proxy": 0.0724,
+            "scenario_confidence_score": 0.9532,
+            "scenario_confidence_level": "high",
+            "assumption_flags": [
+              "warehousing_not_separately_sourced",
+              "last_mile_not_separately_sourced"
+            ]
+          },
+          {
+            "supplier_id": "S002",
+            "supplier_name": "Zhejiang GridWorks",
+            "supplier_type": "factory",
+            "quote_id": "Q003",
+            "incoterm": "FOB",
+            "shipping_mode": "sea_fcl",
+            "route_id": "R003",
+            "moq_tier": 300,
+            "lead_time_days": 29,
+            "route_volatility_score": 0.17,
+            "procurement_cost": 271.6,
+            "china_inland_cost": 0.0,
+            "export_fees": 0.0,
+            "origin_handling_cost": 0.0,
+            "international_freight_cost": 26.86,
+            "insurance_cost": 1.02,
+            "destination_handling_cost": 6.12,
+            "compliance_cost": 44.6,
+            "logistics_cost": 34.0,
+            "duty_cost": 27.16,
+            "brokerage_cost": 4.5,
+            "port_cost": 6.0,
+            "ddp_risk_premium": 0.0,
+            "fees_cost": 10.5,
+            "warehousing_cost": 0.0,
+            "last_mile_cost": 0.0,
+            "landed_cost": 387.86,
+            "working_capital_cost": 7.76,
+            "return_reserve": 0.96,
+            "sellable_cost": 396.58,
+            "channel_fee": 104.85,
+            "marketing_fee": 55.92,
+            "net_margin": 141.65,
+            "net_margin_rate": 0.2027,
+            "break_even_price": 515.04,
+            "capital_required": 116358.0,
+            "scenario_loss_proxy": 0.0686,
+            "scenario_confidence_score": 0.9547,
+            "scenario_confidence_level": "high",
+            "assumption_flags": [
+              "warehousing_not_separately_sourced",
+              "last_mile_not_separately_sourced"
+            ]
+          },
+          {
+            "supplier_id": "S001",
+            "supplier_name": "Fujian Powertek",
+            "supplier_type": "factory",
+            "quote_id": "Q001",
+            "incoterm": "EXW",
+            "shipping_mode": "sea_lcl",
+            "route_id": "R002",
+            "moq_tier": 200,
+            "lead_time_days": 28,
+            "route_volatility_score": 0.24,
+            "procurement_cost": 276.25,
+            "china_inland_cost": 3.28,
+            "export_fees": 1.23,
+            "origin_handling_cost": 2.87,
+            "international_freight_cost": 27.47,
+            "insurance_cost": 0.82,
+            "destination_handling_cost": 5.33,
+            "compliance_cost": 44.6,
+            "logistics_cost": 41.0,
+            "duty_cost": 27.62,
+            "brokerage_cost": 4.5,
+            "port_cost": 6.0,
+            "ddp_risk_premium": 0.0,
+            "fees_cost": 10.5,
+            "warehousing_cost": 0.0,
+            "last_mile_cost": 0.0,
+            "landed_cost": 399.98,
+            "working_capital_cost": 8.0,
+            "return_reserve": 0.96,
+            "sellable_cost": 408.93,
+            "channel_fee": 104.85,
+            "marketing_fee": 55.92,
+            "net_margin": 129.3,
+            "net_margin_rate": 0.185,
+            "break_even_price": 531.08,
+            "capital_required": 79995.0,
+            "scenario_loss_proxy": 0.0974,
+            "scenario_confidence_score": 0.9332,
+            "scenario_confidence_level": "high",
+            "assumption_flags": [
+              "warehousing_not_separately_sourced",
+              "last_mile_not_separately_sourced"
+            ]
+          },
+          {
+            "supplier_id": "S006",
+            "supplier_name": "Shenzhen Global Source",
+            "supplier_type": "trader",
+            "quote_id": "Q008",
+            "incoterm": "EXW",
+            "shipping_mode": "sea_lcl",
+            "route_id": "R002",
+            "moq_tier": 150,
+            "lead_time_days": 28,
+            "route_volatility_score": 0.24,
+            "procurement_cost": 290.8,
+            "china_inland_cost": 3.28,
+            "export_fees": 1.23,
+            "origin_handling_cost": 2.87,
+            "international_freight_cost": 27.47,
+            "insurance_cost": 0.82,
+            "destination_handling_cost": 5.33,
+            "compliance_cost": 44.6,
+            "logistics_cost": 41.0,
+            "duty_cost": 29.08,
+            "brokerage_cost": 4.5,
+            "port_cost": 6.0,
+            "ddp_risk_premium": 0.0,
+            "fees_cost": 10.5,
+            "warehousing_cost": 0.0,
+            "last_mile_cost": 0.0,
+            "landed_cost": 415.98,
+            "working_capital_cost": 8.32,
+            "return_reserve": 0.96,
+            "sellable_cost": 425.26,
+            "channel_fee": 104.85,
+            "marketing_fee": 55.92,
+            "net_margin": 112.97,
+            "net_margin_rate": 0.1616,
+            "break_even_price": 552.29,
+            "capital_required": 62397.0,
+            "scenario_loss_proxy": 0.1031,
+            "scenario_confidence_score": 0.9046,
+            "scenario_confidence_level": "high",
+            "assumption_flags": [
+              "warehousing_not_separately_sourced",
+              "last_mile_not_separately_sourced"
+            ]
+          },
+          {
+            "supplier_id": "S003",
+            "supplier_name": "Guangdong Crossborder",
+            "supplier_type": "trader",
+            "quote_id": "Q005",
+            "incoterm": "EXW",
+            "shipping_mode": "sea_lcl",
+            "route_id": "R002",
+            "moq_tier": 100,
+            "lead_time_days": 28,
+            "route_volatility_score": 0.24,
+            "procurement_cost": 295.2,
+            "china_inland_cost": 3.28,
+            "export_fees": 1.23,
+            "origin_handling_cost": 2.87,
+            "international_freight_cost": 27.47,
+            "insurance_cost": 0.82,
+            "destination_handling_cost": 5.33,
+            "compliance_cost": 44.6,
+            "logistics_cost": 41.0,
+            "duty_cost": 29.52,
+            "brokerage_cost": 4.5,
+            "port_cost": 6.0,
+            "ddp_risk_premium": 0.0,
+            "fees_cost": 10.5,
+            "warehousing_cost": 0.0,
+            "last_mile_cost": 0.0,
+            "landed_cost": 420.82,
+            "working_capital_cost": 8.42,
+            "return_reserve": 0.96,
+            "sellable_cost": 430.2,
+            "channel_fee": 104.85,
+            "marketing_fee": 55.92,
+            "net_margin": 108.03,
+            "net_margin_rate": 0.1546,
+            "break_even_price": 558.7,
+            "capital_required": 42082.0,
+            "scenario_loss_proxy": 0.1026,
+            "scenario_confidence_score": 0.9068,
+            "scenario_confidence_level": "high",
+            "assumption_flags": [
+              "warehousing_not_separately_sourced",
+              "last_mile_not_separately_sourced"
+            ]
+          },
+          {
+            "supplier_id": "S001",
+            "supplier_name": "Fujian Powertek",
+            "supplier_type": "factory",
+            "quote_id": "Q001",
+            "incoterm": "EXW",
+            "shipping_mode": "air",
+            "route_id": "R004",
+            "moq_tier": 200,
+            "lead_time_days": 8,
+            "route_volatility_score": 0.11,
+            "procurement_cost": 276.25,
+            "china_inland_cost": 7.68,
+            "export_fees": 2.88,
+            "origin_handling_cost": 6.72,
+            "international_freight_cost": 64.32,
+            "insurance_cost": 1.92,
+            "destination_handling_cost": 12.48,
+            "compliance_cost": 44.6,
+            "logistics_cost": 96.0,
+            "duty_cost": 27.62,
+            "brokerage_cost": 4.5,
+            "port_cost": 6.0,
+            "ddp_risk_premium": 0.0,
+            "fees_cost": 10.5,
+            "warehousing_cost": 0.0,
+            "last_mile_cost": 0.0,
+            "landed_cost": 454.98,
+            "working_capital_cost": 9.1,
+            "return_reserve": 0.96,
+            "sellable_cost": 465.03,
+            "channel_fee": 104.85,
+            "marketing_fee": 55.92,
+            "net_margin": 73.2,
+            "net_margin_rate": 0.1047,
+            "break_even_price": 603.94,
+            "capital_required": 90995.0,
+            "scenario_loss_proxy": 0.3499,
+            "scenario_confidence_score": 0.9527,
+            "scenario_confidence_level": "high",
+            "assumption_flags": [
+              "warehousing_not_separately_sourced",
+              "last_mile_not_separately_sourced"
+            ]
+          },
+          {
+            "supplier_id": "S006",
+            "supplier_name": "Shenzhen Global Source",
+            "supplier_type": "trader",
+            "quote_id": "Q008",
+            "incoterm": "EXW",
+            "shipping_mode": "air",
+            "route_id": "R004",
+            "moq_tier": 150,
+            "lead_time_days": 8,
+            "route_volatility_score": 0.11,
+            "procurement_cost": 290.8,
+            "china_inland_cost": 7.68,
+            "export_fees": 2.88,
+            "origin_handling_cost": 6.72,
+            "international_freight_cost": 64.32,
+            "insurance_cost": 1.92,
+            "destination_handling_cost": 12.48,
+            "compliance_cost": 44.6,
+            "logistics_cost": 96.0,
+            "duty_cost": 29.08,
+            "brokerage_cost": 4.5,
+            "port_cost": 6.0,
+            "ddp_risk_premium": 0.0,
+            "fees_cost": 10.5,
+            "warehousing_cost": 0.0,
+            "last_mile_cost": 0.0,
+            "landed_cost": 470.98,
+            "working_capital_cost": 9.42,
+            "return_reserve": 0.96,
+            "sellable_cost": 481.36,
+            "channel_fee": 104.85,
+            "marketing_fee": 55.92,
+            "net_margin": 56.87,
+            "net_margin_rate": 0.0814,
+            "break_even_price": 625.14,
+            "capital_required": 70647.0,
+            "scenario_loss_proxy": 0.5113,
+            "scenario_confidence_score": 0.9241,
+            "scenario_confidence_level": "high",
+            "assumption_flags": [
+              "warehousing_not_separately_sourced",
+              "last_mile_not_separately_sourced"
+            ]
+          },
+          {
+            "supplier_id": "S003",
+            "supplier_name": "Guangdong Crossborder",
+            "supplier_type": "trader",
+            "quote_id": "Q005",
+            "incoterm": "EXW",
+            "shipping_mode": "air",
+            "route_id": "R004",
+            "moq_tier": 100,
+            "lead_time_days": 8,
+            "route_volatility_score": 0.11,
+            "procurement_cost": 295.2,
+            "china_inland_cost": 7.68,
+            "export_fees": 2.88,
+            "origin_handling_cost": 6.72,
+            "international_freight_cost": 64.32,
+            "insurance_cost": 1.92,
+            "destination_handling_cost": 12.48,
+            "compliance_cost": 44.6,
+            "logistics_cost": 96.0,
+            "duty_cost": 29.52,
+            "brokerage_cost": 4.5,
+            "port_cost": 6.0,
+            "ddp_risk_premium": 0.0,
+            "fees_cost": 10.5,
+            "warehousing_cost": 0.0,
+            "last_mile_cost": 0.0,
+            "landed_cost": 475.82,
+            "working_capital_cost": 9.52,
+            "return_reserve": 0.96,
+            "sellable_cost": 486.3,
+            "channel_fee": 104.85,
+            "marketing_fee": 55.92,
+            "net_margin": 51.93,
+            "net_margin_rate": 0.0743,
+            "break_even_price": 631.55,
+            "capital_required": 47582.0,
+            "scenario_loss_proxy": 0.5579,
+            "scenario_confidence_score": 0.9263,
+            "scenario_confidence_level": "high",
+            "assumption_flags": [
+              "warehousing_not_separately_sourced",
+              "last_mile_not_separately_sourced"
             ]
           }
         ],
@@ -1560,6 +2268,72 @@
               "upside_impact": 0.0
             }
           ]
+        },
+        "part3_risk_metrics": {
+          "value_at_risk_95": 122.79,
+          "value_at_risk_99": 112.96,
+          "expected_shortfall_95": 116.5,
+          "expected_shortfall_99": 108.3,
+          "margin_rate_var_95": 0.1817,
+          "margin_rate_es_95": 0.1743,
+          "loss_probability": 0.0,
+          "margin_floor": 0.15,
+          "margin_floor_breach_probability": 0.0,
+          "tail_shortfall_probability": 0.0208,
+          "margin_rate_sharpe_like": 3.3692,
+          "margin_rate_sortino_like": 0.0,
+          "margin_rate_tail_ratio": 1.3546,
+          "worst_shortfall_vs_floor": 0.0,
+          "tail_risk_score": 0.0474,
+          "tail_risk_level": "low",
+          "threshold_registry_count": 2,
+          "stress_scenarios_active": 4,
+          "scenario_stress_table": [
+            {
+              "scenario_id": "P3SCN003",
+              "scenario_name": "Factory Price Drift",
+              "shock_target": "procurement_cost",
+              "shock_multiplier": 1.1,
+              "severity": "medium",
+              "stressed_net_margin": 136.08,
+              "stressed_net_margin_rate": 0.1947,
+              "margin_delta": -31.48,
+              "gate_result": "pass"
+            },
+            {
+              "scenario_id": "P3SCN004",
+              "scenario_name": "Price Cut Response",
+              "shock_target": "sell_price",
+              "shock_multiplier": 0.95,
+              "severity": "medium",
+              "stressed_net_margin": 140.65,
+              "stressed_net_margin_rate": 0.2118,
+              "margin_delta": -26.91,
+              "gate_result": "pass"
+            },
+            {
+              "scenario_id": "P3SCN001",
+              "scenario_name": "Freight Spike",
+              "shock_target": "logistics_cost",
+              "shock_multiplier": 1.35,
+              "severity": "high",
+              "stressed_net_margin": 167.56,
+              "stressed_net_margin_rate": 0.2397,
+              "margin_delta": 0.0,
+              "gate_result": "pass"
+            },
+            {
+              "scenario_id": "P3SCN002",
+              "scenario_name": "Tariff Escalation",
+              "shock_target": "duty_cost",
+              "shock_multiplier": 1.4,
+              "severity": "high",
+              "stressed_net_margin": 167.56,
+              "stressed_net_margin_rate": 0.2397,
+              "margin_delta": 0.0,
+              "gate_result": "pass"
+            }
+          ]
         }
       }
     },
@@ -1658,7 +2432,73 @@
             "risk_level": "low",
             "mitigation": "先以小批量验证实际转化和退货，再放大备货规模。"
           }
-        ]
+        ],
+        "tail_risk": {
+          "value_at_risk_95": 122.79,
+          "value_at_risk_99": 112.96,
+          "expected_shortfall_95": 116.5,
+          "expected_shortfall_99": 108.3,
+          "margin_rate_var_95": 0.1817,
+          "margin_rate_es_95": 0.1743,
+          "loss_probability": 0.0,
+          "margin_floor": 0.15,
+          "margin_floor_breach_probability": 0.0,
+          "tail_shortfall_probability": 0.0208,
+          "margin_rate_sharpe_like": 3.3692,
+          "margin_rate_sortino_like": 0.0,
+          "margin_rate_tail_ratio": 1.3546,
+          "worst_shortfall_vs_floor": 0.0,
+          "tail_risk_score": 0.0474,
+          "tail_risk_level": "low",
+          "threshold_registry_count": 2,
+          "stress_scenarios_active": 4,
+          "scenario_stress_table": [
+            {
+              "scenario_id": "P3SCN003",
+              "scenario_name": "Factory Price Drift",
+              "shock_target": "procurement_cost",
+              "shock_multiplier": 1.1,
+              "severity": "medium",
+              "stressed_net_margin": 136.08,
+              "stressed_net_margin_rate": 0.1947,
+              "margin_delta": -31.48,
+              "gate_result": "pass"
+            },
+            {
+              "scenario_id": "P3SCN004",
+              "scenario_name": "Price Cut Response",
+              "shock_target": "sell_price",
+              "shock_multiplier": 0.95,
+              "severity": "medium",
+              "stressed_net_margin": 140.65,
+              "stressed_net_margin_rate": 0.2118,
+              "margin_delta": -26.91,
+              "gate_result": "pass"
+            },
+            {
+              "scenario_id": "P3SCN001",
+              "scenario_name": "Freight Spike",
+              "shock_target": "logistics_cost",
+              "shock_multiplier": 1.35,
+              "severity": "high",
+              "stressed_net_margin": 167.56,
+              "stressed_net_margin_rate": 0.2397,
+              "margin_delta": 0.0,
+              "gate_result": "pass"
+            },
+            {
+              "scenario_id": "P3SCN002",
+              "scenario_name": "Tariff Escalation",
+              "shock_target": "duty_cost",
+              "shock_multiplier": 1.4,
+              "severity": "high",
+              "stressed_net_margin": 167.56,
+              "stressed_net_margin_rate": 0.2397,
+              "margin_delta": 0.0,
+              "gate_result": "pass"
+            }
+          ]
+        }
       }
     },
     "3.7": {
@@ -1667,7 +2507,10 @@
       "required_tables": [
         "rfq_quotes",
         "logistics_quotes",
-        "suppliers"
+        "suppliers",
+        "part3_threshold_registry",
+        "part3_scenario_registry",
+        "part3_optimizer_registry"
       ],
       "metric_ids": [
         "entry_strategy"
@@ -1688,12 +2531,14 @@
       "evidence_ref": [
         "evidence.rfq_quotes",
         "evidence.logistics_quotes",
-        "evidence.suppliers"
+        "evidence.suppliers",
+        "evidence.part3_optimizer_registry"
       ],
       "rule_ref": [
         "gate.supplier_readiness",
         "gate.margin_safety",
-        "gate.risk_control"
+        "gate.risk_control",
+        "gate.part3_optimizer_registry"
       ],
       "gate_result": {
         "status": "review",
@@ -1705,46 +2550,361 @@
         "record_counts": {
           "rfq_quotes": 8,
           "logistics_quotes": 5,
-          "suppliers": 6
+          "suppliers": 6,
+          "part3_threshold_registry": 2,
+          "part3_scenario_registry": 4,
+          "part3_optimizer_registry": 1
         },
         "available_tables": [
           "rfq_quotes",
           "logistics_quotes",
-          "suppliers"
+          "suppliers",
+          "part3_threshold_registry",
+          "part3_scenario_registry",
+          "part3_optimizer_registry"
         ],
         "missing_tables": [],
         "completeness_ratio": 1.0,
-        "richness_ratio": 0.8,
-        "quality_score": 0.93,
+        "richness_ratio": 0.9,
+        "quality_score": 0.965,
         "quality_level": "high"
       },
       "confidence": {
-        "score": 0.93,
+        "score": 0.965,
         "level": "high"
       },
       "metrics": {
         "recommendation": "pilot_first",
         "recommended_supplier": {
-          "supplier_id": "S002",
-          "supplier_name": "Zhejiang GridWorks",
-          "supplier_type": "factory"
+          "supplier_id": "S004",
+          "supplier_name": "Jiangsu ReadyStock",
+          "supplier_type": "wholesaler"
         },
         "recommended_path": {
           "incoterm": "DDP",
           "shipping_mode": "included_in_quote",
           "route_id": "included",
-          "moq_tier": 300
+          "moq_tier": 50
         },
-        "first_batch_units": 300,
-        "target_break_even_price": 481.39,
+        "first_batch_units": 50,
+        "target_break_even_price": 504.58,
         "recommendation_reason": "ddp_path_requires_real_order_validation",
-        "execution_confidence_score": 0.8629,
+        "execution_confidence_score": 0.8167,
         "execution_confidence_level": "high",
+        "optimizer_binding": {
+          "optimizer_id": "P3OPT001",
+          "optimizer_gate_result": "pass",
+          "feasible_scenarios_count": 11
+        },
         "next_90_day_actions": [
           "完成必需认证的时间表与预算锁定。",
           "与首选供应商完成样品确认和首批 MOQ 谈判。",
           "按推荐物流路径跑一票试单并记录完整 shipment events。"
-        ]
+        ],
+        "optimizer": {
+          "optimizer_id": "P3OPT001",
+          "objective_name": "maximize_margin_confidence",
+          "objective_type": "constraint_rank",
+          "risk_measure": "loss_probability",
+          "active_constraints": {
+            "max_loss_probability": 0.25,
+            "min_net_margin_rate": 0.15,
+            "min_confidence_score": 0.65,
+            "max_lead_time_days": 35,
+            "max_landed_cost": 520.0,
+            "capital_limit": 250000.0
+          },
+          "feasible_scenarios_count": 11,
+          "scenario_count": 14,
+          "feasible_ratio": 0.7857,
+          "best_feasible_scenario": {
+            "supplier_id": "S004",
+            "supplier_name": "Jiangsu ReadyStock",
+            "supplier_type": "wholesaler",
+            "quote_id": "Q006",
+            "incoterm": "DDP",
+            "shipping_mode": "included_in_quote",
+            "route_id": "included",
+            "moq_tier": 50,
+            "lead_time_days": 18,
+            "route_volatility_score": 0.2,
+            "procurement_cost": 325.6,
+            "china_inland_cost": 0.0,
+            "export_fees": 0.0,
+            "origin_handling_cost": 0.0,
+            "international_freight_cost": 0.0,
+            "insurance_cost": 0.0,
+            "destination_handling_cost": 0.0,
+            "compliance_cost": 44.6,
+            "logistics_cost": 0.0,
+            "duty_cost": 0.0,
+            "brokerage_cost": 0.0,
+            "port_cost": 0.0,
+            "ddp_risk_premium": 9.77,
+            "fees_cost": 9.77,
+            "warehousing_cost": 0.0,
+            "last_mile_cost": 0.0,
+            "landed_cost": 379.97,
+            "working_capital_cost": 7.6,
+            "return_reserve": 0.96,
+            "sellable_cost": 388.53,
+            "channel_fee": 104.85,
+            "marketing_fee": 55.92,
+            "net_margin": 149.7,
+            "net_margin_rate": 0.2142,
+            "break_even_price": 504.58,
+            "capital_required": 18998.4,
+            "scenario_loss_proxy": 0.1067,
+            "scenario_confidence_score": 0.8167,
+            "scenario_confidence_level": "high",
+            "assumption_flags": [
+              "warehousing_not_separately_sourced",
+              "last_mile_not_separately_sourced",
+              "ddp_transparency_risk"
+            ],
+            "optimizer_score": 0.5373
+          },
+          "ranked_feasible_scenarios": [
+            {
+              "supplier_id": "S004",
+              "supplier_name": "Jiangsu ReadyStock",
+              "supplier_type": "wholesaler",
+              "quote_id": "Q006",
+              "incoterm": "DDP",
+              "shipping_mode": "included_in_quote",
+              "route_id": "included",
+              "moq_tier": 50,
+              "lead_time_days": 18,
+              "route_volatility_score": 0.2,
+              "procurement_cost": 325.6,
+              "china_inland_cost": 0.0,
+              "export_fees": 0.0,
+              "origin_handling_cost": 0.0,
+              "international_freight_cost": 0.0,
+              "insurance_cost": 0.0,
+              "destination_handling_cost": 0.0,
+              "compliance_cost": 44.6,
+              "logistics_cost": 0.0,
+              "duty_cost": 0.0,
+              "brokerage_cost": 0.0,
+              "port_cost": 0.0,
+              "ddp_risk_premium": 9.77,
+              "fees_cost": 9.77,
+              "warehousing_cost": 0.0,
+              "last_mile_cost": 0.0,
+              "landed_cost": 379.97,
+              "working_capital_cost": 7.6,
+              "return_reserve": 0.96,
+              "sellable_cost": 388.53,
+              "channel_fee": 104.85,
+              "marketing_fee": 55.92,
+              "net_margin": 149.7,
+              "net_margin_rate": 0.2142,
+              "break_even_price": 504.58,
+              "capital_required": 18998.4,
+              "scenario_loss_proxy": 0.1067,
+              "scenario_confidence_score": 0.8167,
+              "scenario_confidence_level": "high",
+              "assumption_flags": [
+                "warehousing_not_separately_sourced",
+                "last_mile_not_separately_sourced",
+                "ddp_transparency_risk"
+              ],
+              "optimizer_score": 0.5373
+            },
+            {
+              "supplier_id": "S002",
+              "supplier_name": "Zhejiang GridWorks",
+              "supplier_type": "factory",
+              "quote_id": "Q003",
+              "incoterm": "FOB",
+              "shipping_mode": "sea_fcl",
+              "route_id": "R001",
+              "moq_tier": 300,
+              "lead_time_days": 24,
+              "route_volatility_score": 0.18,
+              "procurement_cost": 271.6,
+              "china_inland_cost": 0.0,
+              "export_fees": 0.0,
+              "origin_handling_cost": 0.0,
+              "international_freight_cost": 22.12,
+              "insurance_cost": 0.84,
+              "destination_handling_cost": 5.04,
+              "compliance_cost": 44.6,
+              "logistics_cost": 28.0,
+              "duty_cost": 27.16,
+              "brokerage_cost": 4.5,
+              "port_cost": 6.0,
+              "ddp_risk_premium": 0.0,
+              "fees_cost": 10.5,
+              "warehousing_cost": 0.0,
+              "last_mile_cost": 0.0,
+              "landed_cost": 381.86,
+              "working_capital_cost": 7.64,
+              "return_reserve": 0.96,
+              "sellable_cost": 390.46,
+              "channel_fee": 104.85,
+              "marketing_fee": 55.92,
+              "net_margin": 147.77,
+              "net_margin_rate": 0.2114,
+              "break_even_price": 507.09,
+              "capital_required": 114558.0,
+              "scenario_loss_proxy": 0.0724,
+              "scenario_confidence_score": 0.9532,
+              "scenario_confidence_level": "high",
+              "assumption_flags": [
+                "warehousing_not_separately_sourced",
+                "last_mile_not_separately_sourced"
+              ],
+              "optimizer_score": 0.5263
+            },
+            {
+              "supplier_id": "S002",
+              "supplier_name": "Zhejiang GridWorks",
+              "supplier_type": "factory",
+              "quote_id": "Q003",
+              "incoterm": "FOB",
+              "shipping_mode": "sea_fcl",
+              "route_id": "R003",
+              "moq_tier": 300,
+              "lead_time_days": 29,
+              "route_volatility_score": 0.17,
+              "procurement_cost": 271.6,
+              "china_inland_cost": 0.0,
+              "export_fees": 0.0,
+              "origin_handling_cost": 0.0,
+              "international_freight_cost": 26.86,
+              "insurance_cost": 1.02,
+              "destination_handling_cost": 6.12,
+              "compliance_cost": 44.6,
+              "logistics_cost": 34.0,
+              "duty_cost": 27.16,
+              "brokerage_cost": 4.5,
+              "port_cost": 6.0,
+              "ddp_risk_premium": 0.0,
+              "fees_cost": 10.5,
+              "warehousing_cost": 0.0,
+              "last_mile_cost": 0.0,
+              "landed_cost": 387.86,
+              "working_capital_cost": 7.76,
+              "return_reserve": 0.96,
+              "sellable_cost": 396.58,
+              "channel_fee": 104.85,
+              "marketing_fee": 55.92,
+              "net_margin": 141.65,
+              "net_margin_rate": 0.2027,
+              "break_even_price": 515.04,
+              "capital_required": 116358.0,
+              "scenario_loss_proxy": 0.0686,
+              "scenario_confidence_score": 0.9547,
+              "scenario_confidence_level": "high",
+              "assumption_flags": [
+                "warehousing_not_separately_sourced",
+                "last_mile_not_separately_sourced"
+              ],
+              "optimizer_score": 0.5164
+            },
+            {
+              "supplier_id": "S001",
+              "supplier_name": "Fujian Powertek",
+              "supplier_type": "factory",
+              "quote_id": "Q001",
+              "incoterm": "EXW",
+              "shipping_mode": "sea_lcl",
+              "route_id": "R002",
+              "moq_tier": 200,
+              "lead_time_days": 28,
+              "route_volatility_score": 0.24,
+              "procurement_cost": 276.25,
+              "china_inland_cost": 3.28,
+              "export_fees": 1.23,
+              "origin_handling_cost": 2.87,
+              "international_freight_cost": 27.47,
+              "insurance_cost": 0.82,
+              "destination_handling_cost": 5.33,
+              "compliance_cost": 44.6,
+              "logistics_cost": 41.0,
+              "duty_cost": 27.62,
+              "brokerage_cost": 4.5,
+              "port_cost": 6.0,
+              "ddp_risk_premium": 0.0,
+              "fees_cost": 10.5,
+              "warehousing_cost": 0.0,
+              "last_mile_cost": 0.0,
+              "landed_cost": 399.98,
+              "working_capital_cost": 8.0,
+              "return_reserve": 0.96,
+              "sellable_cost": 408.93,
+              "channel_fee": 104.85,
+              "marketing_fee": 55.92,
+              "net_margin": 129.3,
+              "net_margin_rate": 0.185,
+              "break_even_price": 531.08,
+              "capital_required": 79995.0,
+              "scenario_loss_proxy": 0.0974,
+              "scenario_confidence_score": 0.9332,
+              "scenario_confidence_level": "high",
+              "assumption_flags": [
+                "warehousing_not_separately_sourced",
+                "last_mile_not_separately_sourced"
+              ],
+              "optimizer_score": 0.5086
+            },
+            {
+              "supplier_id": "S002",
+              "supplier_name": "Zhejiang GridWorks",
+              "supplier_type": "factory",
+              "quote_id": "Q004",
+              "incoterm": "DDP",
+              "shipping_mode": "included_in_quote",
+              "route_id": "included",
+              "moq_tier": 300,
+              "lead_time_days": 30,
+              "route_volatility_score": 0.2,
+              "procurement_cost": 308.6,
+              "china_inland_cost": 0.0,
+              "export_fees": 0.0,
+              "origin_handling_cost": 0.0,
+              "international_freight_cost": 0.0,
+              "insurance_cost": 0.0,
+              "destination_handling_cost": 0.0,
+              "compliance_cost": 44.6,
+              "logistics_cost": 0.0,
+              "duty_cost": 0.0,
+              "brokerage_cost": 0.0,
+              "port_cost": 0.0,
+              "ddp_risk_premium": 9.26,
+              "fees_cost": 9.26,
+              "warehousing_cost": 0.0,
+              "last_mile_cost": 0.0,
+              "landed_cost": 362.46,
+              "working_capital_cost": 7.25,
+              "return_reserve": 0.96,
+              "sellable_cost": 370.67,
+              "channel_fee": 104.85,
+              "marketing_fee": 55.92,
+              "net_margin": 167.56,
+              "net_margin_rate": 0.2397,
+              "break_even_price": 481.39,
+              "capital_required": 108737.4,
+              "scenario_loss_proxy": 0.0974,
+              "scenario_confidence_score": 0.8629,
+              "scenario_confidence_level": "high",
+              "assumption_flags": [
+                "warehousing_not_separately_sourced",
+                "last_mile_not_separately_sourced",
+                "ddp_transparency_risk"
+              ],
+              "optimizer_score": 0.5072
+            }
+          ],
+          "infeasible_reason_mix": {
+            "margin_floor": 3,
+            "loss_probability_limit": 3
+          },
+          "optimizer_gate_result": "pass",
+          "optimizer_confidence_level": "medium"
+        }
       }
     }
   },
@@ -2045,5 +3205,43 @@
         }
       }
     ]
-  }
+  },
+  "factor_snapshots": {
+    "FAC-SUPPLY-ROBUSTNESS": {
+      "label": "供应链韧性因子",
+      "value": 0.7281,
+      "source_section": "3.1-3.6"
+    },
+    "FAC-QUOTE-QUALITY": {
+      "label": "报价质量因子",
+      "value": 0.9396,
+      "source_section": "3.2"
+    },
+    "FAC-COMPLIANCE-READINESS": {
+      "label": "合规准备度因子",
+      "value": 0.4468,
+      "source_section": "3.3"
+    },
+    "FAC-LOGISTICS-RELIABILITY": {
+      "label": "物流可靠性因子",
+      "value": 0.52,
+      "source_section": "3.4"
+    },
+    "FAC-MARGIN-SAFETY": {
+      "label": "利润安全边际因子",
+      "value": 0.9929,
+      "source_section": "3.5"
+    },
+    "FAC-EXECUTION-RISK": {
+      "label": "执行风险控制因子",
+      "value": 0.7849,
+      "source_section": "3.6-3.7"
+    }
+  },
+  "confidence_band": {
+    "score": 0.8999,
+    "label": "high",
+    "proxy_usage_flags": []
+  },
+  "proxy_usage_flags": []
 }

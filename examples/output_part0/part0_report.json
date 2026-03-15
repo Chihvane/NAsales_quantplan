@@ -2,7 +2,7 @@
   "metadata": {
     "report_id": "part0_quant_report",
     "report_version": "2026.03",
-    "generated_at": "2026-03-13T16:50:04.908524+00:00",
+    "generated_at": "2026-03-14T19:19:01.704538+00:00",
     "section_order": [
       "0.1",
       "0.2",
@@ -10,7 +10,8 @@
       "0.4",
       "0.5",
       "0.6",
-      "0.7"
+      "0.7",
+      "0.8"
     ],
     "section_structure": {
       "0.1": {
@@ -205,6 +206,44 @@
         "rule_refs": [
           "gate.naming_compliance"
         ]
+      },
+      "0.8": {
+        "title": "全球市场去向与本地化治理",
+        "required_tables": [
+          "market_destination_registry",
+          "consumer_habit_vectors",
+          "region_weight_profiles"
+        ],
+        "metric_ids": [
+          "market_localization_governance"
+        ],
+        "quality_targets": {
+          "market_destination_registry": 8,
+          "consumer_habit_vectors": 8,
+          "region_weight_profiles": 8
+        },
+        "analysis_grain": "market profile",
+        "entity_grain": "market_code",
+        "time_grain": "profile version",
+        "channel_scope": [
+          "governance",
+          "market_selection"
+        ],
+        "master_data_refs": [
+          "mdm.market_destination",
+          "mdm.consumer_habit_vector",
+          "mdm.region_weight_profile"
+        ],
+        "evidence_refs": [
+          "evidence.market_destination_registry",
+          "evidence.consumer_habit_vectors",
+          "evidence.region_weight_profiles"
+        ],
+        "rule_refs": [
+          "gate.geo_fit",
+          "gate.habit_fit",
+          "gate.market_destination"
+        ]
       }
     },
     "metric_specs": [
@@ -288,6 +327,18 @@
         ],
         "formula": "统计定义覆盖、类型覆盖、来源表覆盖、命名风格一致率和复用字段占比。",
         "output_note": "用于控制跨项目主数据与命名口径不漂移。"
+      },
+      {
+        "section_id": "0.8",
+        "metric_id": "market_localization_governance",
+        "label": "全球市场去向与本地化治理",
+        "required_tables": [
+          "market_destination_registry",
+          "consumer_habit_vectors",
+          "region_weight_profiles"
+        ],
+        "formula": "统计市场覆盖、消费习惯向量覆盖、权重 profile 覆盖、方法族多样性与市场间差异度。",
+        "output_note": "用于保证不同区域采用独立消费习惯和权重模型，而不是把欧美模型直接套入东南亚。"
       }
     ],
     "assumptions": {
@@ -295,6 +346,7 @@
       "required_decision_domains": 6,
       "required_policy_scopes": 6,
       "required_strategic_metric_families": 5,
+      "required_localized_markets": 10,
       "max_source_age_days": 90,
       "max_assumption_overdue_days": 14,
       "minimum_signoff_steps": 3,
@@ -328,19 +380,32 @@
       "field_dictionary": {
         "record_count": 12,
         "available": true
+      },
+      "market_destination_registry": {
+        "record_count": 10,
+        "available": true
+      },
+      "consumer_habit_vectors": {
+        "record_count": 10,
+        "available": true
+      },
+      "region_weight_profiles": {
+        "record_count": 10,
+        "available": true
       }
     }
   },
   "overview": {
-    "section_count": 7,
+    "section_count": 8,
     "average_confidence_score": 1.0,
     "confidence_mix": {
-      "high": 7,
+      "high": 8,
       "medium": 0,
       "low": 0
     },
     "connected_channel_scope": [
-      "governance"
+      "governance",
+      "market_selection"
     ],
     "control_tower_binding": {
       "master_data_ref_coverage_ratio": 1.0,
@@ -350,15 +415,15 @@
         "pass": 0,
         "review": 0,
         "fail": 0,
-        "not_applicable": 7
+        "not_applicable": 8
       }
     },
     "decision_summary": {
       "decision_signal": "ready_for_execution_system",
-      "decision_score": 0.9417,
+      "decision_score": 0.9392,
       "scorecard": {
         "operating_system_readiness": {
-          "score": 0.9933,
+          "score": 0.9873,
           "level": "high"
         },
         "evidence_rigour": {
@@ -371,15 +436,16 @@
         }
       },
       "key_findings": [
-        "当前决策树覆盖率为 100.0%，决策操作系统分为 99.3%。",
+        "当前决策树覆盖率为 100.0%，决策操作系统分为 98.7%。",
         "数据治理审计分为 82.5%，假设治理分为 83.1%。",
-        "Gate 可执行性为 100.0%，战略 Gate 覆盖为 100.0%。"
+        "Gate 可执行性为 100.0%，战略 Gate 覆盖为 100.0%。",
+        "本地化治理分为 87.8%，当前已覆盖 10 个可进入市场。"
       ],
       "risk_flags": [],
       "recommended_next_step": "进入 Part 1–5 的统一治理接入阶段，把 Gate、证据链和主数据约束落到各章节。"
     },
     "decision_signal": "ready_for_execution_system",
-    "decision_score": 0.9417,
+    "decision_score": 0.9392,
     "headline_metrics": [
       {
         "key": "decision_tree_score",
@@ -416,10 +482,16 @@
         "label": "更新失效规则分",
         "value": 1.0,
         "unit": "score"
+      },
+      {
+        "key": "localization_governance_score",
+        "label": "本地化治理分",
+        "value": 0.8784,
+        "unit": "score"
       }
     ],
     "validation_summary": {
-      "pass_count": 8,
+      "pass_count": 9,
       "review_count": 0,
       "fail_count": 0
     },
@@ -563,7 +635,7 @@
         "status_coverage_ratio": 1.0,
         "owner_coverage_ratio": 1.0,
         "freshness_compliance_ratio": 1.0,
-        "average_source_age_days": 12.12,
+        "average_source_age_days": 13.12,
         "auditability_score": 0.825,
         "auditability_level": "high"
       }
@@ -911,6 +983,111 @@
         "dictionary_reuse_score": 1.0,
         "dictionary_reuse_level": "high"
       }
+    },
+    "0.8": {
+      "id": "0.8",
+      "title": "全球市场去向与本地化治理",
+      "required_tables": [
+        "market_destination_registry",
+        "consumer_habit_vectors",
+        "region_weight_profiles"
+      ],
+      "metric_ids": [
+        "market_localization_governance"
+      ],
+      "granularity": {
+        "analysis_grain": "market profile",
+        "entity_grain": "market_code",
+        "time_grain": "profile version"
+      },
+      "channel_scope": [
+        "governance",
+        "market_selection"
+      ],
+      "master_data_ref": [
+        "mdm.market_destination",
+        "mdm.consumer_habit_vector",
+        "mdm.region_weight_profile"
+      ],
+      "evidence_ref": [
+        "evidence.market_destination_registry",
+        "evidence.consumer_habit_vectors",
+        "evidence.region_weight_profiles"
+      ],
+      "rule_ref": [
+        "gate.geo_fit",
+        "gate.habit_fit",
+        "gate.market_destination"
+      ],
+      "gate_result": {
+        "status": "not_applicable",
+        "source": "",
+        "raw_value": "",
+        "failed_items": []
+      },
+      "data_quality": {
+        "record_counts": {
+          "market_destination_registry": 10,
+          "consumer_habit_vectors": 10,
+          "region_weight_profiles": 10
+        },
+        "available_tables": [
+          "market_destination_registry",
+          "consumer_habit_vectors",
+          "region_weight_profiles"
+        ],
+        "missing_tables": [],
+        "completeness_ratio": 1.0,
+        "richness_ratio": 1.0,
+        "quality_score": 1.0,
+        "quality_level": "high"
+      },
+      "confidence": {
+        "score": 1.0,
+        "level": "high"
+      },
+      "metrics": {
+        "market_count": 10,
+        "active_market_count": 10,
+        "market_coverage_ratio": 1.0,
+        "habit_vector_coverage_ratio": 1.0,
+        "weight_profile_coverage_ratio": 1.0,
+        "analysis_method_diversity_ratio": 0.9,
+        "habit_model_family_diversity_ratio": 0.5,
+        "market_codes": [
+          "EU",
+          "ID",
+          "JP",
+          "KH",
+          "KR",
+          "LA",
+          "PH",
+          "TH",
+          "TW",
+          "VN"
+        ],
+        "analysis_method_mix": {
+          "balance_crossborder": 1,
+          "compliance_first": 1,
+          "content_fast": 1,
+          "content_platform": 1,
+          "lightweight_entry": 2,
+          "mass_scale": 1,
+          "platform_value": 1,
+          "quality_service": 1,
+          "value_mobile": 1
+        },
+        "habit_model_family_mix": {
+          "frontier_value": 2,
+          "mature_premium": 1,
+          "mobile_value": 4,
+          "service_quality": 2,
+          "trend_digital": 1
+        },
+        "consumer_habit_distance_score": 0.4896,
+        "localization_governance_score": 0.8784,
+        "localization_governance_level": "high"
+      }
     }
   },
   "uncertainty": {
@@ -1047,10 +1224,25 @@
           "naming_compliance_ratio": 1.0,
           "definition_coverage_ratio": 1.0
         }
+      },
+      {
+        "check_id": "market_localization_governance",
+        "status": "pass",
+        "source": {
+          "label": "Stage-Gate governance references",
+          "url": "https://www.stage-gate.com/blog/the-stage-gate-model-an-overview/"
+        },
+        "method": "Localized market governance must expose bounded coverage ratios for market registry, habit vectors and regional weight profiles.",
+        "evidence": {
+          "market_coverage_ratio": 1.0,
+          "habit_vector_coverage_ratio": 1.0,
+          "weight_profile_coverage_ratio": 1.0,
+          "active_market_count": 10
+        }
       }
     ],
     "summary": {
-      "pass_count": 8,
+      "pass_count": 9,
       "review_count": 0,
       "fail_count": 0
     }

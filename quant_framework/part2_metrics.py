@@ -14,12 +14,17 @@ from .metrics import (
     _safe_divide,
 )
 from .models import (
+    ChannelBenchmarkRecord,
+    EventLibraryRecord,
+    EvidenceSourceRecord,
+    GateThresholdRecord,
     ListingSnapshotRecord,
     Part2Assumptions,
     ProductCatalogRecord,
     ReviewRecord,
     SoldTransactionRecord,
 )
+from .stats_utils import clip
 
 
 POSITIVE_TERMS = {
@@ -91,8 +96,34 @@ def _latest_snapshots_by_listing(
         if current is None or snapshot.captured_at > current.captured_at:
             latest[snapshot.listing_id] = snapshot
     return latest
+
+
 def _realized_price(record: SoldTransactionRecord) -> float:
     return record.transaction_price + record.shipping_fee
+
+
+def _threshold_lookup(
+    threshold_registry: list[GateThresholdRecord] | None,
+    metric_names: set[str],
+    default_value: float,
+) -> float:
+    for row in threshold_registry or []:
+        if row.metric_name in metric_names:
+            return row.threshold_value
+    return default_value
+
+
+def _event_theme_hint(event_name: str) -> str:
+    normalized = event_name.lower()
+    if "shipping" in normalized or "damage" in normalized or "box" in normalized:
+        return "shipping_damage"
+    if "reliability" in normalized or "failure" in normalized or "return" in normalized:
+        return "quality_issue"
+    if "start" in normalized or "manual" in normalized or "setup" in normalized:
+        return "ease_of_use"
+    if "price" in normalized or "value" in normalized or "overpriced" in normalized:
+        return "value_for_money"
+    return "quality_issue"
 
 
 def _build_equal_frequency_price_bands(
@@ -338,6 +369,8 @@ def compute_transaction_price_analysis(
     listing_snapshots: list[ListingSnapshotRecord],
     sold_transactions: list[SoldTransactionRecord],
     assumptions: Part2Assumptions,
+    benchmark_registry: list[ChannelBenchmarkRecord] | None = None,
+    threshold_registry: list[GateThresholdRecord] | None = None,
 ) -> dict:
     if not sold_transactions:
         return {
@@ -388,6 +421,47 @@ def compute_transaction_price_analysis(
         )
     }
 
+    platform_price: dict[str, dict[str, float]] = defaultdict(lambda: {"revenue": 0.0, "units": 0})
+    for record in sold_transactions:
+        realized = _realized_price(record)
+        platform_price[record.platform]["revenue"] += realized * record.units
+        platform_price[record.platform]["units"] += record.units
+
+    benchmark_lookup = {row.channel: row for row in benchmark_registry or []}
+    benchmark_gap_by_platform = {}
+    for platform, payload in platform_price.items():
+        benchmark = benchmark_lookup.get(platform)
+        if benchmark is None or payload["units"] <= 0:
+            continue
+        observed_aov_proxy = _safe_divide(payload["revenue"], payload["units"])
+        benchmark_gap_by_platform[platform] = {
+            "observed_aov_proxy": round(observed_aov_proxy, 2),
+            "benchmark_average_order_value": round(benchmark.benchmark_average_order_value, 2),
+            "gap_ratio": round(
+                _safe_divide(
+                    observed_aov_proxy - benchmark.benchmark_average_order_value,
+                    benchmark.benchmark_average_order_value,
+                ),
+                4,
+            ),
+        }
+    sweet_spot_threshold = _threshold_lookup(
+        threshold_registry,
+        {"sweet_spot_share", "sweet_spot_fit"},
+        0.08,
+    )
+    realization_floor = _threshold_lookup(
+        threshold_registry,
+        {"price_realization_rate", "price_realization_floor"},
+        0.9,
+    )
+    sweet_spot_share = sweet_spot_band.get("share", 0.0)
+    price_realization_rate = round(_safe_divide(realized_total, listed_total), 4)
+    gate_results = {
+        "sweet_spot_fit": sweet_spot_share >= sweet_spot_threshold,
+        "price_realization_floor": price_realization_rate >= realization_floor,
+    }
+
     return {
         "price_distribution": distribution.get("summary", {}),
         "outlier_analysis": {
@@ -402,7 +476,7 @@ def compute_transaction_price_analysis(
             2,
         ),
         "median_realized_price": round(_percentile(realized_prices, 50), 2),
-        "price_realization_rate": round(_safe_divide(realized_total, listed_total), 4),
+        "price_realization_rate": price_realization_rate,
         "discount_depth": {
             "weighted_average_discount_rate": round(
                 _safe_divide(weighted_discount_numerator, weighted_units),
@@ -410,12 +484,19 @@ def compute_transaction_price_analysis(
             ),
             "median_discount_rate_by_seller_type": discount_by_seller_type,
         },
+        "benchmark_gap_by_platform": benchmark_gap_by_platform,
+        "benchmark_coverage_ratio": round(
+            _safe_divide(len(benchmark_gap_by_platform), len(platform_price)),
+            4,
+        ) if platform_price else 0.0,
+        "gate_results": gate_results,
     }
 
 
 def compute_value_gap_analysis(
     listing_snapshots: list[ListingSnapshotRecord],
     sold_transactions: list[SoldTransactionRecord],
+    benchmark_registry: list[ChannelBenchmarkRecord] | None = None,
 ) -> dict:
     latest_snapshots = _latest_snapshots_by_listing(listing_snapshots)
     if not latest_snapshots:
@@ -483,10 +564,29 @@ def compute_value_gap_analysis(
         if row["value_gap"] < 0 and row["price_bucket"] in {"upper_mid", "premium"}
     ][:3]
 
+    top_cluster_gap = max((row["value_gap"] for row in strong_value_clusters), default=0.0)
+    risk_cluster_penalty = abs(min((row["value_gap"] for row in risk_clusters), default=0.0))
+    benchmark_channels = {row.channel for row in benchmark_registry or []}
+    observed_channels = {item.platform for item in latest_snapshots.values()}
+    benchmark_coverage_ratio = _safe_divide(
+        len(observed_channels & benchmark_channels),
+        len(observed_channels),
+    ) if observed_channels else 0.0
+    value_advantage_score = clip(
+        min(len(strong_value_clusters), 3) / 3 * 0.35
+        + clip(top_cluster_gap / 0.08, 0.0, 1.0) * 0.4
+        + (1 - clip(risk_cluster_penalty / 0.08, 0.0, 1.0)) * 0.15
+        + benchmark_coverage_ratio * 0.1,
+        0.0,
+        1.0,
+    )
+
     return {
         "matrix": matrix,
         "strong_value_clusters": strong_value_clusters,
         "risk_clusters": risk_clusters,
+        "benchmark_coverage_ratio": round(benchmark_coverage_ratio, 4),
+        "value_advantage_score": round(value_advantage_score, 4),
     }
 
 
@@ -571,6 +671,9 @@ def compute_attribute_landscape(
 def compute_review_analytics(
     reviews: list[ReviewRecord],
     assumptions: Part2Assumptions,
+    voc_event_registry: list[EventLibraryRecord] | None = None,
+    threshold_registry: list[GateThresholdRecord] | None = None,
+    source_registry: list[EvidenceSourceRecord] | None = None,
 ) -> dict:
     if not reviews:
         return {
@@ -664,6 +767,52 @@ def compute_review_analytics(
         if negative_theme_counts[theme] >= assumptions.min_theme_mentions
     ][:5]
 
+    active_voc_events = [row for row in voc_event_registry or [] if row.expected_direction == "negative"]
+    voc_event_hits = []
+    matched_themes = set()
+    for event in active_voc_events:
+        hinted_theme = _event_theme_hint(event.event_name)
+        theme_row = next((row for row in pain_points if row["theme"] == hinted_theme), None)
+        mention_rate = theme_row["mention_rate"] if theme_row else 0.0
+        intensity = theme_row["intensity"] if theme_row else 0.0
+        event_risk = clip(event.severity * 0.6 + mention_rate * 0.25 + intensity * 0.15, 0.0, 1.0)
+        if theme_row:
+            matched_themes.add(hinted_theme)
+        voc_event_hits.append(
+            {
+                "event_id": event.event_id,
+                "event_name": event.event_name,
+                "mapped_theme": hinted_theme,
+                "matched_theme": theme_row is not None,
+                "severity": round(event.severity, 4),
+                "mention_rate": round(mention_rate, 4),
+                "event_risk": round(event_risk, 4),
+            }
+        )
+    negative_threshold = _threshold_lookup(
+        threshold_registry,
+        {"negative_sentiment_rate", "voc_negative_rate"},
+        0.35,
+    )
+    negative_rate = sentiment_mix.get("negative", 0.0)
+    voc_risk_score = clip(
+        negative_rate * 0.45
+        + min(len(active_voc_events), 3) / 3 * 0.2
+        + max((row["event_risk"] for row in voc_event_hits), default=0.0) * 0.25
+        + (1 - _safe_divide(len(matched_themes), len(active_voc_events) or 1)) * 0.1,
+        0.0,
+        1.0,
+    )
+    proxy_usage_flags = []
+    if not source_registry:
+        proxy_usage_flags.append("missing_part2_source_registry")
+    if not voc_event_registry:
+        proxy_usage_flags.append("missing_voc_event_registry")
+    if len(reviews) < 12:
+        proxy_usage_flags.append("low_review_sample_size")
+    if sentiment_mix.get("negative", 0.0) == 0.0 and not pain_points:
+        proxy_usage_flags.append("limited_negative_signal")
+
     return {
         "sentiment_mix": sentiment_mix,
         "top_negative_themes": top_negative_themes,
@@ -674,6 +823,17 @@ def compute_review_analytics(
             bucket: round(_safe_divide(count, total_reviews), 4)
             for bucket, count in sorted(rating_buckets.items())
         },
+        "voc_event_hits": voc_event_hits,
+        "voc_event_coverage_ratio": round(
+            _safe_divide(sum(1 for row in voc_event_hits if row["matched_theme"]), len(voc_event_hits)),
+            4,
+        ) if voc_event_hits else 0.0,
+        "source_registry_count": len(source_registry or []),
+        "voc_risk_score": round(voc_risk_score, 4),
+        "gate_results": {
+            "voc_negative_rate": negative_rate <= negative_threshold,
+        },
+        "proxy_usage_flags": proxy_usage_flags,
     }
 
 

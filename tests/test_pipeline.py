@@ -145,6 +145,10 @@ class Part0PipelineTests(unittest.TestCase):
             1.0,
         )
         self.assertGreater(report["sections"]["0.7"]["metrics"]["naming_compliance_ratio"], 0)
+        self.assertEqual(report["sections"]["0.8"]["metrics"]["active_market_count"], 10)
+        self.assertEqual(report["sections"]["0.8"]["metrics"]["habit_vector_coverage_ratio"], 1.0)
+        self.assertEqual(report["sections"]["0.8"]["metrics"]["weight_profile_coverage_ratio"], 1.0)
+        self.assertGreater(report["sections"]["0.8"]["metrics"]["localization_governance_score"], 0.5)
 
     def test_generate_part0_charts(self) -> None:
         dataset = build_part0_dataset_from_directory(PART0_EXAMPLES)
@@ -270,7 +274,9 @@ class Part1PipelineTests(unittest.TestCase):
         self.assertIn("market_size", report["uncertainty"])
         self.assertIn("decision_summary", report["overview"])
         self.assertIn(report["overview"]["decision_signal"], {"attractive", "watchlist", "caution"})
-        self.assertEqual(len(report["overview"]["decision_summary"]["scorecard"]), 4)
+        self.assertEqual(len(report["overview"]["decision_summary"]["scorecard"]), 5)
+        self.assertIn("factor_snapshots", report)
+        self.assertEqual(report["overview"]["factor_snapshot_count"], 6)
         self.assertEqual(
             report["sections"]["1.3"]["metrics"]["bottom_up"]["concentration_level"],
             "highly_concentrated",
@@ -297,6 +303,43 @@ class Part1PipelineTests(unittest.TestCase):
         self.assertIn("part1_threshold_registry", report["metadata"]["table_inventory"])
         self.assertEqual(report["metadata"]["table_inventory"]["event_library"]["record_count"], 4)
         self.assertEqual(report["sections"]["1.1"]["data_quality"]["record_counts"]["event_library"], 4)
+        self.assertGreater(report["sections"]["1.1"]["metrics"]["source_health"]["coverage_ratio"], 0.5)
+        self.assertGreater(report["sections"]["1.1"]["metrics"]["threshold_coverage_ratio"], 0.0)
+        self.assertGreater(report["sections"]["1.3"]["metrics"]["market_size_inputs"]["market_attractiveness_factor"], 0.0)
+        self.assertGreaterEqual(report["sections"]["1.4"]["metrics"]["channel_dependency_score"], 0.6)
+        self.assertIn("FAC-MARKET-ATTRACT", report["factor_snapshots"])
+        self.assertIn("part1_data_quality_log", report)
+        self.assertIn("part1_evidence_trace_index", report)
+        self.assertIn("part1_forecast_engine", report)
+        self.assertIn("part1_drift_report", report)
+        self.assertIn("part1_calibration_report", report)
+        self.assertIn("part1_advanced_quant_tools", report)
+        self.assertIn("part1_market_destination_engine", report)
+        self.assertGreater(report["part1_data_quality_log"]["summary"]["table_count"], 0)
+        self.assertGreater(report["part1_evidence_trace_index"]["summary"]["evidence_trace_coverage_ratio"], 0.0)
+        self.assertEqual(len(report["part1_forecast_engine"]["next_forecast"]), 3)
+        self.assertGreater(report["part1_forecast_engine"]["backtest"]["observation_count"], 0)
+        self.assertGreater(report["part1_drift_report"]["summary"]["check_count"], 0)
+        self.assertGreaterEqual(report["part1_calibration_report"]["summary"]["threshold_alignment_ratio"], 0.0)
+        self.assertEqual(report["part1_advanced_quant_tools"]["summary"]["tool_count"], 5)
+        self.assertEqual(report["part1_market_destination_engine"]["summary"]["market_count"], 10)
+        self.assertIn(
+            report["part1_market_destination_engine"]["summary"]["top_market_code"],
+            {"EU", "JP", "KR", "TW", "PH", "VN", "TH", "KH", "LA", "ID"},
+        )
+        self.assertIn("advanced_time_series", report["sections"]["1.1"]["metrics"])
+        self.assertIn(
+            report["sections"]["1.1"]["metrics"]["advanced_time_series"]["signal_regime"],
+            {"seasonal", "trend", "noisy"},
+        )
+        self.assertGreaterEqual(
+            report["sections"]["1.1"]["metrics"]["advanced_time_series"]["spectral_features"]["seasonality_confidence_score"],
+            0.0,
+        )
+        self.assertIn("continuous_quant_outputs", report["overview"])
+        self.assertEqual(report["metadata"]["table_inventory"]["market_destination_registry"]["record_count"], 10)
+        self.assertEqual(report["metadata"]["table_inventory"]["consumer_habit_vectors"]["record_count"], 10)
+        self.assertEqual(report["metadata"]["table_inventory"]["region_weight_profiles"]["record_count"], 10)
 
     def test_generate_charts(self) -> None:
         dataset = build_dataset_from_directory(EXAMPLES)
@@ -386,6 +429,10 @@ class Part2PipelineTests(unittest.TestCase):
         report = build_part2_quant_report(dataset, DEFAULT_PART2_ASSUMPTIONS)
 
         _assert_standard_report_contract(self, report)
+        self.assertEqual(len(dataset.part2_source_registry), 3)
+        self.assertEqual(len(dataset.part2_threshold_registry), 2)
+        self.assertEqual(len(dataset.part2_benchmark_registry), 3)
+        self.assertEqual(len(dataset.voc_event_registry), 2)
         self.assertEqual(report["validation"]["summary"]["fail_count"], 0)
         self.assertEqual(report["validation"]["summary"]["review_count"], 0)
         self.assertGreater(report["sections"]["2.1"]["metrics"]["total_gmv"], 0)
@@ -393,6 +440,8 @@ class Part2PipelineTests(unittest.TestCase):
         self.assertIn("decision_summary", report["overview"])
         self.assertIn(report["overview"]["decision_signal"], {"promising", "selective", "crowded"})
         self.assertEqual(len(report["overview"]["decision_summary"]["scorecard"]), 4)
+        self.assertIn("factor_snapshots", report)
+        self.assertEqual(report["overview"]["factor_snapshot_count"], 6)
         self.assertGreater(
             report["sections"]["2.2"]["metrics"]["sweet_spot_band"]["share"],
             0,
@@ -401,6 +450,15 @@ class Part2PipelineTests(unittest.TestCase):
             report["sections"]["2.6"]["metrics"]["median_lifetime_days"],
             0,
         )
+        self.assertEqual(report["sections"]["2.2"]["metrics"]["benchmark_registry_count"], 3)
+        self.assertEqual(report["sections"]["2.5"]["metrics"]["voc_event_registry_count"], 2)
+        self.assertIn("FAC-PRICING-FIT", report["factor_snapshots"])
+        self.assertIn("FAC-VALUE-ADVANTAGE", report["factor_snapshots"])
+        self.assertIn("FAC-VOC-RISK", report["factor_snapshots"])
+        self.assertEqual(report["part2_registry_bindings"]["part2_source_registry_count"], 3)
+        self.assertIn("confidence_band", report)
+        self.assertIn(report["confidence_band"]["label"], {"high", "medium", "low"})
+        self.assertIn("proxy_usage_flags", report)
 
     def test_generate_part2_charts(self) -> None:
         dataset = build_part2_dataset_from_directory(PART2_EXAMPLES)
@@ -555,6 +613,10 @@ class Part3PipelineTests(unittest.TestCase):
         report = build_part3_quant_report(dataset, DEFAULT_PART3_ASSUMPTIONS)
 
         _assert_standard_report_contract(self, report)
+        self.assertEqual(len(dataset.part3_source_registry), 3)
+        self.assertEqual(len(dataset.part3_threshold_registry), 2)
+        self.assertEqual(len(dataset.part3_scenario_registry), 4)
+        self.assertEqual(len(dataset.part3_optimizer_registry), 1)
         self.assertEqual(report["validation"]["summary"]["fail_count"], 0)
         self.assertEqual(report["validation"]["summary"]["review_count"], 0)
         self.assertIn("uncertainty", report)
@@ -579,6 +641,21 @@ class Part3PipelineTests(unittest.TestCase):
         self.assertGreater(
             report["sections"]["3.5"]["metrics"]["monte_carlo"]["iterations"],
             1000,
+        )
+        self.assertIn("part3_risk_metrics", report["sections"]["3.5"]["metrics"])
+        self.assertIn("value_at_risk_95", report["sections"]["3.5"]["metrics"]["part3_risk_metrics"])
+        self.assertIn("expected_shortfall_95", report["sections"]["3.5"]["metrics"]["part3_risk_metrics"])
+        self.assertIn("margin_rate_sharpe_like", report["sections"]["3.5"]["metrics"]["part3_risk_metrics"])
+        self.assertIn("margin_rate_sortino_like", report["sections"]["3.5"]["metrics"]["part3_risk_metrics"])
+        self.assertIn("factor_snapshots", report)
+        self.assertEqual(len(report["factor_snapshots"]), 6)
+        self.assertIn("confidence_band", report)
+        self.assertIn(report["confidence_band"]["label"], {"high", "medium", "low"})
+        self.assertIn("proxy_usage_flags", report)
+        self.assertIn("scenario_table", report["sections"]["3.5"]["metrics"])
+        self.assertGreater(
+            report["sections"]["3.7"]["metrics"]["optimizer"]["feasible_scenarios_count"],
+            0,
         )
         self.assertGreaterEqual(
             len(report["sections"]["3.5"]["metrics"]["monte_carlo"]["sensitivity"]),
@@ -699,6 +776,11 @@ class Part4PipelineTests(unittest.TestCase):
         report = build_part4_quant_report(dataset, DEFAULT_PART4_ASSUMPTIONS)
 
         _assert_standard_report_contract(self, report)
+        self.assertEqual(len(dataset.part4_source_registry), 3)
+        self.assertEqual(len(dataset.part4_threshold_registry), 3)
+        self.assertEqual(len(dataset.part4_benchmark_registry), 5)
+        self.assertEqual(len(dataset.part4_optimizer_registry), 1)
+        self.assertEqual(len(dataset.part4_stress_registry), 3)
         self.assertEqual(report["validation"]["summary"]["fail_count"], 0)
         self.assertEqual(report["validation"]["summary"]["review_count"], 0)
         self.assertIn("uncertainty", report)
@@ -707,8 +789,28 @@ class Part4PipelineTests(unittest.TestCase):
         self.assertIn(report["overview"]["decision_signal"], {"go", "pilot", "hold"})
         self.assertEqual(len(report["overview"]["decision_summary"]["scorecard"]), 4)
         self.assertIn("monte_carlo", report["sections"]["4.5"]["metrics"])
+        self.assertIn("channel_performance_metrics", report["sections"]["4.5"]["metrics"])
+        self.assertIn("stress_suite", report["sections"]["4.5"]["metrics"])
+        self.assertIn("tail_risk", report["sections"]["4.5"]["metrics"]["monte_carlo"]["overall"])
+        self.assertIn("risk_adjusted", report["sections"]["4.5"]["metrics"]["monte_carlo"]["overall"])
+        self.assertIn("factor_snapshots", report)
+        self.assertEqual(len(report["factor_snapshots"]), 6)
+        self.assertIn("confidence_band", report)
+        self.assertIn(report["confidence_band"]["label"], {"high", "medium", "low"})
+        self.assertIn("proxy_usage_flags", report)
+        self.assertIn("execution_friction_flags", report)
+        self.assertIn("part4_optimizer_runs", report)
+        self.assertGreater(len(report["part4_optimizer_runs"]), 0)
+        self.assertIn("optimal_budget_mix", report["sections"]["4.7"]["metrics"]["optimizer"])
+        self.assertIn("portfolio_constraints", report["sections"]["4.7"]["metrics"]["optimizer"])
+        self.assertIn("optimizer_feasibility_report", report["sections"]["4.5"]["metrics"]["stress_suite"])
+        self.assertIn("gate_flip_report", report["sections"]["4.5"]["metrics"]["stress_suite"])
         self.assertGreater(
             report["sections"]["4.5"]["metrics"]["blended"]["revenue"],
+            0,
+        )
+        self.assertGreater(
+            report["sections"]["4.7"]["metrics"]["optimizer"]["feasible_channels_count"],
             0,
         )
         self.assertIn(
@@ -828,6 +930,11 @@ class Part5PipelineTests(unittest.TestCase):
         self.assertIn("change_signal_count", alerts)
         if alerts["alerts"]:
             self.assertIn("runbook_action", alerts["alerts"][0])
+        self.assertIn("factor_snapshots", report)
+        self.assertEqual(len(report["factor_snapshots"]), 7)
+        self.assertIn("confidence_band", report)
+        self.assertIn(report["confidence_band"]["label"], {"high", "medium", "low"})
+        self.assertIn("proxy_usage_flags", report)
         self.assertIn(
             first_readout["auto_stop_decision"],
             {"ship_winner", "stop_for_loss", "stop_for_futility", "prepare_rollout", "watch_for_loss", "continue_collecting"},

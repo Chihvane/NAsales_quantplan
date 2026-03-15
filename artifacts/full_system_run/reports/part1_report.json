@@ -1,0 +1,3182 @@
+{
+  "metadata": {
+    "report_id": "part1_quant_report",
+    "report_version": "2026.03",
+    "generated_at": "2026-03-15T00:47:12.532979+00:00",
+    "section_order": [
+      "1.1",
+      "1.2",
+      "1.3",
+      "1.4",
+      "1.5",
+      "1.6"
+    ],
+    "section_structure": {
+      "1.1": {
+        "title": "市场现状与需求概览",
+        "required_tables": [
+          "search_trends",
+          "region_demand",
+          "event_library",
+          "source_registry",
+          "part1_threshold_registry"
+        ],
+        "metric_ids": [
+          "demand_growth_rate",
+          "market_heat_coefficient",
+          "seasonality_index",
+          "regional_demand_share",
+          "demand_sales_lag_signal",
+          "demand_strength_score",
+          "demand_stability_score",
+          "event_sensitivity_score"
+        ],
+        "quality_targets": {
+          "search_trends": 12,
+          "region_demand": 5,
+          "event_library": 3,
+          "source_registry": 3,
+          "part1_threshold_registry": 2
+        },
+        "analysis_grain": "month x keyword / region",
+        "entity_grain": "keyword / region",
+        "time_grain": "month",
+        "channel_scope": [
+          "marketwide"
+        ],
+        "master_data_refs": [
+          "mdm.calendar",
+          "mdm.region"
+        ],
+        "evidence_refs": [
+          "evidence.search_trends",
+          "evidence.region_demand",
+          "evidence.event_library"
+        ],
+        "rule_refs": [
+          "gate.market_entry",
+          "gate.demand_stability",
+          "gate.event_sensitivity"
+        ]
+      },
+      "1.2": {
+        "title": "客户画像分析",
+        "required_tables": [
+          "customer_segments"
+        ],
+        "metric_ids": [
+          "customer_distribution"
+        ],
+        "quality_targets": {
+          "customer_segments": 12
+        },
+        "analysis_grain": "segment bucket",
+        "entity_grain": "customer segment",
+        "time_grain": "study window",
+        "channel_scope": [
+          "marketwide"
+        ],
+        "master_data_refs": [
+          "mdm.customer_segment"
+        ],
+        "evidence_refs": [
+          "evidence.customer_segments"
+        ],
+        "rule_refs": [
+          "gate.customer_fit"
+        ]
+      },
+      "1.3": {
+        "title": "市场规模分析",
+        "required_tables": [
+          "listings",
+          "market_size_inputs",
+          "source_registry",
+          "part1_threshold_registry",
+          "market_destination_registry",
+          "consumer_habit_vectors",
+          "region_weight_profiles"
+        ],
+        "metric_ids": [
+          "bottom_up_market_size",
+          "top_down_market_size",
+          "market_size_reference_panel",
+          "market_hhi",
+          "market_attractiveness_factor",
+          "market_structure_factor"
+        ],
+        "quality_targets": {
+          "listings": 8,
+          "market_size_inputs": 2,
+          "source_registry": 1,
+          "part1_threshold_registry": 1,
+          "market_destination_registry": 6,
+          "consumer_habit_vectors": 6,
+          "region_weight_profiles": 6
+        },
+        "analysis_grain": "listing sample / market panel row",
+        "entity_grain": "market segment",
+        "time_grain": "annualized window",
+        "channel_scope": [
+          "Amazon",
+          "eBay",
+          "TikTok Shop",
+          "Walmart"
+        ],
+        "master_data_refs": [
+          "mdm.sku",
+          "mdm.price_metric"
+        ],
+        "evidence_refs": [
+          "evidence.listings",
+          "evidence.market_size_inputs",
+          "evidence.source_registry"
+        ],
+        "rule_refs": [
+          "gate.market_entry",
+          "gate.market_scale",
+          "gate.market_attractiveness"
+        ]
+      },
+      "1.4": {
+        "title": "购买渠道分析",
+        "required_tables": [
+          "channels",
+          "channel_benchmarks",
+          "source_registry",
+          "part1_threshold_registry"
+        ],
+        "metric_ids": [
+          "channel_share",
+          "channel_conversion_rate",
+          "channel_benchmark_gap",
+          "channel_efficiency_factor",
+          "channel_risk_factor",
+          "channel_dependency_score"
+        ],
+        "quality_targets": {
+          "channels": 4,
+          "channel_benchmarks": 3,
+          "source_registry": 2,
+          "part1_threshold_registry": 1
+        },
+        "analysis_grain": "channel",
+        "entity_grain": "channel",
+        "time_grain": "analysis window",
+        "channel_scope": [
+          "DTC",
+          "Amazon",
+          "TikTok Shop",
+          "eBay",
+          "Walmart",
+          "B2B"
+        ],
+        "master_data_refs": [
+          "mdm.channel"
+        ],
+        "evidence_refs": [
+          "evidence.channel_metrics",
+          "evidence.channel_benchmarks",
+          "evidence.source_registry"
+        ],
+        "rule_refs": [
+          "gate.channel_selection",
+          "gate.channel_dependency"
+        ]
+      },
+      "1.5": {
+        "title": "货架商品价格分析",
+        "required_tables": [
+          "listings"
+        ],
+        "metric_ids": [
+          "listed_price_bands",
+          "brand_premium"
+        ],
+        "quality_targets": {
+          "listings": 8
+        },
+        "analysis_grain": "listing",
+        "entity_grain": "sku x platform",
+        "time_grain": "snapshot window",
+        "channel_scope": [
+          "Amazon",
+          "eBay",
+          "TikTok Shop",
+          "Walmart"
+        ],
+        "master_data_refs": [
+          "mdm.sku",
+          "mdm.price_metric"
+        ],
+        "evidence_refs": [
+          "evidence.listings"
+        ],
+        "rule_refs": [
+          "gate.price_band_fit"
+        ]
+      },
+      "1.6": {
+        "title": "实际成交价格分析",
+        "required_tables": [
+          "transactions"
+        ],
+        "metric_ids": [
+          "average_transaction_price",
+          "average_discount_rate",
+          "price_elasticity",
+          "price_realization_factor"
+        ],
+        "quality_targets": {
+          "transactions": 12
+        },
+        "analysis_grain": "transaction row",
+        "entity_grain": "sku x platform",
+        "time_grain": "transaction date",
+        "channel_scope": [
+          "Amazon",
+          "eBay",
+          "TikTok Shop",
+          "Walmart"
+        ],
+        "master_data_refs": [
+          "mdm.sku",
+          "mdm.price_metric",
+          "mdm.channel"
+        ],
+        "evidence_refs": [
+          "evidence.transactions"
+        ],
+        "rule_refs": [
+          "gate.price_realization"
+        ]
+      }
+    },
+    "metric_specs": [
+      {
+        "section_id": "1.1",
+        "metric_id": "demand_growth_rate",
+        "label": "需求增长率",
+        "required_tables": [
+          "search_trends"
+        ],
+        "formula": "(末期兴趣值 - 初期兴趣值) / 初期兴趣值",
+        "output_note": "用于判断需求增长、平稳或下滑。"
+      },
+      {
+        "section_id": "1.1",
+        "metric_id": "seasonality_index",
+        "label": "季节性指数",
+        "required_tables": [
+          "search_trends"
+        ],
+        "formula": "月均兴趣值 / 全期均值 * 100",
+        "output_note": "高于 120 视为旺季，低于 80 视为淡季。"
+      },
+      {
+        "section_id": "1.1",
+        "metric_id": "market_heat_coefficient",
+        "label": "市场热度波动系数",
+        "required_tables": [
+          "search_trends"
+        ],
+        "formula": "热度时间序列标准差 / 均值，并输出需求热度与交易量的领先滞后关系。",
+        "output_note": "用于识别昙花一现的热点和更稳定的需求型市场。"
+      },
+      {
+        "section_id": "1.1",
+        "metric_id": "regional_demand_share",
+        "label": "区域需求占比",
+        "required_tables": [
+          "region_demand"
+        ],
+        "formula": "区域需求分值 / 全区域需求分值合计",
+        "output_note": "用于找出重点州、省或区域。"
+      },
+      {
+        "section_id": "1.2",
+        "metric_id": "customer_distribution",
+        "label": "客户分布",
+        "required_tables": [
+          "customer_segments"
+        ],
+        "formula": "各维度 count / 该维度总 count",
+        "output_note": "统一支持年龄、性别、收入、场景、决策因素等维度。"
+      },
+      {
+        "section_id": "1.3",
+        "metric_id": "bottom_up_market_size",
+        "label": "自下而上市场规模",
+        "required_tables": [
+          "listings"
+        ],
+        "formula": "样本月 GMV / 样本覆盖率 * 12",
+        "output_note": "用于估算平台口径的年度市场规模。"
+      },
+      {
+        "section_id": "1.3",
+        "metric_id": "top_down_market_size",
+        "label": "自上而下市场规模",
+        "required_tables": [],
+        "formula": "SAM = TAM * 线上渗透率 * 可服务比例；SOM = SAM * 目标份额",
+        "output_note": "用于形成 TAM、SAM、SOM 三层估算。"
+      },
+      {
+        "section_id": "1.3",
+        "metric_id": "market_hhi",
+        "label": "市场集中度 HHI",
+        "required_tables": [
+          "listings"
+        ],
+        "formula": "sum(品牌收入份额^2) * 10000",
+        "output_note": "用于判断市场分散度和进入难度。"
+      },
+      {
+        "section_id": "1.3",
+        "metric_id": "market_size_reference_panel",
+        "label": "市场规模参考面板",
+        "required_tables": [
+          "market_size_inputs"
+        ],
+        "formula": "对显式输入的 TAM/SAM/SOM 面板计算一致性、来源置信度和与默认假设的偏差。",
+        "output_note": "用于把 Top-Down 假设从单点参数升级成可审计的参考面板。"
+      },
+      {
+        "section_id": "1.4",
+        "metric_id": "channel_share",
+        "label": "渠道收入占比",
+        "required_tables": [
+          "channels"
+        ],
+        "formula": "单渠道收入 / 全渠道收入",
+        "output_note": "用于识别成交主渠道。"
+      },
+      {
+        "section_id": "1.4",
+        "metric_id": "channel_conversion_rate",
+        "label": "渠道转化率",
+        "required_tables": [
+          "channels"
+        ],
+        "formula": "订单数 / 访问量",
+        "output_note": "用于比较平台成交效率。"
+      },
+      {
+        "section_id": "1.4",
+        "metric_id": "channel_benchmark_gap",
+        "label": "渠道基准偏差",
+        "required_tables": [
+          "channels",
+          "channel_benchmarks"
+        ],
+        "formula": "渠道实际 conversion/AOV/ROAS/CAC 与基准值比较，输出 gap 和 above/near/below 状态。",
+        "output_note": "用于把渠道判断从绝对值比较升级成相对行业基准比较。"
+      },
+      {
+        "section_id": "1.5",
+        "metric_id": "listed_price_bands",
+        "label": "货架价格带分布",
+        "required_tables": [
+          "listings"
+        ],
+        "formula": "按价格分布四分位数划分价格带，并结合 IQR 异常值处理统计 SKU 占比",
+        "output_note": "用于识别红海价格带与潜在空白带。"
+      },
+      {
+        "section_id": "1.5",
+        "metric_id": "brand_premium",
+        "label": "品牌溢价系数",
+        "required_tables": [
+          "listings"
+        ],
+        "formula": "品牌价格中位数 / 类目价格中位数 - 1",
+        "output_note": "用于判断品牌溢价能力。"
+      },
+      {
+        "section_id": "1.6",
+        "metric_id": "average_transaction_price",
+        "label": "平均实际成交价",
+        "required_tables": [
+          "transactions"
+        ],
+        "formula": "sum(成交价 * 销量) / sum(销量)",
+        "output_note": "用于识别真实支付区间。"
+      },
+      {
+        "section_id": "1.6",
+        "metric_id": "average_discount_rate",
+        "label": "平均折扣率",
+        "required_tables": [
+          "transactions"
+        ],
+        "formula": "sum((挂牌价-成交价) / 挂牌价 * 销量) / sum(销量)",
+        "output_note": "用于判断市场折扣深度。"
+      },
+      {
+        "section_id": "1.6",
+        "metric_id": "price_elasticity",
+        "label": "价格弹性系数",
+        "required_tables": [
+          "transactions"
+        ],
+        "formula": "使用 midpoint method: |销量变化率 / 价格变化率|",
+        "output_note": "用于判断品类是否适合以促销驱动销量。"
+      }
+    ],
+    "assumptions": {
+      "tam": 95000000.0,
+      "online_penetration": 0.48,
+      "importable_share": 0.58,
+      "target_capture_share": 0.03,
+      "sample_coverage": 0.28,
+      "preferred_hhi_ceiling": 2000.0,
+      "triangulation_gap_review_threshold": 0.15,
+      "max_heat_volatility": 0.25,
+      "benchmark_gap_tolerance": 0.2
+    },
+    "table_inventory": {
+      "search_trends": {
+        "record_count": 12,
+        "available": true
+      },
+      "region_demand": {
+        "record_count": 7,
+        "available": true
+      },
+      "customer_segments": {
+        "record_count": 14,
+        "available": true
+      },
+      "listings": {
+        "record_count": 8,
+        "available": true
+      },
+      "transactions": {
+        "record_count": 16,
+        "available": true
+      },
+      "channels": {
+        "record_count": 5,
+        "available": true
+      },
+      "market_size_inputs": {
+        "record_count": 2,
+        "available": true
+      },
+      "channel_benchmarks": {
+        "record_count": 4,
+        "available": true
+      },
+      "event_library": {
+        "record_count": 4,
+        "available": true
+      },
+      "source_registry": {
+        "record_count": 5,
+        "available": true
+      },
+      "part1_threshold_registry": {
+        "record_count": 4,
+        "available": true
+      },
+      "market_destination_registry": {
+        "record_count": 10,
+        "available": true
+      },
+      "consumer_habit_vectors": {
+        "record_count": 10,
+        "available": true
+      },
+      "region_weight_profiles": {
+        "record_count": 10,
+        "available": true
+      }
+    }
+  },
+  "overview": {
+    "section_count": 6,
+    "average_confidence_score": 1.0,
+    "confidence_mix": {
+      "high": 6,
+      "medium": 0,
+      "low": 0
+    },
+    "connected_channel_scope": [
+      "Amazon",
+      "B2B",
+      "DTC",
+      "TikTok Shop",
+      "Walmart",
+      "eBay",
+      "marketwide"
+    ],
+    "control_tower_binding": {
+      "master_data_ref_coverage_ratio": 1.0,
+      "evidence_ref_coverage_ratio": 1.0,
+      "rule_ref_coverage_ratio": 1.0,
+      "gate_status_mix": {
+        "pass": 1,
+        "review": 0,
+        "fail": 1,
+        "not_applicable": 4
+      }
+    },
+    "headline_metrics": [
+      {
+        "key": "sam",
+        "label": "SAM",
+        "value": 26448000.0,
+        "unit": "USD"
+      },
+      {
+        "key": "bottom_up_market_size",
+        "label": "Bottom-Up 年化市场规模",
+        "value": 26195035.71,
+        "unit": "USD"
+      },
+      {
+        "key": "triangulation_gap_ratio",
+        "label": "双口径偏差",
+        "value": 0.0096,
+        "unit": "ratio"
+      },
+      {
+        "key": "top_channel",
+        "label": "主成交渠道",
+        "value": "Amazon",
+        "unit": "channel"
+      },
+      {
+        "key": "heat_volatility_coefficient",
+        "label": "市场热度波动系数",
+        "value": 0.1128,
+        "unit": "ratio"
+      },
+      {
+        "key": "average_actual_price",
+        "label": "平均实际成交价",
+        "value": 271.69,
+        "unit": "USD"
+      },
+      {
+        "key": "market_attractiveness_factor",
+        "label": "市场吸引力因子",
+        "value": 0.7769,
+        "unit": "score"
+      },
+      {
+        "key": "demand_stability_factor",
+        "label": "需求稳定因子",
+        "value": 0.7514,
+        "unit": "score"
+      }
+    ],
+    "decision_summary": {
+      "decision_signal": "attractive",
+      "decision_score": 0.6808,
+      "scorecard": {
+        "demand_strength": {
+          "score": 0.607,
+          "level": "medium"
+        },
+        "market_accessibility": {
+          "score": 0.7769,
+          "level": "high"
+        },
+        "customer_fit": {
+          "score": 0.6563,
+          "level": "medium"
+        },
+        "channel_efficiency": {
+          "score": 0.8708,
+          "level": "high"
+        },
+        "pricing_power": {
+          "score": 0.5596,
+          "level": "medium"
+        }
+      },
+      "key_findings": [
+        "需求端当前 CAGR 为 16.8%，热度波动系数为 11.3%，重点区域集中在 Texas。",
+        "市场年化规模约 26,195,036 USD，集中度为 highly_concentrated，Top-Down 与参考面板偏差为 0.1%。",
+        "当前主成交渠道为 Amazon，渠道领先滞后信号为 样本不足，平均实际成交价为 271.69 USD。"
+      ],
+      "risk_flags": [
+        "市场集中度较高，头部品牌挤压明显。"
+      ],
+      "recommended_next_step": "进入 Part 2，继续做 SKU 结构、价格甜蜜带和白空间扫描。"
+    },
+    "decision_signal": "attractive",
+    "decision_score": 0.6808,
+    "factor_snapshot_count": 6,
+    "continuous_quant_outputs": [
+      "part1_data_quality_log",
+      "part1_evidence_trace_index",
+      "part1_forecast_engine",
+      "part1_drift_report",
+      "part1_calibration_report",
+      "part1_advanced_quant_tools",
+      "part1_market_destination_engine"
+    ],
+    "data_quality_health_score": 0.8638,
+    "evidence_traceability_score": 1.0,
+    "forecast_backtest_score": 0.6985,
+    "calibration_brier_score": 0.2065,
+    "advanced_tool_count": 5,
+    "market_destination_count": 10,
+    "top_market_destination": "TW",
+    "validation_summary": {
+      "pass_count": 16,
+      "review_count": 0,
+      "fail_count": 0
+    },
+    "uncertainty_keys": [
+      "market_size",
+      "transactions",
+      "listed_price_median"
+    ]
+  },
+  "sections": {
+    "1.1": {
+      "id": "1.1",
+      "title": "市场现状与需求概览",
+      "required_tables": [
+        "search_trends",
+        "region_demand",
+        "event_library",
+        "source_registry",
+        "part1_threshold_registry"
+      ],
+      "metric_ids": [
+        "demand_growth_rate",
+        "market_heat_coefficient",
+        "seasonality_index",
+        "regional_demand_share",
+        "demand_sales_lag_signal",
+        "demand_strength_score",
+        "demand_stability_score",
+        "event_sensitivity_score"
+      ],
+      "granularity": {
+        "analysis_grain": "month x keyword / region",
+        "entity_grain": "keyword / region",
+        "time_grain": "month"
+      },
+      "channel_scope": [
+        "marketwide"
+      ],
+      "master_data_ref": [
+        "mdm.calendar",
+        "mdm.region"
+      ],
+      "evidence_ref": [
+        "evidence.search_trends",
+        "evidence.region_demand",
+        "evidence.event_library"
+      ],
+      "rule_ref": [
+        "gate.market_entry",
+        "gate.demand_stability",
+        "gate.event_sensitivity"
+      ],
+      "gate_result": {
+        "status": "pass",
+        "source": "gate_results",
+        "raw_value": {
+          "demand_stability_score": true,
+          "event_sensitivity_score": true
+        },
+        "failed_items": []
+      },
+      "data_quality": {
+        "record_counts": {
+          "search_trends": 12,
+          "region_demand": 7,
+          "event_library": 4,
+          "source_registry": 5,
+          "part1_threshold_registry": 4
+        },
+        "available_tables": [
+          "search_trends",
+          "region_demand",
+          "event_library",
+          "source_registry",
+          "part1_threshold_registry"
+        ],
+        "missing_tables": [],
+        "completeness_ratio": 1.0,
+        "richness_ratio": 1.0,
+        "quality_score": 1.0,
+        "quality_level": "high"
+      },
+      "confidence": {
+        "score": 1.0,
+        "level": "high"
+      },
+      "metrics": {
+        "trend": {
+          "monthly_average_interest": {
+            "2025-01": 72.0,
+            "2025-02": 74.0,
+            "2025-03": 70.0,
+            "2025-04": 68.0,
+            "2025-05": 76.0,
+            "2025-06": 88.0,
+            "2025-07": 96.0,
+            "2025-08": 94.0,
+            "2025-09": 91.0,
+            "2025-10": 85.0,
+            "2025-11": 79.0,
+            "2025-12": 83.0
+          },
+          "moving_average_3m": {
+            "2025-01": 72.0,
+            "2025-02": 73.0,
+            "2025-03": 72.0,
+            "2025-04": 70.67,
+            "2025-05": 71.33,
+            "2025-06": 77.33,
+            "2025-07": 86.67,
+            "2025-08": 92.67,
+            "2025-09": 93.67,
+            "2025-10": 90.0,
+            "2025-11": 85.0,
+            "2025-12": 82.33
+          },
+          "average_interest": 81.33,
+          "growth_rate": 0.1528,
+          "cagr": 0.1678,
+          "volatility": 0.1128,
+          "heat_volatility_coefficient": 0.1128,
+          "three_month_momentum": -0.121
+        },
+        "seasonality_index": {
+          "01": 88.52,
+          "02": 90.98,
+          "03": 86.07,
+          "04": 83.61,
+          "05": 93.44,
+          "06": 108.2,
+          "07": 118.03,
+          "08": 115.57,
+          "09": 111.89,
+          "10": 104.51,
+          "11": 97.13,
+          "12": 102.05
+        },
+        "peak_months": [],
+        "low_months": [],
+        "regional_share": {
+          "Texas": 0.2186,
+          "Florida": 0.173,
+          "California": 0.1603,
+          "Georgia": 0.1348,
+          "North Carolina": 0.122,
+          "New York": 0.1093,
+          "Ontario": 0.082
+        },
+        "top_regions": {
+          "Texas": 0.2186,
+          "Florida": 0.173,
+          "California": 0.1603
+        },
+        "data_quality": {
+          "months_covered": 12,
+          "keyword_count": 1,
+          "google_trends_index_range_check": true
+        },
+        "source_health": {
+          "topics_expected": [
+            "demand",
+            "platform",
+            "promo",
+            "weather"
+          ],
+          "topics_covered": [
+            "demand",
+            "platform",
+            "promo",
+            "weather"
+          ],
+          "source_count": 4,
+          "coverage_ratio": 1.0,
+          "average_confidence_score": 0.9,
+          "fresh_source_ratio": 1.0,
+          "staleness_score": 0.9321
+        },
+        "event_analysis": {
+          "event_count": 4,
+          "event_sensitivity_score": 0.1328,
+          "event_effects": [
+            {
+              "event_id": "EVT-001",
+              "event_name": "Hurricane Preparedness Season",
+              "event_month": "2025-06",
+              "severity": 0.8,
+              "expected_direction": "up",
+              "interest": 88.0,
+              "baseline_interest": 80.73,
+              "normalized_impact": 0.0901
+            },
+            {
+              "event_id": "EVT-002",
+              "event_name": "Black Friday",
+              "event_month": "2025-11",
+              "severity": 0.9,
+              "expected_direction": "up",
+              "interest": 79.0,
+              "baseline_interest": 81.55,
+              "normalized_impact": -0.0312
+            },
+            {
+              "event_id": "EVT-003",
+              "event_name": "Prime Day",
+              "event_month": "2025-07",
+              "severity": 0.7,
+              "expected_direction": "up",
+              "interest": 96.0,
+              "baseline_interest": 80.0,
+              "normalized_impact": 0.2
+            },
+            {
+              "event_id": "EVT-004",
+              "event_name": "Regional Storm Outages",
+              "event_month": "2025-09",
+              "severity": 0.6,
+              "expected_direction": "up",
+              "interest": 91.0,
+              "baseline_interest": 80.45,
+              "normalized_impact": 0.1311
+            }
+          ]
+        },
+        "demand_strength_score": 0.607,
+        "demand_stability_score": 0.7018,
+        "threshold_coverage_ratio": 0.5,
+        "gate_results": {
+          "demand_stability_score": true,
+          "event_sensitivity_score": true
+        },
+        "failed_rules": [],
+        "lag_analysis": {
+          "best_lag_months": null,
+          "best_lag_correlation": null,
+          "candidate_lags": []
+        },
+        "advanced_time_series": {
+          "spectral_features": {
+            "observation_count": 12,
+            "dominant_period": 12.0,
+            "dominant_power_share": 0.8263,
+            "spectral_entropy": 0.3602,
+            "seasonality_confidence_score": 0.5287,
+            "top_periods": [
+              {
+                "period": 12.0,
+                "power_share": 0.8263
+              },
+              {
+                "period": 6.0,
+                "power_share": 0.1163
+              },
+              {
+                "period": 2.4,
+                "power_share": 0.0234
+              }
+            ]
+          },
+          "shannon_entropy": 0.9728,
+          "approximate_entropy": 0.0953,
+          "signal_regime": "seasonal"
+        }
+      }
+    },
+    "1.2": {
+      "id": "1.2",
+      "title": "客户画像分析",
+      "required_tables": [
+        "customer_segments"
+      ],
+      "metric_ids": [
+        "customer_distribution"
+      ],
+      "granularity": {
+        "analysis_grain": "segment bucket",
+        "entity_grain": "customer segment",
+        "time_grain": "study window"
+      },
+      "channel_scope": [
+        "marketwide"
+      ],
+      "master_data_ref": [
+        "mdm.customer_segment"
+      ],
+      "evidence_ref": [
+        "evidence.customer_segments"
+      ],
+      "rule_ref": [
+        "gate.customer_fit"
+      ],
+      "gate_result": {
+        "status": "not_applicable",
+        "source": "",
+        "raw_value": "",
+        "failed_items": []
+      },
+      "data_quality": {
+        "record_counts": {
+          "customer_segments": 14
+        },
+        "available_tables": [
+          "customer_segments"
+        ],
+        "missing_tables": [],
+        "completeness_ratio": 1.0,
+        "richness_ratio": 1.0,
+        "quality_score": 1.0,
+        "quality_level": "high"
+      },
+      "confidence": {
+        "score": 1.0,
+        "level": "high"
+      },
+      "metrics": {
+        "dimensions": {
+          "age": {
+            "distribution": [
+              {
+                "value": "35-44",
+                "count": 260,
+                "share": 0.4
+              },
+              {
+                "value": "45-54",
+                "count": 210,
+                "share": 0.3231
+              },
+              {
+                "value": "25-34",
+                "count": 180,
+                "share": 0.2769
+              }
+            ],
+            "sample_size": 650,
+            "top_segment": "35-44",
+            "top_segment_share": 0.4,
+            "segment_concentration_hhi": 3410.67
+          },
+          "gender": {
+            "distribution": [
+              {
+                "value": "male",
+                "count": 470,
+                "share": 0.7231
+              },
+              {
+                "value": "female",
+                "count": 180,
+                "share": 0.2769
+              }
+            ],
+            "sample_size": 650,
+            "top_segment": "male",
+            "top_segment_share": 0.7231,
+            "segment_concentration_hhi": 5995.47
+          },
+          "income": {
+            "distribution": [
+              {
+                "value": "$75k-$100k",
+                "count": 240,
+                "share": 0.3692
+              },
+              {
+                "value": "$100k+",
+                "count": 220,
+                "share": 0.3385
+              },
+              {
+                "value": "$50k-$75k",
+                "count": 190,
+                "share": 0.2923
+              }
+            ],
+            "sample_size": 650,
+            "top_segment": "$75k-$100k",
+            "top_segment_share": 0.3692,
+            "segment_concentration_hhi": 3363.3
+          },
+          "scenario": {
+            "distribution": [
+              {
+                "value": "Home Backup",
+                "count": 300,
+                "share": 0.4615
+              },
+              {
+                "value": "Outdoor Recreation",
+                "count": 220,
+                "share": 0.3385
+              },
+              {
+                "value": "Preparedness",
+                "count": 130,
+                "share": 0.2
+              }
+            ],
+            "sample_size": 650,
+            "top_segment": "Home Backup",
+            "top_segment_share": 0.4615,
+            "segment_concentration_hhi": 3675.65
+          },
+          "decision_factor": {
+            "distribution": [
+              {
+                "value": "Reliability",
+                "count": 280,
+                "share": 0.4308
+              },
+              {
+                "value": "Runtime",
+                "count": 210,
+                "share": 0.3231
+              },
+              {
+                "value": "Price",
+                "count": 160,
+                "share": 0.2462
+              }
+            ],
+            "sample_size": 650,
+            "top_segment": "Reliability",
+            "top_segment_share": 0.4308,
+            "segment_concentration_hhi": 3505.97
+          }
+        },
+        "customer_fit_score": 0.4769,
+        "persona_confidence_score": 1.0,
+        "persona_concentration_score": 0.8013
+      }
+    },
+    "1.3": {
+      "id": "1.3",
+      "title": "市场规模分析",
+      "required_tables": [
+        "listings",
+        "market_size_inputs",
+        "source_registry",
+        "part1_threshold_registry",
+        "market_destination_registry",
+        "consumer_habit_vectors",
+        "region_weight_profiles"
+      ],
+      "metric_ids": [
+        "bottom_up_market_size",
+        "top_down_market_size",
+        "market_size_reference_panel",
+        "market_hhi",
+        "market_attractiveness_factor",
+        "market_structure_factor"
+      ],
+      "granularity": {
+        "analysis_grain": "listing sample / market panel row",
+        "entity_grain": "market segment",
+        "time_grain": "annualized window"
+      },
+      "channel_scope": [
+        "Amazon",
+        "eBay",
+        "TikTok Shop",
+        "Walmart"
+      ],
+      "master_data_ref": [
+        "mdm.sku",
+        "mdm.price_metric"
+      ],
+      "evidence_ref": [
+        "evidence.listings",
+        "evidence.market_size_inputs",
+        "evidence.source_registry"
+      ],
+      "rule_ref": [
+        "gate.market_entry",
+        "gate.market_scale",
+        "gate.market_attractiveness"
+      ],
+      "gate_result": {
+        "status": "not_applicable",
+        "source": "",
+        "raw_value": "",
+        "failed_items": []
+      },
+      "data_quality": {
+        "record_counts": {
+          "listings": 8,
+          "market_size_inputs": 2,
+          "source_registry": 5,
+          "part1_threshold_registry": 4,
+          "market_destination_registry": 10,
+          "consumer_habit_vectors": 10,
+          "region_weight_profiles": 10
+        },
+        "available_tables": [
+          "listings",
+          "market_size_inputs",
+          "source_registry",
+          "part1_threshold_registry",
+          "market_destination_registry",
+          "consumer_habit_vectors",
+          "region_weight_profiles"
+        ],
+        "missing_tables": [],
+        "completeness_ratio": 1.0,
+        "richness_ratio": 1.0,
+        "quality_score": 1.0,
+        "quality_level": "high"
+      },
+      "confidence": {
+        "score": 1.0,
+        "level": "high"
+      },
+      "metrics": {
+        "top_down": {
+          "tam": 95000000.0,
+          "online_market": 45600000.0,
+          "sam": 26448000.0,
+          "serviceable_import_market": 26448000.0,
+          "som": 793440.0
+        },
+        "bottom_up": {
+          "sample_monthly_gmv_raw": 616275.0,
+          "sample_monthly_gmv": 611217.5,
+          "estimated_total_monthly_gmv": 2182919.64,
+          "estimated_annual_market_size": 26195035.71,
+          "weighted_average_list_price": 304.47,
+          "median_list_price": 319.0,
+          "winsorized_sales_caps": {
+            "lower_cap": 110.75,
+            "upper_cap": 392.5
+          },
+          "brand_market_share": {
+            "BrandA": 0.4146,
+            "BrandB": 0.2941,
+            "WhiteLabelX": 0.0995,
+            "PremiumD": 0.0931,
+            "BrandC": 0.0502,
+            "WhiteLabelY": 0.0485
+          },
+          "platform_market_share": {
+            "Amazon": 0.7928,
+            "Walmart": 0.1085,
+            "eBay": 0.0502,
+            "TikTok Shop": 0.0485
+          },
+          "top3_concentration_ratio": 0.8082,
+          "top5_concentration_ratio": 0.9515,
+          "hhi": 2818.06,
+          "concentration_level": "highly_concentrated",
+          "sample_coverage": 0.28,
+          "data_quality": {
+            "listing_count": 8,
+            "review_coverage_rate": 1.0,
+            "rating_coverage_rate": 1.0,
+            "winsorization_ratio": 0.0082
+          }
+        },
+        "market_size_inputs": {
+          "rows": [
+            {
+              "market_segment": "portable_generators_na",
+              "tam": 98000000.0,
+              "sam": 27244000.0,
+              "som": 817320.0,
+              "ecommerce_penetration": 0.49,
+              "importable_share": 0.567,
+              "cagr": 0.082,
+              "source": "Statista_2025",
+              "confidence_grade": "A",
+              "waterfall_valid": true,
+              "implied_sam_gap_ratio": 0.0006
+            },
+            {
+              "market_segment": "portable_generators_ecommerce",
+              "tam": 94000000.0,
+              "sam": 25584000.0,
+              "som": 767520.0,
+              "ecommerce_penetration": 0.47,
+              "importable_share": 0.579,
+              "cagr": 0.076,
+              "source": "IBISWorld_2025",
+              "confidence_grade": "B",
+              "waterfall_valid": true,
+              "implied_sam_gap_ratio": 0.0001
+            }
+          ],
+          "reference_panel": {
+            "average_tam": 96000000.0,
+            "average_sam": 26414000.0,
+            "average_som": 792420.0,
+            "average_cagr": 0.079
+          },
+          "confidence_mix": {
+            "A": 0.5,
+            "B": 0.5
+          },
+          "consistency_ratio": 1.0,
+          "average_implied_sam_gap_ratio": 0.0004,
+          "assumption_vs_reference_gap_ratio": 0.0013,
+          "average_confidence_score": 0.9,
+          "source_health": {
+            "topics_expected": [
+              "marketsize"
+            ],
+            "topics_covered": [
+              "marketsize"
+            ],
+            "source_count": 1,
+            "coverage_ratio": 1.0,
+            "average_confidence_score": 0.8,
+            "fresh_source_ratio": 1.0,
+            "staleness_score": 0.9944
+          },
+          "market_attractiveness_factor": 0.7769,
+          "market_structure_factor": 0.9989,
+          "sizing_confidence_band": {
+            "lower": 26379661.8,
+            "mid": 26414000.0,
+            "upper": 26448338.2
+          },
+          "threshold_coverage_ratio": 0.25,
+          "gate_results": {
+            "market_attractiveness_factor": true
+          },
+          "failed_rules": []
+        },
+        "triangulation": {
+          "top_down_vs_bottom_up_gap_ratio": 0.0096
+        }
+      }
+    },
+    "1.4": {
+      "id": "1.4",
+      "title": "购买渠道分析",
+      "required_tables": [
+        "channels",
+        "channel_benchmarks",
+        "source_registry",
+        "part1_threshold_registry"
+      ],
+      "metric_ids": [
+        "channel_share",
+        "channel_conversion_rate",
+        "channel_benchmark_gap",
+        "channel_efficiency_factor",
+        "channel_risk_factor",
+        "channel_dependency_score"
+      ],
+      "granularity": {
+        "analysis_grain": "channel",
+        "entity_grain": "channel",
+        "time_grain": "analysis window"
+      },
+      "channel_scope": [
+        "DTC",
+        "Amazon",
+        "TikTok Shop",
+        "eBay",
+        "Walmart",
+        "B2B"
+      ],
+      "master_data_ref": [
+        "mdm.channel"
+      ],
+      "evidence_ref": [
+        "evidence.channel_metrics",
+        "evidence.channel_benchmarks",
+        "evidence.source_registry"
+      ],
+      "rule_ref": [
+        "gate.channel_selection",
+        "gate.channel_dependency"
+      ],
+      "gate_result": {
+        "status": "fail",
+        "source": "gate_results",
+        "raw_value": {
+          "channel_dependency_score": false
+        },
+        "failed_items": [
+          "channel_dependency_score"
+        ]
+      },
+      "data_quality": {
+        "record_counts": {
+          "channels": 5,
+          "channel_benchmarks": 4,
+          "source_registry": 5,
+          "part1_threshold_registry": 4
+        },
+        "available_tables": [
+          "channels",
+          "channel_benchmarks",
+          "source_registry",
+          "part1_threshold_registry"
+        ],
+        "missing_tables": [],
+        "completeness_ratio": 1.0,
+        "richness_ratio": 1.0,
+        "quality_score": 1.0,
+        "quality_level": "high"
+      },
+      "confidence": {
+        "score": 1.0,
+        "level": "high"
+      },
+      "metrics": {
+        "totals": {
+          "revenue": 7584000.0,
+          "visits": 341000,
+          "orders": 27360,
+          "ad_spend": 865000.0,
+          "overall_conversion_rate": 0.0802,
+          "overall_average_order_value": 277.19,
+          "overall_roas": 8.77,
+          "benchmark_coverage_ratio": 0.8,
+          "over_benchmark_channel_ratio": 1.0
+        },
+        "channels": [
+          {
+            "channel": "Amazon",
+            "visits": 150000,
+            "orders": 18200,
+            "revenue": 5120000.0,
+            "ad_spend": 620000.0,
+            "traffic_share": 0.4399,
+            "order_share": 0.6652,
+            "revenue_share": 0.6751,
+            "conversion_rate": 0.1213,
+            "average_order_value": 281.32,
+            "revenue_per_visit": 34.13,
+            "roas": 8.26,
+            "cost_per_order": 34.07,
+            "efficiency_index": 1.5347,
+            "net_revenue_after_ads": 4500000.0,
+            "benchmark_conversion_rate": 0.11,
+            "benchmark_average_order_value": 270.0,
+            "benchmark_roas": 7.5,
+            "benchmark_cac": 35.0,
+            "conversion_rate_gap": 0.1027,
+            "average_order_value_gap": 0.0419,
+            "roas_gap": 0.1013,
+            "cac_gap": 0.0266,
+            "benchmark_status": "above_benchmark"
+          },
+          {
+            "channel": "Offline Dealers",
+            "visits": 0,
+            "orders": 2400,
+            "revenue": 980000.0,
+            "ad_spend": 0.0,
+            "traffic_share": 0.0,
+            "order_share": 0.0877,
+            "revenue_share": 0.1292,
+            "conversion_rate": null,
+            "average_order_value": 408.33,
+            "revenue_per_visit": null,
+            "roas": null,
+            "cost_per_order": null,
+            "efficiency_index": null,
+            "net_revenue_after_ads": 980000.0,
+            "benchmark_conversion_rate": null,
+            "benchmark_average_order_value": null,
+            "benchmark_roas": null,
+            "benchmark_cac": null,
+            "conversion_rate_gap": null,
+            "average_order_value_gap": null,
+            "roas_gap": null,
+            "cac_gap": null,
+            "benchmark_status": "unbenchmarked"
+          },
+          {
+            "channel": "Independent Site",
+            "visits": 88000,
+            "orders": 1760,
+            "revenue": 604000.0,
+            "ad_spend": 132000.0,
+            "traffic_share": 0.2581,
+            "order_share": 0.0643,
+            "revenue_share": 0.0796,
+            "conversion_rate": 0.02,
+            "average_order_value": 343.18,
+            "revenue_per_visit": 6.86,
+            "roas": 4.58,
+            "cost_per_order": 75.0,
+            "efficiency_index": 0.3086,
+            "net_revenue_after_ads": 472000.0,
+            "benchmark_conversion_rate": 0.018,
+            "benchmark_average_order_value": 320.0,
+            "benchmark_roas": 4.2,
+            "benchmark_cac": 75.0,
+            "conversion_rate_gap": 0.1111,
+            "average_order_value_gap": 0.0724,
+            "roas_gap": 0.0905,
+            "cac_gap": 0.0,
+            "benchmark_status": "above_benchmark"
+          },
+          {
+            "channel": "eBay",
+            "visits": 42000,
+            "orders": 2100,
+            "revenue": 498000.0,
+            "ad_spend": 38000.0,
+            "traffic_share": 0.1232,
+            "order_share": 0.0768,
+            "revenue_share": 0.0657,
+            "conversion_rate": 0.05,
+            "average_order_value": 237.14,
+            "revenue_per_visit": 11.86,
+            "roas": 13.11,
+            "cost_per_order": 18.1,
+            "efficiency_index": 0.5331,
+            "net_revenue_after_ads": 460000.0,
+            "benchmark_conversion_rate": 0.045,
+            "benchmark_average_order_value": 220.0,
+            "benchmark_roas": 6.5,
+            "benchmark_cac": 22.0,
+            "conversion_rate_gap": 0.1111,
+            "average_order_value_gap": 0.0779,
+            "roas_gap": 1.0169,
+            "cac_gap": 0.1773,
+            "benchmark_status": "above_benchmark"
+          },
+          {
+            "channel": "TikTok Shop",
+            "visits": 61000,
+            "orders": 2900,
+            "revenue": 382000.0,
+            "ad_spend": 75000.0,
+            "traffic_share": 0.1789,
+            "order_share": 0.106,
+            "revenue_share": 0.0504,
+            "conversion_rate": 0.0475,
+            "average_order_value": 131.72,
+            "revenue_per_visit": 6.26,
+            "roas": 5.09,
+            "cost_per_order": 25.86,
+            "efficiency_index": 0.2816,
+            "net_revenue_after_ads": 307000.0,
+            "benchmark_conversion_rate": 0.04,
+            "benchmark_average_order_value": 125.0,
+            "benchmark_roas": 4.5,
+            "benchmark_cac": 28.0,
+            "conversion_rate_gap": 0.1875,
+            "average_order_value_gap": 0.0538,
+            "roas_gap": 0.1311,
+            "cac_gap": 0.0764,
+            "benchmark_status": "above_benchmark"
+          }
+        ],
+        "source_health": {
+          "topics_expected": [
+            "platform",
+            "promo"
+          ],
+          "topics_covered": [
+            "platform",
+            "promo"
+          ],
+          "source_count": 2,
+          "coverage_ratio": 1.0,
+          "average_confidence_score": 0.8,
+          "fresh_source_ratio": 1.0,
+          "staleness_score": 0.9833
+        },
+        "channel_dependency_score": 0.6751,
+        "channel_efficiency_factor": 0.8708,
+        "channel_risk_factor": 0.3749,
+        "threshold_coverage_ratio": 0.25,
+        "gate_results": {
+          "channel_dependency_score": false
+        },
+        "failed_rules": [
+          {
+            "gate_id": "GATE-P1-003",
+            "gate_name": "market_entry",
+            "metric_name": "channel_dependency_score",
+            "operator": "<=",
+            "threshold_value": 0.65,
+            "observed_value": 0.6751,
+            "decision_if_fail": "review"
+          }
+        ]
+      }
+    },
+    "1.5": {
+      "id": "1.5",
+      "title": "货架商品价格分析",
+      "required_tables": [
+        "listings"
+      ],
+      "metric_ids": [
+        "listed_price_bands",
+        "brand_premium"
+      ],
+      "granularity": {
+        "analysis_grain": "listing",
+        "entity_grain": "sku x platform",
+        "time_grain": "snapshot window"
+      },
+      "channel_scope": [
+        "Amazon",
+        "eBay",
+        "TikTok Shop",
+        "Walmart"
+      ],
+      "master_data_ref": [
+        "mdm.sku",
+        "mdm.price_metric"
+      ],
+      "evidence_ref": [
+        "evidence.listings"
+      ],
+      "rule_ref": [
+        "gate.price_band_fit"
+      ],
+      "gate_result": {
+        "status": "not_applicable",
+        "source": "",
+        "raw_value": "",
+        "failed_items": []
+      },
+      "data_quality": {
+        "record_counts": {
+          "listings": 8
+        },
+        "available_tables": [
+          "listings"
+        ],
+        "missing_tables": [],
+        "completeness_ratio": 1.0,
+        "richness_ratio": 1.0,
+        "quality_score": 1.0,
+        "quality_level": "high"
+      },
+      "confidence": {
+        "score": 1.0,
+        "level": "high"
+      },
+      "metrics": {
+        "price_summary": {
+          "min_price": 129.0,
+          "p10_price": 157.0,
+          "q1_price": 206.5,
+          "median_price": 319.0,
+          "q3_price": 411.5,
+          "p90_price": 494.0,
+          "max_price": 599.0,
+          "average_price": 325.25,
+          "weighted_average_price": 304.33
+        },
+        "outlier_analysis": {
+          "method": "tukey_iqr_fences_1.5_3.0",
+          "fences": {
+            "lower_inner": -101.0,
+            "upper_inner": 719.0,
+            "lower_outer": -408.5,
+            "upper_outer": 1026.5
+          },
+          "counts": {
+            "mild_count": 0,
+            "extreme_count": 0
+          }
+        },
+        "price_band_share": {
+          "budget": 0.25,
+          "mass": 0.25,
+          "premium": 0.25,
+          "upper_mid": 0.25
+        },
+        "sales_weighted_price_band_share": {
+          "budget": 0.2914,
+          "mass": 0.2716,
+          "premium": 0.1852,
+          "upper_mid": 0.2519
+        },
+        "brand_premium": {
+          "PremiumD": 0.8777,
+          "BrandA": 0.3292,
+          "BrandB": 0.0,
+          "BrandC": -0.3135,
+          "WhiteLabelX": -0.4702,
+          "WhiteLabelY": -0.5956
+        },
+        "price_rating_correlation": 0.9475
+      }
+    },
+    "1.6": {
+      "id": "1.6",
+      "title": "实际成交价格分析",
+      "required_tables": [
+        "transactions"
+      ],
+      "metric_ids": [
+        "average_transaction_price",
+        "average_discount_rate",
+        "price_elasticity",
+        "price_realization_factor"
+      ],
+      "granularity": {
+        "analysis_grain": "transaction row",
+        "entity_grain": "sku x platform",
+        "time_grain": "transaction date"
+      },
+      "channel_scope": [
+        "Amazon",
+        "eBay",
+        "TikTok Shop",
+        "Walmart"
+      ],
+      "master_data_ref": [
+        "mdm.sku",
+        "mdm.price_metric",
+        "mdm.channel"
+      ],
+      "evidence_ref": [
+        "evidence.transactions"
+      ],
+      "rule_ref": [
+        "gate.price_realization"
+      ],
+      "gate_result": {
+        "status": "not_applicable",
+        "source": "",
+        "raw_value": "",
+        "failed_items": []
+      },
+      "data_quality": {
+        "record_counts": {
+          "transactions": 16
+        },
+        "available_tables": [
+          "transactions"
+        ],
+        "missing_tables": [],
+        "completeness_ratio": 1.0,
+        "richness_ratio": 1.0,
+        "quality_score": 1.0,
+        "quality_level": "high"
+      },
+      "confidence": {
+        "score": 1.0,
+        "level": "high"
+      },
+      "metrics": {
+        "total_units": 1985,
+        "total_gmv": 539297.0,
+        "average_list_price": 305.28,
+        "average_actual_price": 271.69,
+        "median_actual_price": 289.0,
+        "weighted_median_actual_price": 279.0,
+        "price_realization_rate": 0.89,
+        "average_discount_rate": 0.1122,
+        "transaction_price_band_share": {
+          "budget": 0.2816,
+          "mass": 0.2761,
+          "premium": 0.1008,
+          "upper_mid": 0.3416
+        },
+        "outlier_analysis": {
+          "method": "tukey_iqr_fences_1.5_3.0",
+          "fences": {
+            "lower_inner": -114.75,
+            "upper_inner": 675.25,
+            "lower_outer": -411.0,
+            "upper_outer": 971.5
+          },
+          "counts": {
+            "mild_count": 0,
+            "extreme_count": 0
+          }
+        },
+        "elasticity_method": "midpoint_absolute",
+        "average_price_elasticity": 3.4282,
+        "elasticity_consistency_ratio": 1.0,
+        "elasticity_observation_count": 8,
+        "elasticity_by_sku": {
+          "GEN-001": 3.1974,
+          "GEN-002": 3.7292,
+          "GEN-003": 3.08,
+          "GEN-004": 3.9932,
+          "GEN-005": 2.4988,
+          "GEN-006": 4.5215,
+          "GEN-007": 2.871,
+          "GEN-008": 5.49
+        },
+        "elasticity_pairs": [
+          {
+            "sku_id": "GEN-001",
+            "start_date": "2025-06-01",
+            "end_date": "2025-11-25",
+            "price_change_rate": -0.1412,
+            "volume_change_rate": 0.4516,
+            "elasticity": 3.1974,
+            "directionally_consistent": true
+          },
+          {
+            "sku_id": "GEN-002",
+            "start_date": "2025-06-01",
+            "end_date": "2025-11-25",
+            "price_change_rate": -0.1238,
+            "volume_change_rate": 0.4615,
+            "elasticity": 3.7292,
+            "directionally_consistent": true
+          },
+          {
+            "sku_id": "GEN-003",
+            "start_date": "2025-06-01",
+            "end_date": "2025-11-25",
+            "price_change_rate": -0.1136,
+            "volume_change_rate": 0.35,
+            "elasticity": 3.08,
+            "directionally_consistent": true
+          },
+          {
+            "sku_id": "GEN-004",
+            "start_date": "2025-06-01",
+            "end_date": "2025-11-25",
+            "price_change_rate": -0.0812,
+            "volume_change_rate": 0.3243,
+            "elasticity": 3.9932,
+            "directionally_consistent": true
+          },
+          {
+            "sku_id": "GEN-005",
+            "start_date": "2025-06-01",
+            "end_date": "2025-11-25",
+            "price_change_rate": -0.1342,
+            "volume_change_rate": 0.3354,
+            "elasticity": 2.4988,
+            "directionally_consistent": true
+          },
+          {
+            "sku_id": "GEN-006",
+            "start_date": "2025-06-01",
+            "end_date": "2025-11-25",
+            "price_change_rate": -0.0877,
+            "volume_change_rate": 0.3966,
+            "elasticity": 4.5215,
+            "directionally_consistent": true
+          },
+          {
+            "sku_id": "GEN-007",
+            "start_date": "2025-06-01",
+            "end_date": "2025-11-25",
+            "price_change_rate": -0.1254,
+            "volume_change_rate": 0.36,
+            "elasticity": 2.871,
+            "directionally_consistent": true
+          },
+          {
+            "sku_id": "GEN-008",
+            "start_date": "2025-06-01",
+            "end_date": "2025-11-25",
+            "price_change_rate": -0.0729,
+            "volume_change_rate": 0.4,
+            "elasticity": 5.49,
+            "directionally_consistent": true
+          }
+        ],
+        "price_realization_factor": 0.5596,
+        "elasticity_reliability_score": 1.0,
+        "discount_dependency_score": 0.4488
+      }
+    }
+  },
+  "uncertainty": {
+    "market_size": {
+      "annual_market_size": {
+        "point_estimate": 26195035.71,
+        "ci_lower": 16959010.72,
+        "ci_upper": 34546644.64,
+        "iterations": 400,
+        "alpha": 0.05
+      },
+      "weighted_average_list_price": {
+        "point_estimate": 304.47,
+        "ci_lower": 224.57,
+        "ci_upper": 381.56,
+        "iterations": 400,
+        "alpha": 0.05
+      }
+    },
+    "transactions": {
+      "average_actual_price": {
+        "point_estimate": 271.69,
+        "ci_lower": 220.36,
+        "ci_upper": 329.55,
+        "iterations": 400,
+        "alpha": 0.05
+      },
+      "average_discount_rate": {
+        "point_estimate": 0.1122,
+        "ci_lower": 0.0793,
+        "ci_upper": 0.1389,
+        "iterations": 400,
+        "alpha": 0.05
+      },
+      "average_price_elasticity": {
+        "point_estimate": 3.4282,
+        "ci_lower": 2.8314,
+        "ci_upper": 4.5223,
+        "iterations": 400,
+        "alpha": 0.05
+      }
+    },
+    "listed_price_median": {
+      "statistic": "median",
+      "point_estimate": 319.0,
+      "ci_lower": 194.0,
+      "ci_upper": 449.0,
+      "iterations": 500,
+      "alpha": 0.05
+    }
+  },
+  "validation": {
+    "summary": {
+      "pass_count": 16,
+      "review_count": 0,
+      "fail_count": 0
+    },
+    "checks": [
+      {
+        "check_id": "google_trends_relative_scale",
+        "status": "pass",
+        "source": {
+          "label": "Google Trends Help",
+          "url": "https://support.google.com/trends/answer/4365533"
+        },
+        "method": "Demand metrics use Google Trends style 0-100 relative index values in one comparison window.",
+        "evidence": {
+          "min_interest": 68.0,
+          "max_interest": 96.0,
+          "missing_input": false
+        }
+      },
+      {
+        "check_id": "regional_share_integrity",
+        "status": "pass",
+        "source": {
+          "label": "Google Trends Help",
+          "url": "https://support.google.com/trends/answer/4365533"
+        },
+        "method": "Regional demand shares should reconcile back to 100% of the modeled regional demand pool.",
+        "evidence": {
+          "regional_share_sum": 1.0,
+          "missing_input": false
+        }
+      },
+      {
+        "check_id": "demand_source_freshness",
+        "status": "pass",
+        "source": {
+          "label": "Google Trends Help",
+          "url": "https://support.google.com/trends/answer/4365533"
+        },
+        "method": "Demand-side evidence should maintain active and fresh source coverage across demand, promo, platform and weather topics.",
+        "evidence": {
+          "coverage_ratio": 1.0,
+          "fresh_source_ratio": 1.0,
+          "staleness_score": 0.9321,
+          "missing_input": false
+        }
+      },
+      {
+        "check_id": "demand_threshold_binding",
+        "status": "pass",
+        "source": {
+          "label": "Google Trends Help",
+          "url": "https://support.google.com/trends/answer/4365533"
+        },
+        "method": "Demand section should bind at least one registered threshold so the section can be consumed by a market-entry gate.",
+        "evidence": {
+          "threshold_coverage_ratio": 0.5,
+          "gate_results": {
+            "demand_stability_score": true,
+            "event_sensitivity_score": true
+          }
+        }
+      },
+      {
+        "check_id": "market_concentration_thresholds",
+        "status": "pass",
+        "source": {
+          "label": "U.S. DOJ and FTC Merger Guidelines",
+          "url": "https://www.justice.gov/atr/merger-guidelines"
+        },
+        "method": "Market concentration classification uses current DOJ/FTC HHI thresholds.",
+        "evidence": {
+          "hhi": 2818.06,
+          "expected_level": "highly_concentrated",
+          "reported_level": "highly_concentrated"
+        }
+      },
+      {
+        "check_id": "market_size_triangulation_gap",
+        "status": "pass",
+        "source": {
+          "label": "Umbrex - How to Estimate Market Size using Bottom-Up Analysis",
+          "url": "https://umbrex.com/resources/market-sizing-playbook/how-to-estimate-market-size/how-to-estimate-market-size-using-bottom-up-analysis/"
+        },
+        "method": "Top-down and bottom-up estimates are triangulated; gaps above 15% require review rather than blind acceptance.",
+        "evidence": {
+          "top_down_sam": 26448000.0,
+          "bottom_up_annual_market_size": 26195035.71,
+          "gap_ratio": 0.0096
+        }
+      },
+      {
+        "check_id": "market_size_dual_method_presence",
+        "status": "pass",
+        "source": {
+          "label": "HolonIQ - Market Sizing 101",
+          "url": "https://www.holoniq.com/notes/market-sizing-101"
+        },
+        "method": "Market sizing keeps both top-down and bottom-up estimates instead of relying on one side only.",
+        "evidence": {
+          "has_top_down": true,
+          "has_bottom_up": true
+        }
+      },
+      {
+        "check_id": "market_size_reference_panel_consistency",
+        "status": "pass",
+        "source": {
+          "label": "HolonIQ - Market Sizing 101",
+          "url": "https://www.holoniq.com/notes/market-sizing-101"
+        },
+        "method": "Explicit TAM/SAM/SOM reference rows should preserve the TAM>=SAM>=SOM waterfall and bounded penetration assumptions.",
+        "evidence": {
+          "consistency_ratio": 1.0,
+          "assumption_vs_reference_gap_ratio": 0.0013,
+          "missing_input": false
+        }
+      },
+      {
+        "check_id": "market_size_threshold_binding",
+        "status": "pass",
+        "source": {
+          "label": "HolonIQ - Market Sizing 101",
+          "url": "https://www.holoniq.com/notes/market-sizing-101"
+        },
+        "method": "Market sizing should expose registered thresholds for attractiveness or scale rather than only descriptive outputs.",
+        "evidence": {
+          "threshold_coverage_ratio": 0.25,
+          "failed_rules": []
+        }
+      },
+      {
+        "check_id": "market_size_winsorization_sanity",
+        "status": "pass",
+        "source": {
+          "label": "NIST/SEMATECH e-Handbook of Statistical Methods",
+          "url": "https://www.itl.nist.gov/div898/handbook/prc/section1/prc16.htm"
+        },
+        "method": "Winsorized bottom-up GMV should not exceed the raw sample GMV when used to reduce estimator spikes.",
+        "evidence": {
+          "raw_sample_monthly_gmv": 616275.0,
+          "adjusted_sample_monthly_gmv": 611217.5
+        }
+      },
+      {
+        "check_id": "conversion_rate_formula",
+        "status": "pass",
+        "source": {
+          "label": "Google Ads Help - About conversion tracking",
+          "url": "https://support.google.com/google-ads/answer/1722022"
+        },
+        "method": "Conversion rate is modeled as orders divided by visits/interactions.",
+        "evidence": {
+          "channel": "Amazon",
+          "conversion_rate": 0.1213,
+          "missing_input": false
+        }
+      },
+      {
+        "check_id": "roas_formula",
+        "status": "pass",
+        "source": {
+          "label": "Google Ads Help - About target ROAS bidding",
+          "url": "https://support.google.com/google-ads/answer/6268637"
+        },
+        "method": "ROAS is modeled as revenue divided by ad spend.",
+        "evidence": {
+          "channel": "Amazon",
+          "roas": 8.26,
+          "missing_input": false
+        }
+      },
+      {
+        "check_id": "channel_benchmark_gap_formula",
+        "status": "pass",
+        "source": {
+          "label": "Google Ads Help - About conversion tracking",
+          "url": "https://support.google.com/google-ads/answer/1722022"
+        },
+        "method": "Channel benchmark gap is modeled as actual conversion divided by benchmark conversion minus one.",
+        "evidence": {
+          "channel": "Amazon",
+          "conversion_rate_gap": 0.1027,
+          "missing_input": false
+        }
+      },
+      {
+        "check_id": "channel_threshold_binding",
+        "status": "pass",
+        "source": {
+          "label": "Google Ads Help - About conversion tracking",
+          "url": "https://support.google.com/google-ads/answer/1722022"
+        },
+        "method": "Channel analysis should bind dependency or concentration thresholds before flowing into channel-selection decisions.",
+        "evidence": {
+          "threshold_coverage_ratio": 0.25,
+          "channel_dependency_score": 0.6751,
+          "failed_rules": [
+            {
+              "gate_id": "GATE-P1-003",
+              "gate_name": "market_entry",
+              "metric_name": "channel_dependency_score",
+              "operator": "<=",
+              "threshold_value": 0.65,
+              "observed_value": 0.6751,
+              "decision_if_fail": "review"
+            }
+          ]
+        }
+      },
+      {
+        "check_id": "price_outlier_method",
+        "status": "pass",
+        "source": {
+          "label": "NIST/SEMATECH e-Handbook of Statistical Methods",
+          "url": "https://www.itl.nist.gov/div898/handbook/prc/section1/prc16.htm"
+        },
+        "method": "Price outlier handling uses IQR/Tukey fences before distribution analysis.",
+        "evidence": {
+          "listed_price_method": "tukey_iqr_fences_1.5_3.0",
+          "transaction_price_method": "tukey_iqr_fences_1.5_3.0"
+        }
+      },
+      {
+        "check_id": "price_elasticity_method",
+        "status": "pass",
+        "source": {
+          "label": "OpenStax - Price Elasticity of Demand and Price Elasticity of Supply",
+          "url": "https://openstax.org/books/principles-economics-3e/pages/5-1-price-elasticity-of-demand-and-price-elasticity-of-supply"
+        },
+        "method": "Price elasticity uses the midpoint method to reduce base-point bias.",
+        "evidence": {
+          "elasticity_method": "midpoint_absolute",
+          "elasticity_consistency_ratio": 1.0
+        }
+      }
+    ]
+  },
+  "factor_snapshots": {
+    "FAC-MARKET-ATTRACT": {
+      "label": "市场吸引力因子",
+      "value": 0.7769,
+      "source_section": "1.3"
+    },
+    "FAC-DEMAND-STABILITY": {
+      "label": "需求稳定因子",
+      "value": 0.7514,
+      "source_section": "1.1"
+    },
+    "FAC-CUSTOMER-FIT": {
+      "label": "客户匹配因子",
+      "value": 0.4769,
+      "source_section": "1.2"
+    },
+    "FAC-CHANNEL-EFFICIENCY": {
+      "label": "渠道效率因子",
+      "value": 0.8708,
+      "source_section": "1.4"
+    },
+    "FAC-CHANNEL-RISK": {
+      "label": "渠道风险因子",
+      "value": 0.3749,
+      "source_section": "1.4"
+    },
+    "FAC-PRICE-REALIZATION": {
+      "label": "价格实现因子",
+      "value": 0.5596,
+      "source_section": "1.6"
+    }
+  },
+  "part1_data_quality_log": {
+    "table_logs": [
+      {
+        "table_name": "search_trends",
+        "record_count": 12,
+        "field_missingness_rate": 0.0,
+        "freshness_days": 271.5,
+        "freshness_target_days": 45,
+        "freshness_status": "stale",
+        "outlier_rate_iqr": 0.0,
+        "proxy_dependency_ratio": 0.0,
+        "health_score": 0.75,
+        "health_level": "high"
+      },
+      {
+        "table_name": "region_demand",
+        "record_count": 7,
+        "field_missingness_rate": 0.0,
+        "freshness_days": null,
+        "freshness_target_days": 90,
+        "freshness_status": "unknown",
+        "outlier_rate_iqr": 0.0,
+        "proxy_dependency_ratio": 0.0,
+        "health_score": 0.875,
+        "health_level": "high"
+      },
+      {
+        "table_name": "customer_segments",
+        "record_count": 14,
+        "field_missingness_rate": 0.0,
+        "freshness_days": null,
+        "freshness_target_days": 90,
+        "freshness_status": "unknown",
+        "outlier_rate_iqr": 0.0714,
+        "proxy_dependency_ratio": 0.0,
+        "health_score": 0.8643,
+        "health_level": "high"
+      },
+      {
+        "table_name": "listings",
+        "record_count": 8,
+        "field_missingness_rate": 0.0,
+        "freshness_days": null,
+        "freshness_target_days": 60,
+        "freshness_status": "unknown",
+        "outlier_rate_iqr": 0.0,
+        "proxy_dependency_ratio": 0.0,
+        "health_score": 0.875,
+        "health_level": "high"
+      },
+      {
+        "table_name": "transactions",
+        "record_count": 16,
+        "field_missingness_rate": 0.0,
+        "freshness_days": 198.5,
+        "freshness_target_days": 30,
+        "freshness_status": "stale",
+        "outlier_rate_iqr": 0.0,
+        "proxy_dependency_ratio": 0.0,
+        "health_score": 0.75,
+        "health_level": "high"
+      },
+      {
+        "table_name": "channels",
+        "record_count": 5,
+        "field_missingness_rate": 0.0,
+        "freshness_days": null,
+        "freshness_target_days": 30,
+        "freshness_status": "unknown",
+        "outlier_rate_iqr": 0.15,
+        "proxy_dependency_ratio": 0.0,
+        "health_score": 0.8525,
+        "health_level": "high"
+      },
+      {
+        "table_name": "market_size_inputs",
+        "record_count": 2,
+        "field_missingness_rate": 0.0,
+        "freshness_days": null,
+        "freshness_target_days": 120,
+        "freshness_status": "unknown",
+        "outlier_rate_iqr": 0.0,
+        "proxy_dependency_ratio": 0.0,
+        "health_score": 0.875,
+        "health_level": "high"
+      },
+      {
+        "table_name": "channel_benchmarks",
+        "record_count": 4,
+        "field_missingness_rate": 0.0,
+        "freshness_days": null,
+        "freshness_target_days": 90,
+        "freshness_status": "unknown",
+        "outlier_rate_iqr": 0.125,
+        "proxy_dependency_ratio": 0.0,
+        "health_score": 0.8562,
+        "health_level": "high"
+      },
+      {
+        "table_name": "event_library",
+        "record_count": 4,
+        "field_missingness_rate": 0.2,
+        "freshness_days": 206.5,
+        "freshness_target_days": 365,
+        "freshness_status": "fresh",
+        "outlier_rate_iqr": 0.0,
+        "proxy_dependency_ratio": 0.0,
+        "health_score": 0.7686,
+        "health_level": "high"
+      },
+      {
+        "table_name": "source_registry",
+        "record_count": 5,
+        "field_missingness_rate": 0.0,
+        "freshness_days": 1,
+        "freshness_target_days": 30,
+        "freshness_status": "fresh",
+        "outlier_rate_iqr": 0.2,
+        "proxy_dependency_ratio": 0.2,
+        "health_score": 0.9317,
+        "health_level": "high"
+      },
+      {
+        "table_name": "part1_threshold_registry",
+        "record_count": 4,
+        "field_missingness_rate": 0.1,
+        "freshness_days": null,
+        "freshness_target_days": 180,
+        "freshness_status": "unknown",
+        "outlier_rate_iqr": 0.0,
+        "proxy_dependency_ratio": 0.0,
+        "health_score": 0.83,
+        "health_level": "high"
+      },
+      {
+        "table_name": "market_destination_registry",
+        "record_count": 10,
+        "field_missingness_rate": 0.0,
+        "freshness_days": null,
+        "freshness_target_days": 365,
+        "freshness_status": "unknown",
+        "outlier_rate_iqr": 0.0,
+        "proxy_dependency_ratio": 0.0,
+        "health_score": 0.875,
+        "health_level": "high"
+      },
+      {
+        "table_name": "consumer_habit_vectors",
+        "record_count": 10,
+        "field_missingness_rate": 0.0,
+        "freshness_days": 0,
+        "freshness_target_days": 180,
+        "freshness_status": "fresh",
+        "outlier_rate_iqr": 0.0,
+        "proxy_dependency_ratio": 0.0,
+        "health_score": 1.0,
+        "health_level": "high"
+      },
+      {
+        "table_name": "region_weight_profiles",
+        "record_count": 10,
+        "field_missingness_rate": 0.0,
+        "freshness_days": 0,
+        "freshness_target_days": 180,
+        "freshness_status": "fresh",
+        "outlier_rate_iqr": 0.0636,
+        "proxy_dependency_ratio": 0.0,
+        "health_score": 0.9905,
+        "health_level": "high"
+      }
+    ],
+    "summary": {
+      "table_count": 14,
+      "average_missingness_rate": 0.0214,
+      "average_outlier_rate_iqr": 0.0436,
+      "proxy_dependency_ratio": 0.0143,
+      "stale_table_count": 2,
+      "health_score": 0.8638,
+      "health_level": "high"
+    }
+  },
+  "part1_evidence_trace_index": {
+    "section_traces": [
+      {
+        "section_id": "1.1",
+        "title": "市场现状与需求概览",
+        "required_tables": [
+          "search_trends",
+          "region_demand",
+          "event_library",
+          "source_registry",
+          "part1_threshold_registry"
+        ],
+        "evidence_ref": [
+          "evidence.search_trends",
+          "evidence.region_demand",
+          "evidence.event_library"
+        ],
+        "rule_ref": [
+          "gate.market_entry",
+          "gate.demand_stability",
+          "gate.event_sensitivity"
+        ],
+        "source_topics_expected": [
+          "demand",
+          "platform",
+          "promo",
+          "weather"
+        ],
+        "source_topics_covered": [
+          "demand",
+          "platform",
+          "promo",
+          "weather"
+        ],
+        "source_count": 4,
+        "threshold_coverage_ratio": 0.5,
+        "trace_score": 0.925,
+        "trace_level": "high"
+      },
+      {
+        "section_id": "1.2",
+        "title": "客户画像分析",
+        "required_tables": [
+          "customer_segments"
+        ],
+        "evidence_ref": [
+          "evidence.customer_segments"
+        ],
+        "rule_ref": [
+          "gate.customer_fit"
+        ],
+        "source_topics_expected": [],
+        "source_topics_covered": [],
+        "source_count": 0,
+        "threshold_coverage_ratio": 0.0,
+        "trace_score": 0.5,
+        "trace_level": "medium"
+      },
+      {
+        "section_id": "1.3",
+        "title": "市场规模分析",
+        "required_tables": [
+          "listings",
+          "market_size_inputs",
+          "source_registry",
+          "part1_threshold_registry",
+          "market_destination_registry",
+          "consumer_habit_vectors",
+          "region_weight_profiles"
+        ],
+        "evidence_ref": [
+          "evidence.listings",
+          "evidence.market_size_inputs",
+          "evidence.source_registry"
+        ],
+        "rule_ref": [
+          "gate.market_entry",
+          "gate.market_scale",
+          "gate.market_attractiveness"
+        ],
+        "source_topics_expected": [],
+        "source_topics_covered": [],
+        "source_count": 0,
+        "threshold_coverage_ratio": 0.0,
+        "trace_score": 0.5,
+        "trace_level": "medium"
+      },
+      {
+        "section_id": "1.4",
+        "title": "购买渠道分析",
+        "required_tables": [
+          "channels",
+          "channel_benchmarks",
+          "source_registry",
+          "part1_threshold_registry"
+        ],
+        "evidence_ref": [
+          "evidence.channel_metrics",
+          "evidence.channel_benchmarks",
+          "evidence.source_registry"
+        ],
+        "rule_ref": [
+          "gate.channel_selection",
+          "gate.channel_dependency"
+        ],
+        "source_topics_expected": [
+          "platform",
+          "promo"
+        ],
+        "source_topics_covered": [
+          "platform",
+          "promo"
+        ],
+        "source_count": 2,
+        "threshold_coverage_ratio": 0.25,
+        "trace_score": 0.8875,
+        "trace_level": "high"
+      },
+      {
+        "section_id": "1.5",
+        "title": "货架商品价格分析",
+        "required_tables": [
+          "listings"
+        ],
+        "evidence_ref": [
+          "evidence.listings"
+        ],
+        "rule_ref": [
+          "gate.price_band_fit"
+        ],
+        "source_topics_expected": [],
+        "source_topics_covered": [],
+        "source_count": 0,
+        "threshold_coverage_ratio": 0.0,
+        "trace_score": 0.5,
+        "trace_level": "medium"
+      },
+      {
+        "section_id": "1.6",
+        "title": "实际成交价格分析",
+        "required_tables": [
+          "transactions"
+        ],
+        "evidence_ref": [
+          "evidence.transactions"
+        ],
+        "rule_ref": [
+          "gate.price_realization"
+        ],
+        "source_topics_expected": [],
+        "source_topics_covered": [],
+        "source_count": 0,
+        "threshold_coverage_ratio": 0.0,
+        "trace_score": 0.5,
+        "trace_level": "medium"
+      }
+    ],
+    "factor_traces": [
+      {
+        "factor_id": "FAC-CHANNEL-EFFICIENCY",
+        "label": "渠道效率因子",
+        "source_section": "1.4",
+        "evidence_ref": [
+          "evidence.channel_metrics",
+          "evidence.channel_benchmarks",
+          "evidence.source_registry"
+        ],
+        "rule_ref": [
+          "gate.channel_selection",
+          "gate.channel_dependency"
+        ],
+        "traceable": true
+      },
+      {
+        "factor_id": "FAC-CHANNEL-RISK",
+        "label": "渠道风险因子",
+        "source_section": "1.4",
+        "evidence_ref": [
+          "evidence.channel_metrics",
+          "evidence.channel_benchmarks",
+          "evidence.source_registry"
+        ],
+        "rule_ref": [
+          "gate.channel_selection",
+          "gate.channel_dependency"
+        ],
+        "traceable": true
+      },
+      {
+        "factor_id": "FAC-CUSTOMER-FIT",
+        "label": "客户匹配因子",
+        "source_section": "1.2",
+        "evidence_ref": [
+          "evidence.customer_segments"
+        ],
+        "rule_ref": [
+          "gate.customer_fit"
+        ],
+        "traceable": true
+      },
+      {
+        "factor_id": "FAC-DEMAND-STABILITY",
+        "label": "需求稳定因子",
+        "source_section": "1.1",
+        "evidence_ref": [
+          "evidence.search_trends",
+          "evidence.region_demand",
+          "evidence.event_library"
+        ],
+        "rule_ref": [
+          "gate.market_entry",
+          "gate.demand_stability",
+          "gate.event_sensitivity"
+        ],
+        "traceable": true
+      },
+      {
+        "factor_id": "FAC-MARKET-ATTRACT",
+        "label": "市场吸引力因子",
+        "source_section": "1.3",
+        "evidence_ref": [
+          "evidence.listings",
+          "evidence.market_size_inputs",
+          "evidence.source_registry"
+        ],
+        "rule_ref": [
+          "gate.market_entry",
+          "gate.market_scale",
+          "gate.market_attractiveness"
+        ],
+        "traceable": true
+      },
+      {
+        "factor_id": "FAC-PRICE-REALIZATION",
+        "label": "价格实现因子",
+        "source_section": "1.6",
+        "evidence_ref": [
+          "evidence.transactions"
+        ],
+        "rule_ref": [
+          "gate.price_realization"
+        ],
+        "traceable": true
+      }
+    ],
+    "lineage_edges": [
+      {
+        "from_node": "search_trends",
+        "to_node": "1.1",
+        "edge_type": "table_to_section"
+      },
+      {
+        "from_node": "region_demand",
+        "to_node": "1.1",
+        "edge_type": "table_to_section"
+      },
+      {
+        "from_node": "event_library",
+        "to_node": "1.1",
+        "edge_type": "table_to_section"
+      },
+      {
+        "from_node": "source_registry",
+        "to_node": "1.1",
+        "edge_type": "table_to_section"
+      },
+      {
+        "from_node": "part1_threshold_registry",
+        "to_node": "1.1",
+        "edge_type": "table_to_section"
+      },
+      {
+        "from_node": "customer_segments",
+        "to_node": "1.2",
+        "edge_type": "table_to_section"
+      },
+      {
+        "from_node": "listings",
+        "to_node": "1.3",
+        "edge_type": "table_to_section"
+      },
+      {
+        "from_node": "market_size_inputs",
+        "to_node": "1.3",
+        "edge_type": "table_to_section"
+      },
+      {
+        "from_node": "source_registry",
+        "to_node": "1.3",
+        "edge_type": "table_to_section"
+      },
+      {
+        "from_node": "part1_threshold_registry",
+        "to_node": "1.3",
+        "edge_type": "table_to_section"
+      },
+      {
+        "from_node": "market_destination_registry",
+        "to_node": "1.3",
+        "edge_type": "table_to_section"
+      },
+      {
+        "from_node": "consumer_habit_vectors",
+        "to_node": "1.3",
+        "edge_type": "table_to_section"
+      },
+      {
+        "from_node": "region_weight_profiles",
+        "to_node": "1.3",
+        "edge_type": "table_to_section"
+      },
+      {
+        "from_node": "channels",
+        "to_node": "1.4",
+        "edge_type": "table_to_section"
+      },
+      {
+        "from_node": "channel_benchmarks",
+        "to_node": "1.4",
+        "edge_type": "table_to_section"
+      },
+      {
+        "from_node": "source_registry",
+        "to_node": "1.4",
+        "edge_type": "table_to_section"
+      },
+      {
+        "from_node": "part1_threshold_registry",
+        "to_node": "1.4",
+        "edge_type": "table_to_section"
+      },
+      {
+        "from_node": "listings",
+        "to_node": "1.5",
+        "edge_type": "table_to_section"
+      },
+      {
+        "from_node": "transactions",
+        "to_node": "1.6",
+        "edge_type": "table_to_section"
+      },
+      {
+        "from_node": "1.4",
+        "to_node": "FAC-CHANNEL-EFFICIENCY",
+        "edge_type": "section_to_factor"
+      },
+      {
+        "from_node": "1.4",
+        "to_node": "FAC-CHANNEL-RISK",
+        "edge_type": "section_to_factor"
+      },
+      {
+        "from_node": "1.2",
+        "to_node": "FAC-CUSTOMER-FIT",
+        "edge_type": "section_to_factor"
+      },
+      {
+        "from_node": "1.1",
+        "to_node": "FAC-DEMAND-STABILITY",
+        "edge_type": "section_to_factor"
+      },
+      {
+        "from_node": "1.3",
+        "to_node": "FAC-MARKET-ATTRACT",
+        "edge_type": "section_to_factor"
+      },
+      {
+        "from_node": "1.6",
+        "to_node": "FAC-PRICE-REALIZATION",
+        "edge_type": "section_to_factor"
+      }
+    ],
+    "summary": {
+      "section_trace_coverage_ratio": 1.0,
+      "factor_trace_coverage_ratio": 1.0,
+      "evidence_trace_coverage_ratio": 0.6354,
+      "traceability_score": 1.0
+    }
+  },
+  "part1_forecast_engine": {
+    "model_id": "part1_forecast_engine_v1",
+    "status": "ready",
+    "history_months": 12,
+    "backtest": {
+      "observation_count": 8,
+      "mae": 6.48,
+      "mape": 0.0765,
+      "rmse": 7.02,
+      "bias": -1.22,
+      "score": 0.6985
+    },
+    "rolling_window_error": [
+      {
+        "target_month": "2025-07",
+        "forecast_interest": 88.39,
+        "actual_interest": 96.0,
+        "absolute_error": 7.61,
+        "absolute_percentage_error": 0.0793,
+        "event_window_flag": true
+      },
+      {
+        "target_month": "2025-08",
+        "forecast_interest": 92.79,
+        "actual_interest": 94.0,
+        "absolute_error": 1.21,
+        "absolute_percentage_error": 0.0129,
+        "event_window_flag": false
+      },
+      {
+        "target_month": "2025-09",
+        "forecast_interest": 96.02,
+        "actual_interest": 91.0,
+        "absolute_error": 5.02,
+        "absolute_percentage_error": 0.0552,
+        "event_window_flag": true
+      },
+      {
+        "target_month": "2025-10",
+        "forecast_interest": 90.79,
+        "actual_interest": 85.0,
+        "absolute_error": 5.79,
+        "absolute_percentage_error": 0.0681,
+        "event_window_flag": false
+      },
+      {
+        "target_month": "2025-11",
+        "forecast_interest": 89.21,
+        "actual_interest": 79.0,
+        "absolute_error": 10.21,
+        "absolute_percentage_error": 0.1292,
+        "event_window_flag": true
+      },
+      {
+        "target_month": "2025-12",
+        "forecast_interest": 78.26,
+        "actual_interest": 83.0,
+        "absolute_error": 4.74,
+        "absolute_percentage_error": 0.0571,
+        "event_window_flag": false
+      }
+    ],
+    "event_window_stability": {
+      "event_month_count": 4,
+      "event_window_mae": 8.03,
+      "non_event_window_mae": 4.93,
+      "stability_score": 0.3712
+    },
+    "lead_lag_stability": {
+      "full_profile": [],
+      "first_half_best_lag": {
+        "lag_months": 0,
+        "correlation": 0.0
+      },
+      "second_half_best_lag": {
+        "lag_months": 0,
+        "correlation": 0.0
+      },
+      "stability_score": 1.0
+    },
+    "next_forecast": [
+      {
+        "month": "2026-01",
+        "forecast_interest": 77.0
+      },
+      {
+        "month": "2026-02",
+        "forecast_interest": 73.81
+      },
+      {
+        "month": "2026-03",
+        "forecast_interest": 70.51
+      }
+    ]
+  },
+  "part1_drift_report": {
+    "source_drift_report": {
+      "proxy_dependency_ratio": 0.0143,
+      "stale_table_count": 2,
+      "source_drift_score": 0.9214
+    },
+    "factor_drift_report": {
+      "demand_shift_ratio": 0.1786,
+      "demand_volatility_shift_ratio": 0.15,
+      "price_shift_ratio": 0.1133,
+      "discount_shift_ratio": 1.9352,
+      "channel_mix_shift": 0.0075,
+      "drift_risk_score": 0.4769
+    },
+    "benchmark_drift_report": {
+      "benchmark_gap_severity": 0.1487,
+      "benchmark_coverage_ratio": 0.8
+    },
+    "summary": {
+      "check_count": 5,
+      "stable_check_ratio": 0.8,
+      "drift_score": 0.7047,
+      "drift_level": "medium"
+    }
+  },
+  "part1_calibration_report": {
+    "threshold_alignment": {
+      "rows": [
+        {
+          "gate_id": "GATE-P1-001",
+          "metric_name": "demand_stability_score",
+          "aligned": true,
+          "matched_paths": [
+            "1.1.demand_stability_score"
+          ]
+        },
+        {
+          "gate_id": "GATE-P1-002",
+          "metric_name": "market_attractiveness_factor",
+          "aligned": true,
+          "matched_paths": [
+            "1.3.market_size_inputs.market_attractiveness_factor"
+          ]
+        },
+        {
+          "gate_id": "GATE-P1-003",
+          "metric_name": "channel_dependency_score",
+          "aligned": true,
+          "matched_paths": [
+            "1.4.channel_dependency_score"
+          ]
+        },
+        {
+          "gate_id": "GATE-P1-004",
+          "metric_name": "event_sensitivity_score",
+          "aligned": true,
+          "matched_paths": [
+            "1.1.event_analysis.event_sensitivity_score"
+          ]
+        }
+      ],
+      "threshold_alignment_ratio": 1.0,
+      "naming_alignment_status": "aligned"
+    },
+    "factor_outcome_pairs": [
+      {
+        "factor_id": "FAC-CHANNEL-EFFICIENCY",
+        "predicted_score": 0.8708,
+        "realized_success": 1,
+        "calibration_gap": -0.1292
+      },
+      {
+        "factor_id": "FAC-CHANNEL-RISK",
+        "predicted_score": 0.3749,
+        "realized_success": 0,
+        "calibration_gap": 0.3749
+      },
+      {
+        "factor_id": "FAC-CUSTOMER-FIT",
+        "predicted_score": 0.4769,
+        "realized_success": 1,
+        "calibration_gap": -0.5231
+      },
+      {
+        "factor_id": "FAC-DEMAND-STABILITY",
+        "predicted_score": 0.7514,
+        "realized_success": 0,
+        "calibration_gap": 0.7514
+      },
+      {
+        "factor_id": "FAC-MARKET-ATTRACT",
+        "predicted_score": 0.7769,
+        "realized_success": 1,
+        "calibration_gap": -0.2231
+      },
+      {
+        "factor_id": "FAC-PRICE-REALIZATION",
+        "predicted_score": 0.5596,
+        "realized_success": 1,
+        "calibration_gap": -0.4404
+      }
+    ],
+    "probability_bucket_diagnostics": [
+      {
+        "bucket": "low",
+        "count": 1,
+        "average_predicted_score": 0.3749,
+        "realized_success_rate": 0
+      },
+      {
+        "bucket": "medium",
+        "count": 2,
+        "average_predicted_score": 0.5182,
+        "realized_success_rate": 1
+      },
+      {
+        "bucket": "high",
+        "count": 3,
+        "average_predicted_score": 0.7997,
+        "realized_success_rate": 0.6667
+      }
+    ],
+    "gate_consistency": {
+      "rows": [
+        {
+          "section_id": "1.1",
+          "expected_status": "pass",
+          "actual_status": "pass",
+          "consistent": true
+        },
+        {
+          "section_id": "1.4",
+          "expected_status": "fail",
+          "actual_status": "fail",
+          "consistent": true
+        }
+      ],
+      "gate_consistency_ratio": 1.0
+    },
+    "gate_flip_candidates": [
+      {
+        "metric_name": "channel_dependency_score",
+        "metric_path": "1.4.channel_dependency_score",
+        "observed_value": 0.6751,
+        "threshold_value": 0.65,
+        "distance_ratio": 0.0386,
+        "decision_if_fail": "review"
+      }
+    ],
+    "summary": {
+      "brier_score": 0.2065,
+      "average_calibration_gap": 0.407,
+      "threshold_alignment_ratio": 1.0,
+      "gate_consistency_ratio": 1.0,
+      "flip_candidate_count": 1,
+      "naming_alignment_status": "aligned"
+    }
+  },
+  "part1_advanced_quant_tools": {
+    "toolkit_id": "part1_advanced_quant_tools_v1",
+    "status": "ready",
+    "modules": [
+      "fourier",
+      "bayesian_shrinkage",
+      "fibonacci_levels",
+      "entropy_growth",
+      "recursive_ewma"
+    ],
+    "fourier": {
+      "spectral_features": {
+        "observation_count": 12,
+        "dominant_period": 12.0,
+        "dominant_power_share": 0.8263,
+        "spectral_entropy": 0.3602,
+        "seasonality_confidence_score": 0.5287,
+        "top_periods": [
+          {
+            "period": 12.0,
+            "power_share": 0.8263
+          },
+          {
+            "period": 6.0,
+            "power_share": 0.1163
+          },
+          {
+            "period": 2.4,
+            "power_share": 0.0234
+          }
+        ]
+      },
+      "shannon_entropy": 0.9728,
+      "approximate_entropy": 0.0953,
+      "signal_regime": "seasonal"
+    },
+    "bayesian_shrinkage": {
+      "prior_mean": 81.3333,
+      "observed_latest": 83.0,
+      "posterior_demand_signal": 82.3333
+    },
+    "fibonacci": {
+      "high": 96.0,
+      "low": 68.0,
+      "level_236": 89.392,
+      "level_382": 85.304,
+      "level_500": 82.0,
+      "level_618": 78.696,
+      "level_786": 73.992,
+      "latest_position_ratio": 0.5357
+    },
+    "entropy_growth": {
+      "base_entropy": 0.9591,
+      "recent_entropy": 0.9697,
+      "entropy_delta": 0.0106,
+      "entropy_growth_score": 0.9894
+    },
+    "recursive": {
+      "alpha": 0.35,
+      "series": [
+        72.0,
+        72.7,
+        71.755,
+        70.4407,
+        72.3865,
+        77.8512,
+        84.2033,
+        87.6321,
+        88.8109,
+        87.4771,
+        84.5101,
+        83.9816
+      ],
+      "stability_score": 0.9708,
+      "trend_score": 0.5832
+    },
+    "summary": {
+      "tool_count": 5,
+      "posterior_demand_signal": 82.3333,
+      "entropy_growth_score": 0.9894,
+      "recursive_stability_score": 0.9708,
+      "event_library_count": 4
+    }
+  },
+  "part1_market_destination_engine": {
+    "engine_id": "part1_market_destination_engine_v1",
+    "status": "ready",
+    "product_habit_fingerprint": {
+      "price_sensitivity": 0.4488,
+      "brand_loyalty": 0.3577,
+      "quality_premium_preference": 0.7011,
+      "novelty_seeking": 0.2437,
+      "social_proof_dependency": 1.0,
+      "discount_dependency": 0.4488,
+      "delivery_speed_preference": 0.8708,
+      "return_aversion": 0.8205,
+      "cross_border_affinity": 0.6076,
+      "content_driven_discovery": 0.6531,
+      "payment_friction_tolerance": 0.5596,
+      "offline_affinity": 0.3249
+    },
+    "market_rows": [
+      {
+        "market_code": "TW",
+        "market_name": "Taiwan",
+        "region_group": "East Asia",
+        "analysis_method": "balance_crossborder",
+        "habit_model_family": "service_quality",
+        "localized_factor_score": 0.647,
+        "geo_fit_score": 0.785,
+        "habit_fit_score": 0.8425,
+        "raw_score": 0.4807,
+        "evidence_strength": 0.8,
+        "posterior_score": 0.4368,
+        "destination_fit_level": "low"
+      },
+      {
+        "market_code": "KR",
+        "market_name": "South Korea",
+        "region_group": "East Asia",
+        "analysis_method": "content_fast",
+        "habit_model_family": "trend_digital",
+        "localized_factor_score": 0.6501,
+        "geo_fit_score": 0.7785,
+        "habit_fit_score": 0.8171,
+        "raw_score": 0.4556,
+        "evidence_strength": 0.8667,
+        "posterior_score": 0.4252,
+        "destination_fit_level": "low"
+      },
+      {
+        "market_code": "JP",
+        "market_name": "Japan",
+        "region_group": "East Asia",
+        "analysis_method": "quality_service",
+        "habit_model_family": "service_quality",
+        "localized_factor_score": 0.6523,
+        "geo_fit_score": 0.731,
+        "habit_fit_score": 0.7684,
+        "raw_score": 0.4284,
+        "evidence_strength": 0.8667,
+        "posterior_score": 0.4106,
+        "destination_fit_level": "low"
+      },
+      {
+        "market_code": "TH",
+        "market_name": "Thailand",
+        "region_group": "Southeast Asia",
+        "analysis_method": "content_platform",
+        "habit_model_family": "mobile_value",
+        "localized_factor_score": 0.65,
+        "geo_fit_score": 0.744,
+        "habit_fit_score": 0.7828,
+        "raw_score": 0.422,
+        "evidence_strength": 0.7333,
+        "posterior_score": 0.4058,
+        "destination_fit_level": "low"
+      },
+      {
+        "market_code": "VN",
+        "market_name": "Vietnam",
+        "region_group": "Southeast Asia",
+        "analysis_method": "platform_value",
+        "habit_model_family": "mobile_value",
+        "localized_factor_score": 0.6539,
+        "geo_fit_score": 0.7325,
+        "habit_fit_score": 0.7552,
+        "raw_score": 0.4012,
+        "evidence_strength": 0.6667,
+        "posterior_score": 0.3953,
+        "destination_fit_level": "low"
+      },
+      {
+        "market_code": "ID",
+        "market_name": "Indonesia",
+        "region_group": "Southeast Asia",
+        "analysis_method": "mass_scale",
+        "habit_model_family": "mobile_value",
+        "localized_factor_score": 0.6541,
+        "geo_fit_score": 0.764,
+        "habit_fit_score": 0.7484,
+        "raw_score": 0.386,
+        "evidence_strength": 0.7333,
+        "posterior_score": 0.388,
+        "destination_fit_level": "low"
+      },
+      {
+        "market_code": "EU",
+        "market_name": "Europe",
+        "region_group": "Europe",
+        "analysis_method": "compliance_first",
+        "habit_model_family": "mature_premium",
+        "localized_factor_score": 0.6526,
+        "geo_fit_score": 0.6985,
+        "habit_fit_score": 0.8088,
+        "raw_score": 0.3848,
+        "evidence_strength": 0.8,
+        "posterior_score": 0.3873,
+        "destination_fit_level": "low"
+      },
+      {
+        "market_code": "PH",
+        "market_name": "Philippines",
+        "region_group": "Southeast Asia",
+        "analysis_method": "value_mobile",
+        "habit_model_family": "mobile_value",
+        "localized_factor_score": 0.648,
+        "geo_fit_score": 0.7275,
+        "habit_fit_score": 0.7264,
+        "raw_score": 0.3786,
+        "evidence_strength": 0.6667,
+        "posterior_score": 0.3846,
+        "destination_fit_level": "low"
+      },
+      {
+        "market_code": "KH",
+        "market_name": "Cambodia",
+        "region_group": "Southeast Asia",
+        "analysis_method": "lightweight_entry",
+        "habit_model_family": "frontier_value",
+        "localized_factor_score": 0.6054,
+        "geo_fit_score": 0.599,
+        "habit_fit_score": 0.6849,
+        "raw_score": 0.3019,
+        "evidence_strength": 0.5,
+        "posterior_score": 0.3547,
+        "destination_fit_level": "low"
+      },
+      {
+        "market_code": "LA",
+        "market_name": "Laos",
+        "region_group": "Southeast Asia",
+        "analysis_method": "lightweight_entry",
+        "habit_model_family": "frontier_value",
+        "localized_factor_score": 0.5879,
+        "geo_fit_score": 0.559,
+        "habit_fit_score": 0.6613,
+        "raw_score": 0.2605,
+        "evidence_strength": 0.5,
+        "posterior_score": 0.3382,
+        "destination_fit_level": "low"
+      }
+    ],
+    "summary": {
+      "market_count": 10,
+      "habit_vector_coverage_ratio": 1.0,
+      "weight_profile_coverage_ratio": 1.0,
+      "analysis_method_diversity_count": 9,
+      "habit_model_family_diversity_count": 5,
+      "top_market_code": "TW",
+      "top_market_score": 0.4368
+    }
+  }
+}

@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from collections import Counter, defaultdict
 from datetime import date
+from statistics import mean
 
 from .models import Part0Assumptions, Part0Dataset
 from .stats_utils import mean_or_zero, safe_divide, score_level
@@ -391,4 +392,93 @@ def compute_field_dictionary_metrics(
         "naming_style_mix": dict(sorted(Counter(record.naming_style for record in dataset.field_dictionary if record.naming_style).items())),
         "dictionary_reuse_score": dictionary_score,
         "dictionary_reuse_level": score_level(dictionary_score),
+    }
+
+
+def compute_market_localization_metrics(
+    dataset: Part0Dataset,
+    assumptions: Part0Assumptions,
+) -> dict:
+    if not dataset.market_destination_registry:
+        return {}
+
+    active_markets = [row for row in dataset.market_destination_registry if row.active_flag]
+    active_market_codes = {row.market_code for row in active_markets}
+    habit_market_codes = {row.market_code for row in dataset.consumer_habit_vectors if row.market_code}
+    weight_market_codes = {
+        row.market_code
+        for row in dataset.region_weight_profiles
+        if row.market_code and row.active_flag
+    }
+    analysis_methods = {row.analysis_method for row in active_markets if row.analysis_method}
+    habit_model_families = {row.habit_model_family for row in active_markets if row.habit_model_family}
+
+    habit_coverage_ratio = safe_divide(len(active_market_codes & habit_market_codes), len(active_market_codes))
+    weight_coverage_ratio = safe_divide(len(active_market_codes & weight_market_codes), len(active_market_codes))
+    market_coverage_ratio = min(
+        safe_divide(len(active_market_codes), assumptions.required_localized_markets),
+        1.0,
+    )
+
+    vector_map = {}
+    for row in dataset.consumer_habit_vectors:
+        vector_map[row.market_code] = [
+            row.price_sensitivity,
+            row.brand_loyalty,
+            row.quality_premium_preference,
+            row.novelty_seeking,
+            row.social_proof_dependency,
+            row.discount_dependency,
+            row.delivery_speed_preference,
+            row.return_aversion,
+            row.cross_border_affinity,
+            row.content_driven_discovery,
+            row.payment_friction_tolerance,
+            row.offline_affinity,
+        ]
+    pairwise_distances = []
+    ordered_codes = sorted(active_market_codes & habit_market_codes)
+    for left_index, left_code in enumerate(ordered_codes):
+        left_vector = vector_map.get(left_code)
+        if not left_vector:
+            continue
+        for right_code in ordered_codes[left_index + 1 :]:
+            right_vector = vector_map.get(right_code)
+            if not right_vector:
+                continue
+            pairwise_distances.append(
+                mean(abs(left - right) for left, right in zip(left_vector, right_vector))
+            )
+    separation_score = round(min(mean(pairwise_distances) * 2.5, 1.0), 4) if pairwise_distances else 0.0
+    analysis_method_diversity_ratio = round(
+        safe_divide(len(analysis_methods), max(len(active_market_codes), 1)),
+        4,
+    )
+    habit_model_family_diversity_ratio = round(
+        safe_divide(len(habit_model_families), max(len(active_market_codes), 1)),
+        4,
+    )
+    localization_governance_score = round(
+        market_coverage_ratio * 0.2
+        + habit_coverage_ratio * 0.25
+        + weight_coverage_ratio * 0.25
+        + separation_score * 0.15
+        + analysis_method_diversity_ratio * 0.075
+        + habit_model_family_diversity_ratio * 0.075,
+        4,
+    )
+    return {
+        "market_count": len(dataset.market_destination_registry),
+        "active_market_count": len(active_markets),
+        "market_coverage_ratio": round(market_coverage_ratio, 4),
+        "habit_vector_coverage_ratio": round(habit_coverage_ratio, 4),
+        "weight_profile_coverage_ratio": round(weight_coverage_ratio, 4),
+        "analysis_method_diversity_ratio": analysis_method_diversity_ratio,
+        "habit_model_family_diversity_ratio": habit_model_family_diversity_ratio,
+        "market_codes": sorted(active_market_codes),
+        "analysis_method_mix": dict(sorted(Counter(row.analysis_method for row in active_markets if row.analysis_method).items())),
+        "habit_model_family_mix": dict(sorted(Counter(row.habit_model_family for row in active_markets if row.habit_model_family).items())),
+        "consumer_habit_distance_score": separation_score,
+        "localization_governance_score": localization_governance_score,
+        "localization_governance_level": score_level(localization_governance_score),
     }

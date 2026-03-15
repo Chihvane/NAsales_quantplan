@@ -149,6 +149,7 @@ def run_landed_cost_monte_carlo(
     route_volatility_score: float = 0.2,
     iterations: int = 1200,
     seed: int = 42,
+    return_raw_samples: bool = False,
 ) -> dict:
     if not best_scenario:
         return {}
@@ -228,7 +229,7 @@ def run_landed_cost_monte_carlo(
     loss_probability = sum(1 for value in net_margins if value < 0) / len(net_margins)
     margin_below_15_probability = sum(1 for value in margin_rates if value < 0.15) / len(margin_rates)
 
-    return {
+    payload = {
         "iterations": iterations,
         "seed": seed,
         "loss_probability": round(loss_probability, 4),
@@ -244,3 +245,12 @@ def run_landed_cost_monte_carlo(
         },
         "sensitivity": _build_sensitivity(best_scenario, assumptions),
     }
+    if return_raw_samples:
+        payload["raw_samples"] = {
+            "landed_cost": [round(value, 4) for value in landed_costs],
+            "sellable_cost": [round(value, 4) for value in sellable_costs],
+            "net_margin": [round(value, 4) for value in net_margins],
+            "net_margin_rate": [round(value, 6) for value in margin_rates],
+            "break_even_price": [round(value, 4) for value in break_even_prices],
+        }
+    return payload

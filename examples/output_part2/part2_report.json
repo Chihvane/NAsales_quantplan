@@ -2,7 +2,7 @@
   "metadata": {
     "report_id": "part2_quant_report",
     "report_version": "2026.03",
-    "generated_at": "2026-03-13T16:50:04.979278+00:00",
+    "generated_at": "2026-03-14T17:38:12.354774+00:00",
     "section_order": [
       "2.1",
       "2.2",
@@ -16,14 +16,16 @@
         "title": "在售商品与成交结构",
         "required_tables": [
           "listing_snapshots",
-          "sold_transactions"
+          "sold_transactions",
+          "part2_source_registry"
         ],
         "metric_ids": [
           "sku_gmv_leaderboard"
         ],
         "quality_targets": {
           "listing_snapshots": 20,
-          "sold_transactions": 20
+          "sold_transactions": 20,
+          "part2_source_registry": 3
         },
         "analysis_grain": "listing x transaction",
         "entity_grain": "sku x platform",
@@ -40,7 +42,8 @@
         ],
         "evidence_refs": [
           "evidence.listing_snapshots",
-          "evidence.sold_transactions"
+          "evidence.sold_transactions",
+          "evidence.part2_source_registry"
         ],
         "rule_refs": [
           "gate.competition_density"
@@ -50,14 +53,18 @@
         "title": "成交价格带与折扣深度",
         "required_tables": [
           "listing_snapshots",
-          "sold_transactions"
+          "sold_transactions",
+          "part2_benchmark_registry",
+          "part2_threshold_registry"
         ],
         "metric_ids": [
           "realized_price_distribution"
         ],
         "quality_targets": {
           "listing_snapshots": 20,
-          "sold_transactions": 20
+          "sold_transactions": 20,
+          "part2_benchmark_registry": 2,
+          "part2_threshold_registry": 2
         },
         "analysis_grain": "transaction price event",
         "entity_grain": "sku x platform",
@@ -74,24 +81,28 @@
         ],
         "evidence_refs": [
           "evidence.listing_snapshots",
-          "evidence.sold_transactions"
+          "evidence.sold_transactions",
+          "evidence.part2_benchmark_registry"
         ],
         "rule_refs": [
-          "gate.sweet_spot_fit"
+          "gate.sweet_spot_fit",
+          "gate.part2_threshold_registry"
         ]
       },
       "2.3": {
         "title": "价格-评分价值矩阵",
         "required_tables": [
           "listing_snapshots",
-          "sold_transactions"
+          "sold_transactions",
+          "part2_benchmark_registry"
         ],
         "metric_ids": [
           "price_rating_matrix"
         ],
         "quality_targets": {
           "listing_snapshots": 20,
-          "sold_transactions": 20
+          "sold_transactions": 20,
+          "part2_benchmark_registry": 2
         },
         "analysis_grain": "price x rating bucket",
         "entity_grain": "sku x platform",
@@ -108,7 +119,8 @@
         ],
         "evidence_refs": [
           "evidence.listing_snapshots",
-          "evidence.sold_transactions"
+          "evidence.sold_transactions",
+          "evidence.part2_benchmark_registry"
         ],
         "rule_refs": [
           "gate.value_gap"
@@ -118,14 +130,16 @@
         "title": "属性画像与白空间机会",
         "required_tables": [
           "product_catalog",
-          "sold_transactions"
+          "sold_transactions",
+          "part2_source_registry"
         ],
         "metric_ids": [
           "attribute_outperformance"
         ],
         "quality_targets": {
           "product_catalog": 8,
-          "sold_transactions": 20
+          "sold_transactions": 20,
+          "part2_source_registry": 3
         },
         "analysis_grain": "attribute token x sold item",
         "entity_grain": "canonical sku x attribute",
@@ -142,7 +156,8 @@
         ],
         "evidence_refs": [
           "evidence.product_catalog",
-          "evidence.sold_transactions"
+          "evidence.sold_transactions",
+          "evidence.part2_source_registry"
         ],
         "rule_refs": [
           "gate.whitespace_opportunity"
@@ -151,13 +166,19 @@
       "2.5": {
         "title": "评论情绪与痛点主题",
         "required_tables": [
-          "reviews"
+          "reviews",
+          "voc_event_registry",
+          "part2_threshold_registry",
+          "part2_source_registry"
         ],
         "metric_ids": [
           "review_sentiment_topics"
         ],
         "quality_targets": {
-          "reviews": 16
+          "reviews": 16,
+          "voc_event_registry": 2,
+          "part2_threshold_registry": 2,
+          "part2_source_registry": 3
         },
         "analysis_grain": "review row",
         "entity_grain": "sku x review theme",
@@ -172,22 +193,29 @@
           "mdm.sku"
         ],
         "evidence_refs": [
-          "evidence.reviews"
+          "evidence.reviews",
+          "evidence.voc_event_registry",
+          "evidence.part2_source_registry"
         ],
         "rule_refs": [
-          "gate.voc_risk"
+          "gate.voc_risk",
+          "gate.part2_threshold_registry"
         ]
       },
       "2.6": {
         "title": "货架动态与生存分析",
         "required_tables": [
-          "listing_snapshots"
+          "listing_snapshots",
+          "part2_threshold_registry",
+          "part2_benchmark_registry"
         ],
         "metric_ids": [
           "listing_survival_dynamics"
         ],
         "quality_targets": {
-          "listing_snapshots": 20
+          "listing_snapshots": 20,
+          "part2_threshold_registry": 2,
+          "part2_benchmark_registry": 2
         },
         "analysis_grain": "listing survival event",
         "entity_grain": "listing x platform",
@@ -203,10 +231,12 @@
           "mdm.channel"
         ],
         "evidence_refs": [
-          "evidence.listing_snapshots"
+          "evidence.listing_snapshots",
+          "evidence.part2_benchmark_registry"
         ],
         "rule_refs": [
-          "gate.shelf_stability"
+          "gate.shelf_stability",
+          "gate.part2_threshold_registry"
         ]
       }
     },
@@ -299,6 +329,22 @@
       "reviews": {
         "record_count": 20,
         "available": true
+      },
+      "part2_source_registry": {
+        "record_count": 3,
+        "available": true
+      },
+      "part2_threshold_registry": {
+        "record_count": 2,
+        "available": true
+      },
+      "part2_benchmark_registry": {
+        "record_count": 3,
+        "available": true
+      },
+      "voc_event_registry": {
+        "record_count": 2,
+        "available": true
       }
     }
   },
@@ -321,10 +367,10 @@
       "evidence_ref_coverage_ratio": 1.0,
       "rule_ref_coverage_ratio": 1.0,
       "gate_status_mix": {
-        "pass": 0,
+        "pass": 1,
         "review": 0,
-        "fail": 0,
-        "not_applicable": 6
+        "fail": 1,
+        "not_applicable": 4
       }
     },
     "headline_metrics": [
@@ -357,6 +403,18 @@
         "label": "货架中位生存期",
         "value": 62.0,
         "unit": "days"
+      },
+      {
+        "key": "competition_headroom_factor",
+        "label": "竞争结构空间因子",
+        "value": 0.3305,
+        "unit": "score"
+      },
+      {
+        "key": "pricing_fit_factor",
+        "label": "定价甜区匹配因子",
+        "value": 0.849,
+        "unit": "score"
       }
     ],
     "decision_summary": {
@@ -393,6 +451,10 @@
     },
     "decision_signal": "promising",
     "decision_score": 0.6513,
+    "factor_snapshot_count": 6,
+    "registry_binding_count": 10,
+    "confidence_band": "high",
+    "proxy_usage_flag_count": 0,
     "validation_summary": {
       "pass_count": 9,
       "review_count": 0,
@@ -411,7 +473,8 @@
       "title": "在售商品与成交结构",
       "required_tables": [
         "listing_snapshots",
-        "sold_transactions"
+        "sold_transactions",
+        "part2_source_registry"
       ],
       "metric_ids": [
         "sku_gmv_leaderboard"
@@ -433,7 +496,8 @@
       ],
       "evidence_ref": [
         "evidence.listing_snapshots",
-        "evidence.sold_transactions"
+        "evidence.sold_transactions",
+        "evidence.part2_source_registry"
       ],
       "rule_ref": [
         "gate.competition_density"
@@ -447,11 +511,13 @@
       "data_quality": {
         "record_counts": {
           "listing_snapshots": 23,
-          "sold_transactions": 23
+          "sold_transactions": 23,
+          "part2_source_registry": 3
         },
         "available_tables": [
           "listing_snapshots",
-          "sold_transactions"
+          "sold_transactions",
+          "part2_source_registry"
         ],
         "missing_tables": [],
         "completeness_ratio": 1.0,
@@ -556,7 +622,8 @@
           "brand_count": 4,
           "platform_count": 3,
           "proxy_transaction_share": 0.0
-        }
+        },
+        "source_registry_count": 3
       }
     },
     "2.2": {
@@ -564,7 +631,9 @@
       "title": "成交价格带与折扣深度",
       "required_tables": [
         "listing_snapshots",
-        "sold_transactions"
+        "sold_transactions",
+        "part2_benchmark_registry",
+        "part2_threshold_registry"
       ],
       "metric_ids": [
         "realized_price_distribution"
@@ -586,25 +655,34 @@
       ],
       "evidence_ref": [
         "evidence.listing_snapshots",
-        "evidence.sold_transactions"
+        "evidence.sold_transactions",
+        "evidence.part2_benchmark_registry"
       ],
       "rule_ref": [
-        "gate.sweet_spot_fit"
+        "gate.sweet_spot_fit",
+        "gate.part2_threshold_registry"
       ],
       "gate_result": {
-        "status": "not_applicable",
-        "source": "",
-        "raw_value": "",
+        "status": "pass",
+        "source": "gate_results",
+        "raw_value": {
+          "sweet_spot_fit": true,
+          "price_realization_floor": true
+        },
         "failed_items": []
       },
       "data_quality": {
         "record_counts": {
           "listing_snapshots": 23,
-          "sold_transactions": 23
+          "sold_transactions": 23,
+          "part2_benchmark_registry": 3,
+          "part2_threshold_registry": 2
         },
         "available_tables": [
           "listing_snapshots",
-          "sold_transactions"
+          "sold_transactions",
+          "part2_benchmark_registry",
+          "part2_threshold_registry"
         ],
         "missing_tables": [],
         "completeness_ratio": 1.0,
@@ -661,7 +739,31 @@
             "reseller": 0.1089,
             "brand_owner": 0.0896
           }
-        }
+        },
+        "benchmark_gap_by_platform": {
+          "Amazon": {
+            "observed_aov_proxy": 695.32,
+            "benchmark_average_order_value": 720.0,
+            "gap_ratio": -0.0343
+          },
+          "eBay": {
+            "observed_aov_proxy": 600.98,
+            "benchmark_average_order_value": 610.0,
+            "gap_ratio": -0.0148
+          },
+          "TikTok Shop": {
+            "observed_aov_proxy": 435.86,
+            "benchmark_average_order_value": 440.0,
+            "gap_ratio": -0.0094
+          }
+        },
+        "benchmark_coverage_ratio": 1.0,
+        "gate_results": {
+          "sweet_spot_fit": true,
+          "price_realization_floor": true
+        },
+        "benchmark_registry_count": 3,
+        "threshold_registry_count": 2
       }
     },
     "2.3": {
@@ -669,7 +771,8 @@
       "title": "价格-评分价值矩阵",
       "required_tables": [
         "listing_snapshots",
-        "sold_transactions"
+        "sold_transactions",
+        "part2_benchmark_registry"
       ],
       "metric_ids": [
         "price_rating_matrix"
@@ -691,7 +794,8 @@
       ],
       "evidence_ref": [
         "evidence.listing_snapshots",
-        "evidence.sold_transactions"
+        "evidence.sold_transactions",
+        "evidence.part2_benchmark_registry"
       ],
       "rule_ref": [
         "gate.value_gap"
@@ -705,11 +809,13 @@
       "data_quality": {
         "record_counts": {
           "listing_snapshots": 23,
-          "sold_transactions": 23
+          "sold_transactions": 23,
+          "part2_benchmark_registry": 3
         },
         "available_tables": [
           "listing_snapshots",
-          "sold_transactions"
+          "sold_transactions",
+          "part2_benchmark_registry"
         ],
         "missing_tables": [],
         "completeness_ratio": 1.0,
@@ -852,7 +958,9 @@
             "value_density": 1.8096
           }
         ],
-        "risk_clusters": []
+        "risk_clusters": [],
+        "benchmark_coverage_ratio": 1.0,
+        "value_advantage_score": 0.8833
       }
     },
     "2.4": {
@@ -860,7 +968,8 @@
       "title": "属性画像与白空间机会",
       "required_tables": [
         "product_catalog",
-        "sold_transactions"
+        "sold_transactions",
+        "part2_source_registry"
       ],
       "metric_ids": [
         "attribute_outperformance"
@@ -882,7 +991,8 @@
       ],
       "evidence_ref": [
         "evidence.product_catalog",
-        "evidence.sold_transactions"
+        "evidence.sold_transactions",
+        "evidence.part2_source_registry"
       ],
       "rule_ref": [
         "gate.whitespace_opportunity"
@@ -896,11 +1006,13 @@
       "data_quality": {
         "record_counts": {
           "product_catalog": 8,
-          "sold_transactions": 23
+          "sold_transactions": 23,
+          "part2_source_registry": 3
         },
         "available_tables": [
           "product_catalog",
-          "sold_transactions"
+          "sold_transactions",
+          "part2_source_registry"
         ],
         "missing_tables": [],
         "completeness_ratio": 1.0,
@@ -1085,7 +1197,10 @@
       "id": "2.5",
       "title": "评论情绪与痛点主题",
       "required_tables": [
-        "reviews"
+        "reviews",
+        "voc_event_registry",
+        "part2_threshold_registry",
+        "part2_source_registry"
       ],
       "metric_ids": [
         "review_sentiment_topics"
@@ -1105,23 +1220,36 @@
         "mdm.sku"
       ],
       "evidence_ref": [
-        "evidence.reviews"
+        "evidence.reviews",
+        "evidence.voc_event_registry",
+        "evidence.part2_source_registry"
       ],
       "rule_ref": [
-        "gate.voc_risk"
+        "gate.voc_risk",
+        "gate.part2_threshold_registry"
       ],
       "gate_result": {
-        "status": "not_applicable",
-        "source": "",
-        "raw_value": "",
-        "failed_items": []
+        "status": "fail",
+        "source": "gate_results",
+        "raw_value": {
+          "voc_negative_rate": false
+        },
+        "failed_items": [
+          "voc_negative_rate"
+        ]
       },
       "data_quality": {
         "record_counts": {
-          "reviews": 20
+          "reviews": 20,
+          "voc_event_registry": 2,
+          "part2_threshold_registry": 2,
+          "part2_source_registry": 3
         },
         "available_tables": [
-          "reviews"
+          "reviews",
+          "voc_event_registry",
+          "part2_threshold_registry",
+          "part2_source_registry"
         ],
         "missing_tables": [],
         "completeness_ratio": 1.0,
@@ -1225,14 +1353,45 @@
           "high": 0.3,
           "low": 0.3,
           "mid": 0.4
-        }
+        },
+        "voc_event_hits": [
+          {
+            "event_id": "VOC001",
+            "event_name": "shipping_damage_complaints",
+            "mapped_theme": "shipping_damage",
+            "matched_theme": true,
+            "severity": 0.7,
+            "mention_rate": 0.2,
+            "event_risk": 0.5675
+          },
+          {
+            "event_id": "VOC002",
+            "event_name": "reliability_failures_cluster",
+            "mapped_theme": "quality_issue",
+            "matched_theme": true,
+            "severity": 0.9,
+            "mention_rate": 0.3,
+            "event_risk": 0.7875
+          }
+        ],
+        "voc_event_coverage_ratio": 1.0,
+        "source_registry_count": 3,
+        "voc_risk_score": 0.5102,
+        "gate_results": {
+          "voc_negative_rate": false
+        },
+        "proxy_usage_flags": [],
+        "voc_event_registry_count": 2,
+        "threshold_registry_count": 2
       }
     },
     "2.6": {
       "id": "2.6",
       "title": "货架动态与生存分析",
       "required_tables": [
-        "listing_snapshots"
+        "listing_snapshots",
+        "part2_threshold_registry",
+        "part2_benchmark_registry"
       ],
       "metric_ids": [
         "listing_survival_dynamics"
@@ -1253,10 +1412,12 @@
         "mdm.channel"
       ],
       "evidence_ref": [
-        "evidence.listing_snapshots"
+        "evidence.listing_snapshots",
+        "evidence.part2_benchmark_registry"
       ],
       "rule_ref": [
-        "gate.shelf_stability"
+        "gate.shelf_stability",
+        "gate.part2_threshold_registry"
       ],
       "gate_result": {
         "status": "not_applicable",
@@ -1266,10 +1427,14 @@
       },
       "data_quality": {
         "record_counts": {
-          "listing_snapshots": 23
+          "listing_snapshots": 23,
+          "part2_threshold_registry": 2,
+          "part2_benchmark_registry": 3
         },
         "available_tables": [
-          "listing_snapshots"
+          "listing_snapshots",
+          "part2_threshold_registry",
+          "part2_benchmark_registry"
         ],
         "missing_tables": [],
         "completeness_ratio": 1.0,
@@ -1335,7 +1500,9 @@
           "mass": 0.5,
           "premium": 0.5,
           "upper_mid": 0.0
-        }
+        },
+        "threshold_registry_count": 2,
+        "benchmark_registry_count": 3
       }
     }
   },
@@ -1504,5 +1671,49 @@
         }
       }
     ]
+  },
+  "factor_snapshots": {
+    "FAC-COMPETITION-HEADROOM": {
+      "label": "竞争结构空间因子",
+      "value": 0.3305,
+      "source_section": "2.1"
+    },
+    "FAC-PRICING-FIT": {
+      "label": "定价甜区匹配因子",
+      "value": 0.849,
+      "source_section": "2.2"
+    },
+    "FAC-WHITESPACE-DEPTH": {
+      "label": "白空间深度因子",
+      "value": 1.0,
+      "source_section": "2.4"
+    },
+    "FAC-SHELF-STABILITY": {
+      "label": "货架稳定性因子",
+      "value": 0.4256,
+      "source_section": "2.6"
+    },
+    "FAC-VALUE-ADVANTAGE": {
+      "label": "价值优势因子",
+      "value": 0.8833,
+      "source_section": "2.3"
+    },
+    "FAC-VOC-RISK": {
+      "label": "VOC 风险因子",
+      "value": 0.4898,
+      "source_section": "2.5"
+    }
+  },
+  "confidence_band": {
+    "score": 1.0,
+    "label": "high",
+    "proxy_usage_flags": []
+  },
+  "proxy_usage_flags": [],
+  "part2_registry_bindings": {
+    "part2_source_registry_count": 3,
+    "part2_threshold_registry_count": 2,
+    "part2_benchmark_registry_count": 3,
+    "voc_event_registry_count": 2
   }
 }

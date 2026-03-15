@@ -2,7 +2,7 @@
   "metadata": {
     "report_id": "part4_quant_report",
     "report_version": "2026.03",
-    "generated_at": "2026-03-13T16:50:05.006518+00:00",
+    "generated_at": "2026-03-14T18:18:08.044651+00:00",
     "section_order": [
       "4.1",
       "4.2",
@@ -57,7 +57,9 @@
           "traffic_sessions",
           "marketing_spend",
           "channel_rate_cards",
-          "landed_cost_scenarios"
+          "landed_cost_scenarios",
+          "part4_source_registry",
+          "part4_benchmark_registry"
         ],
         "metric_ids": [
           "platform_channel_fit"
@@ -67,7 +69,9 @@
           "traffic_sessions": 8,
           "marketing_spend": 8,
           "channel_rate_cards": 10,
-          "landed_cost_scenarios": 6
+          "landed_cost_scenarios": 6,
+          "part4_source_registry": 3,
+          "part4_benchmark_registry": 3
         },
         "analysis_grain": "channel x transaction window",
         "entity_grain": "platform channel",
@@ -86,10 +90,13 @@
         "evidence_refs": [
           "evidence.sold_transactions",
           "evidence.channel_rate_cards",
-          "evidence.marketing_spend"
+          "evidence.marketing_spend",
+          "evidence.part4_source_registry",
+          "evidence.part4_benchmark_registry"
         ],
         "rule_refs": [
-          "gate.platform_selection"
+          "gate.platform_selection",
+          "gate.part4_threshold_registry"
         ]
       },
       "4.3": {
@@ -130,14 +137,16 @@
         "title": "曝光、获客与流量结构分析",
         "required_tables": [
           "traffic_sessions",
-          "marketing_spend"
+          "marketing_spend",
+          "part4_source_registry"
         ],
         "metric_ids": [
           "traffic_structure"
         ],
         "quality_targets": {
           "traffic_sessions": 8,
-          "marketing_spend": 8
+          "marketing_spend": 8,
+          "part4_source_registry": 3
         },
         "analysis_grain": "channel x source",
         "entity_grain": "channel x traffic source",
@@ -156,7 +165,8 @@
         ],
         "evidence_refs": [
           "evidence.traffic_sessions",
-          "evidence.marketing_spend"
+          "evidence.marketing_spend",
+          "evidence.part4_source_registry"
         ],
         "rule_refs": [
           "gate.traffic_efficiency"
@@ -170,7 +180,10 @@
           "returns_claims",
           "inventory_positions",
           "landed_cost_scenarios",
-          "channel_rate_cards"
+          "channel_rate_cards",
+          "part4_threshold_registry",
+          "part4_benchmark_registry",
+          "part4_stress_registry"
         ],
         "metric_ids": [
           "roi_unit_economics"
@@ -181,7 +194,10 @@
           "returns_claims": 6,
           "inventory_positions": 8,
           "landed_cost_scenarios": 6,
-          "channel_rate_cards": 10
+          "channel_rate_cards": 10,
+          "part4_threshold_registry": 2,
+          "part4_benchmark_registry": 3,
+          "part4_stress_registry": 3
         },
         "analysis_grain": "channel x roi scenario",
         "entity_grain": "channel",
@@ -202,12 +218,15 @@
         "evidence_refs": [
           "evidence.sold_transactions",
           "evidence.channel_rate_cards",
-          "evidence.returns_claims"
+          "evidence.returns_claims",
+          "evidence.part4_benchmark_registry",
+          "evidence.part4_stress_registry"
         ],
         "rule_refs": [
           "gate.margin_gate",
           "gate.payback_gate",
-          "gate.loss_gate"
+          "gate.loss_gate",
+          "gate.part4_threshold_registry"
         ]
       },
       "4.6": {
@@ -258,7 +277,10 @@
           "traffic_sessions",
           "marketing_spend",
           "b2b_accounts",
-          "experiment_registry"
+          "experiment_registry",
+          "part4_threshold_registry",
+          "part4_optimizer_registry",
+          "part4_stress_registry"
         ],
         "metric_ids": [
           "entry_plan"
@@ -268,7 +290,10 @@
           "traffic_sessions": 8,
           "marketing_spend": 8,
           "b2b_accounts": 3,
-          "experiment_registry": 4
+          "experiment_registry": 4,
+          "part4_threshold_registry": 2,
+          "part4_optimizer_registry": 1,
+          "part4_stress_registry": 3
         },
         "analysis_grain": "entry plan scenario",
         "entity_grain": "channel portfolio",
@@ -289,13 +314,17 @@
         "evidence_refs": [
           "evidence.landed_cost_scenarios",
           "evidence.traffic_sessions",
-          "evidence.marketing_spend"
+          "evidence.marketing_spend",
+          "evidence.part4_optimizer_registry",
+          "evidence.part4_stress_registry"
         ],
         "rule_refs": [
           "gate.margin_gate",
           "gate.payback_gate",
           "gate.loss_gate",
-          "gate.readiness_gate"
+          "gate.readiness_gate",
+          "gate.part4_threshold_registry",
+          "gate.part4_optimizer_registry"
         ],
         "gate_status_key": "recommendation"
       }
@@ -451,6 +480,26 @@
       "b2b_accounts": {
         "record_count": 3,
         "available": true
+      },
+      "part4_source_registry": {
+        "record_count": 3,
+        "available": true
+      },
+      "part4_threshold_registry": {
+        "record_count": 3,
+        "available": true
+      },
+      "part4_benchmark_registry": {
+        "record_count": 5,
+        "available": true
+      },
+      "part4_optimizer_registry": {
+        "record_count": 1,
+        "available": true
+      },
+      "part4_stress_registry": {
+        "record_count": 3,
+        "available": true
       }
     }
   },
@@ -483,18 +532,18 @@
     },
     "decision_summary": {
       "decision_signal": "go",
-      "decision_score": 0.5898,
+      "decision_score": 0.6741,
       "scorecard": {
         "channel_optionality": {
           "score": 0.9045,
           "level": "high"
         },
         "traffic_quality": {
-          "score": 0.0339,
+          "score": 0.1965,
           "level": "low"
         },
         "unit_economics": {
-          "score": 0.779,
+          "score": 0.9514,
           "level": "high"
         },
         "operating_readiness": {
@@ -505,7 +554,7 @@
       "key_findings": [
         "当前推荐状态为 go，主攻渠道为 B2B。",
         "最佳平台为 TikTok Shop，综合贡献毛利率约 17.2%。",
-        "组织承接分为 53.7%，总体亏损概率为 0.0%。"
+        "组织承接分为 53.7%，总体亏损概率为 1.1%。"
       ],
       "risk_flags": [
         "流量结构过度依赖付费流量，冷启动成本与放量波动都偏高。",
@@ -515,7 +564,7 @@
       "recommended_next_step": "按主攻渠道启动试点，并把预算、SKU 与库存控制在 90 天计划内。"
     },
     "decision_signal": "go",
-    "decision_score": 0.5898,
+    "decision_score": 0.6741,
     "headline_metrics": [
       {
         "key": "recommendation",
@@ -544,7 +593,7 @@
       {
         "key": "loss_probability",
         "label": "总体亏损概率",
-        "value": 0.0,
+        "value": 0.0108,
         "unit": "ratio"
       },
       {
@@ -552,8 +601,25 @@
         "label": "组织承接分",
         "value": 0.5368,
         "unit": "score"
+      },
+      {
+        "key": "portfolio_resilience_factor",
+        "label": "组合韧性因子",
+        "value": 0.9968,
+        "unit": "score"
+      },
+      {
+        "key": "execution_friction_factor",
+        "label": "执行摩擦因子",
+        "value": 0.2095,
+        "unit": "score"
       }
     ],
+    "factor_snapshot_count": 6,
+    "confidence_band": "high",
+    "proxy_usage_flag_count": 0,
+    "execution_friction_flag_count": 4,
+    "optimizer_run_count": 6,
     "validation_summary": {
       "pass_count": 8,
       "review_count": 0,
@@ -696,7 +762,9 @@
         "traffic_sessions",
         "marketing_spend",
         "channel_rate_cards",
-        "landed_cost_scenarios"
+        "landed_cost_scenarios",
+        "part4_source_registry",
+        "part4_benchmark_registry"
       ],
       "metric_ids": [
         "platform_channel_fit"
@@ -720,10 +788,13 @@
       "evidence_ref": [
         "evidence.sold_transactions",
         "evidence.channel_rate_cards",
-        "evidence.marketing_spend"
+        "evidence.marketing_spend",
+        "evidence.part4_source_registry",
+        "evidence.part4_benchmark_registry"
       ],
       "rule_ref": [
-        "gate.platform_selection"
+        "gate.platform_selection",
+        "gate.part4_threshold_registry"
       ],
       "gate_result": {
         "status": "not_applicable",
@@ -737,14 +808,18 @@
           "traffic_sessions": 14,
           "marketing_spend": 12,
           "channel_rate_cards": 18,
-          "landed_cost_scenarios": 12
+          "landed_cost_scenarios": 12,
+          "part4_source_registry": 3,
+          "part4_benchmark_registry": 5
         },
         "available_tables": [
           "sold_transactions",
           "traffic_sessions",
           "marketing_spend",
           "channel_rate_cards",
-          "landed_cost_scenarios"
+          "landed_cost_scenarios",
+          "part4_source_registry",
+          "part4_benchmark_registry"
         ],
         "missing_tables": [],
         "completeness_ratio": 1.0,
@@ -1066,7 +1141,8 @@
       "title": "曝光、获客与流量结构分析",
       "required_tables": [
         "traffic_sessions",
-        "marketing_spend"
+        "marketing_spend",
+        "part4_source_registry"
       ],
       "metric_ids": [
         "traffic_structure"
@@ -1090,7 +1166,8 @@
       ],
       "evidence_ref": [
         "evidence.traffic_sessions",
-        "evidence.marketing_spend"
+        "evidence.marketing_spend",
+        "evidence.part4_source_registry"
       ],
       "rule_ref": [
         "gate.traffic_efficiency"
@@ -1104,11 +1181,13 @@
       "data_quality": {
         "record_counts": {
           "traffic_sessions": 14,
-          "marketing_spend": 12
+          "marketing_spend": 12,
+          "part4_source_registry": 3
         },
         "available_tables": [
           "traffic_sessions",
-          "marketing_spend"
+          "marketing_spend",
+          "part4_source_registry"
         ],
         "missing_tables": [],
         "completeness_ratio": 1.0,
@@ -1328,7 +1407,10 @@
         "returns_claims",
         "inventory_positions",
         "landed_cost_scenarios",
-        "channel_rate_cards"
+        "channel_rate_cards",
+        "part4_threshold_registry",
+        "part4_benchmark_registry",
+        "part4_stress_registry"
       ],
       "metric_ids": [
         "roi_unit_economics"
@@ -1354,12 +1436,15 @@
       "evidence_ref": [
         "evidence.sold_transactions",
         "evidence.channel_rate_cards",
-        "evidence.returns_claims"
+        "evidence.returns_claims",
+        "evidence.part4_benchmark_registry",
+        "evidence.part4_stress_registry"
       ],
       "rule_ref": [
         "gate.margin_gate",
         "gate.payback_gate",
-        "gate.loss_gate"
+        "gate.loss_gate",
+        "gate.part4_threshold_registry"
       ],
       "gate_result": {
         "status": "not_applicable",
@@ -1374,7 +1459,10 @@
           "returns_claims": 8,
           "inventory_positions": 12,
           "landed_cost_scenarios": 12,
-          "channel_rate_cards": 18
+          "channel_rate_cards": 18,
+          "part4_threshold_registry": 3,
+          "part4_benchmark_registry": 5,
+          "part4_stress_registry": 3
         },
         "available_tables": [
           "sold_transactions",
@@ -1382,7 +1470,10 @@
           "returns_claims",
           "inventory_positions",
           "landed_cost_scenarios",
-          "channel_rate_cards"
+          "channel_rate_cards",
+          "part4_threshold_registry",
+          "part4_benchmark_registry",
+          "part4_stress_registry"
         ],
         "missing_tables": [],
         "completeness_ratio": 1.0,
@@ -1666,7 +1757,8 @@
           "contribution_profit": 18048.72,
           "contribution_margin_rate": 0.1716,
           "acquisition_cost_total": 9280.0,
-          "roi": 1.9449
+          "roi": 1.9449,
+          "payback_period_months": 0.75
         },
         "best_channel": {
           "channel": "B2B",
@@ -1679,144 +1771,276 @@
           "seed": 42,
           "overall": {
             "roi": {
-              "p10": 0.1346,
-              "p50": 0.1713,
-              "p90": 0.2052
+              "p10": 0.0528,
+              "p50": 0.1325,
+              "p90": 0.2155
             },
             "contribution_margin_rate": {
-              "p10": 0.1186,
-              "p50": 0.1463,
-              "p90": 0.1703
+              "p10": 0.0501,
+              "p50": 0.117,
+              "p90": 0.1773
             },
             "contribution_profit": {
-              "p10": 12217.9547,
-              "p50": 15369.7005,
-              "p90": 18352.3708
+              "p10": 4983.9286,
+              "p50": 12197.1344,
+              "p90": 19222.7967
             },
-            "loss_probability": 0.0,
-            "loss_probability_weighted_channels": 0.0465,
-            "target_payback_months": 6.0
+            "loss_probability": 0.0108,
+            "loss_probability_weighted_channels": 0.1379,
+            "target_payback_months": 6.0,
+            "tail_risk": {
+              "contribution_profit_var_95": 3104.39,
+              "contribution_profit_es_95": 988.26,
+              "contribution_profit_cvar_95": 988.26,
+              "margin_rate_var_95": 0.0308,
+              "margin_rate_es_95": 0.01,
+              "margin_rate_cvar_95": 0.01,
+              "tail_shortfall_severity": 0.0311
+            },
+            "risk_adjusted": {
+              "margin_rate_sharpe_like": 0.7122,
+              "margin_rate_sortino_like": 1.8021,
+              "margin_rate_calmar_like": 0.3694,
+              "margin_rate_ulcer_index": 0.5696,
+              "margin_rate_drawdown_duration": 648,
+              "margin_rate_tail_ratio": 6.2157,
+              "margin_rate_omega_ratio": 5.8274,
+              "roi_sharpe_like": 2.1309,
+              "roi_sortino_like": 58.574,
+              "roi_calmar_like": 0.3373,
+              "roi_ulcer_index": 0.6228,
+              "roi_drawdown_duration": 648,
+              "roi_omega_ratio": 686.0951
+            }
           },
           "channels": {
             "Amazon": {
               "roi": {
-                "p10": 0.0446,
-                "p50": 0.119,
-                "p90": 0.2064
+                "p10": -0.0064,
+                "p50": 0.0841,
+                "p90": 0.1804
               },
               "contribution_margin_rate": {
-                "p10": 0.0427,
-                "p50": 0.1063,
-                "p90": 0.1711
+                "p10": -0.0064,
+                "p50": 0.0776,
+                "p90": 0.1528
               },
               "contribution_profit": {
-                "p10": 1142.4921,
-                "p50": 3004.3519,
-                "p90": 5192.6037
+                "p10": -167.9669,
+                "p50": 2150.1876,
+                "p90": 4551.7015
               },
-              "loss_probability": 0.0167,
+              "loss_probability": 0.1242,
               "base_margin_rate": 0.1358,
-              "base_roi": 0.1572
+              "base_roi": 0.1572,
+              "tail_risk": {
+                "contribution_profit_var_95": -700.36,
+                "contribution_profit_es_95": -1465.42,
+                "contribution_profit_cvar_95": -1465.42,
+                "margin_rate_var_95": -0.0275,
+                "margin_rate_es_95": -0.0571,
+                "margin_rate_cvar_95": -0.0571,
+                "tail_shortfall_severity": 0.0778
+              },
+              "risk_adjusted": {
+                "margin_rate_sharpe_like": -0.9806,
+                "margin_rate_sortino_like": -0.7106,
+                "margin_rate_calmar_like": 0.1837,
+                "margin_rate_ulcer_index": 0.7391,
+                "margin_rate_drawdown_duration": 667,
+                "margin_rate_tail_ratio": 6.2257,
+                "margin_rate_omega_ratio": 0.0711
+              }
             },
             "B2B": {
               "roi": {
-                "p10": 0.3307,
-                "p50": 0.4293,
-                "p90": 0.536
+                "p10": 0.2641,
+                "p50": 0.3972,
+                "p90": 0.5425
               },
               "contribution_margin_rate": {
-                "p10": 0.2485,
-                "p50": 0.3004,
-                "p90": 0.349
+                "p10": 0.2089,
+                "p50": 0.2843,
+                "p90": 0.3517
               },
               "contribution_profit": {
-                "p10": 5038.4048,
-                "p50": 6430.3691,
-                "p90": 7940.3304
+                "p10": 4198.2321,
+                "p50": 6138.0721,
+                "p90": 7940.4418
               },
               "loss_probability": 0.0,
               "base_margin_rate": 0.3217,
-              "base_roi": 0.4743
+              "base_roi": 0.4743,
+              "tail_risk": {
+                "contribution_profit_var_95": 3712.09,
+                "contribution_profit_es_95": 3108.49,
+                "contribution_profit_cvar_95": 3108.49,
+                "margin_rate_var_95": 0.1854,
+                "margin_rate_es_95": 0.1592,
+                "margin_rate_cvar_95": 0.1592,
+                "tail_shortfall_severity": 0.0623
+              },
+              "risk_adjusted": {
+                "margin_rate_sharpe_like": -0.7101,
+                "margin_rate_sortino_like": -0.5993,
+                "margin_rate_calmar_like": 0.8291,
+                "margin_rate_ulcer_index": 0.3521,
+                "margin_rate_drawdown_duration": 415,
+                "margin_rate_tail_ratio": 1.9743,
+                "margin_rate_omega_ratio": 0.1517
+              }
             },
             "TikTok Shop": {
               "roi": {
-                "p10": 0.1002,
-                "p50": 0.1881,
-                "p90": 0.2786
+                "p10": 0.0445,
+                "p50": 0.138,
+                "p90": 0.2445
               },
               "contribution_margin_rate": {
-                "p10": 0.0911,
-                "p50": 0.1583,
-                "p90": 0.2179
+                "p10": 0.0426,
+                "p50": 0.1212,
+                "p90": 0.1965
               },
               "contribution_profit": {
-                "p10": 1532.6928,
-                "p50": 2850.4944,
-                "p90": 4175.6409
+                "p10": 717.4249,
+                "p50": 2140.1386,
+                "p90": 3706.721
               },
-              "loss_probability": 0.0,
+              "loss_probability": 0.0233,
               "base_margin_rate": 0.1812,
-              "base_roi": 0.2213
+              "base_roi": 0.2213,
+              "tail_risk": {
+                "contribution_profit_var_95": 382.5,
+                "contribution_profit_es_95": -98.19,
+                "contribution_profit_cvar_95": -98.19,
+                "margin_rate_var_95": 0.0231,
+                "margin_rate_es_95": -0.0064,
+                "margin_rate_cvar_95": -0.0064,
+                "tail_shortfall_severity": 0.0776
+              },
+              "risk_adjusted": {
+                "margin_rate_sharpe_like": -1.0243,
+                "margin_rate_sortino_like": -0.7265,
+                "margin_rate_calmar_like": 0.3431,
+                "margin_rate_ulcer_index": 0.6074,
+                "margin_rate_drawdown_duration": 625,
+                "margin_rate_tail_ratio": 9.3759,
+                "margin_rate_omega_ratio": 0.0695
+              }
             },
             "DTC": {
               "roi": {
-                "p10": -0.0352,
-                "p50": 0.0418,
-                "p90": 0.122
+                "p10": -0.0822,
+                "p50": 0.002,
+                "p90": 0.1012
               },
               "contribution_margin_rate": {
-                "p10": -0.0365,
-                "p50": 0.0401,
-                "p90": 0.1087
+                "p10": -0.0895,
+                "p50": 0.002,
+                "p90": 0.0919
               },
               "contribution_profit": {
-                "p10": -510.5929,
-                "p50": 594.085,
-                "p90": 1673.083
+                "p10": -1255.1249,
+                "p50": 29.2586,
+                "p90": 1415.898
               },
-              "loss_probability": 0.2608,
+              "loss_probability": 0.4858,
               "base_margin_rate": 0.0735,
-              "base_roi": 0.0793
+              "base_roi": 0.0793,
+              "tail_risk": {
+                "contribution_profit_var_95": -1726.51,
+                "contribution_profit_es_95": -2157.86,
+                "contribution_profit_cvar_95": -2157.86,
+                "margin_rate_var_95": -0.1278,
+                "margin_rate_es_95": -0.1631,
+                "margin_rate_cvar_95": -0.1631,
+                "tail_shortfall_severity": 0.0939
+              },
+              "risk_adjusted": {
+                "margin_rate_sharpe_like": -1.0214,
+                "margin_rate_sortino_like": -0.7245,
+                "margin_rate_calmar_like": -0.0014,
+                "margin_rate_ulcer_index": 1.0792,
+                "margin_rate_drawdown_duration": 588,
+                "margin_rate_tail_ratio": 0.9079,
+                "margin_rate_omega_ratio": 0.0665
+              }
             },
             "Walmart": {
               "roi": {
-                "p10": 0.0451,
-                "p50": 0.126,
-                "p90": 0.2057
+                "p10": -0.0057,
+                "p50": 0.0933,
+                "p90": 0.1877
               },
               "contribution_margin_rate": {
-                "p10": 0.0431,
-                "p50": 0.1119,
-                "p90": 0.1706
+                "p10": -0.0057,
+                "p50": 0.0853,
+                "p90": 0.158
               },
               "contribution_profit": {
-                "p10": 515.4677,
-                "p50": 1426.7957,
-                "p90": 2278.0835
+                "p10": -68.9096,
+                "p50": 1079.1358,
+                "p90": 2100.9318
               },
-              "loss_probability": 0.0125,
+              "loss_probability": 0.1083,
               "base_margin_rate": 0.1399,
-              "base_roi": 0.1627
+              "base_roi": 0.1627,
+              "tail_risk": {
+                "contribution_profit_var_95": -377.14,
+                "contribution_profit_es_95": -745.92,
+                "contribution_profit_cvar_95": -745.92,
+                "margin_rate_var_95": -0.0317,
+                "margin_rate_es_95": -0.0656,
+                "margin_rate_cvar_95": -0.0656,
+                "tail_shortfall_severity": 0.0775
+              },
+              "risk_adjusted": {
+                "margin_rate_sharpe_like": -0.9378,
+                "margin_rate_sortino_like": -0.6936,
+                "margin_rate_calmar_like": 0.1859,
+                "margin_rate_ulcer_index": 0.7196,
+                "margin_rate_drawdown_duration": 502,
+                "margin_rate_tail_ratio": 5.5175,
+                "margin_rate_omega_ratio": 0.0728
+              }
             },
             "eBay": {
               "roi": {
-                "p10": 0.0211,
-                "p50": 0.0957,
-                "p90": 0.1782
+                "p10": -0.035,
+                "p50": 0.0591,
+                "p90": 0.1575
               },
               "contribution_margin_rate": {
-                "p10": 0.0207,
-                "p50": 0.0874,
-                "p90": 0.1513
+                "p10": -0.0363,
+                "p50": 0.0558,
+                "p90": 0.1361
               },
               "contribution_profit": {
-                "p10": 191.9306,
-                "p50": 864.8853,
-                "p90": 1614.0927
+                "p10": -335.2956,
+                "p50": 558.7316,
+                "p90": 1443.3131
               },
-              "loss_probability": 0.045,
+              "loss_probability": 0.2075,
               "base_margin_rate": 0.1167,
-              "base_roi": 0.1321
+              "base_roi": 0.1321,
+              "tail_risk": {
+                "contribution_profit_var_95": -561.42,
+                "contribution_profit_es_95": -782.16,
+                "contribution_profit_cvar_95": -782.16,
+                "margin_rate_var_95": -0.0606,
+                "margin_rate_es_95": -0.0866,
+                "margin_rate_cvar_95": -0.0866,
+                "tail_shortfall_severity": 0.0829
+              },
+              "risk_adjusted": {
+                "margin_rate_sharpe_like": -0.9751,
+                "margin_rate_sortino_like": -0.7093,
+                "margin_rate_calmar_like": 0.1308,
+                "margin_rate_ulcer_index": 0.8306,
+                "margin_rate_drawdown_duration": 992,
+                "margin_rate_tail_ratio": 2.5634,
+                "margin_rate_omega_ratio": 0.0744
+              }
             }
           },
           "sensitivity": [
@@ -1876,6 +2100,333 @@
               "upside_impact": 0.0014
             }
           ]
+        },
+        "channel_performance_metrics": {
+          "channel_rows": [
+            {
+              "channel": "Amazon",
+              "channel_family": "platform",
+              "benchmark_gap": {
+                "conversion_gap_ratio": -0.9983,
+                "aov_gap_ratio": 20.0356,
+                "roi_gap_ratio": -0.9651,
+                "cac_gap_ratio": -22.3333
+              },
+              "benchmark_fit_score": 0.0,
+              "risk_adjusted_profit": 0.0,
+              "turnover_penalty_score": 0.0,
+              "cac_slippage_ratio": 22.3333,
+              "fee_burden_rate": 0.2038,
+              "fee_jump_risk_score": 1.0,
+              "policy_jump_risk_score": 1.0,
+              "execution_friction_score": 1.0,
+              "execution_friction_flags": [
+                "cac_slippage",
+                "fee_jump_risk",
+                "policy_jump_risk",
+                "execution_friction_high"
+              ],
+              "gate_results": {
+                "margin_gate": true,
+                "benchmark_fit_gate": false,
+                "execution_friction_gate": false
+              }
+            },
+            {
+              "channel": "B2B",
+              "channel_family": "b2b",
+              "benchmark_gap": {
+                "conversion_gap_ratio": -0.9788,
+                "aov_gap_ratio": 2.3569,
+                "roi_gap_ratio": -0.7036,
+                "cac_gap_ratio": 0.0
+              },
+              "benchmark_fit_score": 0.4833,
+              "risk_adjusted_profit": 4600.0,
+              "turnover_penalty_score": 0.0,
+              "cac_slippage_ratio": -0.0,
+              "fee_burden_rate": 0.0604,
+              "fee_jump_risk_score": 1.0,
+              "policy_jump_risk_score": 1.0,
+              "execution_friction_score": 0.3345,
+              "execution_friction_flags": [
+                "fee_jump_risk",
+                "policy_jump_risk"
+              ],
+              "gate_results": {
+                "margin_gate": true,
+                "benchmark_fit_gate": false,
+                "execution_friction_gate": true
+              }
+            },
+            {
+              "channel": "TikTok Shop",
+              "channel_family": "platform",
+              "benchmark_gap": {
+                "conversion_gap_ratio": -0.9967,
+                "aov_gap_ratio": 16.3106,
+                "roi_gap_ratio": -0.9149,
+                "cac_gap_ratio": -21.3684
+              },
+              "benchmark_fit_score": 0.0,
+              "risk_adjusted_profit": 0.0,
+              "turnover_penalty_score": 0.0,
+              "cac_slippage_ratio": 21.3684,
+              "fee_burden_rate": 0.1417,
+              "fee_jump_risk_score": 1.0,
+              "policy_jump_risk_score": 1.0,
+              "execution_friction_score": 1.0,
+              "execution_friction_flags": [
+                "cac_slippage",
+                "fee_jump_risk",
+                "policy_jump_risk",
+                "execution_friction_high"
+              ],
+              "gate_results": {
+                "margin_gate": true,
+                "benchmark_fit_gate": false,
+                "execution_friction_gate": false
+              }
+            },
+            {
+              "channel": "DTC",
+              "channel_family": "dtc",
+              "benchmark_gap": {
+                "conversion_gap_ratio": -0.9933,
+                "aov_gap_ratio": 9.5935,
+                "roi_gap_ratio": -0.9559,
+                "cac_gap_ratio": -14.0909
+              },
+              "benchmark_fit_score": 0.0,
+              "risk_adjusted_profit": 0.0,
+              "turnover_penalty_score": 0.0,
+              "cac_slippage_ratio": 14.0909,
+              "fee_burden_rate": 0.0879,
+              "fee_jump_risk_score": 1.0,
+              "policy_jump_risk_score": 1.0,
+              "execution_friction_score": 1.0,
+              "execution_friction_flags": [
+                "cac_slippage",
+                "fee_jump_risk",
+                "policy_jump_risk",
+                "execution_friction_high"
+              ],
+              "gate_results": {
+                "margin_gate": false,
+                "benchmark_fit_gate": false,
+                "execution_friction_gate": false
+              }
+            },
+            {
+              "channel": "Walmart",
+              "channel_family": "platform",
+              "benchmark_gap": {},
+              "benchmark_fit_score": 0.45,
+              "risk_adjusted_profit": 1047.06,
+              "turnover_penalty_score": 0.0,
+              "cac_slippage_ratio": 0.0,
+              "fee_burden_rate": 0.1899,
+              "fee_jump_risk_score": 1.0,
+              "policy_jump_risk_score": 1.0,
+              "execution_friction_score": 0.4085,
+              "execution_friction_flags": [
+                "fee_jump_risk",
+                "policy_jump_risk"
+              ],
+              "gate_results": {
+                "margin_gate": true,
+                "benchmark_fit_gate": false,
+                "execution_friction_gate": true
+              }
+            },
+            {
+              "channel": "eBay",
+              "channel_family": "platform",
+              "benchmark_gap": {
+                "conversion_gap_ratio": -0.9867,
+                "aov_gap_ratio": 7.2336,
+                "roi_gap_ratio": -0.945,
+                "cac_gap_ratio": -8.75
+              },
+              "benchmark_fit_score": 0.0586,
+              "risk_adjusted_profit": 0.0,
+              "turnover_penalty_score": 0.0,
+              "cac_slippage_ratio": 8.75,
+              "fee_burden_rate": 0.2019,
+              "fee_jump_risk_score": 1.0,
+              "policy_jump_risk_score": 1.0,
+              "execution_friction_score": 1.0,
+              "execution_friction_flags": [
+                "cac_slippage",
+                "fee_jump_risk",
+                "policy_jump_risk",
+                "execution_friction_high"
+              ],
+              "gate_results": {
+                "margin_gate": true,
+                "benchmark_fit_gate": false,
+                "execution_friction_gate": false
+              }
+            }
+          ],
+          "benchmark_coverage_ratio": 0.8333,
+          "threshold_coverage_ratio": 0.3333,
+          "threshold_registry_count": 3,
+          "benchmark_registry_count": 5,
+          "source_registry_count": 3,
+          "source_health": {
+            "coverage_ratio": 0.6,
+            "freshness_score": 0.6889,
+            "confidence_score": 0.9333,
+            "health_score": 0.7222
+          },
+          "average_benchmark_fit_score": 0.1653,
+          "average_execution_friction_score": 0.7905,
+          "average_turnover_penalty_score": 0.0,
+          "average_cac_slippage_ratio": 11.0904,
+          "execution_friction_flags": [
+            "cac_slippage",
+            "execution_friction_high",
+            "fee_jump_risk",
+            "policy_jump_risk"
+          ],
+          "channel_gate_records": [
+            {
+              "channel": "Amazon",
+              "gate_results": {
+                "margin_gate": true,
+                "benchmark_fit_gate": false,
+                "execution_friction_gate": false
+              },
+              "execution_friction_flags": [
+                "cac_slippage",
+                "fee_jump_risk",
+                "policy_jump_risk",
+                "execution_friction_high"
+              ]
+            },
+            {
+              "channel": "B2B",
+              "gate_results": {
+                "margin_gate": true,
+                "benchmark_fit_gate": false,
+                "execution_friction_gate": true
+              },
+              "execution_friction_flags": [
+                "fee_jump_risk",
+                "policy_jump_risk"
+              ]
+            },
+            {
+              "channel": "TikTok Shop",
+              "gate_results": {
+                "margin_gate": true,
+                "benchmark_fit_gate": false,
+                "execution_friction_gate": false
+              },
+              "execution_friction_flags": [
+                "cac_slippage",
+                "fee_jump_risk",
+                "policy_jump_risk",
+                "execution_friction_high"
+              ]
+            },
+            {
+              "channel": "DTC",
+              "gate_results": {
+                "margin_gate": false,
+                "benchmark_fit_gate": false,
+                "execution_friction_gate": false
+              },
+              "execution_friction_flags": [
+                "cac_slippage",
+                "fee_jump_risk",
+                "policy_jump_risk",
+                "execution_friction_high"
+              ]
+            },
+            {
+              "channel": "Walmart",
+              "gate_results": {
+                "margin_gate": true,
+                "benchmark_fit_gate": false,
+                "execution_friction_gate": true
+              },
+              "execution_friction_flags": [
+                "fee_jump_risk",
+                "policy_jump_risk"
+              ]
+            },
+            {
+              "channel": "eBay",
+              "gate_results": {
+                "margin_gate": true,
+                "benchmark_fit_gate": false,
+                "execution_friction_gate": false
+              },
+              "execution_friction_flags": [
+                "cac_slippage",
+                "fee_jump_risk",
+                "policy_jump_risk",
+                "execution_friction_high"
+              ]
+            }
+          ]
+        },
+        "stress_suite": {
+          "scenario_count": 3,
+          "scenario_rows": [
+            {
+              "scenario_id": "P4STR002",
+              "scenario_name": "Landed Cost Shock",
+              "shock_target": "landed_cost",
+              "shock_multiplier": 1.15,
+              "severity": "medium",
+              "stressed_contribution_profit": 9490.77,
+              "stressed_margin_rate": 0.0902,
+              "margin_delta": -0.0813,
+              "gate_result": "pass",
+              "gate_flip": false
+            },
+            {
+              "scenario_id": "P4STR003",
+              "scenario_name": "Revenue Compression",
+              "shock_target": "revenue",
+              "shock_multiplier": 0.92,
+              "severity": "high",
+              "stressed_contribution_profit": 9632.72,
+              "stressed_margin_rate": 0.0995,
+              "margin_delta": -0.072,
+              "gate_result": "pass",
+              "gate_flip": false
+            },
+            {
+              "scenario_id": "P4STR001",
+              "scenario_name": "CPC Shock",
+              "shock_target": "acquisition_cost",
+              "shock_multiplier": 1.4,
+              "severity": "high",
+              "stressed_contribution_profit": 14336.72,
+              "stressed_margin_rate": 0.1363,
+              "margin_delta": -0.0353,
+              "gate_result": "pass",
+              "gate_flip": false
+            }
+          ],
+          "baseline_margin_rate": 0.1716,
+          "worst_case_margin_rate": 0.0902,
+          "robustness_score": 1.0,
+          "robustness_level": "high",
+          "optimizer_feasibility_report": {
+            "pass_count": 3,
+            "fail_count": 0,
+            "pass_ratio": 1.0
+          },
+          "gate_flip_report": {
+            "baseline_gate_result": "pass",
+            "flip_count": 0,
+            "scenario_flips": []
+          }
         }
       }
     },
@@ -1974,7 +2525,10 @@
         "traffic_sessions",
         "marketing_spend",
         "b2b_accounts",
-        "experiment_registry"
+        "experiment_registry",
+        "part4_threshold_registry",
+        "part4_optimizer_registry",
+        "part4_stress_registry"
       ],
       "metric_ids": [
         "entry_plan"
@@ -2000,13 +2554,17 @@
       "evidence_ref": [
         "evidence.landed_cost_scenarios",
         "evidence.traffic_sessions",
-        "evidence.marketing_spend"
+        "evidence.marketing_spend",
+        "evidence.part4_optimizer_registry",
+        "evidence.part4_stress_registry"
       ],
       "rule_ref": [
         "gate.margin_gate",
         "gate.payback_gate",
         "gate.loss_gate",
-        "gate.readiness_gate"
+        "gate.readiness_gate",
+        "gate.part4_threshold_registry",
+        "gate.part4_optimizer_registry"
       ],
       "gate_result": {
         "status": "pass",
@@ -2020,14 +2578,20 @@
           "traffic_sessions": 14,
           "marketing_spend": 12,
           "b2b_accounts": 3,
-          "experiment_registry": 6
+          "experiment_registry": 6,
+          "part4_threshold_registry": 3,
+          "part4_optimizer_registry": 1,
+          "part4_stress_registry": 3
         },
         "available_tables": [
           "landed_cost_scenarios",
           "traffic_sessions",
           "marketing_spend",
           "b2b_accounts",
-          "experiment_registry"
+          "experiment_registry",
+          "part4_threshold_registry",
+          "part4_optimizer_registry",
+          "part4_stress_registry"
         ],
         "missing_tables": [],
         "completeness_ratio": 1.0,
@@ -2055,9 +2619,9 @@
           "Walmart"
         ],
         "budget_allocation": {
-          "B2B": 0.4922,
-          "TikTok Shop": 0.2385,
-          "Walmart": 0.1694
+          "B2B": 0.6313,
+          "TikTok Shop": 0.2758,
+          "Walmart": 0.0929
         },
         "priority_channels": [
           {
@@ -2068,22 +2632,22 @@
           {
             "channel": "TikTok Shop",
             "channel_family": "platform",
-            "priority_score": 0.0945
+            "priority_score": 0.0852
           },
           {
             "channel": "Walmart",
             "channel_family": "platform",
-            "priority_score": 0.0671
+            "priority_score": 0.0287
           },
           {
             "channel": "eBay",
             "channel_family": "platform",
-            "priority_score": 0.0396
+            "priority_score": -0.0254
           },
           {
             "channel": "Amazon",
             "channel_family": "platform",
-            "priority_score": -0.1325
+            "priority_score": -0.1755
           }
         ],
         "top_risks": [
@@ -2110,7 +2674,296 @@
         "best_platform_fit_score": 1.0,
         "b2b_viability_score": 0.5694,
         "traffic_paid_share": 0.7398,
-        "readiness_score": 0.5368
+        "readiness_score": 0.5368,
+        "optimizer": {
+          "optimizer_id": "P4OPT001",
+          "objective_name": "maximize_margin_under_risk_budget",
+          "objective_type": "constraint_rank",
+          "feasible_channels_count": 2,
+          "channel_count": 6,
+          "feasible_ratio": 0.3333,
+          "best_channel": {
+            "channel": "B2B",
+            "channel_family": "b2b",
+            "impressions": 18000,
+            "clicks": 420,
+            "sessions": 380,
+            "product_page_views": 316,
+            "add_to_cart": 59,
+            "checkout_start": 29,
+            "orders": 2,
+            "units": 36,
+            "revenue": 21484.0,
+            "avg_sell_price": 596.78,
+            "aov": 10742.0,
+            "landed_cost_total": 12264.0,
+            "landed_cost_unit_p10": 327.22,
+            "landed_cost_unit_p50": 340.67,
+            "landed_cost_unit_p90": 360.11,
+            "channel_fees_total": 751.94,
+            "fulfillment_cost_total": 432.0,
+            "payment_cost_total": 0.0,
+            "storage_cost_total": 113.0,
+            "acquisition_cost_total": 420.0,
+            "refund_and_return_total": 591.0,
+            "contribution_profit": 6912.06,
+            "contribution_margin_rate": 0.3217,
+            "roi": 0.4743,
+            "conversion_rate": 0.0053,
+            "page_view_rate": 0.8316,
+            "add_to_cart_rate": 0.1867,
+            "checkout_start_rate": 0.4915,
+            "checkout_completion_rate": 0.069,
+            "cac": 210.0,
+            "repeat_rate": 0.3333,
+            "ltv": 5184.05,
+            "payback_period_months": 0.05,
+            "return_rate": 0.5,
+            "dispute_rate": 0.0,
+            "avg_inventory_units": 36.0,
+            "inventory_days": 34.62,
+            "scenario_confidence_score": 0.76,
+            "fee_version_count": 3,
+            "latest_fee_effective_date": "2026-01-01",
+            "capital_required_proxy": 12797.0,
+            "loss_probability": 0.0,
+            "optimizer_priority_score": 0.556,
+            "expected_profit": 6138.07,
+            "risk_adjusted_profit": 4951.5,
+            "execution_friction_score": 0.3345
+          },
+          "ranked_channels": [
+            {
+              "channel": "B2B",
+              "channel_family": "b2b",
+              "impressions": 18000,
+              "clicks": 420,
+              "sessions": 380,
+              "product_page_views": 316,
+              "add_to_cart": 59,
+              "checkout_start": 29,
+              "orders": 2,
+              "units": 36,
+              "revenue": 21484.0,
+              "avg_sell_price": 596.78,
+              "aov": 10742.0,
+              "landed_cost_total": 12264.0,
+              "landed_cost_unit_p10": 327.22,
+              "landed_cost_unit_p50": 340.67,
+              "landed_cost_unit_p90": 360.11,
+              "channel_fees_total": 751.94,
+              "fulfillment_cost_total": 432.0,
+              "payment_cost_total": 0.0,
+              "storage_cost_total": 113.0,
+              "acquisition_cost_total": 420.0,
+              "refund_and_return_total": 591.0,
+              "contribution_profit": 6912.06,
+              "contribution_margin_rate": 0.3217,
+              "roi": 0.4743,
+              "conversion_rate": 0.0053,
+              "page_view_rate": 0.8316,
+              "add_to_cart_rate": 0.1867,
+              "checkout_start_rate": 0.4915,
+              "checkout_completion_rate": 0.069,
+              "cac": 210.0,
+              "repeat_rate": 0.3333,
+              "ltv": 5184.05,
+              "payback_period_months": 0.05,
+              "return_rate": 0.5,
+              "dispute_rate": 0.0,
+              "avg_inventory_units": 36.0,
+              "inventory_days": 34.62,
+              "scenario_confidence_score": 0.76,
+              "fee_version_count": 3,
+              "latest_fee_effective_date": "2026-01-01",
+              "capital_required_proxy": 12797.0,
+              "loss_probability": 0.0,
+              "optimizer_priority_score": 0.556,
+              "expected_profit": 6138.07,
+              "risk_adjusted_profit": 4951.5,
+              "execution_friction_score": 0.3345
+            },
+            {
+              "channel": "Walmart",
+              "channel_family": "platform",
+              "impressions": 122000,
+              "clicks": 3600,
+              "sessions": 4600,
+              "product_page_views": 3520,
+              "add_to_cart": 408,
+              "checkout_start": 196,
+              "orders": 2,
+              "units": 19,
+              "revenue": 12651.0,
+              "avg_sell_price": 665.84,
+              "aov": 6325.5,
+              "landed_cost_total": 6850.0,
+              "landed_cost_unit_p10": 346.53,
+              "landed_cost_unit_p50": 360.53,
+              "landed_cost_unit_p90": 382.53,
+              "channel_fees_total": 1771.14,
+              "fulfillment_cost_total": 456.0,
+              "payment_cost_total": 0.0,
+              "storage_cost_total": 175.6,
+              "acquisition_cost_total": 960.0,
+              "refund_and_return_total": 668.0,
+              "contribution_profit": 1770.26,
+              "contribution_margin_rate": 0.1399,
+              "roi": 0.1627,
+              "conversion_rate": 0.0004,
+              "page_view_rate": 0.7652,
+              "add_to_cart_rate": 0.1159,
+              "checkout_start_rate": 0.4804,
+              "checkout_completion_rate": 0.0102,
+              "cac": 480.0,
+              "repeat_rate": 0.1146,
+              "ltv": 1004.99,
+              "payback_period_months": 0.49,
+              "return_rate": 0.5,
+              "dispute_rate": 0.0,
+              "avg_inventory_units": 24.0,
+              "inventory_days": 30.0,
+              "scenario_confidence_score": 0.8,
+              "fee_version_count": 3,
+              "latest_fee_effective_date": "2026-01-01",
+              "capital_required_proxy": 7985.6,
+              "loss_probability": 0.1083,
+              "optimizer_priority_score": 0.3052,
+              "expected_profit": 1079.14,
+              "risk_adjusted_profit": 531.75,
+              "execution_friction_score": 0.4085
+            }
+          ],
+          "recommended_capital_allocation": {
+            "B2B": 150000.0,
+            "Walmart": 24244.29
+          },
+          "optimal_budget_mix": {
+            "B2B": 0.6,
+            "Walmart": 0.097
+          },
+          "risk_adjusted_profit": 5483.25,
+          "portfolio_constraints": {
+            "capital_limit": 250000.0,
+            "max_loss_probability": 0.25,
+            "min_contribution_margin_rate": 0.08,
+            "max_payback_months": 6.0,
+            "max_paid_share": 0.75,
+            "max_single_channel_weight": 0.6,
+            "objective_lambda": 0.4,
+            "turnover_penalty_lambda": 0.15
+          },
+          "capital_fit_status": "pass",
+          "risk_budget_fit_status": "pass",
+          "optimizer_runs": [
+            {
+              "channel": "Amazon",
+              "objective_name": "maximize_margin_under_risk_budget",
+              "objective_type": "constraint_rank",
+              "expected_profit": 2150.19,
+              "profit_variance_proxy": 2318.15,
+              "risk_adjusted_profit": 792.89,
+              "turnover_penalty_score": 0.0,
+              "execution_friction_score": 1.0,
+              "capital_required_proxy": 17663.0,
+              "feasible": false,
+              "infeasible_reasons": [
+                "execution_friction_limit"
+              ],
+              "priority_score": 0.2924
+            },
+            {
+              "channel": "B2B",
+              "objective_name": "maximize_margin_under_risk_budget",
+              "objective_type": "constraint_rank",
+              "expected_profit": 6138.07,
+              "profit_variance_proxy": 1939.84,
+              "risk_adjusted_profit": 4951.5,
+              "turnover_penalty_score": 0.0,
+              "execution_friction_score": 0.3345,
+              "capital_required_proxy": 12797.0,
+              "feasible": true,
+              "infeasible_reasons": [],
+              "priority_score": 0.556
+            },
+            {
+              "channel": "TikTok Shop",
+              "objective_name": "maximize_margin_under_risk_budget",
+              "objective_type": "constraint_rank",
+              "expected_profit": 2140.14,
+              "profit_variance_proxy": 1422.71,
+              "risk_adjusted_profit": 1143.03,
+              "turnover_penalty_score": 0.0,
+              "execution_friction_score": 1.0,
+              "capital_required_proxy": 11651.0,
+              "feasible": false,
+              "infeasible_reasons": [
+                "execution_friction_limit"
+              ],
+              "priority_score": 0.4042
+            },
+            {
+              "channel": "DTC",
+              "objective_name": "maximize_margin_under_risk_budget",
+              "objective_type": "constraint_rank",
+              "expected_profit": 29.26,
+              "profit_variance_proxy": 1284.38,
+              "risk_adjusted_profit": -490.35,
+              "turnover_penalty_score": 0.0,
+              "execution_friction_score": 1.0,
+              "capital_required_proxy": 10966.0,
+              "feasible": false,
+              "infeasible_reasons": [
+                "margin_floor",
+                "loss_probability_limit",
+                "execution_friction_limit"
+              ],
+              "priority_score": 0.1334
+            },
+            {
+              "channel": "Walmart",
+              "objective_name": "maximize_margin_under_risk_budget",
+              "objective_type": "constraint_rank",
+              "expected_profit": 1079.14,
+              "profit_variance_proxy": 1148.05,
+              "risk_adjusted_profit": 531.75,
+              "turnover_penalty_score": 0.0,
+              "execution_friction_score": 0.4085,
+              "capital_required_proxy": 7985.6,
+              "feasible": true,
+              "infeasible_reasons": [],
+              "priority_score": 0.3052
+            },
+            {
+              "channel": "eBay",
+              "objective_name": "maximize_margin_under_risk_budget",
+              "objective_type": "constraint_rank",
+              "expected_profit": 558.73,
+              "profit_variance_proxy": 894.03,
+              "risk_adjusted_profit": 89.37,
+              "turnover_penalty_score": 0.0,
+              "execution_friction_score": 1.0,
+              "capital_required_proxy": 6280.0,
+              "feasible": false,
+              "infeasible_reasons": [
+                "execution_friction_limit"
+              ],
+              "priority_score": 0.2071
+            }
+          ],
+          "infeasible_reason_mix": {
+            "execution_friction_limit": 4,
+            "margin_floor": 1,
+            "loss_probability_limit": 1
+          },
+          "optimizer_gate_result": "pass",
+          "optimizer_confidence_level": "medium"
+        },
+        "optimized_primary_channel": "B2B",
+        "optimizer_capital_allocation": {
+          "B2B": 150000.0,
+          "Walmart": 24244.29
+        }
       }
     }
   },
@@ -2144,144 +2997,276 @@
       "seed": 42,
       "overall": {
         "roi": {
-          "p10": 0.1346,
-          "p50": 0.1713,
-          "p90": 0.2052
+          "p10": 0.0528,
+          "p50": 0.1325,
+          "p90": 0.2155
         },
         "contribution_margin_rate": {
-          "p10": 0.1186,
-          "p50": 0.1463,
-          "p90": 0.1703
+          "p10": 0.0501,
+          "p50": 0.117,
+          "p90": 0.1773
         },
         "contribution_profit": {
-          "p10": 12217.9547,
-          "p50": 15369.7005,
-          "p90": 18352.3708
+          "p10": 4983.9286,
+          "p50": 12197.1344,
+          "p90": 19222.7967
         },
-        "loss_probability": 0.0,
-        "loss_probability_weighted_channels": 0.0465,
-        "target_payback_months": 6.0
+        "loss_probability": 0.0108,
+        "loss_probability_weighted_channels": 0.1379,
+        "target_payback_months": 6.0,
+        "tail_risk": {
+          "contribution_profit_var_95": 3104.39,
+          "contribution_profit_es_95": 988.26,
+          "contribution_profit_cvar_95": 988.26,
+          "margin_rate_var_95": 0.0308,
+          "margin_rate_es_95": 0.01,
+          "margin_rate_cvar_95": 0.01,
+          "tail_shortfall_severity": 0.0311
+        },
+        "risk_adjusted": {
+          "margin_rate_sharpe_like": 0.7122,
+          "margin_rate_sortino_like": 1.8021,
+          "margin_rate_calmar_like": 0.3694,
+          "margin_rate_ulcer_index": 0.5696,
+          "margin_rate_drawdown_duration": 648,
+          "margin_rate_tail_ratio": 6.2157,
+          "margin_rate_omega_ratio": 5.8274,
+          "roi_sharpe_like": 2.1309,
+          "roi_sortino_like": 58.574,
+          "roi_calmar_like": 0.3373,
+          "roi_ulcer_index": 0.6228,
+          "roi_drawdown_duration": 648,
+          "roi_omega_ratio": 686.0951
+        }
       },
       "channels": {
         "Amazon": {
           "roi": {
-            "p10": 0.0446,
-            "p50": 0.119,
-            "p90": 0.2064
+            "p10": -0.0064,
+            "p50": 0.0841,
+            "p90": 0.1804
           },
           "contribution_margin_rate": {
-            "p10": 0.0427,
-            "p50": 0.1063,
-            "p90": 0.1711
+            "p10": -0.0064,
+            "p50": 0.0776,
+            "p90": 0.1528
           },
           "contribution_profit": {
-            "p10": 1142.4921,
-            "p50": 3004.3519,
-            "p90": 5192.6037
+            "p10": -167.9669,
+            "p50": 2150.1876,
+            "p90": 4551.7015
           },
-          "loss_probability": 0.0167,
+          "loss_probability": 0.1242,
           "base_margin_rate": 0.1358,
-          "base_roi": 0.1572
+          "base_roi": 0.1572,
+          "tail_risk": {
+            "contribution_profit_var_95": -700.36,
+            "contribution_profit_es_95": -1465.42,
+            "contribution_profit_cvar_95": -1465.42,
+            "margin_rate_var_95": -0.0275,
+            "margin_rate_es_95": -0.0571,
+            "margin_rate_cvar_95": -0.0571,
+            "tail_shortfall_severity": 0.0778
+          },
+          "risk_adjusted": {
+            "margin_rate_sharpe_like": -0.9806,
+            "margin_rate_sortino_like": -0.7106,
+            "margin_rate_calmar_like": 0.1837,
+            "margin_rate_ulcer_index": 0.7391,
+            "margin_rate_drawdown_duration": 667,
+            "margin_rate_tail_ratio": 6.2257,
+            "margin_rate_omega_ratio": 0.0711
+          }
         },
         "B2B": {
           "roi": {
-            "p10": 0.3307,
-            "p50": 0.4293,
-            "p90": 0.536
+            "p10": 0.2641,
+            "p50": 0.3972,
+            "p90": 0.5425
           },
           "contribution_margin_rate": {
-            "p10": 0.2485,
-            "p50": 0.3004,
-            "p90": 0.349
+            "p10": 0.2089,
+            "p50": 0.2843,
+            "p90": 0.3517
           },
           "contribution_profit": {
-            "p10": 5038.4048,
-            "p50": 6430.3691,
-            "p90": 7940.3304
+            "p10": 4198.2321,
+            "p50": 6138.0721,
+            "p90": 7940.4418
           },
           "loss_probability": 0.0,
           "base_margin_rate": 0.3217,
-          "base_roi": 0.4743
+          "base_roi": 0.4743,
+          "tail_risk": {
+            "contribution_profit_var_95": 3712.09,
+            "contribution_profit_es_95": 3108.49,
+            "contribution_profit_cvar_95": 3108.49,
+            "margin_rate_var_95": 0.1854,
+            "margin_rate_es_95": 0.1592,
+            "margin_rate_cvar_95": 0.1592,
+            "tail_shortfall_severity": 0.0623
+          },
+          "risk_adjusted": {
+            "margin_rate_sharpe_like": -0.7101,
+            "margin_rate_sortino_like": -0.5993,
+            "margin_rate_calmar_like": 0.8291,
+            "margin_rate_ulcer_index": 0.3521,
+            "margin_rate_drawdown_duration": 415,
+            "margin_rate_tail_ratio": 1.9743,
+            "margin_rate_omega_ratio": 0.1517
+          }
         },
         "TikTok Shop": {
           "roi": {
-            "p10": 0.1002,
-            "p50": 0.1881,
-            "p90": 0.2786
+            "p10": 0.0445,
+            "p50": 0.138,
+            "p90": 0.2445
           },
           "contribution_margin_rate": {
-            "p10": 0.0911,
-            "p50": 0.1583,
-            "p90": 0.2179
+            "p10": 0.0426,
+            "p50": 0.1212,
+            "p90": 0.1965
           },
           "contribution_profit": {
-            "p10": 1532.6928,
-            "p50": 2850.4944,
-            "p90": 4175.6409
+            "p10": 717.4249,
+            "p50": 2140.1386,
+            "p90": 3706.721
           },
-          "loss_probability": 0.0,
+          "loss_probability": 0.0233,
           "base_margin_rate": 0.1812,
-          "base_roi": 0.2213
+          "base_roi": 0.2213,
+          "tail_risk": {
+            "contribution_profit_var_95": 382.5,
+            "contribution_profit_es_95": -98.19,
+            "contribution_profit_cvar_95": -98.19,
+            "margin_rate_var_95": 0.0231,
+            "margin_rate_es_95": -0.0064,
+            "margin_rate_cvar_95": -0.0064,
+            "tail_shortfall_severity": 0.0776
+          },
+          "risk_adjusted": {
+            "margin_rate_sharpe_like": -1.0243,
+            "margin_rate_sortino_like": -0.7265,
+            "margin_rate_calmar_like": 0.3431,
+            "margin_rate_ulcer_index": 0.6074,
+            "margin_rate_drawdown_duration": 625,
+            "margin_rate_tail_ratio": 9.3759,
+            "margin_rate_omega_ratio": 0.0695
+          }
         },
         "DTC": {
           "roi": {
-            "p10": -0.0352,
-            "p50": 0.0418,
-            "p90": 0.122
+            "p10": -0.0822,
+            "p50": 0.002,
+            "p90": 0.1012
           },
           "contribution_margin_rate": {
-            "p10": -0.0365,
-            "p50": 0.0401,
-            "p90": 0.1087
+            "p10": -0.0895,
+            "p50": 0.002,
+            "p90": 0.0919
           },
           "contribution_profit": {
-            "p10": -510.5929,
-            "p50": 594.085,
-            "p90": 1673.083
+            "p10": -1255.1249,
+            "p50": 29.2586,
+            "p90": 1415.898
           },
-          "loss_probability": 0.2608,
+          "loss_probability": 0.4858,
           "base_margin_rate": 0.0735,
-          "base_roi": 0.0793
+          "base_roi": 0.0793,
+          "tail_risk": {
+            "contribution_profit_var_95": -1726.51,
+            "contribution_profit_es_95": -2157.86,
+            "contribution_profit_cvar_95": -2157.86,
+            "margin_rate_var_95": -0.1278,
+            "margin_rate_es_95": -0.1631,
+            "margin_rate_cvar_95": -0.1631,
+            "tail_shortfall_severity": 0.0939
+          },
+          "risk_adjusted": {
+            "margin_rate_sharpe_like": -1.0214,
+            "margin_rate_sortino_like": -0.7245,
+            "margin_rate_calmar_like": -0.0014,
+            "margin_rate_ulcer_index": 1.0792,
+            "margin_rate_drawdown_duration": 588,
+            "margin_rate_tail_ratio": 0.9079,
+            "margin_rate_omega_ratio": 0.0665
+          }
         },
         "Walmart": {
           "roi": {
-            "p10": 0.0451,
-            "p50": 0.126,
-            "p90": 0.2057
+            "p10": -0.0057,
+            "p50": 0.0933,
+            "p90": 0.1877
           },
           "contribution_margin_rate": {
-            "p10": 0.0431,
-            "p50": 0.1119,
-            "p90": 0.1706
+            "p10": -0.0057,
+            "p50": 0.0853,
+            "p90": 0.158
           },
           "contribution_profit": {
-            "p10": 515.4677,
-            "p50": 1426.7957,
-            "p90": 2278.0835
+            "p10": -68.9096,
+            "p50": 1079.1358,
+            "p90": 2100.9318
           },
-          "loss_probability": 0.0125,
+          "loss_probability": 0.1083,
           "base_margin_rate": 0.1399,
-          "base_roi": 0.1627
+          "base_roi": 0.1627,
+          "tail_risk": {
+            "contribution_profit_var_95": -377.14,
+            "contribution_profit_es_95": -745.92,
+            "contribution_profit_cvar_95": -745.92,
+            "margin_rate_var_95": -0.0317,
+            "margin_rate_es_95": -0.0656,
+            "margin_rate_cvar_95": -0.0656,
+            "tail_shortfall_severity": 0.0775
+          },
+          "risk_adjusted": {
+            "margin_rate_sharpe_like": -0.9378,
+            "margin_rate_sortino_like": -0.6936,
+            "margin_rate_calmar_like": 0.1859,
+            "margin_rate_ulcer_index": 0.7196,
+            "margin_rate_drawdown_duration": 502,
+            "margin_rate_tail_ratio": 5.5175,
+            "margin_rate_omega_ratio": 0.0728
+          }
         },
         "eBay": {
           "roi": {
-            "p10": 0.0211,
-            "p50": 0.0957,
-            "p90": 0.1782
+            "p10": -0.035,
+            "p50": 0.0591,
+            "p90": 0.1575
           },
           "contribution_margin_rate": {
-            "p10": 0.0207,
-            "p50": 0.0874,
-            "p90": 0.1513
+            "p10": -0.0363,
+            "p50": 0.0558,
+            "p90": 0.1361
           },
           "contribution_profit": {
-            "p10": 191.9306,
-            "p50": 864.8853,
-            "p90": 1614.0927
+            "p10": -335.2956,
+            "p50": 558.7316,
+            "p90": 1443.3131
           },
-          "loss_probability": 0.045,
+          "loss_probability": 0.2075,
           "base_margin_rate": 0.1167,
-          "base_roi": 0.1321
+          "base_roi": 0.1321,
+          "tail_risk": {
+            "contribution_profit_var_95": -561.42,
+            "contribution_profit_es_95": -782.16,
+            "contribution_profit_cvar_95": -782.16,
+            "margin_rate_var_95": -0.0606,
+            "margin_rate_es_95": -0.0866,
+            "margin_rate_cvar_95": -0.0866,
+            "tail_shortfall_severity": 0.0829
+          },
+          "risk_adjusted": {
+            "margin_rate_sharpe_like": -0.9751,
+            "margin_rate_sortino_like": -0.7093,
+            "margin_rate_calmar_like": 0.1308,
+            "margin_rate_ulcer_index": 0.8306,
+            "margin_rate_drawdown_duration": 992,
+            "margin_rate_tail_ratio": 2.5634,
+            "margin_rate_omega_ratio": 0.0744
+          }
         }
       },
       "sensitivity": [
@@ -2435,11 +3420,11 @@
         "method": "Monte Carlo percentile bands should be monotonic and loss probability must stay within a 0-1 range.",
         "evidence": {
           "overall_band": {
-            "p10": 0.1186,
-            "p50": 0.1463,
-            "p90": 0.1703
+            "p10": 0.0501,
+            "p50": 0.117,
+            "p90": 0.1773
           },
-          "loss_probability": 0.0,
+          "loss_probability": 0.0108,
           "missing_input": false
         }
       },
@@ -2465,10 +3450,150 @@
         "method": "Go/No-Go gates should remain boolean, recommendation must use the fixed enum, and budget shares should not exceed 100%.",
         "evidence": {
           "recommendation": "go",
-          "budget_sum": 0.9001,
+          "budget_sum": 1.0,
           "missing_input": false
         }
       }
     ]
-  }
+  },
+  "factor_snapshots": {
+    "FAC-CHANNEL-FIT": {
+      "label": "渠道适配因子",
+      "value": 1.0,
+      "source_section": "4.1-4.3"
+    },
+    "FAC-TRAFFIC-EFFICIENCY": {
+      "label": "流量效率因子",
+      "value": 0.0963,
+      "source_section": "4.4"
+    },
+    "FAC-UNIT-ECONOMICS": {
+      "label": "单位经济因子",
+      "value": 0.7748,
+      "source_section": "4.5"
+    },
+    "FAC-PORTFOLIO-RESILIENCE": {
+      "label": "组合韧性因子",
+      "value": 0.9968,
+      "source_section": "4.5"
+    },
+    "FAC-EXECUTION-FRICTION": {
+      "label": "执行摩擦因子",
+      "value": 0.2095,
+      "source_section": "4.5-4.6"
+    },
+    "FAC-SCALE-READINESS": {
+      "label": "放量承接因子",
+      "value": 0.6158,
+      "source_section": "4.6-4.7"
+    }
+  },
+  "confidence_band": {
+    "score": 0.7861,
+    "label": "high",
+    "proxy_usage_flags": []
+  },
+  "proxy_usage_flags": [],
+  "execution_friction_flags": [
+    "cac_slippage",
+    "execution_friction_high",
+    "fee_jump_risk",
+    "policy_jump_risk"
+  ],
+  "part4_optimizer_runs": [
+    {
+      "channel": "Amazon",
+      "objective_name": "maximize_margin_under_risk_budget",
+      "objective_type": "constraint_rank",
+      "expected_profit": 2150.19,
+      "profit_variance_proxy": 2318.15,
+      "risk_adjusted_profit": 792.89,
+      "turnover_penalty_score": 0.0,
+      "execution_friction_score": 1.0,
+      "capital_required_proxy": 17663.0,
+      "feasible": false,
+      "infeasible_reasons": [
+        "execution_friction_limit"
+      ],
+      "priority_score": 0.2924
+    },
+    {
+      "channel": "B2B",
+      "objective_name": "maximize_margin_under_risk_budget",
+      "objective_type": "constraint_rank",
+      "expected_profit": 6138.07,
+      "profit_variance_proxy": 1939.84,
+      "risk_adjusted_profit": 4951.5,
+      "turnover_penalty_score": 0.0,
+      "execution_friction_score": 0.3345,
+      "capital_required_proxy": 12797.0,
+      "feasible": true,
+      "infeasible_reasons": [],
+      "priority_score": 0.556
+    },
+    {
+      "channel": "TikTok Shop",
+      "objective_name": "maximize_margin_under_risk_budget",
+      "objective_type": "constraint_rank",
+      "expected_profit": 2140.14,
+      "profit_variance_proxy": 1422.71,
+      "risk_adjusted_profit": 1143.03,
+      "turnover_penalty_score": 0.0,
+      "execution_friction_score": 1.0,
+      "capital_required_proxy": 11651.0,
+      "feasible": false,
+      "infeasible_reasons": [
+        "execution_friction_limit"
+      ],
+      "priority_score": 0.4042
+    },
+    {
+      "channel": "DTC",
+      "objective_name": "maximize_margin_under_risk_budget",
+      "objective_type": "constraint_rank",
+      "expected_profit": 29.26,
+      "profit_variance_proxy": 1284.38,
+      "risk_adjusted_profit": -490.35,
+      "turnover_penalty_score": 0.0,
+      "execution_friction_score": 1.0,
+      "capital_required_proxy": 10966.0,
+      "feasible": false,
+      "infeasible_reasons": [
+        "margin_floor",
+        "loss_probability_limit",
+        "execution_friction_limit"
+      ],
+      "priority_score": 0.1334
+    },
+    {
+      "channel": "Walmart",
+      "objective_name": "maximize_margin_under_risk_budget",
+      "objective_type": "constraint_rank",
+      "expected_profit": 1079.14,
+      "profit_variance_proxy": 1148.05,
+      "risk_adjusted_profit": 531.75,
+      "turnover_penalty_score": 0.0,
+      "execution_friction_score": 0.4085,
+      "capital_required_proxy": 7985.6,
+      "feasible": true,
+      "infeasible_reasons": [],
+      "priority_score": 0.3052
+    },
+    {
+      "channel": "eBay",
+      "objective_name": "maximize_margin_under_risk_budget",
+      "objective_type": "constraint_rank",
+      "expected_profit": 558.73,
+      "profit_variance_proxy": 894.03,
+      "risk_adjusted_profit": 89.37,
+      "turnover_penalty_score": 0.0,
+      "execution_friction_score": 1.0,
+      "capital_required_proxy": 6280.0,
+      "feasible": false,
+      "infeasible_reasons": [
+        "execution_friction_limit"
+      ],
+      "priority_score": 0.2071
+    }
+  ]
 }

@@ -35,6 +35,10 @@ from .cleaners import (
     normalize_tiktok_channels_export,
 )
 from .io_utils import read_csv_rows, write_csv_rows, write_json
+from .decision_os_bridge import (
+    build_decision_os_bridge_bundle,
+    export_decision_os_bridge_bundle,
+)
 from .models import (
     MarketSizeAssumptions,
     Part1Dataset,
@@ -120,4 +124,6 @@ __all__ = [
     "write_demo_backtest_panel",
     "write_demo_part2_backtest_panel",
     "write_json",
+    "build_decision_os_bridge_bundle",
+    "export_decision_os_bridge_bundle",
 ]

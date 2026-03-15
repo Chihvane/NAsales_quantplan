@@ -2,7 +2,7 @@
   "metadata": {
     "report_id": "part5_quant_report",
     "report_version": "2026.03",
-    "generated_at": "2026-03-13T16:50:04.986966+00:00",
+    "generated_at": "2026-03-14T18:51:56.445839+00:00",
     "section_order": [
       "5.1",
       "5.2",
@@ -632,7 +632,10 @@
       "refund_cash_out",
       "channel_health_score",
       "forecast_snapshot"
-    ]
+    ],
+    "factor_snapshot_count": 7,
+    "confidence_band": "high",
+    "proxy_usage_flag_count": 4
   },
   "sections": {
     "5.1": {
@@ -3092,5 +3095,58 @@
         "customer_level_ltv"
       ]
     }
-  }
+  },
+  "factor_snapshots": {
+    "FAC-OPERATING-HEALTH": {
+      "label": "经营健康因子",
+      "value": 0.6515,
+      "source_section": "5.1"
+    },
+    "FAC-DATA-CONTRACT": {
+      "label": "数据契约因子",
+      "value": 0.825,
+      "source_section": "5.2"
+    },
+    "FAC-GROWTH-LEVERAGE": {
+      "label": "增长杠杆因子",
+      "value": 0.6081,
+      "source_section": "5.3"
+    },
+    "FAC-MARGIN-PROTECTION": {
+      "label": "利润保护因子",
+      "value": 0.7,
+      "source_section": "5.4"
+    },
+    "FAC-CASH-DISCIPLINE": {
+      "label": "库存现金纪律因子",
+      "value": 0.9552,
+      "source_section": "5.5"
+    },
+    "FAC-EXPERIMENT-CONFIDENCE": {
+      "label": "实验可信度因子",
+      "value": 0.8792,
+      "source_section": "5.6"
+    },
+    "FAC-SCALE-CONTROL": {
+      "label": "扩张控制因子",
+      "value": 0.5235,
+      "source_section": "5.7"
+    }
+  },
+  "confidence_band": {
+    "score": 0.8531,
+    "label": "high",
+    "proxy_usage_flags": [
+      "cohort_repeat_rate_proxy_for_ltv",
+      "platform_level_customer_acquisition_proxy",
+      "policy_monitoring_thin",
+      "rollback_pressure_high"
+    ]
+  },
+  "proxy_usage_flags": [
+    "cohort_repeat_rate_proxy_for_ltv",
+    "platform_level_customer_acquisition_proxy",
+    "policy_monitoring_thin",
+    "rollback_pressure_high"
+  ]
 }

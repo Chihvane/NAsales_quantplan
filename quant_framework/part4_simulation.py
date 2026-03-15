@@ -3,6 +3,18 @@ from __future__ import annotations
 from random import Random
 
 from .models import Part4Assumptions
+from .risk_metrics import (
+    calmar_like,
+    drawdown_duration,
+    expected_shortfall,
+    omega_ratio,
+    sharpe_like,
+    sortino_like,
+    tail_ratio,
+    tail_shortfall_severity,
+    ulcer_index,
+    value_at_risk,
+)
 from .stats_utils import percentile_band as _band
 
 
@@ -110,18 +122,25 @@ def run_part4_roi_monte_carlo(
         }
 
     for _ in range(iterations):
+        macro_demand_shock = rng.triangular(0.9, 1.08, 1.0)
+        ads_shock = rng.triangular(0.85, 1.3, 1.03)
+        logistics_shock = rng.triangular(0.92, 1.16, 1.01)
+        policy_shock = rng.triangular(0.95, 1.12, 1.0)
         total_profit = 0.0
         total_cost = 0.0
         total_revenue = 0.0
         for row in channel_rows:
+            channel_family = row.get("channel_family", "")
+            revenue_mode = 1.03 if channel_family == "b2b" else 1.0
+            spend_mode = 0.98 if channel_family == "b2b" else 1.04
             factors = {
-                "revenue": rng.triangular(0.88, 1.12, 1.0),
-                "landed": rng.triangular(0.95, 1.12, 1.02),
-                "fee": rng.triangular(0.96, 1.08, 1.01),
-                "fulfillment": rng.triangular(0.92, 1.12, 1.0),
-                "storage": rng.triangular(0.85, 1.2, 1.0),
-                "spend": rng.triangular(0.82, 1.25, 1.03),
-                "refund": rng.triangular(0.75, 1.45, 1.05),
+                "revenue": macro_demand_shock * rng.triangular(0.9, 1.1, revenue_mode),
+                "landed": logistics_shock * rng.triangular(0.96, 1.1, 1.01),
+                "fee": policy_shock * rng.triangular(0.97, 1.08, 1.01),
+                "fulfillment": logistics_shock * rng.triangular(0.93, 1.12, 1.0),
+                "storage": logistics_shock * rng.triangular(0.88, 1.2, 1.0),
+                "spend": ads_shock * rng.triangular(0.84, 1.22, spend_mode),
+                "refund": max(policy_shock, 1.0) * rng.triangular(0.78, 1.4, 1.04),
             }
             roi, margin_rate = _compute_profit(row, factors)
             revenue = row.get("revenue", 0.0) * factors["revenue"]
@@ -156,6 +175,7 @@ def run_part4_roi_monte_carlo(
         bucket = channel_samples[row["channel"]]
         loss_probability = sum(1 for value in bucket["contribution_profit"] if value < 0) / iterations
         weighted_loss_probability_numerator += loss_probability * row.get("revenue", 0.0)
+        margin_floor = row.get("contribution_margin_rate", 0.0)
         channel_payload[row["channel"]] = {
             "roi": _band(bucket["roi"]),
             "contribution_margin_rate": _band(bucket["contribution_margin_rate"]),
@@ -163,6 +183,24 @@ def run_part4_roi_monte_carlo(
             "loss_probability": round(loss_probability, 4),
             "base_margin_rate": round(row.get("contribution_margin_rate", 0.0), 4),
             "base_roi": round(row.get("roi", 0.0), 4),
+            "tail_risk": {
+                "contribution_profit_var_95": round(value_at_risk(bucket["contribution_profit"], 0.95), 2),
+                "contribution_profit_es_95": round(expected_shortfall(bucket["contribution_profit"], 0.95), 2),
+                "contribution_profit_cvar_95": round(expected_shortfall(bucket["contribution_profit"], 0.95), 2),
+                "margin_rate_var_95": round(value_at_risk(bucket["contribution_margin_rate"], 0.95), 4),
+                "margin_rate_es_95": round(expected_shortfall(bucket["contribution_margin_rate"], 0.95), 4),
+                "margin_rate_cvar_95": round(expected_shortfall(bucket["contribution_margin_rate"], 0.95), 4),
+                "tail_shortfall_severity": round(tail_shortfall_severity(bucket["contribution_margin_rate"], threshold=margin_floor), 4),
+            },
+            "risk_adjusted": {
+                "margin_rate_sharpe_like": round(sharpe_like(bucket["contribution_margin_rate"], hurdle_rate=margin_floor), 4),
+                "margin_rate_sortino_like": round(sortino_like(bucket["contribution_margin_rate"], hurdle_rate=margin_floor), 4),
+                "margin_rate_calmar_like": round(calmar_like(bucket["contribution_margin_rate"]), 4),
+                "margin_rate_ulcer_index": round(ulcer_index(bucket["contribution_margin_rate"]), 4),
+                "margin_rate_drawdown_duration": drawdown_duration(bucket["contribution_margin_rate"]),
+                "margin_rate_tail_ratio": round(tail_ratio(bucket["contribution_margin_rate"]), 4),
+                "margin_rate_omega_ratio": round(omega_ratio(bucket["contribution_margin_rate"], threshold=margin_floor), 4),
+            },
         }
 
     overall_roi = [
@@ -186,6 +224,33 @@ def run_part4_roi_monte_carlo(
             4,
         ),
         "target_payback_months": assumptions.target_payback_months,
+        "tail_risk": {
+            "contribution_profit_var_95": round(value_at_risk(total_profit_samples, 0.95), 2),
+            "contribution_profit_es_95": round(expected_shortfall(total_profit_samples, 0.95), 2),
+            "contribution_profit_cvar_95": round(expected_shortfall(total_profit_samples, 0.95), 2),
+            "margin_rate_var_95": round(value_at_risk(overall_margin, 0.95), 4),
+            "margin_rate_es_95": round(expected_shortfall(overall_margin, 0.95), 4),
+            "margin_rate_cvar_95": round(expected_shortfall(overall_margin, 0.95), 4),
+            "tail_shortfall_severity": round(
+                tail_shortfall_severity(overall_margin, threshold=assumptions.min_contribution_margin_rate),
+                4,
+            ),
+        },
+        "risk_adjusted": {
+            "margin_rate_sharpe_like": round(sharpe_like(overall_margin, hurdle_rate=assumptions.min_contribution_margin_rate), 4),
+            "margin_rate_sortino_like": round(sortino_like(overall_margin, hurdle_rate=assumptions.min_contribution_margin_rate), 4),
+            "margin_rate_calmar_like": round(calmar_like(overall_margin), 4),
+            "margin_rate_ulcer_index": round(ulcer_index(overall_margin), 4),
+            "margin_rate_drawdown_duration": drawdown_duration(overall_margin),
+            "margin_rate_tail_ratio": round(tail_ratio(overall_margin), 4),
+            "margin_rate_omega_ratio": round(omega_ratio(overall_margin, threshold=assumptions.min_contribution_margin_rate), 4),
+            "roi_sharpe_like": round(sharpe_like(overall_roi, hurdle_rate=0.0), 4),
+            "roi_sortino_like": round(sortino_like(overall_roi, hurdle_rate=0.0), 4),
+            "roi_calmar_like": round(calmar_like(overall_roi), 4),
+            "roi_ulcer_index": round(ulcer_index(overall_roi), 4),
+            "roi_drawdown_duration": drawdown_duration(overall_roi),
+            "roi_omega_ratio": round(omega_ratio(overall_roi, threshold=0.0), 4),
+        },
     }
 
     return {

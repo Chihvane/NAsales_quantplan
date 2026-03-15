@@ -23,6 +23,8 @@ class StressTestTests(unittest.TestCase):
                 "min_profit_p50": 2.0,
                 "min_margin_p50_ratio": 0.18,
                 "max_volatility": 0.24,
+                "min_channel_optimizer_feasible_ratio": 0.25,
+                "min_channel_stress_robustness_score": 0.6,
                 "max_positions_per_period": 3,
             },
             simulations=200,
@@ -31,6 +33,7 @@ class StressTestTests(unittest.TestCase):
         self.assertEqual(result["scenario_count"], 5)
         self.assertIn("robustness_score", result)
         self.assertTrue(result["scenarios"])
+        self.assertIn("summary", result["scenarios"][0])
 
 
 if __name__ == "__main__":

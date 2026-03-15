@@ -1,0 +1,11 @@
+market_code,market_name,region_group,default_currency,analysis_method,habit_model_family,regulatory_complexity,logistics_complexity,fx_risk,digital_maturity,cross_border_acceptance,active_flag,notes
+EU,Europe,Europe,EUR,compliance_first,mature_premium,0.62,0.41,0.32,0.86,0.72,true,high compliance and certification burden
+JP,Japan,East Asia,JPY,quality_service,service_quality,0.58,0.28,0.26,0.91,0.69,true,high quality and warranty expectation
+KR,South Korea,East Asia,KRW,content_fast,trend_digital,0.49,0.24,0.24,0.92,0.76,true,fast digital response and content-led discovery
+TW,Taiwan,East Asia,TWD,balance_crossborder,service_quality,0.42,0.22,0.21,0.88,0.78,true,cross-border friendly with balanced premium and value
+PH,Philippines,Southeast Asia,PHP,value_mobile,mobile_value,0.33,0.46,0.51,0.72,0.84,true,mobile and promo driven with logistics variability
+VN,Vietnam,Southeast Asia,VND,platform_value,mobile_value,0.36,0.42,0.48,0.76,0.81,true,platform-led conversion and value sensitivity
+TH,Thailand,Southeast Asia,THB,content_platform,mobile_value,0.38,0.37,0.43,0.79,0.8,true,content-commerce mixed market
+KH,Cambodia,Southeast Asia,KHR,lightweight_entry,frontier_value,0.28,0.55,0.57,0.58,0.63,true,frontier market with limited infrastructure
+LA,Laos,Southeast Asia,LAK,lightweight_entry,frontier_value,0.27,0.57,0.61,0.52,0.58,true,small market with higher logistics friction
+ID,Indonesia,Southeast Asia,IDR,mass_scale,mobile_value,0.41,0.44,0.47,0.83,0.86,true,large archipelago with scale and logistics complexity

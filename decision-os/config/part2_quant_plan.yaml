@@ -1,0 +1,196 @@
+plan_id: PART2-QUANT-PLAN-20260315
+schema_version: 1.0
+module: part2_product_intelligence_engine
+owner: strategy_committee
+status: active
+
+goals:
+  - standardize_part2_as_product_intelligence_engine
+  - connect_part2_to_decision_os_gate
+  - add_evidence_grading_and_probability_outputs
+  - unify_part2_backtest_with_walk_forward_engine
+  - add_calibration_and_drift_monitoring
+  - upgrade_part2_to_probabilistic_product_decision_layer
+
+layers:
+  governance:
+    required_objects:
+      - part2_source_registry
+      - part2_threshold_registry
+      - part2_benchmark_registry
+      - voc_event_registry
+      - part2_evidence_index
+      - part2_data_quality_log
+      - part2_source_cost_registry
+    mandatory_outputs:
+      - evidence_ref
+      - master_data_ref
+      - rule_ref
+      - confidence
+      - threshold_coverage_ratio
+      - gate_result
+      - confidence_band
+      - proxy_usage_flags
+      - evidence_grade
+  data:
+    observation_tables:
+      - listing_snapshots
+      - sold_transactions
+      - product_catalog
+      - reviews
+    reference_tables:
+      - part2_source_registry
+      - part2_threshold_registry
+      - part2_benchmark_registry
+      - voc_event_registry
+      - part2_evidence_index
+      - part2_data_quality_log
+      - part2_source_cost_registry
+      - part2_label_registry
+    backtest_tables:
+      - part2_factor_snapshots
+      - part2_gate_records
+      - part2_backtest_panel
+      - part2_stress_scenarios
+      - part2_calibration_report
+      - part2_drift_report
+  factor:
+    outputs:
+      - FAC-COMPETITION-HEADROOM
+      - FAC-PRICING-FIT
+      - FAC-VALUE-ADVANTAGE
+      - FAC-WHITESPACE-DEPTH
+      - FAC-VOC-RISK
+      - FAC-SHELF-STABILITY
+
+sections:
+  "2.1":
+    theme: market_structure
+    planned_upgrades:
+      - concentration_reliability
+      - active_competitor_quality
+      - entry_barrier_score
+      - competition_density_gate
+      - evidence_grade
+    outputs:
+      - competition_headroom_factor
+      - seller_fragmentation_score
+      - structure_confidence_score
+  "2.2":
+    theme: pricing_realization
+    planned_upgrades:
+      - realized_price_quality
+      - discount_dependency
+      - margin_proxy_band
+      - promo_contamination_flag
+      - proxy_usage_flags
+    outputs:
+      - pricing_fit_factor
+      - price_realization_score
+      - value_trap_probability
+  "2.3":
+    theme: value_matrix
+    planned_upgrades:
+      - rating_confidence
+      - premium_justification
+      - low_rating_discount_trap
+    outputs:
+      - value_advantage_factor
+      - premium_justification_score
+  "2.4":
+    theme: attribute_whitespace
+    planned_upgrades:
+      - shrinkage_adjusted_outperformance
+      - novelty_score
+      - brand_coverage_gap
+      - attribute_combo_opportunity
+    outputs:
+      - whitespace_depth_factor
+      - whitespace_confidence_score
+      - attribute_gap_depth
+  "2.5":
+    theme: voc_engine
+    planned_upgrades:
+      - product_defect_tree
+      - experience_defect_tree
+      - expectation_mismatch_tree
+      - returns_prevention_priority
+      - voc_event_binding
+    outputs:
+      - voc_risk_factor
+      - design_fix_priority
+      - copy_fix_priority
+  "2.6":
+    theme: shelf_dynamics
+    planned_upgrades:
+      - hazard_rate_by_price_band
+      - hazard_rate_by_attribute
+      - entry_exit_velocity
+      - shelf_risk_gate
+    outputs:
+      - shelf_stability_factor
+      - listing_decay_score
+
+backtest:
+  mode: walk_forward
+  split_policy: train_test_split_required
+  scenarios:
+    - returns_rate_x2
+    - review_sentiment_shock
+    - platform_fee_up
+    - pricing_war
+    - ad_competition_up
+  outputs:
+    - part2_backtest_summary.json
+    - part2_factor_panel.csv
+    - part2_gate_records.csv
+    - part2_alpha_table.csv
+    - part2_stress_test_summary.json
+    - part2_calibration_report.json
+    - part2_drift_report.json
+
+validation:
+  required_reports:
+    - calibration_curve
+    - ece
+    - mce
+    - posterior_predictive_checks
+    - proxy_dependency_review
+    - drift_report
+
+tooling:
+  recommended_modules:
+    - bayesian_evidence_scoring
+    - monte_carlo_uncertainty
+    - ahp_weighting_workflow
+    - shap_contribution_decomposition
+    - part2_calibration_monitor
+    - part2_drift_monitor
+
+delivery_phases:
+  - phase: governance
+    tasks:
+      - finalize_part2_source_registry
+      - finalize_part2_threshold_registry
+      - finalize_part2_benchmark_registry
+      - finalize_voc_event_registry
+      - finalize_part2_evidence_index
+      - finalize_part2_source_cost_registry
+  - phase: factorization
+    tasks:
+      - extend_part2_factor_snapshots_to_six_factors
+      - add_confidence_band_and_gate_results
+      - add_evidence_grade_and_proxy_flags
+  - phase: product_intelligence
+    tasks:
+      - build_voc_problem_trees
+      - add_value_trap_probability
+      - add_attribute_combo_whitespace
+      - add_contribution_decomposition
+  - phase: backtesting
+    tasks:
+      - unify_part2_backtest_with_decision_os
+      - add_train_test_split
+      - add_stress_test
+      - add_calibration_report
+      - add_drift_monitor

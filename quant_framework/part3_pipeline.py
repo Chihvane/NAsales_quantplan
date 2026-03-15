@@ -5,6 +5,10 @@ from pathlib import Path
 from .loaders import (
     load_compliance_requirements,
     load_logistics_quotes,
+    load_evidence_sources,
+    load_gate_thresholds,
+    load_part3_optimizer_registry,
+    load_part3_scenario_registry,
     load_rfq_quotes,
     load_shipment_events,
     load_suppliers,
@@ -34,4 +38,24 @@ def build_part3_dataset_from_directory(data_dir: str | Path) -> Part3Dataset:
         logistics_quotes=load_logistics_quotes(data_dir / "logistics_quotes.csv"),
         tariff_tax=load_tariff_tax(data_dir / "tariff_tax.csv"),
         shipment_events=load_shipment_events(data_dir / "shipment_events.csv"),
+        part3_source_registry=(
+            load_evidence_sources(data_dir / "part3_source_registry.csv")
+            if (data_dir / "part3_source_registry.csv").exists()
+            else []
+        ),
+        part3_threshold_registry=(
+            load_gate_thresholds(data_dir / "part3_threshold_registry.csv")
+            if (data_dir / "part3_threshold_registry.csv").exists()
+            else []
+        ),
+        part3_scenario_registry=(
+            load_part3_scenario_registry(data_dir / "part3_scenario_registry.csv")
+            if (data_dir / "part3_scenario_registry.csv").exists()
+            else []
+        ),
+        part3_optimizer_registry=(
+            load_part3_optimizer_registry(data_dir / "part3_optimizer_registry.csv")
+            if (data_dir / "part3_optimizer_registry.csv").exists()
+            else []
+        ),
     )

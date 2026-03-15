@@ -4,13 +4,18 @@ from pathlib import Path
 
 from .loaders import (
     load_b2b_accounts,
+    load_channel_benchmarks,
     load_channel_rate_cards,
     load_customer_cohorts,
+    load_evidence_sources,
     load_experiment_registry,
+    load_gate_thresholds,
     load_inventory_positions,
     load_landed_cost_scenarios,
     load_listing_snapshots,
     load_marketing_spend,
+    load_part4_optimizer_registry,
+    load_part4_stress_registry,
     load_product_catalog,
     load_returns_claims,
     load_sold_transactions,
@@ -45,4 +50,29 @@ def build_part4_dataset_from_directory(data_dir: str | Path) -> Part4Dataset:
         inventory_positions=load_inventory_positions(data_dir / "inventory_positions.csv"),
         experiment_registry=load_experiment_registry(data_dir / "experiment_registry.csv"),
         b2b_accounts=load_b2b_accounts(data_dir / "b2b_accounts.csv"),
+        part4_source_registry=(
+            load_evidence_sources(data_dir / "part4_source_registry.csv")
+            if (data_dir / "part4_source_registry.csv").exists()
+            else []
+        ),
+        part4_threshold_registry=(
+            load_gate_thresholds(data_dir / "part4_threshold_registry.csv")
+            if (data_dir / "part4_threshold_registry.csv").exists()
+            else []
+        ),
+        part4_benchmark_registry=(
+            load_channel_benchmarks(data_dir / "part4_benchmark_registry.csv")
+            if (data_dir / "part4_benchmark_registry.csv").exists()
+            else []
+        ),
+        part4_optimizer_registry=(
+            load_part4_optimizer_registry(data_dir / "part4_optimizer_registry.csv")
+            if (data_dir / "part4_optimizer_registry.csv").exists()
+            else []
+        ),
+        part4_stress_registry=(
+            load_part4_stress_registry(data_dir / "part4_stress_registry.csv")
+            if (data_dir / "part4_stress_registry.csv").exists()
+            else []
+        ),
     )

@@ -11,6 +11,7 @@ from .models import (
     ChannelBenchmarkRecord,
     ChannelRateCardRecord,
     ComplianceRequirementRecord,
+    ConsumerHabitVectorRecord,
     DecisionNodeRecord,
     DecisionRuleRecord,
     DecisionTriggerRecord,
@@ -32,13 +33,19 @@ from .models import (
     ListingSnapshotRecord,
     LogisticsQuoteRecord,
     MasterDataEntityRecord,
+    MarketDestinationRecord,
     MarketSizeInputRecord,
     MarketingSpendRecord,
+    Part4OptimizerRecord,
+    Part4StressRecord,
+    Part3OptimizerRecord,
+    Part3ScenarioRecord,
     PolicyChangeLogRecord,
     PricingActionRecord,
     RFQQuoteRecord,
     ProductCatalogRecord,
     RegionDemandRecord,
+    RegionWeightProfileRecord,
     ReorderPlanRecord,
     ReviewRecord,
     ReturnClaimRecord,
@@ -132,6 +139,7 @@ def load_gate_thresholds(path: str | Path) -> list[GateThresholdRecord]:
             source_grade_min=row.get("source_grade_min", ""),
             approver_role=row.get("approver_role", ""),
             decision_if_fail=row.get("decision_if_fail", ""),
+            market_code=row.get("market_code", ""),
         )
         for row in _read_csv(path)
     ]
@@ -180,6 +188,80 @@ def load_field_dictionary(path: str | Path) -> list[FieldDictionaryRecord]:
             source_table=row.get("source_table", ""),
             reusable_flag=_parse_bool(row.get("reusable_flag", False)),
             required_flag=_parse_bool(row.get("required_flag", False)),
+        )
+        for row in _read_csv(path)
+    ]
+
+
+def load_market_destination_registry(path: str | Path) -> list[MarketDestinationRecord]:
+    return [
+        MarketDestinationRecord(
+            market_code=row["market_code"],
+            market_name=row.get("market_name", ""),
+            region_group=row.get("region_group", ""),
+            default_currency=row.get("default_currency", ""),
+            analysis_method=row.get("analysis_method", ""),
+            habit_model_family=row.get("habit_model_family", ""),
+            regulatory_complexity=float(row.get("regulatory_complexity", 0) or 0),
+            logistics_complexity=float(row.get("logistics_complexity", 0) or 0),
+            fx_risk=float(row.get("fx_risk", 0) or 0),
+            digital_maturity=float(row.get("digital_maturity", 0) or 0),
+            cross_border_acceptance=float(row.get("cross_border_acceptance", 0) or 0),
+            active_flag=_parse_bool(row.get("active_flag", True)),
+            notes=row.get("notes", ""),
+        )
+        for row in _read_csv(path)
+    ]
+
+
+def load_consumer_habit_vectors(path: str | Path) -> list[ConsumerHabitVectorRecord]:
+    return [
+        ConsumerHabitVectorRecord(
+            market_code=row["market_code"],
+            category_key=row.get("category_key", ""),
+            period=row.get("period", ""),
+            price_sensitivity=float(row.get("price_sensitivity", 0) or 0),
+            brand_loyalty=float(row.get("brand_loyalty", 0) or 0),
+            quality_premium_preference=float(row.get("quality_premium_preference", 0) or 0),
+            novelty_seeking=float(row.get("novelty_seeking", 0) or 0),
+            social_proof_dependency=float(row.get("social_proof_dependency", 0) or 0),
+            discount_dependency=float(row.get("discount_dependency", 0) or 0),
+            delivery_speed_preference=float(row.get("delivery_speed_preference", 0) or 0),
+            return_aversion=float(row.get("return_aversion", 0) or 0),
+            cross_border_affinity=float(row.get("cross_border_affinity", 0) or 0),
+            content_driven_discovery=float(row.get("content_driven_discovery", 0) or 0),
+            payment_friction_tolerance=float(row.get("payment_friction_tolerance", 0) or 0),
+            offline_affinity=float(row.get("offline_affinity", 0) or 0),
+            evidence_bundle=row.get("evidence_bundle", ""),
+            updated_at=row.get("updated_at", ""),
+            owner_role=row.get("owner_role", ""),
+        )
+        for row in _read_csv(path)
+    ]
+
+
+def load_region_weight_profiles(path: str | Path) -> list[RegionWeightProfileRecord]:
+    return [
+        RegionWeightProfileRecord(
+            market_code=row["market_code"],
+            profile_id=row.get("profile_id", ""),
+            version=row.get("version", ""),
+            factor_weight_market_attract=float(row.get("factor_weight_market_attract", 0) or 0),
+            factor_weight_demand_stability=float(row.get("factor_weight_demand_stability", 0) or 0),
+            factor_weight_customer_fit=float(row.get("factor_weight_customer_fit", 0) or 0),
+            factor_weight_channel_efficiency=float(row.get("factor_weight_channel_efficiency", 0) or 0),
+            factor_weight_channel_risk=float(row.get("factor_weight_channel_risk", 0) or 0),
+            factor_weight_price_realization=float(row.get("factor_weight_price_realization", 0) or 0),
+            geo_fit_weight=float(row.get("geo_fit_weight", 0) or 0),
+            habit_fit_weight=float(row.get("habit_fit_weight", 0) or 0),
+            penalty_fx_risk=float(row.get("penalty_fx_risk", 0) or 0),
+            penalty_compliance_risk=float(row.get("penalty_compliance_risk", 0) or 0),
+            penalty_logistics_volatility=float(row.get("penalty_logistics_volatility", 0) or 0),
+            calibration_method=row.get("calibration_method", ""),
+            calibration_window=row.get("calibration_window", ""),
+            updated_at=row.get("updated_at", ""),
+            owner_role=row.get("owner_role", ""),
+            active_flag=_parse_bool(row.get("active_flag", True)),
         )
         for row in _read_csv(path)
     ]
@@ -300,6 +382,8 @@ def load_event_library(path: str | Path) -> list[EventLibraryRecord]:
             severity=float(row.get("severity", 0) or 0),
             expected_direction=row.get("expected_direction", ""),
             source_ref=row.get("source_ref", ""),
+            market_code=row.get("market_code", ""),
+            scope_key=row.get("scope_key", ""),
         )
         for row in _read_csv(path)
     ]
@@ -597,6 +681,78 @@ def load_shipment_events(path: str | Path) -> list[ShipmentEventRecord]:
             node=row.get("node", ""),
             delay_reason=row.get("delay_reason", ""),
             cost_component=float(row.get("cost_component", 0) or 0),
+        )
+        for row in _read_csv(path)
+    ]
+
+
+def load_part3_scenario_registry(path: str | Path) -> list[Part3ScenarioRecord]:
+    return [
+        Part3ScenarioRecord(
+            scenario_id=row["scenario_id"],
+            scenario_name=row.get("scenario_name", ""),
+            shock_target=row.get("shock_target", ""),
+            shock_multiplier=float(row.get("shock_multiplier", 1) or 1),
+            severity=row.get("severity", ""),
+            active_flag=_parse_bool(row.get("active_flag", False)),
+            notes=row.get("notes", ""),
+        )
+        for row in _read_csv(path)
+    ]
+
+
+def load_part3_optimizer_registry(path: str | Path) -> list[Part3OptimizerRecord]:
+    return [
+        Part3OptimizerRecord(
+            optimizer_id=row["optimizer_id"],
+            objective_name=row.get("objective_name", ""),
+            objective_type=row.get("objective_type", ""),
+            risk_measure=row.get("risk_measure", ""),
+            max_loss_probability=float(row.get("max_loss_probability", 0) or 0),
+            min_net_margin_rate=float(row.get("min_net_margin_rate", 0) or 0),
+            min_confidence_score=float(row.get("min_confidence_score", 0) or 0),
+            max_lead_time_days=int(row.get("max_lead_time_days", 0) or 0),
+            max_landed_cost=float(row.get("max_landed_cost", 0) or 0),
+            capital_limit=float(row.get("capital_limit", 0) or 0),
+            active_flag=_parse_bool(row.get("active_flag", False)),
+        )
+        for row in _read_csv(path)
+    ]
+
+
+def load_part4_optimizer_registry(path: str | Path) -> list[Part4OptimizerRecord]:
+    return [
+        Part4OptimizerRecord(
+            optimizer_id=row["optimizer_id"],
+            objective_name=row.get("objective_name", ""),
+            objective_type=row.get("objective_type", ""),
+            risk_measure=row.get("risk_measure", ""),
+            max_loss_probability=float(row.get("max_loss_probability", 0) or 0),
+            min_contribution_margin_rate=float(row.get("min_contribution_margin_rate", 0) or 0),
+            min_priority_score=float(row.get("min_priority_score", 0) or 0),
+            max_payback_months=float(row.get("max_payback_months", 0) or 0),
+            max_paid_share=float(row.get("max_paid_share", 0) or 0),
+            capital_limit=float(row.get("capital_limit", 0) or 0),
+            active_flag=_parse_bool(row.get("active_flag", False)),
+            objective_lambda=float(row.get("objective_lambda", 0.4) or 0.4),
+            turnover_penalty_lambda=float(row.get("turnover_penalty_lambda", 0.15) or 0.15),
+            max_single_channel_weight=float(row.get("max_single_channel_weight", 0.6) or 0.6),
+        )
+        for row in _read_csv(path)
+    ]
+
+
+def load_part4_stress_registry(path: str | Path) -> list[Part4StressRecord]:
+    return [
+        Part4StressRecord(
+            scenario_id=row["scenario_id"],
+            scenario_name=row.get("scenario_name", ""),
+            shock_target=row.get("shock_target", ""),
+            shock_multiplier=float(row.get("shock_multiplier", 1) or 1),
+            severity=row.get("severity", ""),
+            channel_scope=row.get("channel_scope", "all"),
+            active_flag=_parse_bool(row.get("active_flag", False)),
+            notes=row.get("notes", ""),
         )
         for row in _read_csv(path)
     ]

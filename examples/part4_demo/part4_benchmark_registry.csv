@@ -1,0 +1,6 @@
+channel,benchmark_conversion_rate,benchmark_average_order_value,benchmark_roas,benchmark_cac
+DTC,0.015,690,1.8,110
+Amazon,0.12,675,4.5,45
+TikTok Shop,0.06,520,2.6,38
+eBay,0.045,610,2.4,40
+B2B,0.25,3200,1.6,0

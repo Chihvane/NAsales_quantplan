@@ -4,6 +4,20 @@
 
 This file is the unified entry point for `Part 0` through `Part 5`, plus the horizontal control module.
 
+The first-layer entry has now been consolidated into unified chain documents, so the workspace can be read part by part without jumping across multiple drafts.
+
+## Unified Chain Entry
+
+- Unified index: [README.md](/Users/zhiwenxiang/Documents/Playground/北美市场量化报告/docs/part-chains/README.md)
+- Part 0 chain: [Part0-Chain.md](/Users/zhiwenxiang/Documents/Playground/北美市场量化报告/docs/part-chains/Part0-Chain.md)
+- Part 1 chain: [Part1-Chain.md](/Users/zhiwenxiang/Documents/Playground/北美市场量化报告/docs/part-chains/Part1-Chain.md)
+- Part 2 chain: [Part2-Chain.md](/Users/zhiwenxiang/Documents/Playground/北美市场量化报告/docs/part-chains/Part2-Chain.md)
+- Part 3 chain: [Part3-Chain.md](/Users/zhiwenxiang/Documents/Playground/北美市场量化报告/docs/part-chains/Part3-Chain.md)
+- Part 4 chain: [Part4-Chain.md](/Users/zhiwenxiang/Documents/Playground/北美市场量化报告/docs/part-chains/Part4-Chain.md)
+- Part 5 chain: [Part5-Chain.md](/Users/zhiwenxiang/Documents/Playground/北美市场量化报告/docs/part-chains/Part5-Chain.md)
+- Horizontal System chain: [Horizontal-System-Chain.md](/Users/zhiwenxiang/Documents/Playground/北美市场量化报告/docs/part-chains/Horizontal-System-Chain.md)
+- Decision OS chain: [Decision-OS-Chain.md](/Users/zhiwenxiang/Documents/Playground/北美市场量化报告/docs/part-chains/Decision-OS-Chain.md)
+
 It aligns the current workspace into the same granularity for each part:
 
 1. Strategy / framework document
@@ -25,6 +39,8 @@ Each part should be read in this order:
 6. Generated report and charts
 
 ## Part Map
+
+The sections below are retained as source-level references. For normal reading, use the unified chain entry above first.
 
 ### Part 0
 

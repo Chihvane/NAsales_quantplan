@@ -1,0 +1,194 @@
+plan_id: PART4-QUANT-PLAN-20260315
+schema_version: 1.0
+module: part4_channel_portfolio_engine
+owner: strategy_committee
+status: active
+
+goals:
+  - standardize_part4_as_channel_portfolio_engine
+  - connect_part4_to_decision_os_gate
+  - add_risk_adjusted_channel_metrics
+  - replace_heuristic_budget_scoring_with_portfolio_optimization
+  - unify_part4_walk_forward_and_stress_suite
+
+layers:
+  governance:
+    required_objects:
+      - part4_source_registry
+      - part4_threshold_registry
+      - part4_benchmark_registry
+      - part4_optimizer_registry
+      - part4_stress_registry
+    mandatory_outputs:
+      - evidence_ref
+      - master_data_ref
+      - rule_ref
+      - confidence
+      - threshold_coverage_ratio
+      - gate_result
+      - confidence_band
+      - proxy_usage_flags
+      - execution_friction_flags
+  data:
+    observation_tables:
+      - listing_snapshots
+      - sold_transactions
+      - product_catalog
+      - landed_cost_scenarios
+      - channel_rate_cards
+      - marketing_spend
+      - traffic_sessions
+      - returns_claims
+      - customer_cohorts
+      - inventory_positions
+      - experiment_registry
+      - b2b_accounts
+    reference_tables:
+      - part4_source_registry
+      - part4_threshold_registry
+      - part4_benchmark_registry
+      - part4_optimizer_registry
+      - part4_stress_registry
+    backtest_tables:
+      - part4_factor_snapshots
+      - part4_gate_records
+      - part4_portfolio_panel
+      - part4_optimizer_runs
+      - part4_stress_suite
+      - part4_channel_performance_metrics
+  factor:
+    outputs:
+      - FAC-CHANNEL-FIT
+      - FAC-TRAFFIC-EFFICIENCY
+      - FAC-UNIT-ECONOMICS
+      - FAC-PORTFOLIO-RESILIENCE
+      - FAC-EXECUTION-FRICTION
+      - FAC-SCALE-READINESS
+
+sections:
+  "4.1":
+    theme: dtc_feasibility
+    planned_upgrades:
+      - brand_ownability_score
+      - content_dependency_score
+      - owned_data_capture_score
+      - dtc_payback_distribution
+    outputs:
+      - channel_fit_factor
+      - owned_data_value_score
+  "4.2":
+    theme: platform_selection
+    planned_upgrades:
+      - platform_dependency_index
+      - platform_margin_stack
+      - platform_white_space_signal
+      - platform_penalty_risk
+    outputs:
+      - platform_fit_factor
+      - platform_risk_factor
+  "4.3":
+    theme: b2b_viability
+    planned_upgrades:
+      - rebate_pressure_score
+      - payment_terms_burden
+      - dealer_concentration_risk
+      - offline_execution_complexity
+    outputs:
+      - b2b_fit_factor
+      - terms_pressure_score
+  "4.4":
+    theme: traffic_structure
+    planned_upgrades:
+      - traffic_source_resilience
+      - paid_dependency_ratio
+      - first_touch_mix_stability
+      - traffic_efficiency_index
+    outputs:
+      - traffic_efficiency_factor
+      - traffic_dependency_score
+  "4.5":
+    theme: roi_unit_economics
+    planned_upgrades:
+      - sharpe_ratio
+      - sortino_ratio
+      - calmar_ratio
+      - ulcer_index
+      - var_95
+      - cvar_95
+      - omega_ratio
+      - turnover_penalty_score
+      - risk_adjusted_profit
+    outputs:
+      - unit_economics_factor
+      - portfolio_resilience_factor
+      - risk_adjusted_profit
+  "4.6":
+    theme: operating_readiness
+    planned_upgrades:
+      - execution_friction_score
+      - ops_capacity_gap
+      - experiment_readiness_score
+      - inventory_reaction_time
+    outputs:
+      - execution_friction_factor
+      - scale_readiness_factor
+  "4.7":
+    theme: entry_plan
+    planned_upgrades:
+      - optimal_budget_mix
+      - recommended_channel_sequence
+      - pilot_scale_rollback_map
+      - channel_portfolio_feasible_set
+    outputs:
+      - optimized_channel_portfolio
+      - risk_adjusted_recommendation
+      - capital_fit_status
+      - risk_budget_fit_status
+
+validation:
+  required_reports:
+    - walk_forward_summary
+    - train_test_split_summary
+    - optimizer_feasibility_report
+    - metric_regression_report
+    - gate_flip_report
+    - stress_suite_summary
+
+tooling:
+  recommended_modules:
+    - part4_channel_performance_metrics
+    - part4_optimizer
+    - part4_stress_suite
+    - part4_walk_forward
+    - part4_attribution_lab
+    - part4_cost_slippage_model
+
+delivery_phases:
+  - phase: governance
+    tasks:
+      - finalize_part4_source_registry
+      - finalize_part4_threshold_registry
+      - finalize_part4_benchmark_registry
+      - finalize_part4_optimizer_registry
+      - finalize_part4_stress_registry
+  - phase: metrics
+    tasks:
+      - add_sharpe_sortino_calmar_ulcer
+      - add_var_cvar_omega
+      - add_turnover_penalty_and_execution_friction
+  - phase: optimization
+    tasks:
+      - build_mean_variance_optimizer
+      - build_cvar_optimizer
+      - output_optimal_budget_mix
+  - phase: validation
+    tasks:
+      - connect_walk_forward
+      - add_train_test_split
+      - add_stress_suite
+      - add_gate_flip_report
+  - phase: decision_os
+    tasks:
+      - output_channel_factor_snapshots
+      - output_portfolio_records
+      - bind_capital_and_risk_constraints

@@ -5,13 +5,16 @@ from pathlib import Path
 from .loaders import (
     load_channel_benchmarks,
     load_channels,
+    load_consumer_habit_vectors,
     load_customer_segments,
     load_event_library,
     load_evidence_sources,
     load_gate_thresholds,
     load_listings,
+    load_market_destination_registry,
     load_market_size_inputs,
     load_region_demand,
+    load_region_weight_profiles,
     load_search_trends,
     load_transactions,
 )
@@ -59,6 +62,21 @@ def build_dataset_from_directory(data_dir: str | Path) -> Part1Dataset:
         part1_threshold_registry=(
             load_gate_thresholds(data_dir / "part1_threshold_registry.csv")
             if (data_dir / "part1_threshold_registry.csv").exists()
+            else []
+        ),
+        market_destination_registry=(
+            load_market_destination_registry(data_dir / "market_destination_registry.csv")
+            if (data_dir / "market_destination_registry.csv").exists()
+            else []
+        ),
+        consumer_habit_vectors=(
+            load_consumer_habit_vectors(data_dir / "consumer_habit_vectors.csv")
+            if (data_dir / "consumer_habit_vectors.csv").exists()
+            else []
+        ),
+        region_weight_profiles=(
+            load_region_weight_profiles(data_dir / "region_weight_profiles.csv")
+            if (data_dir / "region_weight_profiles.csv").exists()
             else []
         ),
     )

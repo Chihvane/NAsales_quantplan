@@ -83,6 +83,7 @@ def build_part0_methodology_validation(report: dict) -> dict:
     section_05 = report["sections"]["0.5"]["metrics"]
     section_06 = report["sections"]["0.6"]["metrics"]
     section_07 = report["sections"]["0.7"]["metrics"]
+    section_08 = report["sections"].get("0.8", {}).get("metrics", {})
 
     confidence_mix = section_02.get("confidence_mix", {})
     confidence_sum = sum(confidence_mix.values())
@@ -189,6 +190,23 @@ def build_part0_methodology_validation(report: dict) -> dict:
             "evidence": {
                 "naming_compliance_ratio": section_07.get("naming_compliance_ratio"),
                 "definition_coverage_ratio": section_07.get("definition_coverage_ratio"),
+            },
+        },
+        {
+            "check_id": "market_localization_governance",
+            "status": _status(
+                0.0 <= section_08.get("market_coverage_ratio", 0.0) <= 1.0
+                and 0.0 <= section_08.get("habit_vector_coverage_ratio", 0.0) <= 1.0
+                and 0.0 <= section_08.get("weight_profile_coverage_ratio", 0.0) <= 1.0,
+                review=not bool(section_08),
+            ),
+            "source": PART0_SOURCE_REFERENCES["stage_gate"],
+            "method": "Localized market governance must expose bounded coverage ratios for market registry, habit vectors and regional weight profiles.",
+            "evidence": {
+                "market_coverage_ratio": section_08.get("market_coverage_ratio"),
+                "habit_vector_coverage_ratio": section_08.get("habit_vector_coverage_ratio"),
+                "weight_profile_coverage_ratio": section_08.get("weight_profile_coverage_ratio"),
+                "active_market_count": section_08.get("active_market_count"),
             },
         },
     ]
@@ -327,6 +345,39 @@ def build_methodology_validation(report: dict) -> dict:
             },
         }
     )
+    source_health_11 = section_11.get("source_health", {})
+    checks.append(
+        {
+            "check_id": "demand_source_freshness",
+            "status": _status(
+                source_health_11.get("fresh_source_ratio", 0.0) >= 0.75,
+                review=not bool(source_health_11),
+            ),
+            "source": SOURCE_REFERENCES["google_trends"],
+            "method": "Demand-side evidence should maintain active and fresh source coverage across demand, promo, platform and weather topics.",
+            "evidence": {
+                "coverage_ratio": source_health_11.get("coverage_ratio"),
+                "fresh_source_ratio": source_health_11.get("fresh_source_ratio"),
+                "staleness_score": source_health_11.get("staleness_score"),
+                "missing_input": not bool(source_health_11),
+            },
+        }
+    )
+    checks.append(
+        {
+            "check_id": "demand_threshold_binding",
+            "status": _status(
+                section_11.get("threshold_coverage_ratio", 0.0) > 0,
+                review=not bool(section_11.get("gate_results")),
+            ),
+            "source": SOURCE_REFERENCES["google_trends"],
+            "method": "Demand section should bind at least one registered threshold so the section can be consumed by a market-entry gate.",
+            "evidence": {
+                "threshold_coverage_ratio": section_11.get("threshold_coverage_ratio"),
+                "gate_results": section_11.get("gate_results"),
+            },
+        }
+    )
 
     hhi = section_13["bottom_up"].get("hhi", 0.0)
     expected_level = _classify_hhi(hhi)
@@ -390,6 +441,21 @@ def build_methodology_validation(report: dict) -> dict:
                 "consistency_ratio": market_size_reference_panel.get("consistency_ratio"),
                 "assumption_vs_reference_gap_ratio": market_size_reference_panel.get("assumption_vs_reference_gap_ratio"),
                 "missing_input": not bool(market_size_reference_panel),
+            },
+        }
+    )
+    checks.append(
+        {
+            "check_id": "market_size_threshold_binding",
+            "status": _status(
+                market_size_reference_panel.get("threshold_coverage_ratio", 0.0) > 0,
+                review=not bool(market_size_reference_panel),
+            ),
+            "source": SOURCE_REFERENCES["holoniq_market_sizing"],
+            "method": "Market sizing should expose registered thresholds for attractiveness or scale rather than only descriptive outputs.",
+            "evidence": {
+                "threshold_coverage_ratio": market_size_reference_panel.get("threshold_coverage_ratio"),
+                "failed_rules": market_size_reference_panel.get("failed_rules"),
             },
         }
     )
@@ -480,6 +546,22 @@ def build_methodology_validation(report: dict) -> dict:
                 "channel": benchmark_channel.get("channel") if benchmark_channel else None,
                 "conversion_rate_gap": benchmark_channel.get("conversion_rate_gap") if benchmark_channel else None,
                 "missing_input": benchmark_channel is None,
+            },
+        }
+    )
+    checks.append(
+        {
+            "check_id": "channel_threshold_binding",
+            "status": _status(
+                section_14.get("threshold_coverage_ratio", 0.0) > 0,
+                review=not bool(section_14.get("gate_results")),
+            ),
+            "source": SOURCE_REFERENCES["google_ads_conversion"],
+            "method": "Channel analysis should bind dependency or concentration thresholds before flowing into channel-selection decisions.",
+            "evidence": {
+                "threshold_coverage_ratio": section_14.get("threshold_coverage_ratio"),
+                "channel_dependency_score": section_14.get("channel_dependency_score"),
+                "failed_rules": section_14.get("failed_rules"),
             },
         }
     )

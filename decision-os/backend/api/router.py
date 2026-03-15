@@ -8,6 +8,7 @@ from backend.api.gate import router as gate_router
 from backend.api.market import router as market_router
 from backend.api.model import router as model_router
 from backend.api.portfolio import router as portfolio_router
+from backend.api.system import router as system_router
 
 
 api_router = APIRouter()
@@ -17,3 +18,4 @@ api_router.include_router(gate_router)
 api_router.include_router(capital_router)
 api_router.include_router(portfolio_router)
 api_router.include_router(audit_router)
+api_router.include_router(system_router)

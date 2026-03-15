@@ -1,0 +1,1250 @@
+{
+  "metadata": {
+    "report_id": "part0_quant_report",
+    "report_version": "2026.03",
+    "generated_at": "2026-03-15T00:47:12.522220+00:00",
+    "section_order": [
+      "0.1",
+      "0.2",
+      "0.3",
+      "0.4",
+      "0.5",
+      "0.6",
+      "0.7",
+      "0.8"
+    ],
+    "section_structure": {
+      "0.1": {
+        "title": "全局决策树与研究问题映射",
+        "required_tables": [
+          "decision_nodes"
+        ],
+        "metric_ids": [
+          "decision_tree_governance"
+        ],
+        "quality_targets": {
+          "decision_nodes": 10
+        },
+        "analysis_grain": "decision node",
+        "entity_grain": "decision question",
+        "time_grain": "version event",
+        "channel_scope": [
+          "governance"
+        ],
+        "master_data_refs": [
+          "mdm.decision_domain"
+        ],
+        "evidence_refs": [
+          "evidence.decision_tree"
+        ],
+        "rule_refs": [
+          "gate.governance_scope"
+        ]
+      },
+      "0.2": {
+        "title": "数据置信度与版本控制",
+        "required_tables": [
+          "evidence_sources"
+        ],
+        "metric_ids": [
+          "data_confidence_versioning"
+        ],
+        "quality_targets": {
+          "evidence_sources": 8
+        },
+        "analysis_grain": "source record",
+        "entity_grain": "evidence source",
+        "time_grain": "source freshness window",
+        "channel_scope": [
+          "governance"
+        ],
+        "master_data_refs": [
+          "mdm.source_system"
+        ],
+        "evidence_refs": [
+          "evidence.source_register"
+        ],
+        "rule_refs": [
+          "gate.data_confidence"
+        ]
+      },
+      "0.3": {
+        "title": "策略假设登记与验证机制",
+        "required_tables": [
+          "assumptions_register"
+        ],
+        "metric_ids": [
+          "assumption_register"
+        ],
+        "quality_targets": {
+          "assumptions_register": 8
+        },
+        "analysis_grain": "assumption item",
+        "entity_grain": "strategic assumption",
+        "time_grain": "assumption due date",
+        "channel_scope": [
+          "governance"
+        ],
+        "master_data_refs": [
+          "mdm.assumption_domain"
+        ],
+        "evidence_refs": [
+          "evidence.assumption_register"
+        ],
+        "rule_refs": [
+          "gate.assumption_validity"
+        ]
+      },
+      "0.4": {
+        "title": "决策门槛与 Gate 管理",
+        "required_tables": [
+          "gate_thresholds"
+        ],
+        "metric_ids": [
+          "gate_threshold_operability"
+        ],
+        "quality_targets": {
+          "gate_thresholds": 5
+        },
+        "analysis_grain": "gate threshold",
+        "entity_grain": "gate x metric",
+        "time_grain": "gate version",
+        "channel_scope": [
+          "governance"
+        ],
+        "master_data_refs": [
+          "mdm.gate_threshold"
+        ],
+        "evidence_refs": [
+          "evidence.gate_threshold_register"
+        ],
+        "rule_refs": [
+          "gate.entry",
+          "gate.scale",
+          "gate.exit"
+        ]
+      },
+      "0.5": {
+        "title": "责任链与签字流",
+        "required_tables": [
+          "approval_chain",
+          "gate_thresholds"
+        ],
+        "metric_ids": [
+          "signature_chain_integrity"
+        ],
+        "quality_targets": {
+          "approval_chain": 10,
+          "gate_thresholds": 5
+        },
+        "analysis_grain": "approval step",
+        "entity_grain": "gate x signer",
+        "time_grain": "approval timestamp",
+        "channel_scope": [
+          "governance"
+        ],
+        "master_data_refs": [
+          "mdm.approval_role"
+        ],
+        "evidence_refs": [
+          "evidence.approval_chain"
+        ],
+        "rule_refs": [
+          "gate.approval_route"
+        ]
+      },
+      "0.6": {
+        "title": "更新周期与失效规则",
+        "required_tables": [
+          "update_policies"
+        ],
+        "metric_ids": [
+          "update_expiration_policy"
+        ],
+        "quality_targets": {
+          "update_policies": 6
+        },
+        "analysis_grain": "update policy",
+        "entity_grain": "scope x refresh rule",
+        "time_grain": "refresh cadence",
+        "channel_scope": [
+          "governance"
+        ],
+        "master_data_refs": [
+          "mdm.policy_scope"
+        ],
+        "evidence_refs": [
+          "evidence.update_policy"
+        ],
+        "rule_refs": [
+          "gate.expiry_control"
+        ]
+      },
+      "0.7": {
+        "title": "字段字典、复用与审计要求",
+        "required_tables": [
+          "field_dictionary"
+        ],
+        "metric_ids": [
+          "field_dictionary_reuse"
+        ],
+        "quality_targets": {
+          "field_dictionary": 12
+        },
+        "analysis_grain": "field dictionary row",
+        "entity_grain": "field definition",
+        "time_grain": "dictionary version",
+        "channel_scope": [
+          "governance"
+        ],
+        "master_data_refs": [
+          "mdm.field_dictionary"
+        ],
+        "evidence_refs": [
+          "evidence.field_dictionary"
+        ],
+        "rule_refs": [
+          "gate.naming_compliance"
+        ]
+      },
+      "0.8": {
+        "title": "全球市场去向与本地化治理",
+        "required_tables": [
+          "market_destination_registry",
+          "consumer_habit_vectors",
+          "region_weight_profiles"
+        ],
+        "metric_ids": [
+          "market_localization_governance"
+        ],
+        "quality_targets": {
+          "market_destination_registry": 8,
+          "consumer_habit_vectors": 8,
+          "region_weight_profiles": 8
+        },
+        "analysis_grain": "market profile",
+        "entity_grain": "market_code",
+        "time_grain": "profile version",
+        "channel_scope": [
+          "governance",
+          "market_selection"
+        ],
+        "master_data_refs": [
+          "mdm.market_destination",
+          "mdm.consumer_habit_vector",
+          "mdm.region_weight_profile"
+        ],
+        "evidence_refs": [
+          "evidence.market_destination_registry",
+          "evidence.consumer_habit_vectors",
+          "evidence.region_weight_profiles"
+        ],
+        "rule_refs": [
+          "gate.geo_fit",
+          "gate.habit_fit",
+          "gate.market_destination"
+        ]
+      }
+    },
+    "metric_specs": [
+      {
+        "section_id": "0.1",
+        "metric_id": "decision_tree_governance",
+        "label": "全局决策树覆盖",
+        "required_tables": [
+          "decision_nodes"
+        ],
+        "formula": "统计节点数、Gate 覆盖率、域覆盖率、叶子节点数与 owner 绑定率。",
+        "output_note": "用于确认整个研究体系是否已经从章节目录升级为决策树。"
+      },
+      {
+        "section_id": "0.2",
+        "metric_id": "data_confidence_versioning",
+        "label": "数据置信度与版本控制",
+        "required_tables": [
+          "evidence_sources"
+        ],
+        "formula": "按 A/B/C/D 统计来源占比，并计算版本覆盖率、状态覆盖率和时效合规率。",
+        "output_note": "用于衡量研究输入是否具备稳定、可追溯的数据治理基础。"
+      },
+      {
+        "section_id": "0.3",
+        "metric_id": "assumption_register",
+        "label": "策略假设登记与验证进度",
+        "required_tables": [
+          "assumptions_register"
+        ],
+        "formula": "统计假设数量、已验证占比、owner 覆盖率、验证方法覆盖率与过期假设数量。",
+        "output_note": "用于控制假设漂移，避免拍脑袋推进。"
+      },
+      {
+        "section_id": "0.4",
+        "metric_id": "gate_threshold_operability",
+        "label": "Gate 阈值可执行性",
+        "required_tables": [
+          "gate_thresholds"
+        ],
+        "formula": "统计 Gate1-5 覆盖率、阈值完整率、审批人覆盖率、fail-action 覆盖率及战略 Gate 家族覆盖。",
+        "output_note": "用于保证 Go / Hold / Kill 决策不是口号，而是可操作规则。"
+      },
+      {
+        "section_id": "0.4",
+        "metric_id": "strategic_gate_family_coverage",
+        "label": "战略 Gate 家族覆盖",
+        "required_tables": [
+          "gate_thresholds"
+        ],
+        "formula": "按资本回报、市场结构、需求稳定、回本周期、风险控制五类识别 Gate 指标覆盖率。",
+        "output_note": "用于确认 Part 0 是否真的把 ROIC/HHI/热度波动/Payback/风险阈值纳入治理。"
+      },
+      {
+        "section_id": "0.5",
+        "metric_id": "signature_chain_integrity",
+        "label": "责任链与签字流完整性",
+        "required_tables": [
+          "approval_chain",
+          "gate_thresholds"
+        ],
+        "formula": "统计 gate 签字覆盖、最小签字步数通过率、veto 覆盖率和已签署比例。",
+        "output_note": "用于保证关键节点有明确 owner 和审批痕迹。"
+      },
+      {
+        "section_id": "0.6",
+        "metric_id": "update_expiration_policy",
+        "label": "更新频率与失效规则",
+        "required_tables": [
+          "update_policies"
+        ],
+        "formula": "统计 scope 覆盖、expiry 规则覆盖、event trigger 覆盖和 refresh/expiry 对齐率。",
+        "output_note": "用于控制研究结论何时应刷新、何时应失效。"
+      },
+      {
+        "section_id": "0.7",
+        "metric_id": "field_dictionary_reuse",
+        "label": "字段字典与复用规范",
+        "required_tables": [
+          "field_dictionary"
+        ],
+        "formula": "统计定义覆盖、类型覆盖、来源表覆盖、命名风格一致率和复用字段占比。",
+        "output_note": "用于控制跨项目主数据与命名口径不漂移。"
+      },
+      {
+        "section_id": "0.8",
+        "metric_id": "market_localization_governance",
+        "label": "全球市场去向与本地化治理",
+        "required_tables": [
+          "market_destination_registry",
+          "consumer_habit_vectors",
+          "region_weight_profiles"
+        ],
+        "formula": "统计市场覆盖、消费习惯向量覆盖、权重 profile 覆盖、方法族多样性与市场间差异度。",
+        "output_note": "用于保证不同区域采用独立消费习惯和权重模型，而不是把欧美模型直接套入东南亚。"
+      }
+    ],
+    "assumptions": {
+      "required_gate_count": 5,
+      "required_decision_domains": 6,
+      "required_policy_scopes": 6,
+      "required_strategic_metric_families": 5,
+      "required_localized_markets": 10,
+      "max_source_age_days": 90,
+      "max_assumption_overdue_days": 14,
+      "minimum_signoff_steps": 3,
+      "required_naming_style": "snake_case"
+    },
+    "table_inventory": {
+      "decision_nodes": {
+        "record_count": 11,
+        "available": true
+      },
+      "evidence_sources": {
+        "record_count": 8,
+        "available": true
+      },
+      "assumptions_register": {
+        "record_count": 8,
+        "available": true
+      },
+      "gate_thresholds": {
+        "record_count": 9,
+        "available": true
+      },
+      "approval_chain": {
+        "record_count": 15,
+        "available": true
+      },
+      "update_policies": {
+        "record_count": 6,
+        "available": true
+      },
+      "field_dictionary": {
+        "record_count": 12,
+        "available": true
+      },
+      "market_destination_registry": {
+        "record_count": 10,
+        "available": true
+      },
+      "consumer_habit_vectors": {
+        "record_count": 10,
+        "available": true
+      },
+      "region_weight_profiles": {
+        "record_count": 10,
+        "available": true
+      }
+    }
+  },
+  "overview": {
+    "section_count": 8,
+    "average_confidence_score": 1.0,
+    "confidence_mix": {
+      "high": 8,
+      "medium": 0,
+      "low": 0
+    },
+    "connected_channel_scope": [
+      "governance",
+      "market_selection"
+    ],
+    "control_tower_binding": {
+      "master_data_ref_coverage_ratio": 1.0,
+      "evidence_ref_coverage_ratio": 1.0,
+      "rule_ref_coverage_ratio": 1.0,
+      "gate_status_mix": {
+        "pass": 0,
+        "review": 0,
+        "fail": 0,
+        "not_applicable": 8
+      }
+    },
+    "decision_summary": {
+      "decision_signal": "ready_for_execution_system",
+      "decision_score": 0.9392,
+      "scorecard": {
+        "operating_system_readiness": {
+          "score": 0.9873,
+          "level": "high"
+        },
+        "evidence_rigour": {
+          "score": 0.8278,
+          "level": "high"
+        },
+        "control_discipline": {
+          "score": 0.9867,
+          "level": "high"
+        }
+      },
+      "key_findings": [
+        "当前决策树覆盖率为 100.0%，决策操作系统分为 98.7%。",
+        "数据治理审计分为 82.5%，假设治理分为 83.1%。",
+        "Gate 可执行性为 100.0%，战略 Gate 覆盖为 100.0%。",
+        "本地化治理分为 87.8%，当前已覆盖 10 个可进入市场。"
+      ],
+      "risk_flags": [],
+      "recommended_next_step": "进入 Part 1–5 的统一治理接入阶段，把 Gate、证据链和主数据约束落到各章节。"
+    },
+    "decision_signal": "ready_for_execution_system",
+    "decision_score": 0.9392,
+    "headline_metrics": [
+      {
+        "key": "decision_tree_score",
+        "label": "决策树完整度",
+        "value": 1.0,
+        "unit": "score"
+      },
+      {
+        "key": "auditability_score",
+        "label": "证据链审计分",
+        "value": 0.825,
+        "unit": "score"
+      },
+      {
+        "key": "gate_operability_score",
+        "label": "Gate 可执行性",
+        "value": 1.0,
+        "unit": "score"
+      },
+      {
+        "key": "strategic_gate_score",
+        "label": "战略 Gate 覆盖分",
+        "value": 0.8667,
+        "unit": "score"
+      },
+      {
+        "key": "signature_chain_score",
+        "label": "签字链完整性",
+        "value": 1.0,
+        "unit": "score"
+      },
+      {
+        "key": "refresh_policy_score",
+        "label": "更新失效规则分",
+        "value": 1.0,
+        "unit": "score"
+      },
+      {
+        "key": "localization_governance_score",
+        "label": "本地化治理分",
+        "value": 0.8784,
+        "unit": "score"
+      }
+    ],
+    "validation_summary": {
+      "pass_count": 9,
+      "review_count": 0,
+      "fail_count": 0
+    },
+    "uncertainty_keys": [
+      "governance_quality_band",
+      "decision_gate_band",
+      "auditability_band"
+    ]
+  },
+  "sections": {
+    "0.1": {
+      "id": "0.1",
+      "title": "全局决策树与研究问题映射",
+      "required_tables": [
+        "decision_nodes"
+      ],
+      "metric_ids": [
+        "decision_tree_governance"
+      ],
+      "granularity": {
+        "analysis_grain": "decision node",
+        "entity_grain": "decision question",
+        "time_grain": "version event"
+      },
+      "channel_scope": [
+        "governance"
+      ],
+      "master_data_ref": [
+        "mdm.decision_domain"
+      ],
+      "evidence_ref": [
+        "evidence.decision_tree"
+      ],
+      "rule_ref": [
+        "gate.governance_scope"
+      ],
+      "gate_result": {
+        "status": "not_applicable",
+        "source": "",
+        "raw_value": "",
+        "failed_items": []
+      },
+      "data_quality": {
+        "record_counts": {
+          "decision_nodes": 11
+        },
+        "available_tables": [
+          "decision_nodes"
+        ],
+        "missing_tables": [],
+        "completeness_ratio": 1.0,
+        "richness_ratio": 1.0,
+        "quality_score": 1.0,
+        "quality_level": "high"
+      },
+      "confidence": {
+        "score": 1.0,
+        "level": "high"
+      },
+      "metrics": {
+        "decision_node_count": 11,
+        "gate_count": 5,
+        "leaf_count": 6,
+        "gate_coverage_ratio": 1.0,
+        "domain_coverage_ratio": 1.0,
+        "owner_coverage_ratio": 1.0,
+        "path_coverage_ratio": 1.0,
+        "domain_mix": {
+          "category": 1,
+          "channel": 1,
+          "compliance": 1,
+          "customer": 1,
+          "finance": 1,
+          "inventory": 1,
+          "market": 2,
+          "pilot": 1,
+          "risk": 1,
+          "supply": 1
+        },
+        "decision_tree_score": 1.0,
+        "decision_tree_level": "high"
+      }
+    },
+    "0.2": {
+      "id": "0.2",
+      "title": "数据置信度与版本控制",
+      "required_tables": [
+        "evidence_sources"
+      ],
+      "metric_ids": [
+        "data_confidence_versioning"
+      ],
+      "granularity": {
+        "analysis_grain": "source record",
+        "entity_grain": "evidence source",
+        "time_grain": "source freshness window"
+      },
+      "channel_scope": [
+        "governance"
+      ],
+      "master_data_ref": [
+        "mdm.source_system"
+      ],
+      "evidence_ref": [
+        "evidence.source_register"
+      ],
+      "rule_ref": [
+        "gate.data_confidence"
+      ],
+      "gate_result": {
+        "status": "not_applicable",
+        "source": "",
+        "raw_value": "",
+        "failed_items": []
+      },
+      "data_quality": {
+        "record_counts": {
+          "evidence_sources": 8
+        },
+        "available_tables": [
+          "evidence_sources"
+        ],
+        "missing_tables": [],
+        "completeness_ratio": 1.0,
+        "richness_ratio": 1.0,
+        "quality_score": 1.0,
+        "quality_level": "high"
+      },
+      "confidence": {
+        "score": 1.0,
+        "level": "high"
+      },
+      "metrics": {
+        "source_count": 8,
+        "confidence_mix": {
+          "A": 0.5,
+          "B": 0.375,
+          "C": 0.125
+        },
+        "version_coverage_ratio": 1.0,
+        "status_coverage_ratio": 1.0,
+        "owner_coverage_ratio": 1.0,
+        "freshness_compliance_ratio": 1.0,
+        "average_source_age_days": 13.12,
+        "auditability_score": 0.825,
+        "auditability_level": "high"
+      }
+    },
+    "0.3": {
+      "id": "0.3",
+      "title": "策略假设登记与验证机制",
+      "required_tables": [
+        "assumptions_register"
+      ],
+      "metric_ids": [
+        "assumption_register"
+      ],
+      "granularity": {
+        "analysis_grain": "assumption item",
+        "entity_grain": "strategic assumption",
+        "time_grain": "assumption due date"
+      },
+      "channel_scope": [
+        "governance"
+      ],
+      "master_data_ref": [
+        "mdm.assumption_domain"
+      ],
+      "evidence_ref": [
+        "evidence.assumption_register"
+      ],
+      "rule_ref": [
+        "gate.assumption_validity"
+      ],
+      "gate_result": {
+        "status": "not_applicable",
+        "source": "",
+        "raw_value": "",
+        "failed_items": []
+      },
+      "data_quality": {
+        "record_counts": {
+          "assumptions_register": 8
+        },
+        "available_tables": [
+          "assumptions_register"
+        ],
+        "missing_tables": [],
+        "completeness_ratio": 1.0,
+        "richness_ratio": 1.0,
+        "quality_score": 1.0,
+        "quality_level": "high"
+      },
+      "confidence": {
+        "score": 1.0,
+        "level": "high"
+      },
+      "metrics": {
+        "assumption_count": 8,
+        "status_mix": {
+          "in_progress": 3,
+          "validated": 5
+        },
+        "confidence_mix": {
+          "A": 0.25,
+          "B": 0.5,
+          "C": 0.25
+        },
+        "validated_ratio": 0.625,
+        "owner_coverage_ratio": 1.0,
+        "validation_method_coverage_ratio": 1.0,
+        "high_confidence_share": 0.75,
+        "overdue_assumption_count": 0,
+        "assumption_governance_score": 0.8312,
+        "assumption_governance_level": "high"
+      }
+    },
+    "0.4": {
+      "id": "0.4",
+      "title": "决策门槛与 Gate 管理",
+      "required_tables": [
+        "gate_thresholds"
+      ],
+      "metric_ids": [
+        "gate_threshold_operability"
+      ],
+      "granularity": {
+        "analysis_grain": "gate threshold",
+        "entity_grain": "gate x metric",
+        "time_grain": "gate version"
+      },
+      "channel_scope": [
+        "governance"
+      ],
+      "master_data_ref": [
+        "mdm.gate_threshold"
+      ],
+      "evidence_ref": [
+        "evidence.gate_threshold_register"
+      ],
+      "rule_ref": [
+        "gate.entry",
+        "gate.scale",
+        "gate.exit"
+      ],
+      "gate_result": {
+        "status": "not_applicable",
+        "source": "",
+        "raw_value": "",
+        "failed_items": []
+      },
+      "data_quality": {
+        "record_counts": {
+          "gate_thresholds": 9
+        },
+        "available_tables": [
+          "gate_thresholds"
+        ],
+        "missing_tables": [],
+        "completeness_ratio": 1.0,
+        "richness_ratio": 1.0,
+        "quality_score": 1.0,
+        "quality_level": "high"
+      },
+      "confidence": {
+        "score": 1.0,
+        "level": "high"
+      },
+      "metrics": {
+        "gate_count": 5,
+        "threshold_count": 9,
+        "gate_coverage_ratio": 1.0,
+        "threshold_completeness_ratio": 1.0,
+        "approver_coverage_ratio": 1.0,
+        "fail_action_coverage_ratio": 1.0,
+        "source_grade_policy_coverage_ratio": 1.0,
+        "strategic_metric_family_coverage_ratio": 1.0,
+        "strategic_metric_family_mix": {
+          "capital_return": 2,
+          "demand_stability": 1,
+          "market_structure": 2,
+          "payback_control": 1,
+          "risk_control": 1
+        },
+        "uncovered_strategic_metric_families": [],
+        "gate_family_map": {
+          "Gate1": [
+            "demand_stability",
+            "market_structure"
+          ],
+          "Gate2": [
+            "capital_return",
+            "payback_control",
+            "risk_control"
+          ],
+          "Gate4": [
+            "capital_return"
+          ]
+        },
+        "strategic_gate_score": 0.8667,
+        "gate_operability_score": 1.0,
+        "gate_operability_level": "high"
+      }
+    },
+    "0.5": {
+      "id": "0.5",
+      "title": "责任链与签字流",
+      "required_tables": [
+        "approval_chain",
+        "gate_thresholds"
+      ],
+      "metric_ids": [
+        "signature_chain_integrity"
+      ],
+      "granularity": {
+        "analysis_grain": "approval step",
+        "entity_grain": "gate x signer",
+        "time_grain": "approval timestamp"
+      },
+      "channel_scope": [
+        "governance"
+      ],
+      "master_data_ref": [
+        "mdm.approval_role"
+      ],
+      "evidence_ref": [
+        "evidence.approval_chain"
+      ],
+      "rule_ref": [
+        "gate.approval_route"
+      ],
+      "gate_result": {
+        "status": "not_applicable",
+        "source": "",
+        "raw_value": "",
+        "failed_items": []
+      },
+      "data_quality": {
+        "record_counts": {
+          "approval_chain": 15,
+          "gate_thresholds": 9
+        },
+        "available_tables": [
+          "approval_chain",
+          "gate_thresholds"
+        ],
+        "missing_tables": [],
+        "completeness_ratio": 1.0,
+        "richness_ratio": 1.0,
+        "quality_score": 1.0,
+        "quality_level": "high"
+      },
+      "confidence": {
+        "score": 1.0,
+        "level": "high"
+      },
+      "metrics": {
+        "approval_row_count": 15,
+        "gate_signoff_coverage_ratio": 1.0,
+        "minimum_step_pass_ratio": 1.0,
+        "signed_completion_ratio": 1.0,
+        "veto_coverage_ratio": 1.0,
+        "owner_named_ratio": 1.0,
+        "signature_chain_score": 1.0,
+        "signature_chain_level": "high"
+      }
+    },
+    "0.6": {
+      "id": "0.6",
+      "title": "更新周期与失效规则",
+      "required_tables": [
+        "update_policies"
+      ],
+      "metric_ids": [
+        "update_expiration_policy"
+      ],
+      "granularity": {
+        "analysis_grain": "update policy",
+        "entity_grain": "scope x refresh rule",
+        "time_grain": "refresh cadence"
+      },
+      "channel_scope": [
+        "governance"
+      ],
+      "master_data_ref": [
+        "mdm.policy_scope"
+      ],
+      "evidence_ref": [
+        "evidence.update_policy"
+      ],
+      "rule_ref": [
+        "gate.expiry_control"
+      ],
+      "gate_result": {
+        "status": "not_applicable",
+        "source": "",
+        "raw_value": "",
+        "failed_items": []
+      },
+      "data_quality": {
+        "record_counts": {
+          "update_policies": 6
+        },
+        "available_tables": [
+          "update_policies"
+        ],
+        "missing_tables": [],
+        "completeness_ratio": 1.0,
+        "richness_ratio": 1.0,
+        "quality_score": 1.0,
+        "quality_level": "high"
+      },
+      "confidence": {
+        "score": 1.0,
+        "level": "high"
+      },
+      "metrics": {
+        "policy_count": 6,
+        "scope_coverage_ratio": 1.0,
+        "expiry_rule_coverage_ratio": 1.0,
+        "event_trigger_coverage_ratio": 1.0,
+        "owner_coverage_ratio": 1.0,
+        "sla_coverage_ratio": 1.0,
+        "refresh_expiry_alignment_ratio": 1.0,
+        "refresh_policy_score": 1.0,
+        "refresh_policy_level": "high"
+      }
+    },
+    "0.7": {
+      "id": "0.7",
+      "title": "字段字典、复用与审计要求",
+      "required_tables": [
+        "field_dictionary"
+      ],
+      "metric_ids": [
+        "field_dictionary_reuse"
+      ],
+      "granularity": {
+        "analysis_grain": "field dictionary row",
+        "entity_grain": "field definition",
+        "time_grain": "dictionary version"
+      },
+      "channel_scope": [
+        "governance"
+      ],
+      "master_data_ref": [
+        "mdm.field_dictionary"
+      ],
+      "evidence_ref": [
+        "evidence.field_dictionary"
+      ],
+      "rule_ref": [
+        "gate.naming_compliance"
+      ],
+      "gate_result": {
+        "status": "not_applicable",
+        "source": "",
+        "raw_value": "",
+        "failed_items": []
+      },
+      "data_quality": {
+        "record_counts": {
+          "field_dictionary": 12
+        },
+        "available_tables": [
+          "field_dictionary"
+        ],
+        "missing_tables": [],
+        "completeness_ratio": 1.0,
+        "richness_ratio": 1.0,
+        "quality_score": 1.0,
+        "quality_level": "high"
+      },
+      "confidence": {
+        "score": 1.0,
+        "level": "high"
+      },
+      "metrics": {
+        "field_count": 12,
+        "definition_coverage_ratio": 1.0,
+        "data_type_coverage_ratio": 1.0,
+        "source_table_coverage_ratio": 1.0,
+        "reusable_field_share": 1.0,
+        "required_field_share": 1.0,
+        "naming_compliance_ratio": 1.0,
+        "naming_style_mix": {
+          "snake_case": 12
+        },
+        "dictionary_reuse_score": 1.0,
+        "dictionary_reuse_level": "high"
+      }
+    },
+    "0.8": {
+      "id": "0.8",
+      "title": "全球市场去向与本地化治理",
+      "required_tables": [
+        "market_destination_registry",
+        "consumer_habit_vectors",
+        "region_weight_profiles"
+      ],
+      "metric_ids": [
+        "market_localization_governance"
+      ],
+      "granularity": {
+        "analysis_grain": "market profile",
+        "entity_grain": "market_code",
+        "time_grain": "profile version"
+      },
+      "channel_scope": [
+        "governance",
+        "market_selection"
+      ],
+      "master_data_ref": [
+        "mdm.market_destination",
+        "mdm.consumer_habit_vector",
+        "mdm.region_weight_profile"
+      ],
+      "evidence_ref": [
+        "evidence.market_destination_registry",
+        "evidence.consumer_habit_vectors",
+        "evidence.region_weight_profiles"
+      ],
+      "rule_ref": [
+        "gate.geo_fit",
+        "gate.habit_fit",
+        "gate.market_destination"
+      ],
+      "gate_result": {
+        "status": "not_applicable",
+        "source": "",
+        "raw_value": "",
+        "failed_items": []
+      },
+      "data_quality": {
+        "record_counts": {
+          "market_destination_registry": 10,
+          "consumer_habit_vectors": 10,
+          "region_weight_profiles": 10
+        },
+        "available_tables": [
+          "market_destination_registry",
+          "consumer_habit_vectors",
+          "region_weight_profiles"
+        ],
+        "missing_tables": [],
+        "completeness_ratio": 1.0,
+        "richness_ratio": 1.0,
+        "quality_score": 1.0,
+        "quality_level": "high"
+      },
+      "confidence": {
+        "score": 1.0,
+        "level": "high"
+      },
+      "metrics": {
+        "market_count": 10,
+        "active_market_count": 10,
+        "market_coverage_ratio": 1.0,
+        "habit_vector_coverage_ratio": 1.0,
+        "weight_profile_coverage_ratio": 1.0,
+        "analysis_method_diversity_ratio": 0.9,
+        "habit_model_family_diversity_ratio": 0.5,
+        "market_codes": [
+          "EU",
+          "ID",
+          "JP",
+          "KH",
+          "KR",
+          "LA",
+          "PH",
+          "TH",
+          "TW",
+          "VN"
+        ],
+        "analysis_method_mix": {
+          "balance_crossborder": 1,
+          "compliance_first": 1,
+          "content_fast": 1,
+          "content_platform": 1,
+          "lightweight_entry": 2,
+          "mass_scale": 1,
+          "platform_value": 1,
+          "quality_service": 1,
+          "value_mobile": 1
+        },
+        "habit_model_family_mix": {
+          "frontier_value": 2,
+          "mature_premium": 1,
+          "mobile_value": 4,
+          "service_quality": 2,
+          "trend_digital": 1
+        },
+        "consumer_habit_distance_score": 0.4896,
+        "localization_governance_score": 0.8784,
+        "localization_governance_level": "high"
+      }
+    }
+  },
+  "uncertainty": {
+    "governance_quality_band": {
+      "p10": 0.95,
+      "p50": 1.0,
+      "p90": 1.0
+    },
+    "decision_gate_band": {
+      "p10": 0.95,
+      "p50": 1.0,
+      "p90": 1.0
+    },
+    "auditability_band": {
+      "p10": 0.775,
+      "p50": 0.825,
+      "p90": 0.875
+    }
+  },
+  "validation": {
+    "checks": [
+      {
+        "check_id": "decision_gate_coverage",
+        "status": "pass",
+        "source": {
+          "label": "Stage-Gate governance references",
+          "url": "https://www.stage-gate.com/blog/the-stage-gate-model-an-overview/"
+        },
+        "method": "Part 0 should explicitly cover the stage-gate chain rather than leaving decision nodes unbound.",
+        "evidence": {
+          "gate_coverage_ratio": 1.0,
+          "gate_count": 5,
+          "decision_tree_score": 1.0
+        }
+      },
+      {
+        "check_id": "confidence_mix_integrity",
+        "status": "pass",
+        "source": {
+          "label": "Stage-Gate governance references",
+          "url": "https://www.stage-gate.com/blog/the-stage-gate-model-an-overview/"
+        },
+        "method": "Confidence grade shares should reconcile back to 100% of the registered evidence pool.",
+        "evidence": {
+          "confidence_mix": {
+            "A": 0.5,
+            "B": 0.375,
+            "C": 0.125
+          },
+          "confidence_sum": 1.0
+        }
+      },
+      {
+        "check_id": "assumption_validation_range",
+        "status": "pass",
+        "source": {
+          "label": "Stage-Gate governance references",
+          "url": "https://www.stage-gate.com/blog/the-stage-gate-model-an-overview/"
+        },
+        "method": "Assumption validation and method coverage are bounded ratios.",
+        "evidence": {
+          "validated_ratio": 0.625,
+          "validation_method_coverage_ratio": 1.0
+        }
+      },
+      {
+        "check_id": "gate_operability_range",
+        "status": "pass",
+        "source": {
+          "label": "Stage-Gate governance references",
+          "url": "https://www.stage-gate.com/blog/the-stage-gate-model-an-overview/"
+        },
+        "method": "Gate operability and threshold completeness are normalized governance scores.",
+        "evidence": {
+          "gate_operability_score": 1.0,
+          "threshold_completeness_ratio": 1.0
+        }
+      },
+      {
+        "check_id": "strategic_gate_family_coverage",
+        "status": "pass",
+        "source": {
+          "label": "Stage-Gate governance references",
+          "url": "https://www.stage-gate.com/blog/the-stage-gate-model-an-overview/"
+        },
+        "method": "Part 0 should explicitly map strategic gates across capital return, market structure, demand stability, payback and risk control.",
+        "evidence": {
+          "strategic_metric_family_coverage_ratio": 1.0,
+          "strategic_metric_family_mix": {
+            "capital_return": 2,
+            "demand_stability": 1,
+            "market_structure": 2,
+            "payback_control": 1,
+            "risk_control": 1
+          },
+          "uncovered_strategic_metric_families": []
+        }
+      },
+      {
+        "check_id": "signature_chain_integrity",
+        "status": "pass",
+        "source": {
+          "label": "RACI responsibility matrix references",
+          "url": "https://marketingdecision.org/decision-raci-matrix/"
+        },
+        "method": "Signoff coverage and minimum-step pass rate must stay inside a 0-1 governance range.",
+        "evidence": {
+          "gate_signoff_coverage_ratio": 1.0,
+          "minimum_step_pass_ratio": 1.0
+        }
+      },
+      {
+        "check_id": "refresh_policy_alignment",
+        "status": "pass",
+        "source": {
+          "label": "Stage-Gate governance references",
+          "url": "https://www.stage-gate.com/blog/the-stage-gate-model-an-overview/"
+        },
+        "method": "Refresh and expiry policies must be explicitly bounded and machine-readable.",
+        "evidence": {
+          "refresh_expiry_alignment_ratio": 1.0,
+          "event_trigger_coverage_ratio": 1.0
+        }
+      },
+      {
+        "check_id": "field_dictionary_compliance",
+        "status": "pass",
+        "source": {
+          "label": "RACI responsibility matrix references",
+          "url": "https://marketingdecision.org/decision-raci-matrix/"
+        },
+        "method": "Field dictionary compliance must be explicit so future projects do not drift in naming and meaning.",
+        "evidence": {
+          "naming_compliance_ratio": 1.0,
+          "definition_coverage_ratio": 1.0
+        }
+      },
+      {
+        "check_id": "market_localization_governance",
+        "status": "pass",
+        "source": {
+          "label": "Stage-Gate governance references",
+          "url": "https://www.stage-gate.com/blog/the-stage-gate-model-an-overview/"
+        },
+        "method": "Localized market governance must expose bounded coverage ratios for market registry, habit vectors and regional weight profiles.",
+        "evidence": {
+          "market_coverage_ratio": 1.0,
+          "habit_vector_coverage_ratio": 1.0,
+          "weight_profile_coverage_ratio": 1.0,
+          "active_market_count": 10
+        }
+      }
+    ],
+    "summary": {
+      "pass_count": 9,
+      "review_count": 0,
+      "fail_count": 0
+    }
+  }
+}

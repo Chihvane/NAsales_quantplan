@@ -54,6 +54,7 @@ class GateThresholdRecord:
     source_grade_min: str
     approver_role: str
     decision_if_fail: str
+    market_code: str = ""
 
 
 @dataclass(frozen=True)
@@ -93,11 +94,74 @@ class FieldDictionaryRecord:
 
 
 @dataclass(frozen=True)
+class MarketDestinationRecord:
+    market_code: str
+    market_name: str
+    region_group: str
+    default_currency: str
+    analysis_method: str
+    habit_model_family: str
+    regulatory_complexity: float
+    logistics_complexity: float
+    fx_risk: float
+    digital_maturity: float
+    cross_border_acceptance: float
+    active_flag: bool = True
+    notes: str = ""
+
+
+@dataclass(frozen=True)
+class ConsumerHabitVectorRecord:
+    market_code: str
+    category_key: str
+    period: str
+    price_sensitivity: float
+    brand_loyalty: float
+    quality_premium_preference: float
+    novelty_seeking: float
+    social_proof_dependency: float
+    discount_dependency: float
+    delivery_speed_preference: float
+    return_aversion: float
+    cross_border_affinity: float
+    content_driven_discovery: float
+    payment_friction_tolerance: float
+    offline_affinity: float
+    evidence_bundle: str = ""
+    updated_at: str = ""
+    owner_role: str = ""
+
+
+@dataclass(frozen=True)
+class RegionWeightProfileRecord:
+    market_code: str
+    profile_id: str
+    version: str
+    factor_weight_market_attract: float
+    factor_weight_demand_stability: float
+    factor_weight_customer_fit: float
+    factor_weight_channel_efficiency: float
+    factor_weight_channel_risk: float
+    factor_weight_price_realization: float
+    geo_fit_weight: float
+    habit_fit_weight: float
+    penalty_fx_risk: float
+    penalty_compliance_risk: float
+    penalty_logistics_volatility: float
+    calibration_method: str = ""
+    calibration_window: str = ""
+    updated_at: str = ""
+    owner_role: str = ""
+    active_flag: bool = True
+
+
+@dataclass(frozen=True)
 class Part0Assumptions:
     required_gate_count: int = 5
     required_decision_domains: int = 6
     required_policy_scopes: int = 6
     required_strategic_metric_families: int = 5
+    required_localized_markets: int = 10
     max_source_age_days: int = 90
     max_assumption_overdue_days: int = 14
     minimum_signoff_steps: int = 3
@@ -113,6 +177,9 @@ class Part0Dataset:
     approval_chain: list[ApprovalChainRecord] = field(default_factory=list)
     update_policies: list[UpdatePolicyRecord] = field(default_factory=list)
     field_dictionary: list[FieldDictionaryRecord] = field(default_factory=list)
+    market_destination_registry: list[MarketDestinationRecord] = field(default_factory=list)
+    consumer_habit_vectors: list[ConsumerHabitVectorRecord] = field(default_factory=list)
+    region_weight_profiles: list[RegionWeightProfileRecord] = field(default_factory=list)
 
 
 @dataclass(frozen=True)
@@ -197,6 +264,8 @@ class EventLibraryRecord:
     severity: float
     expected_direction: str
     source_ref: str = ""
+    market_code: str = ""
+    scope_key: str = ""
 
 
 @dataclass(frozen=True)
@@ -279,6 +348,9 @@ class Part1Dataset:
     event_library: list[EventLibraryRecord] = field(default_factory=list)
     source_registry: list[EvidenceSourceRecord] = field(default_factory=list)
     part1_threshold_registry: list[GateThresholdRecord] = field(default_factory=list)
+    market_destination_registry: list[MarketDestinationRecord] = field(default_factory=list)
+    consumer_habit_vectors: list[ConsumerHabitVectorRecord] = field(default_factory=list)
+    region_weight_profiles: list[RegionWeightProfileRecord] = field(default_factory=list)
 
 
 @dataclass(frozen=True)
@@ -412,6 +484,10 @@ class Part2Dataset:
     sold_transactions: list[SoldTransactionRecord] = field(default_factory=list)
     product_catalog: list[ProductCatalogRecord] = field(default_factory=list)
     reviews: list[ReviewRecord] = field(default_factory=list)
+    part2_source_registry: list[EvidenceSourceRecord] = field(default_factory=list)
+    part2_threshold_registry: list[GateThresholdRecord] = field(default_factory=list)
+    part2_benchmark_registry: list[ChannelBenchmarkRecord] = field(default_factory=list)
+    voc_event_registry: list[EventLibraryRecord] = field(default_factory=list)
 
 
 @dataclass(frozen=True)
@@ -522,6 +598,34 @@ class Part3Assumptions:
     return_rate: float = 0.04
     return_cost_per_unit: float = 24.0
     working_capital_rate: float = 0.02
+    target_margin_floor: float = 0.15
+    max_loss_probability: float = 0.25
+
+
+@dataclass(frozen=True)
+class Part3ScenarioRecord:
+    scenario_id: str
+    scenario_name: str
+    shock_target: str
+    shock_multiplier: float
+    severity: str
+    active_flag: bool
+    notes: str = ""
+
+
+@dataclass(frozen=True)
+class Part3OptimizerRecord:
+    optimizer_id: str
+    objective_name: str
+    objective_type: str
+    risk_measure: str
+    max_loss_probability: float
+    min_net_margin_rate: float
+    min_confidence_score: float
+    max_lead_time_days: int
+    max_landed_cost: float
+    capital_limit: float
+    active_flag: bool
 
 
 @dataclass
@@ -532,6 +636,10 @@ class Part3Dataset:
     logistics_quotes: list[LogisticsQuoteRecord] = field(default_factory=list)
     tariff_tax: list[TariffTaxRecord] = field(default_factory=list)
     shipment_events: list[ShipmentEventRecord] = field(default_factory=list)
+    part3_source_registry: list[EvidenceSourceRecord] = field(default_factory=list)
+    part3_threshold_registry: list[GateThresholdRecord] = field(default_factory=list)
+    part3_scenario_registry: list[Part3ScenarioRecord] = field(default_factory=list)
+    part3_optimizer_registry: list[Part3OptimizerRecord] = field(default_factory=list)
 
 
 @dataclass(frozen=True)
@@ -679,6 +787,36 @@ class Part4Assumptions:
     minimum_experiment_days: int = 7
 
 
+@dataclass(frozen=True)
+class Part4OptimizerRecord:
+    optimizer_id: str
+    objective_name: str
+    objective_type: str
+    risk_measure: str
+    max_loss_probability: float
+    min_contribution_margin_rate: float
+    min_priority_score: float
+    max_payback_months: float
+    max_paid_share: float
+    capital_limit: float
+    active_flag: bool
+    objective_lambda: float = 0.4
+    turnover_penalty_lambda: float = 0.15
+    max_single_channel_weight: float = 0.6
+
+
+@dataclass(frozen=True)
+class Part4StressRecord:
+    scenario_id: str
+    scenario_name: str
+    shock_target: str
+    shock_multiplier: float
+    severity: str
+    channel_scope: str
+    active_flag: bool
+    notes: str = ""
+
+
 @dataclass
 class Part4Dataset:
     listing_snapshots: list[ListingSnapshotRecord] = field(default_factory=list)
@@ -693,6 +831,11 @@ class Part4Dataset:
     inventory_positions: list[InventoryPositionRecord] = field(default_factory=list)
     experiment_registry: list[ExperimentRecord] = field(default_factory=list)
     b2b_accounts: list[B2BAccountRecord] = field(default_factory=list)
+    part4_source_registry: list[EvidenceSourceRecord] = field(default_factory=list)
+    part4_threshold_registry: list[GateThresholdRecord] = field(default_factory=list)
+    part4_benchmark_registry: list[ChannelBenchmarkRecord] = field(default_factory=list)
+    part4_optimizer_registry: list[Part4OptimizerRecord] = field(default_factory=list)
+    part4_stress_registry: list[Part4StressRecord] = field(default_factory=list)
 
 
 @dataclass(frozen=True)

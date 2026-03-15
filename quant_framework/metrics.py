@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from collections import defaultdict
+from datetime import date
 from math import sqrt
 from statistics import mean, median, pstdev
 
@@ -8,6 +9,9 @@ from .models import (
     ChannelBenchmarkRecord,
     ChannelRecord,
     CustomerSegmentRecord,
+    EventLibraryRecord,
+    EvidenceSourceRecord,
+    GateThresholdRecord,
     ListingRecord,
     MarketSizeInputRecord,
     MarketSizeAssumptions,
@@ -21,6 +25,7 @@ from .stats_utils import (
     round_mapping as _common_round_mapping,
     safe_divide as _common_safe_divide,
 )
+from .time_series_metrics import approximate_entropy, fft_seasonality_features, shannon_entropy
 
 
 def _safe_divide(numerator: float, denominator: float, default: float = 0.0) -> float:
@@ -185,9 +190,133 @@ def _normalize_label(value: str) -> str:
     return "".join(ch for ch in value.lower() if ch.isalnum())
 
 
+def _parse_iso_date(value: str) -> date | None:
+    if not value:
+        return None
+    try:
+        return date.fromisoformat(value[:10])
+    except ValueError:
+        return None
+
+
 def _grade_value(grade: str) -> float:
     mapping = {"A": 1.0, "B": 0.8, "C": 0.6, "D": 0.4}
     return mapping.get((grade or "").upper(), 0.0)
+
+
+def _compare_threshold(observed_value: float, operator: str, threshold: float) -> bool:
+    if operator == ">=":
+        return observed_value >= threshold
+    if operator == ">":
+        return observed_value > threshold
+    if operator == "<=":
+        return observed_value <= threshold
+    if operator == "<":
+        return observed_value < threshold
+    if operator == "==":
+        return observed_value == threshold
+    return False
+
+
+def _clamp01(value: float) -> float:
+    return _clip(value, 0.0, 1.0)
+
+
+def _build_source_health(
+    source_registry: list[EvidenceSourceRecord] | None,
+    topics: list[str],
+    *,
+    as_of_date: date | None = None,
+) -> dict:
+    if not source_registry or not topics:
+        return {
+            "topics_expected": topics,
+            "topics_covered": [],
+            "source_count": 0,
+            "coverage_ratio": 0.0,
+            "average_confidence_score": 0.0,
+            "fresh_source_ratio": 0.0,
+            "staleness_score": 1.0,
+        }
+
+    as_of_date = as_of_date or date.today()
+    normalized_topics = {_normalize_label(topic) for topic in topics}
+    matched_sources = [
+        source
+        for source in source_registry
+        if _normalize_label(source.topic) in normalized_topics and source.status.lower() == "active"
+    ]
+    covered_topics = sorted({_normalize_label(source.topic) for source in matched_sources})
+    confidence_scores = [_grade_value(source.confidence_grade) for source in matched_sources]
+    freshness_flags = []
+    staleness_penalties = []
+    for source in matched_sources:
+        collected_at = _parse_iso_date(source.collected_at)
+        if collected_at is None:
+            freshness_flags.append(False)
+            staleness_penalties.append(1.0)
+            continue
+        age_days = max((as_of_date - collected_at).days, 0)
+        freshness_window = max(source.freshness_days, 1)
+        freshness_flags.append(age_days <= freshness_window)
+        staleness_penalties.append(_clip(age_days / freshness_window, 0.0, 2.0))
+    return {
+        "topics_expected": sorted(normalized_topics),
+        "topics_covered": covered_topics,
+        "source_count": len(matched_sources),
+        "coverage_ratio": round(_safe_divide(len(covered_topics), len(normalized_topics)), 4),
+        "average_confidence_score": round(mean(confidence_scores), 4) if confidence_scores else 0.0,
+        "fresh_source_ratio": round(_safe_divide(sum(1 for flag in freshness_flags if flag), len(freshness_flags)), 4)
+        if freshness_flags
+        else 0.0,
+        "staleness_score": round(
+            1 - _clip(mean(staleness_penalties) / 2, 0.0, 1.0),
+            4,
+        )
+        if staleness_penalties
+        else 1.0,
+    }
+
+
+def _evaluate_thresholds(
+    thresholds: list[GateThresholdRecord] | None,
+    metric_values: dict[str, float],
+) -> dict:
+    if not thresholds:
+        return {
+            "coverage_ratio": 0.0,
+            "applied_rule_count": 0,
+            "passed_rule_count": 0,
+            "failed_rules": [],
+            "gate_results": {},
+        }
+
+    matched_rules = [rule for rule in thresholds if rule.metric_name in metric_values]
+    gate_results: dict[str, bool] = {}
+    failed_rules = []
+    for rule in matched_rules:
+        observed_value = float(metric_values[rule.metric_name])
+        passed = _compare_threshold(observed_value, rule.operator, float(rule.threshold_value))
+        gate_results[rule.metric_name] = passed
+        if not passed:
+            failed_rules.append(
+                {
+                    "gate_id": rule.gate_id,
+                    "gate_name": rule.gate_name,
+                    "metric_name": rule.metric_name,
+                    "operator": rule.operator,
+                    "threshold_value": rule.threshold_value,
+                    "observed_value": round(observed_value, 4),
+                    "decision_if_fail": rule.decision_if_fail,
+                }
+            )
+    return {
+        "coverage_ratio": round(_safe_divide(len(matched_rules), len(thresholds)), 4),
+        "applied_rule_count": len(matched_rules),
+        "passed_rule_count": sum(1 for passed in gate_results.values() if passed),
+        "failed_rules": failed_rules,
+        "gate_results": gate_results,
+    }
 
 
 def _classify_hhi(hhi: float) -> str:
@@ -207,6 +336,9 @@ def compute_demand_metrics(
     search_trends: list[SearchTrendRecord],
     region_demand: list[RegionDemandRecord],
     transactions: list[TransactionRecord] | None = None,
+    event_library: list[EventLibraryRecord] | None = None,
+    source_registry: list[EvidenceSourceRecord] | None = None,
+    thresholds: list[GateThresholdRecord] | None = None,
 ) -> dict:
     if not search_trends:
         return {
@@ -294,6 +426,71 @@ def compute_demand_metrics(
             )
 
     best_lag = max(lag_candidates, key=lambda item: item["correlation"], default=None)
+    source_health = _build_source_health(source_registry, ["demand", "promo", "platform", "weather"])
+    spectral_features = fft_seasonality_features(values)
+    demand_entropy = shannon_entropy(values)
+    demand_approx_entropy = approximate_entropy(values)
+    if spectral_features["seasonality_confidence_score"] >= 0.3:
+        signal_regime = "seasonal"
+    elif demand_entropy >= 0.75 or demand_approx_entropy >= 0.35:
+        signal_regime = "noisy"
+    else:
+        signal_regime = "trend"
+
+    event_effect_rows = []
+    weighted_event_effects = []
+    for event in event_library or []:
+        event_month = _month_from_date(event.event_date)
+        if event_month not in monthly_average:
+            continue
+        event_interest = monthly_average[event_month]
+        baseline_without_event = mean(
+            [
+                value
+                for month, value in monthly_average.items()
+                if month != event_month
+            ]
+        ) if len(monthly_average) > 1 else event_interest
+        normalized_impact = _safe_divide(event_interest - baseline_without_event, max(baseline_without_event, 1e-9))
+        weighted_event_effects.append(abs(normalized_impact) * event.severity)
+        event_effect_rows.append(
+            {
+                "event_id": event.event_id,
+                "event_name": event.event_name,
+                "event_month": event_month,
+                "severity": round(event.severity, 4),
+                "expected_direction": event.expected_direction,
+                "interest": round(event_interest, 2),
+                "baseline_interest": round(baseline_without_event, 2),
+                "normalized_impact": round(normalized_impact, 4),
+            }
+        )
+
+    demand_strength_score = round(
+        _clamp01((three_month_momentum + 0.05) / 0.20) * 0.35
+        + _clamp01((cagr + 0.02) / 0.18) * 0.35
+        + _clamp01(overall_average / 100) * 0.15
+        + source_health["average_confidence_score"] * 0.15,
+        4,
+    )
+    demand_stability_score = round(
+        _clamp01(1 - (_safe_divide(pstdev(values), overall_average) / 0.25)) * 0.55
+        + source_health["fresh_source_ratio"] * 0.2
+        + source_health["coverage_ratio"] * 0.15
+        + _clamp01(((best_lag["correlation"] if best_lag else 0.0) + 1) / 2) * 0.1,
+        4,
+    )
+    event_sensitivity_score = round(
+        _clamp01(mean(weighted_event_effects) / 0.6) if weighted_event_effects else 0.0,
+        4,
+    )
+    threshold_evaluation = _evaluate_thresholds(
+        thresholds,
+        {
+            "demand_stability_score": demand_stability_score,
+            "event_sensitivity_score": event_sensitivity_score,
+        },
+    )
 
     return {
         "trend": {
@@ -316,10 +513,27 @@ def compute_demand_metrics(
             "keyword_count": len(keywords),
             "google_trends_index_range_check": all(0 <= value <= 100 for value in values),
         },
+        "source_health": source_health,
+        "event_analysis": {
+            "event_count": len(event_effect_rows),
+            "event_sensitivity_score": event_sensitivity_score,
+            "event_effects": event_effect_rows,
+        },
+        "demand_strength_score": demand_strength_score,
+        "demand_stability_score": demand_stability_score,
+        "threshold_coverage_ratio": threshold_evaluation["coverage_ratio"],
+        "gate_results": threshold_evaluation["gate_results"],
+        "failed_rules": threshold_evaluation["failed_rules"],
         "lag_analysis": {
             "best_lag_months": best_lag["lag_months"] if best_lag else None,
             "best_lag_correlation": best_lag["correlation"] if best_lag else None,
             "candidate_lags": lag_candidates,
+        },
+        "advanced_time_series": {
+            "spectral_features": spectral_features,
+            "shannon_entropy": round(demand_entropy, 4),
+            "approximate_entropy": round(demand_approx_entropy, 4),
+            "signal_regime": signal_regime,
         },
     }
 
@@ -351,7 +565,26 @@ def compute_customer_profile(
             "top_segment_share": distribution[0]["share"],
             "segment_concentration_hhi": round(concentration_hhi, 2),
         }
-    return profile
+    sample_sizes = [item["sample_size"] for item in profile.values()]
+    concentration_scores = [
+        _clamp01(1 - max(item["segment_concentration_hhi"] - 2500, 0) / 7500)
+        for item in profile.values()
+    ]
+    customer_fit_score = round(
+        mean([item["top_segment_share"] for item in profile.values()]) if profile else 0.0,
+        4,
+    )
+    persona_confidence_score = round(
+        _clamp01(mean(sample_sizes) / 400) if sample_sizes else 0.0,
+        4,
+    )
+    persona_concentration_score = round(mean(concentration_scores), 4) if concentration_scores else 0.0
+    return {
+        "dimensions": profile,
+        "customer_fit_score": customer_fit_score,
+        "persona_confidence_score": persona_confidence_score,
+        "persona_concentration_score": persona_concentration_score,
+    }
 
 
 def compute_top_down_market_size(
@@ -372,6 +605,8 @@ def compute_top_down_market_size(
 def compute_market_size_input_panel(
     market_size_inputs: list[MarketSizeInputRecord],
     assumptions: MarketSizeAssumptions,
+    source_registry: list[EvidenceSourceRecord] | None = None,
+    thresholds: list[GateThresholdRecord] | None = None,
 ) -> dict:
     if not market_size_inputs:
         return {}
@@ -409,6 +644,34 @@ def compute_market_size_input_panel(
     reference_som = mean([record.som for record in market_size_inputs])
     reference_cagr = mean([record.cagr for record in market_size_inputs])
     top_down = compute_top_down_market_size(assumptions)
+    source_health = _build_source_health(source_registry, ["market_size"])
+    average_confidence_score = round(
+        mean([_grade_value(record.confidence_grade) for record in market_size_inputs]),
+        4,
+    )
+    assumption_vs_reference_gap_ratio = round(
+        abs(top_down.get("sam", 0.0) - reference_sam) / reference_sam,
+        4,
+    ) if reference_sam else 0.0
+    market_attractiveness_factor = round(
+        _clamp01(reference_cagr / 0.2) * 0.3
+        + _clamp01(reference_sam / max(assumptions.tam * 0.25, 1.0)) * 0.25
+        + _clamp01(1 - assumption_vs_reference_gap_ratio / 0.2) * 0.25
+        + source_health["average_confidence_score"] * 0.2,
+        4,
+    )
+    market_structure_factor = round(
+        _clamp01(1 - (mean(implied_gap_ratios) if implied_gap_ratios else 0.0) / 0.15) * 0.45
+        + _clamp01(_safe_divide(sum(1 for flag in consistency_flags if flag), len(consistency_flags))) * 0.35
+        + source_health["fresh_source_ratio"] * 0.2,
+        4,
+    )
+    threshold_evaluation = _evaluate_thresholds(
+        thresholds,
+        {
+            "market_attractiveness_factor": market_attractiveness_factor,
+        },
+    )
 
     return {
         "rows": rows,
@@ -424,14 +687,19 @@ def compute_market_size_input_panel(
         },
         "consistency_ratio": round(_safe_divide(sum(1 for flag in consistency_flags if flag), len(consistency_flags)), 4),
         "average_implied_sam_gap_ratio": round(mean(implied_gap_ratios), 4) if implied_gap_ratios else 0.0,
-        "assumption_vs_reference_gap_ratio": round(
-            abs(top_down.get("sam", 0.0) - reference_sam) / reference_sam,
-            4,
-        ) if reference_sam else 0.0,
-        "average_confidence_score": round(
-            mean([_grade_value(record.confidence_grade) for record in market_size_inputs]),
-            4,
-        ),
+        "assumption_vs_reference_gap_ratio": assumption_vs_reference_gap_ratio,
+        "average_confidence_score": average_confidence_score,
+        "source_health": source_health,
+        "market_attractiveness_factor": market_attractiveness_factor,
+        "market_structure_factor": market_structure_factor,
+        "sizing_confidence_band": {
+            "lower": round(max(reference_sam * (1 - assumption_vs_reference_gap_ratio), 0.0), 2),
+            "mid": round(reference_sam, 2),
+            "upper": round(reference_sam * (1 + assumption_vs_reference_gap_ratio), 2),
+        },
+        "threshold_coverage_ratio": threshold_evaluation["coverage_ratio"],
+        "gate_results": threshold_evaluation["gate_results"],
+        "failed_rules": threshold_evaluation["failed_rules"],
     }
 
 
@@ -523,6 +791,8 @@ def compute_bottom_up_market_size(
 def compute_channel_metrics(
     channels: list[ChannelRecord],
     benchmarks: list[ChannelBenchmarkRecord] | None = None,
+    source_registry: list[EvidenceSourceRecord] | None = None,
+    thresholds: list[GateThresholdRecord] | None = None,
 ) -> dict:
     total_revenue = sum(record.revenue for record in channels)
     total_visits = sum(record.visits for record in channels)
@@ -612,6 +882,31 @@ def compute_channel_metrics(
                 "benchmark_status": benchmark_status,
             }
         )
+    largest_channel_share = max((row["revenue_share"] for row in channel_rows), default=0.0)
+    source_health = _build_source_health(source_registry, ["platform", "promo"])
+    channel_dependency_score = round(largest_channel_share, 4)
+    benchmark_coverage_ratio = _safe_divide(benchmark_matches, len(channels)) if channels else 0.0
+    over_benchmark_ratio = _safe_divide(over_benchmark_count, benchmark_matches) if benchmark_matches else 0.0
+    channel_efficiency_factor = round(
+        _clamp01(_safe_divide(total_orders, total_visits) / 0.10) * 0.35
+        + _clamp01(_safe_divide(total_revenue, total_ad_spend) / 8.0) * 0.35
+        + _clamp01(benchmark_coverage_ratio) * 0.15
+        + source_health["average_confidence_score"] * 0.15,
+        4,
+    )
+    channel_risk_factor = round(
+        _clamp01(1 - largest_channel_share / 0.75) * 0.55
+        + _clamp01(1 - over_benchmark_ratio) * 0.1
+        + source_health["fresh_source_ratio"] * 0.2
+        + _clamp01(benchmark_coverage_ratio) * 0.15,
+        4,
+    )
+    threshold_evaluation = _evaluate_thresholds(
+        thresholds,
+        {
+            "channel_dependency_score": channel_dependency_score,
+        },
+    )
     return {
         "totals": {
             "revenue": round(total_revenue, 2),
@@ -621,10 +916,17 @@ def compute_channel_metrics(
             "overall_conversion_rate": round(_safe_divide(total_orders, total_visits), 4),
             "overall_average_order_value": round(_safe_divide(total_revenue, total_orders), 2),
             "overall_roas": round(_safe_divide(total_revenue, total_ad_spend), 2) if total_ad_spend else None,
-            "benchmark_coverage_ratio": round(_safe_divide(benchmark_matches, len(channels)), 4) if channels else 0.0,
-            "over_benchmark_channel_ratio": round(_safe_divide(over_benchmark_count, benchmark_matches), 4) if benchmark_matches else 0.0,
+            "benchmark_coverage_ratio": round(benchmark_coverage_ratio, 4),
+            "over_benchmark_channel_ratio": round(over_benchmark_ratio, 4),
         },
         "channels": channel_rows,
+        "source_health": source_health,
+        "channel_dependency_score": channel_dependency_score,
+        "channel_efficiency_factor": channel_efficiency_factor,
+        "channel_risk_factor": channel_risk_factor,
+        "threshold_coverage_ratio": threshold_evaluation["coverage_ratio"],
+        "gate_results": threshold_evaluation["gate_results"],
+        "failed_rules": threshold_evaluation["failed_rules"],
     }
 
 
@@ -787,6 +1089,12 @@ def compute_transaction_metrics(transactions: list[TransactionRecord]) -> dict:
             elasticity_by_sku[sku_id] = mean(sku_elasticities)
 
     average_elasticity = _weighted_average(valid_elasticity_values) if valid_elasticity_values else 0.0
+    price_realization_factor = round(
+        _clamp01((_safe_divide(average_actual_price, average_list_price) - 0.8) / 0.18) * 0.6
+        + _clamp01(1 - weighted_discount / 0.2) * 0.25
+        + _clamp01(_safe_divide(consistent_pairs, total_pairs)) * 0.15,
+        4,
+    )
 
     return {
         "total_units": total_units,
@@ -809,4 +1117,7 @@ def compute_transaction_metrics(transactions: list[TransactionRecord]) -> dict:
         "elasticity_observation_count": len(valid_elasticity_values),
         "elasticity_by_sku": _round_dict(elasticity_by_sku, digits=4),
         "elasticity_pairs": elasticity_pairs,
+        "price_realization_factor": price_realization_factor,
+        "elasticity_reliability_score": round(_clamp01(_safe_divide(consistent_pairs, total_pairs)), 4),
+        "discount_dependency_score": round(_clamp01(weighted_discount / 0.25), 4),
     }

@@ -1,0 +1,3 @@
+gate_id,gate_name,metric_name,operator,threshold_value,unit,source_grade_min,approver_role,decision_if_fail
+P2GATE001,Sweet Spot Fit,sweet_spot_share,>=,0.08,ratio,B,product_manager,review
+P2GATE002,VOC Risk Gate,negative_sentiment_rate,<=,0.35,ratio,B,quality_manager,hold

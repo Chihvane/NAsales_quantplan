@@ -1,0 +1,11 @@
+market_code,profile_id,version,factor_weight_market_attract,factor_weight_demand_stability,factor_weight_customer_fit,factor_weight_channel_efficiency,factor_weight_channel_risk,factor_weight_price_realization,geo_fit_weight,habit_fit_weight,penalty_fx_risk,penalty_compliance_risk,penalty_logistics_volatility,calibration_method,calibration_window,updated_at,owner_role,active_flag
+EU,WP-EU-BASE,v1,0.24,0.18,0.16,0.14,0.13,0.15,0.1,0.12,0.08,0.12,0.1,walk_forward_backtest,2024-01..2026-02,2026-03-15,quant_team,true
+JP,WP-JP-BASE,v1,0.22,0.2,0.18,0.14,0.12,0.14,0.09,0.13,0.06,0.1,0.08,walk_forward_backtest,2024-01..2026-02,2026-03-15,quant_team,true
+KR,WP-KR-BASE,v1,0.2,0.17,0.16,0.16,0.12,0.19,0.08,0.13,0.06,0.08,0.07,walk_forward_backtest,2024-01..2026-02,2026-03-15,quant_team,true
+TW,WP-TW-BASE,v1,0.2,0.18,0.16,0.15,0.13,0.18,0.09,0.14,0.06,0.08,0.08,walk_forward_backtest,2024-01..2026-02,2026-03-15,quant_team,true
+PH,WP-PH-BASE,v1,0.18,0.16,0.14,0.18,0.14,0.2,0.12,0.18,0.18,0.12,0.14,walk_forward_backtest,2024-01..2026-02,2026-03-15,quant_team,true
+VN,WP-VN-BASE,v1,0.19,0.17,0.14,0.18,0.13,0.19,0.11,0.17,0.16,0.1,0.13,walk_forward_backtest,2024-01..2026-02,2026-03-15,quant_team,true
+TH,WP-TH-BASE,v1,0.19,0.17,0.15,0.17,0.13,0.19,0.11,0.16,0.14,0.1,0.12,walk_forward_backtest,2024-01..2026-02,2026-03-15,quant_team,true
+KH,WP-KH-BASE,v1,0.16,0.14,0.12,0.16,0.15,0.22,0.14,0.18,0.2,0.09,0.18,walk_forward_backtest,2024-01..2026-02,2026-03-15,quant_team,true
+LA,WP-LA-BASE,v1,0.15,0.14,0.11,0.15,0.16,0.22,0.14,0.19,0.22,0.09,0.19,walk_forward_backtest,2024-01..2026-02,2026-03-15,quant_team,true
+ID,WP-ID-BASE,v1,0.2,0.18,0.15,0.17,0.13,0.17,0.11,0.16,0.15,0.1,0.15,walk_forward_backtest,2024-01..2026-02,2026-03-15,quant_team,true

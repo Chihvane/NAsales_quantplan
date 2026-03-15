@@ -76,6 +76,14 @@ PART0_METRICS: tuple[MetricSpec, ...] = (
         formula="统计定义覆盖、类型覆盖、来源表覆盖、命名风格一致率和复用字段占比。",
         output_note="用于控制跨项目主数据与命名口径不漂移。",
     ),
+    MetricSpec(
+        section_id="0.8",
+        metric_id="market_localization_governance",
+        label="全球市场去向与本地化治理",
+        required_tables=("market_destination_registry", "consumer_habit_vectors", "region_weight_profiles"),
+        formula="统计市场覆盖、消费习惯向量覆盖、权重 profile 覆盖、方法族多样性与市场间差异度。",
+        output_note="用于保证不同区域采用独立消费习惯和权重模型，而不是把欧美模型直接套入东南亚。",
+    ),
 )
 
 

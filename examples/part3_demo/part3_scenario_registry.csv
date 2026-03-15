@@ -1,0 +1,5 @@
+scenario_id,scenario_name,shock_target,shock_multiplier,severity,active_flag,notes
+P3SCN001,Freight Spike,logistics_cost,1.35,high,1,Stress sea and parcel freight
+P3SCN002,Tariff Escalation,duty_cost,1.4,high,1,Stress import duty changes
+P3SCN003,Factory Price Drift,procurement_cost,1.1,medium,1,Stress supplier repricing
+P3SCN004,Price Cut Response,sell_price,0.95,medium,1,Stress launch discounting

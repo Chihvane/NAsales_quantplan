@@ -1,0 +1,688 @@
+{
+  "metadata": {
+    "report_id": "horizontal_system_management_report",
+    "report_version": "2026.03",
+    "generated_at": "2026-03-15T00:47:12.525225+00:00",
+    "section_order": [
+      "H1",
+      "H2",
+      "H3"
+    ],
+    "section_structure": {
+      "H1": {
+        "title": "数据字典与主数据管理",
+        "required_tables": [
+          "master_data_entities",
+          "data_dictionary_fields"
+        ],
+        "metric_ids": [
+          "master_data_governance"
+        ],
+        "quality_targets": {
+          "master_data_entities": 8,
+          "data_dictionary_fields": 12
+        },
+        "analysis_grain": "master data entity / field row",
+        "entity_grain": "entity type x field group",
+        "time_grain": "dictionary version",
+        "channel_scope": [
+          "control_tower"
+        ],
+        "master_data_refs": [
+          "mdm.sku",
+          "mdm.channel",
+          "mdm.calendar",
+          "mdm.price_metric",
+          "mdm.supplier"
+        ],
+        "evidence_refs": [
+          "evidence.dictionary_versions"
+        ],
+        "rule_refs": [
+          "control.master_data_health"
+        ]
+      },
+      "H2": {
+        "title": "证据链与审计链",
+        "required_tables": [
+          "evidence_lineage",
+          "audit_events"
+        ],
+        "metric_ids": [
+          "evidence_audit_chain"
+        ],
+        "quality_targets": {
+          "evidence_lineage": 8,
+          "audit_events": 8
+        },
+        "analysis_grain": "lineage / audit event",
+        "entity_grain": "metric lineage x audit record",
+        "time_grain": "audit timestamp",
+        "channel_scope": [
+          "control_tower"
+        ],
+        "master_data_refs": [
+          "mdm.source_system",
+          "mdm.approval_role"
+        ],
+        "evidence_refs": [
+          "evidence.lineage_register",
+          "evidence.audit_events"
+        ],
+        "rule_refs": [
+          "control.audit_traceability"
+        ]
+      },
+      "H3": {
+        "title": "决策门槛系统",
+        "required_tables": [
+          "decision_rules",
+          "decision_triggers"
+        ],
+        "metric_ids": [
+          "decision_threshold_system"
+        ],
+        "quality_targets": {
+          "decision_rules": 8,
+          "decision_triggers": 6
+        },
+        "analysis_grain": "decision rule / trigger",
+        "entity_grain": "scenario x gate x trigger",
+        "time_grain": "trigger timestamp",
+        "channel_scope": [
+          "control_tower"
+        ],
+        "master_data_refs": [
+          "mdm.gate_threshold",
+          "mdm.rule_scenario"
+        ],
+        "evidence_refs": [
+          "evidence.decision_trigger"
+        ],
+        "rule_refs": [
+          "control.stop_loss",
+          "control.go_no_go"
+        ]
+      }
+    },
+    "metric_specs": [
+      {
+        "section_id": "H1",
+        "metric_id": "master_data_governance",
+        "label": "数据字典与主数据治理",
+        "required_tables": [
+          "master_data_entities",
+          "data_dictionary_fields"
+        ],
+        "formula": "统计实体类型覆盖、字典审批率、版本覆盖率、重复率与必填字段缺失率。",
+        "output_note": "用于保证跨品类、跨平台、跨团队复用的数据口径不会漂移。"
+      },
+      {
+        "section_id": "H2",
+        "metric_id": "evidence_audit_chain",
+        "label": "证据链与审计链完整性",
+        "required_tables": [
+          "evidence_lineage",
+          "audit_events"
+        ],
+        "formula": "统计血缘覆盖、可复现实验率、审批关联率、不可篡改日志占比与追溯 SLA。",
+        "output_note": "用于确保关键结论和字段能回溯到数据来源、脚本版本和审批人。"
+      },
+      {
+        "section_id": "H3",
+        "metric_id": "decision_threshold_system",
+        "label": "决策门槛系统",
+        "required_tables": [
+          "decision_rules",
+          "decision_triggers"
+        ],
+        "formula": "统计规则场景覆盖、止损规则覆盖、触发闭环解决率、审批路由覆盖与激活规则占比。",
+        "output_note": "用于把 Go/No-Go 规则从报告描述升级成可执行的控制系统。"
+      }
+    ],
+    "assumptions": {
+      "required_entity_types": 5,
+      "required_rule_scenarios": 5,
+      "required_entity_type_names": [
+        "sku",
+        "channel",
+        "calendar",
+        "price_metric",
+        "supplier"
+      ],
+      "required_rule_scenario_names": [
+        "market_entry",
+        "pilot_scale",
+        "sku_exit",
+        "channel_exit",
+        "ad_pause"
+      ],
+      "required_field_groups": [
+        "product",
+        "channel",
+        "time",
+        "price"
+      ],
+      "min_dictionary_approval_ratio": 0.9,
+      "min_reproducibility_ratio": 0.85,
+      "min_trigger_resolution_ratio": 0.8,
+      "max_traceback_minutes": 30
+    },
+    "table_inventory": {
+      "master_data_entities": {
+        "record_count": 11,
+        "available": true
+      },
+      "data_dictionary_fields": {
+        "record_count": 18,
+        "available": true
+      },
+      "evidence_lineage": {
+        "record_count": 8,
+        "available": true
+      },
+      "audit_events": {
+        "record_count": 10,
+        "available": true
+      },
+      "decision_rules": {
+        "record_count": 8,
+        "available": true
+      },
+      "decision_triggers": {
+        "record_count": 6,
+        "available": true
+      }
+    }
+  },
+  "overview": {
+    "section_count": 3,
+    "average_confidence_score": 1.0,
+    "confidence_mix": {
+      "high": 3,
+      "medium": 0,
+      "low": 0
+    },
+    "connected_channel_scope": [
+      "control_tower"
+    ],
+    "control_tower_binding": {
+      "master_data_ref_coverage_ratio": 1.0,
+      "evidence_ref_coverage_ratio": 1.0,
+      "rule_ref_coverage_ratio": 1.0,
+      "gate_status_mix": {
+        "pass": 0,
+        "review": 0,
+        "fail": 0,
+        "not_applicable": 3
+      }
+    },
+    "headline_metrics": [
+      {
+        "key": "master_data_health_score",
+        "label": "主数据健康分",
+        "value": 0.9978,
+        "unit": "score"
+      },
+      {
+        "key": "audit_trace_score",
+        "label": "证据链追溯分",
+        "value": 1.0,
+        "unit": "score"
+      },
+      {
+        "key": "decision_gate_control_score",
+        "label": "决策门槛控制分",
+        "value": 0.925,
+        "unit": "score"
+      },
+      {
+        "key": "traceback_sla_ratio",
+        "label": "30分钟追溯达标率",
+        "value": 1.0,
+        "unit": "ratio"
+      }
+    ],
+    "decision_summary": {
+      "decision_signal": "control_tower_ready",
+      "decision_score": 0.9648,
+      "scorecard": {
+        "data_governance": {
+          "score": 0.9985,
+          "level": "high"
+        },
+        "audit_rigour": {
+          "score": 1.0,
+          "level": "high"
+        },
+        "gate_discipline": {
+          "score": 0.895,
+          "level": "high"
+        }
+      },
+      "key_findings": [
+        "主数据健康分为 99.8%，实体类型覆盖率为 100.0%。",
+        "证据链追溯分为 100.0%，30 分钟追溯达标率为 100.0%。",
+        "决策门槛控制分为 92.5%，规则场景覆盖率为 100.0%。"
+      ],
+      "risk_flags": [],
+      "recommended_next_step": "把横向模块接入 Part 0–5 的字段校验、证据索引和 Gate 结果回填。"
+    },
+    "decision_signal": "control_tower_ready",
+    "decision_score": 0.9648,
+    "validation_summary": {
+      "pass_count": 6,
+      "review_count": 0,
+      "fail_count": 0
+    },
+    "uncertainty_keys": [
+      "master_data_band",
+      "audit_trace_band",
+      "decision_gate_band"
+    ]
+  },
+  "sections": {
+    "H1": {
+      "id": "H1",
+      "title": "数据字典与主数据管理",
+      "required_tables": [
+        "master_data_entities",
+        "data_dictionary_fields"
+      ],
+      "metric_ids": [
+        "master_data_governance"
+      ],
+      "granularity": {
+        "analysis_grain": "master data entity / field row",
+        "entity_grain": "entity type x field group",
+        "time_grain": "dictionary version"
+      },
+      "channel_scope": [
+        "control_tower"
+      ],
+      "master_data_ref": [
+        "mdm.sku",
+        "mdm.channel",
+        "mdm.calendar",
+        "mdm.price_metric",
+        "mdm.supplier"
+      ],
+      "evidence_ref": [
+        "evidence.dictionary_versions"
+      ],
+      "rule_ref": [
+        "control.master_data_health"
+      ],
+      "gate_result": {
+        "status": "not_applicable",
+        "source": "",
+        "raw_value": "",
+        "failed_items": []
+      },
+      "data_quality": {
+        "record_counts": {
+          "master_data_entities": 11,
+          "data_dictionary_fields": 18
+        },
+        "available_tables": [
+          "master_data_entities",
+          "data_dictionary_fields"
+        ],
+        "missing_tables": [],
+        "completeness_ratio": 1.0,
+        "richness_ratio": 1.0,
+        "quality_score": 1.0,
+        "quality_level": "high"
+      },
+      "confidence": {
+        "score": 1.0,
+        "level": "high"
+      },
+      "metrics": {
+        "entity_count": 11,
+        "field_count": 18,
+        "entity_type_mix": {
+          "brand": 2,
+          "calendar": 1,
+          "channel": 2,
+          "price_metric": 1,
+          "region": 1,
+          "sku": 2,
+          "supplier": 2
+        },
+        "required_entity_type_targets": [
+          "sku",
+          "channel",
+          "calendar",
+          "price_metric",
+          "supplier"
+        ],
+        "covered_required_entity_types": [
+          "calendar",
+          "channel",
+          "price_metric",
+          "sku",
+          "supplier"
+        ],
+        "missing_required_entity_types": [],
+        "entity_type_coverage_ratio": 1.0,
+        "approved_entity_ratio": 1.0,
+        "active_entity_ratio": 1.0,
+        "duplicate_free_ratio": 1.0,
+        "required_field_compliance_ratio": 1.0,
+        "owner_coverage_ratio": 1.0,
+        "version_coverage_ratio": 1.0,
+        "dictionary_approval_ratio": 1.0,
+        "validation_rule_coverage_ratio": 1.0,
+        "dictionary_version_coverage_ratio": 1.0,
+        "entity_dictionary_alignment_ratio": 0.8889,
+        "required_field_group_targets": [
+          "product",
+          "channel",
+          "time",
+          "price"
+        ],
+        "covered_field_groups": [
+          "channel",
+          "price",
+          "product",
+          "time"
+        ],
+        "missing_field_groups": [],
+        "core_field_group_coverage_ratio": 1.0,
+        "master_data_health_score": 0.9978,
+        "master_data_health_level": "high"
+      }
+    },
+    "H2": {
+      "id": "H2",
+      "title": "证据链与审计链",
+      "required_tables": [
+        "evidence_lineage",
+        "audit_events"
+      ],
+      "metric_ids": [
+        "evidence_audit_chain"
+      ],
+      "granularity": {
+        "analysis_grain": "lineage / audit event",
+        "entity_grain": "metric lineage x audit record",
+        "time_grain": "audit timestamp"
+      },
+      "channel_scope": [
+        "control_tower"
+      ],
+      "master_data_ref": [
+        "mdm.source_system",
+        "mdm.approval_role"
+      ],
+      "evidence_ref": [
+        "evidence.lineage_register",
+        "evidence.audit_events"
+      ],
+      "rule_ref": [
+        "control.audit_traceability"
+      ],
+      "gate_result": {
+        "status": "not_applicable",
+        "source": "",
+        "raw_value": "",
+        "failed_items": []
+      },
+      "data_quality": {
+        "record_counts": {
+          "evidence_lineage": 8,
+          "audit_events": 10
+        },
+        "available_tables": [
+          "evidence_lineage",
+          "audit_events"
+        ],
+        "missing_tables": [],
+        "completeness_ratio": 1.0,
+        "richness_ratio": 1.0,
+        "quality_score": 1.0,
+        "quality_level": "high"
+      },
+      "confidence": {
+        "score": 1.0,
+        "level": "high"
+      },
+      "metrics": {
+        "lineage_count": 8,
+        "audit_event_count": 10,
+        "target_metric_coverage_ratio": 1.0,
+        "dataset_version_coverage_ratio": 1.0,
+        "script_version_coverage_ratio": 1.0,
+        "approval_linkage_ratio": 1.0,
+        "reproducibility_ratio": 1.0,
+        "traceback_sla_ratio": 1.0,
+        "average_transform_step_count": 3.62,
+        "immutable_audit_ratio": 1.0,
+        "audit_actor_coverage_ratio": 1.0,
+        "audit_approval_ref_ratio": 1.0,
+        "audit_closed_ratio": 1.0,
+        "audit_type_mix": {
+          "access_review": 1,
+          "etl_snapshot": 1,
+          "lineage_review": 1,
+          "master_data_approval": 2,
+          "policy_change": 1,
+          "rule_release": 1,
+          "schema_update": 1,
+          "traceback_test": 1,
+          "trigger_review": 1
+        },
+        "audit_trace_score": 1.0,
+        "audit_trace_level": "high"
+      }
+    },
+    "H3": {
+      "id": "H3",
+      "title": "决策门槛系统",
+      "required_tables": [
+        "decision_rules",
+        "decision_triggers"
+      ],
+      "metric_ids": [
+        "decision_threshold_system"
+      ],
+      "granularity": {
+        "analysis_grain": "decision rule / trigger",
+        "entity_grain": "scenario x gate x trigger",
+        "time_grain": "trigger timestamp"
+      },
+      "channel_scope": [
+        "control_tower"
+      ],
+      "master_data_ref": [
+        "mdm.gate_threshold",
+        "mdm.rule_scenario"
+      ],
+      "evidence_ref": [
+        "evidence.decision_trigger"
+      ],
+      "rule_ref": [
+        "control.stop_loss",
+        "control.go_no_go"
+      ],
+      "gate_result": {
+        "status": "not_applicable",
+        "source": "",
+        "raw_value": "",
+        "failed_items": []
+      },
+      "data_quality": {
+        "record_counts": {
+          "decision_rules": 8,
+          "decision_triggers": 6
+        },
+        "available_tables": [
+          "decision_rules",
+          "decision_triggers"
+        ],
+        "missing_tables": [],
+        "completeness_ratio": 1.0,
+        "richness_ratio": 1.0,
+        "quality_score": 1.0,
+        "quality_level": "high"
+      },
+      "confidence": {
+        "score": 1.0,
+        "level": "high"
+      },
+      "metrics": {
+        "rule_count": 8,
+        "trigger_count": 6,
+        "rule_scenario_mix": {
+          "ad_pause": 2,
+          "channel_exit": 1,
+          "market_entry": 2,
+          "pilot_scale": 1,
+          "sku_exit": 2
+        },
+        "required_rule_scenario_targets": [
+          "market_entry",
+          "pilot_scale",
+          "sku_exit",
+          "channel_exit",
+          "ad_pause"
+        ],
+        "covered_required_rule_scenarios": [
+          "ad_pause",
+          "channel_exit",
+          "market_entry",
+          "pilot_scale",
+          "sku_exit"
+        ],
+        "missing_required_rule_scenarios": [],
+        "scenario_coverage_ratio": 1.0,
+        "active_rule_ratio": 1.0,
+        "version_coverage_ratio": 1.0,
+        "stop_loss_rule_ratio": 0.625,
+        "approver_coverage_ratio": 1.0,
+        "triggered_rule_coverage_ratio": 0.75,
+        "trigger_resolution_ratio": 1.0,
+        "trigger_approval_ref_ratio": 1.0,
+        "stop_loss_trigger_ratio": 0.5,
+        "decision_status_mix": {
+          "exit": 2,
+          "go": 3,
+          "pause": 1
+        },
+        "decision_gate_control_score": 0.925,
+        "decision_gate_control_level": "high"
+      }
+    }
+  },
+  "uncertainty": {
+    "master_data_band": {
+      "p10": 0.9478,
+      "p50": 0.9978,
+      "p90": 1.0
+    },
+    "audit_trace_band": {
+      "p10": 0.95,
+      "p50": 1.0,
+      "p90": 1.0
+    },
+    "decision_gate_band": {
+      "p10": 0.875,
+      "p50": 0.925,
+      "p90": 0.975
+    }
+  },
+  "validation": {
+    "checks": [
+      {
+        "check_id": "entity_type_coverage_range",
+        "status": "pass",
+        "source": {
+          "label": "Master data and data dictionary governance references",
+          "url": "https://www.jiandaoyun.com/nblog/411173/"
+        },
+        "method": "Master-data coverage and dictionary approval should be normalized governance ratios.",
+        "evidence": {
+          "entity_type_coverage_ratio": 1.0,
+          "dictionary_approval_ratio": 1.0
+        }
+      },
+      {
+        "check_id": "duplicate_free_integrity",
+        "status": "pass",
+        "source": {
+          "label": "Master data and data dictionary governance references",
+          "url": "https://www.jiandaoyun.com/nblog/411173/"
+        },
+        "method": "Duplicate-free ratio must stay inside 0-1 and support master-data quality monitoring.",
+        "evidence": {
+          "duplicate_free_ratio": 1.0,
+          "required_field_compliance_ratio": 1.0
+        }
+      },
+      {
+        "check_id": "evidence_lineage_reproducibility",
+        "status": "pass",
+        "source": {
+          "label": "Evidence lineage and audit chain references",
+          "url": "https://sgsystemsglobal.com/zh-CN/"
+        },
+        "method": "Evidence lineage should expose bounded reproducibility and traceback SLA ratios.",
+        "evidence": {
+          "reproducibility_ratio": 1.0,
+          "traceback_sla_ratio": 1.0
+        }
+      },
+      {
+        "check_id": "audit_immutability_integrity",
+        "status": "pass",
+        "source": {
+          "label": "Evidence lineage and audit chain references",
+          "url": "https://sgsystemsglobal.com/zh-CN/"
+        },
+        "method": "Audit immutability must be represented as an explicit normalized control ratio.",
+        "evidence": {
+          "immutable_audit_ratio": 1.0,
+          "audit_approval_ref_ratio": 1.0
+        }
+      },
+      {
+        "check_id": "decision_rule_scenario_coverage",
+        "status": "pass",
+        "source": {
+          "label": "Go/No-Go decision process references",
+          "url": "https://www.inventive.ai/blog-posts/go-no-go-decision-projects"
+        },
+        "method": "Decision-rule scenario coverage is normalized against the required scenario library.",
+        "evidence": {
+          "scenario_coverage_ratio": 1.0,
+          "rule_scenario_mix": {
+            "ad_pause": 2,
+            "channel_exit": 1,
+            "market_entry": 2,
+            "pilot_scale": 1,
+            "sku_exit": 2
+          }
+        }
+      },
+      {
+        "check_id": "trigger_resolution_integrity",
+        "status": "pass",
+        "source": {
+          "label": "Go/No-Go decision process references",
+          "url": "https://www.inventive.ai/blog-posts/go-no-go-decision-projects"
+        },
+        "method": "Triggered decisions should keep bounded closure and approval-reference ratios.",
+        "evidence": {
+          "trigger_resolution_ratio": 1.0,
+          "trigger_approval_ref_ratio": 1.0
+        }
+      }
+    ],
+    "summary": {
+      "pass_count": 6,
+      "review_count": 0,
+      "fail_count": 0
+    }
+  }
+}

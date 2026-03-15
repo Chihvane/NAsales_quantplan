@@ -2,6 +2,7 @@ alembic
 PyYAML
 numpy
 pandas
+openpyxl
 scipy
 statsmodels
 scikit-learn

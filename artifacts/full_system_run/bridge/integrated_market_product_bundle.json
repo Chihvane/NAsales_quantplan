@@ -1,0 +1,493 @@
+{
+  "tenant_id": "TENANT-FULL-CHAIN",
+  "as_of_date": "2026-03-15",
+  "report_refs": {
+    "part0_report_id": "part0_quant_report",
+    "horizontal_report_id": "horizontal_system_management_report",
+    "part1_report_id": "part1_quant_report",
+    "part2_report_id": "part2_quant_report",
+    "part3_report_id": "part3_quant_report",
+    "part4_report_id": "part4_quant_report",
+    "part5_report_id": "part5_quant_report"
+  },
+  "field_data_proxy": {
+    "TAM": 26448000.0,
+    "CAGR": 0.1678,
+    "HHI": 2818.06,
+    "volatility": 0.1128,
+    "expected_price": 645.01,
+    "landed_cost": 354.76,
+    "platform_fee": 77.4
+  },
+  "gate_inputs": {
+    "governance_readiness_score": 0.9392,
+    "localization_governance_score": 0.8784,
+    "control_tower_score": 0.9648,
+    "master_data_health_score": 0.9978,
+    "audit_trace_score": 1.0,
+    "decision_gate_control_score": 0.925,
+    "market_entry_readiness_score": 0.6831,
+    "product_viability_score": 0.639,
+    "channel_portfolio_readiness_score": 0.7079,
+    "operating_system_readiness_score": 0.722,
+    "operating_health_score": 0.6515,
+    "data_contract_score": 0.825,
+    "experiment_confidence_score": 0.8792,
+    "scale_control_score": 0.5235,
+    "operating_proxy_flag_count": 5.0,
+    "integrated_factor_score": 0.7465,
+    "forecast_backtest_score": 0.6985,
+    "forecast_mape": 0.0765,
+    "signal_regime_score": 0.85,
+    "signal_regime": "seasonal",
+    "signal_seasonality_confidence_score": 0.5287,
+    "signal_spectral_entropy": 0.3602,
+    "signal_approximate_entropy": 0.0953,
+    "lead_lag_stability_score": 1.0,
+    "event_window_stability_score": 0.3712,
+    "drift_score": 0.7047,
+    "drift_risk_score": 0.4769,
+    "source_drift_score": 0.9214,
+    "calibration_brier_score": 0.2065,
+    "threshold_alignment_ratio": 1.0,
+    "gate_consistency_ratio": 1.0,
+    "localized_market_selection_score": 0.4368,
+    "market_localization_coverage_ratio": 1.0,
+    "channel_dependency_score": 0.6751,
+    "price_realization_rate": 0.9055,
+    "top_sku_share": 0.8526,
+    "supply_tail_risk_score": 0.0474,
+    "supply_loss_probability": 0.0,
+    "supply_margin_floor_breach_probability": 0.0,
+    "supply_value_at_risk_95": 122.79,
+    "supply_optimizer_feasible_ratio": 0.7857,
+    "supply_execution_confidence_score": 0.8167,
+    "supply_optimizer_gate_pass": 1.0,
+    "channel_portfolio_resilience_score": 0.9968,
+    "channel_execution_friction_factor": 0.2095,
+    "channel_scale_readiness_score": 0.6158,
+    "channel_optimizer_feasible_ratio": 0.3333,
+    "channel_optimizer_gate_pass": 1.0,
+    "channel_risk_adjusted_profit": 5483.25,
+    "channel_stress_robustness_score": 1.0,
+    "channel_gate_flip_count": 0.0,
+    "channel_loss_probability_weighted": 0.1379,
+    "channel_margin_rate_var_95": 0.0308,
+    "channel_margin_rate_es_95": 0.01,
+    "channel_tail_shortfall_severity": 0.0311,
+    "channel_roi_sharpe_like": 2.1309
+  },
+  "part1_continuous_signals": {
+    "forecast_engine": {
+      "score": 0.6985,
+      "mape": 0.0765,
+      "rmse": 7.02,
+      "lead_lag_stability_score": 1.0,
+      "event_window_stability_score": 0.3712
+    },
+    "drift_report": {
+      "drift_score": 0.7047,
+      "drift_level": "medium",
+      "drift_risk_score": 0.4769,
+      "source_drift_score": 0.9214
+    },
+    "calibration_report": {
+      "brier_score": 0.2065,
+      "threshold_alignment_ratio": 1.0,
+      "gate_consistency_ratio": 1.0,
+      "flip_candidate_count": 1
+    },
+    "advanced_time_series": {
+      "signal_regime": "seasonal",
+      "signal_regime_score": 0.85,
+      "seasonality_confidence_score": 0.5287,
+      "spectral_entropy": 0.3602,
+      "approximate_entropy": 0.0953
+    },
+    "market_destination": {
+      "market_count": 10,
+      "top_market_code": "TW",
+      "top_market_score": 0.4368,
+      "habit_vector_coverage_ratio": 1.0,
+      "weight_profile_coverage_ratio": 1.0
+    }
+  },
+  "part0_governance_signals": {
+    "governance": {
+      "decision_signal": "ready_for_execution_system",
+      "decision_score": 0.9392,
+      "localization_governance_score": 0.8784,
+      "active_market_count": 10,
+      "market_localization_coverage_ratio": 1.0
+    }
+  },
+  "horizontal_control_signals": {
+    "control_tower": {
+      "decision_signal": "control_tower_ready",
+      "decision_score": 0.9648,
+      "master_data_health_score": 0.9978,
+      "audit_trace_score": 1.0,
+      "decision_gate_control_score": 0.925
+    }
+  },
+  "part3_supply_signals": {
+    "risk_metrics": {
+      "tail_risk_score": 0.0474,
+      "loss_probability": 0.0,
+      "margin_floor_breach_probability": 0.0,
+      "value_at_risk_95": 122.79,
+      "expected_shortfall_95": 116.5
+    },
+    "optimizer": {
+      "feasible_ratio": 0.7857,
+      "optimizer_gate_result": "pass",
+      "optimizer_confidence_level": "medium",
+      "execution_confidence_score": 0.8167
+    }
+  },
+  "part4_channel_signals": {
+    "performance": {
+      "portfolio_resilience_score": 0.9968,
+      "execution_friction_factor": 0.2095,
+      "scale_readiness_score": 0.6158,
+      "benchmark_coverage_ratio": 0.8333
+    },
+    "optimizer": {
+      "feasible_ratio": 0.3333,
+      "optimizer_gate_result": "pass",
+      "optimizer_confidence_level": "medium",
+      "risk_adjusted_profit": 5483.25
+    },
+    "stress_suite": {
+      "robustness_score": 1.0,
+      "robustness_level": "high",
+      "gate_flip_count": 0,
+      "scenario_count": 3
+    },
+    "tail_risk": {
+      "loss_probability_weighted": 0.1379,
+      "margin_rate_var_95": 0.0308,
+      "margin_rate_es_95": 0.01,
+      "tail_shortfall_severity": 0.0311,
+      "roi_sharpe_like": 2.1309
+    }
+  },
+  "part5_operating_signals": {
+    "operating": {
+      "decision_signal": "rollback_risk",
+      "operating_health_score": 0.6515,
+      "operating_system_readiness_score": 0.722,
+      "data_contract_score": 0.825,
+      "experiment_confidence_score": 0.8792,
+      "scale_control_score": 0.5235,
+      "confidence_label": "high"
+    },
+    "proxy_usage_flags": [
+      "cohort_repeat_rate_proxy_for_ltv",
+      "platform_level_customer_acquisition_proxy",
+      "policy_monitoring_thin",
+      "rollback_pressure_high"
+    ]
+  },
+  "proxy_flags": {
+    "landed_cost_proxy": true,
+    "platform_fee_proxy": true,
+    "price_source": "part2_average_realized_price",
+    "part5_proxy_usage_flags": [
+      "cohort_repeat_rate_proxy_for_ltv",
+      "platform_level_customer_acquisition_proxy",
+      "policy_monitoring_thin",
+      "rollback_pressure_high"
+    ]
+  },
+  "factor_panel": [
+    {
+      "tenant_id": "TENANT-FULL-CHAIN",
+      "as_of_date": "2026-03-15",
+      "module": "part1",
+      "factor_id": "FAC-CHANNEL-EFFICIENCY",
+      "factor_label": "渠道效率因子",
+      "value": "0.870800",
+      "source_section": "1.4"
+    },
+    {
+      "tenant_id": "TENANT-FULL-CHAIN",
+      "as_of_date": "2026-03-15",
+      "module": "part1",
+      "factor_id": "FAC-CHANNEL-RISK",
+      "factor_label": "渠道风险因子",
+      "value": "0.374900",
+      "source_section": "1.4"
+    },
+    {
+      "tenant_id": "TENANT-FULL-CHAIN",
+      "as_of_date": "2026-03-15",
+      "module": "part1",
+      "factor_id": "FAC-CUSTOMER-FIT",
+      "factor_label": "客户匹配因子",
+      "value": "0.476900",
+      "source_section": "1.2"
+    },
+    {
+      "tenant_id": "TENANT-FULL-CHAIN",
+      "as_of_date": "2026-03-15",
+      "module": "part1",
+      "factor_id": "FAC-DEMAND-STABILITY",
+      "factor_label": "需求稳定因子",
+      "value": "0.751400",
+      "source_section": "1.1"
+    },
+    {
+      "tenant_id": "TENANT-FULL-CHAIN",
+      "as_of_date": "2026-03-15",
+      "module": "part1",
+      "factor_id": "FAC-MARKET-ATTRACT",
+      "factor_label": "市场吸引力因子",
+      "value": "0.776900",
+      "source_section": "1.3"
+    },
+    {
+      "tenant_id": "TENANT-FULL-CHAIN",
+      "as_of_date": "2026-03-15",
+      "module": "part1",
+      "factor_id": "FAC-PRICE-REALIZATION",
+      "factor_label": "价格实现因子",
+      "value": "0.559600",
+      "source_section": "1.6"
+    },
+    {
+      "tenant_id": "TENANT-FULL-CHAIN",
+      "as_of_date": "2026-03-15",
+      "module": "part2",
+      "factor_id": "FAC-COMPETITION-HEADROOM",
+      "factor_label": "竞争结构空间因子",
+      "value": "0.330500",
+      "source_section": "2.1"
+    },
+    {
+      "tenant_id": "TENANT-FULL-CHAIN",
+      "as_of_date": "2026-03-15",
+      "module": "part2",
+      "factor_id": "FAC-PRICING-FIT",
+      "factor_label": "定价甜区匹配因子",
+      "value": "0.849000",
+      "source_section": "2.2"
+    },
+    {
+      "tenant_id": "TENANT-FULL-CHAIN",
+      "as_of_date": "2026-03-15",
+      "module": "part2",
+      "factor_id": "FAC-SHELF-STABILITY",
+      "factor_label": "货架稳定性因子",
+      "value": "0.425600",
+      "source_section": "2.6"
+    },
+    {
+      "tenant_id": "TENANT-FULL-CHAIN",
+      "as_of_date": "2026-03-15",
+      "module": "part2",
+      "factor_id": "FAC-VALUE-ADVANTAGE",
+      "factor_label": "价值优势因子",
+      "value": "0.883300",
+      "source_section": "2.3"
+    },
+    {
+      "tenant_id": "TENANT-FULL-CHAIN",
+      "as_of_date": "2026-03-15",
+      "module": "part2",
+      "factor_id": "FAC-VOC-RISK",
+      "factor_label": "VOC 风险因子",
+      "value": "0.489800",
+      "source_section": "2.5"
+    },
+    {
+      "tenant_id": "TENANT-FULL-CHAIN",
+      "as_of_date": "2026-03-15",
+      "module": "part2",
+      "factor_id": "FAC-WHITESPACE-DEPTH",
+      "factor_label": "白空间深度因子",
+      "value": "1.000000",
+      "source_section": "2.4"
+    },
+    {
+      "tenant_id": "TENANT-FULL-CHAIN",
+      "as_of_date": "2026-03-15",
+      "module": "part0",
+      "factor_id": "FAC-GOVERNANCE-READINESS",
+      "factor_label": "治理内核就绪因子",
+      "value": "0.939200",
+      "source_section": "0.1-0.8"
+    },
+    {
+      "tenant_id": "TENANT-FULL-CHAIN",
+      "as_of_date": "2026-03-15",
+      "module": "part0",
+      "factor_id": "FAC-LOCALIZATION-GOVERNANCE",
+      "factor_label": "本地化治理因子",
+      "value": "0.878400",
+      "source_section": "0.8"
+    },
+    {
+      "tenant_id": "TENANT-FULL-CHAIN",
+      "as_of_date": "2026-03-15",
+      "module": "horizontal",
+      "factor_id": "FAC-CONTROL-TOWER",
+      "factor_label": "横向控制塔因子",
+      "value": "0.964800",
+      "source_section": "H1-H3"
+    },
+    {
+      "tenant_id": "TENANT-FULL-CHAIN",
+      "as_of_date": "2026-03-15",
+      "module": "horizontal",
+      "factor_id": "FAC-AUDIT-TRACEABILITY",
+      "factor_label": "审计追溯因子",
+      "value": "1.000000",
+      "source_section": "H2"
+    },
+    {
+      "tenant_id": "TENANT-FULL-CHAIN",
+      "as_of_date": "2026-03-15",
+      "module": "part3",
+      "factor_id": "FAC-SUPPLY-TAIL-RISK",
+      "factor_label": "供应链尾部风险因子",
+      "value": "0.952600",
+      "source_section": "3.5-3.6"
+    },
+    {
+      "tenant_id": "TENANT-FULL-CHAIN",
+      "as_of_date": "2026-03-15",
+      "module": "part3",
+      "factor_id": "FAC-SUPPLY-EXECUTION-CONFIDENCE",
+      "factor_label": "供应链执行信心因子",
+      "value": "0.816700",
+      "source_section": "3.7"
+    },
+    {
+      "tenant_id": "TENANT-FULL-CHAIN",
+      "as_of_date": "2026-03-15",
+      "module": "part3",
+      "factor_id": "FAC-SUPPLY-FEASIBILITY",
+      "factor_label": "供应链可行性因子",
+      "value": "0.785700",
+      "source_section": "3.7"
+    },
+    {
+      "tenant_id": "TENANT-FULL-CHAIN",
+      "as_of_date": "2026-03-15",
+      "module": "part4",
+      "factor_id": "FAC-CHANNEL-FIT",
+      "factor_label": "渠道适配因子",
+      "value": "1.000000",
+      "source_section": "4.1-4.3"
+    },
+    {
+      "tenant_id": "TENANT-FULL-CHAIN",
+      "as_of_date": "2026-03-15",
+      "module": "part4",
+      "factor_id": "FAC-EXECUTION-FRICTION",
+      "factor_label": "执行摩擦因子",
+      "value": "0.209500",
+      "source_section": "4.5-4.6"
+    },
+    {
+      "tenant_id": "TENANT-FULL-CHAIN",
+      "as_of_date": "2026-03-15",
+      "module": "part4",
+      "factor_id": "FAC-PORTFOLIO-RESILIENCE",
+      "factor_label": "组合韧性因子",
+      "value": "0.996800",
+      "source_section": "4.5"
+    },
+    {
+      "tenant_id": "TENANT-FULL-CHAIN",
+      "as_of_date": "2026-03-15",
+      "module": "part4",
+      "factor_id": "FAC-SCALE-READINESS",
+      "factor_label": "放量承接因子",
+      "value": "0.615800",
+      "source_section": "4.6-4.7"
+    },
+    {
+      "tenant_id": "TENANT-FULL-CHAIN",
+      "as_of_date": "2026-03-15",
+      "module": "part4",
+      "factor_id": "FAC-TRAFFIC-EFFICIENCY",
+      "factor_label": "流量效率因子",
+      "value": "0.096300",
+      "source_section": "4.4"
+    },
+    {
+      "tenant_id": "TENANT-FULL-CHAIN",
+      "as_of_date": "2026-03-15",
+      "module": "part4",
+      "factor_id": "FAC-UNIT-ECONOMICS",
+      "factor_label": "单位经济因子",
+      "value": "0.774800",
+      "source_section": "4.5"
+    },
+    {
+      "tenant_id": "TENANT-FULL-CHAIN",
+      "as_of_date": "2026-03-15",
+      "module": "part5",
+      "factor_id": "FAC-CASH-DISCIPLINE",
+      "factor_label": "库存现金纪律因子",
+      "value": "0.955200",
+      "source_section": "5.5"
+    },
+    {
+      "tenant_id": "TENANT-FULL-CHAIN",
+      "as_of_date": "2026-03-15",
+      "module": "part5",
+      "factor_id": "FAC-DATA-CONTRACT",
+      "factor_label": "数据契约因子",
+      "value": "0.825000",
+      "source_section": "5.2"
+    },
+    {
+      "tenant_id": "TENANT-FULL-CHAIN",
+      "as_of_date": "2026-03-15",
+      "module": "part5",
+      "factor_id": "FAC-EXPERIMENT-CONFIDENCE",
+      "factor_label": "实验可信度因子",
+      "value": "0.879200",
+      "source_section": "5.6"
+    },
+    {
+      "tenant_id": "TENANT-FULL-CHAIN",
+      "as_of_date": "2026-03-15",
+      "module": "part5",
+      "factor_id": "FAC-GROWTH-LEVERAGE",
+      "factor_label": "增长杠杆因子",
+      "value": "0.608100",
+      "source_section": "5.3"
+    },
+    {
+      "tenant_id": "TENANT-FULL-CHAIN",
+      "as_of_date": "2026-03-15",
+      "module": "part5",
+      "factor_id": "FAC-MARGIN-PROTECTION",
+      "factor_label": "利润保护因子",
+      "value": "0.700000",
+      "source_section": "5.4"
+    },
+    {
+      "tenant_id": "TENANT-FULL-CHAIN",
+      "as_of_date": "2026-03-15",
+      "module": "part5",
+      "factor_id": "FAC-OPERATING-HEALTH",
+      "factor_label": "经营健康因子",
+      "value": "0.651500",
+      "source_section": "5.1"
+    },
+    {
+      "tenant_id": "TENANT-FULL-CHAIN",
+      "as_of_date": "2026-03-15",
+      "module": "part5",
+      "factor_id": "FAC-SCALE-CONTROL",
+      "factor_label": "扩张控制因子",
+      "value": "0.523500",
+      "source_section": "5.7"
+    }
+  ]
+}

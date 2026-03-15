@@ -1,0 +1,171 @@
+plan_id: PART3-QUANT-PLAN-20260315
+schema_version: 1.0
+module: part3_supply_chain_engine
+owner: strategy_committee
+status: active
+
+goals:
+  - standardize_part3_as_supply_chain_engine
+  - connect_part3_to_decision_os_gate
+  - add_tail_risk_and_constraint_optimization
+  - unify_part3_stress_test_with_walk_forward_engine
+
+layers:
+  governance:
+    required_objects:
+      - part3_source_registry
+      - part3_threshold_registry
+      - part3_scenario_registry
+      - part3_optimizer_registry
+    mandatory_outputs:
+      - evidence_ref
+      - master_data_ref
+      - rule_ref
+      - confidence
+      - threshold_coverage_ratio
+      - gate_result
+      - confidence_band
+      - scenario_confidence
+  data:
+    observation_tables:
+      - suppliers
+      - rfq_quotes
+      - compliance_requirements
+      - logistics_quotes
+      - tariff_tax
+      - shipment_events
+    reference_tables:
+      - part3_source_registry
+      - part3_threshold_registry
+      - part3_scenario_registry
+      - part3_optimizer_registry
+    backtest_tables:
+      - part3_factor_snapshots
+      - part3_gate_records
+      - part3_stress_scenarios
+      - part3_optimizer_runs
+      - part3_tail_risk_report
+  factor:
+    outputs:
+      - FAC-SUPPLY-ROBUSTNESS
+      - FAC-QUOTE-QUALITY
+      - FAC-COMPLIANCE-READINESS
+      - FAC-LOGISTICS-RELIABILITY
+      - FAC-MARGIN-SAFETY
+      - FAC-EXECUTION-RISK
+
+sections:
+  "3.1":
+    theme: supply_structure
+    planned_upgrades:
+      - supplier_diversity_index
+      - effective_supplier_count
+      - supply_fragility_score
+      - single_point_dependency_flag
+    outputs:
+      - supply_robustness_factor
+      - supplier_diversity_score
+  "3.2":
+    theme: quote_strategy
+    planned_upgrades:
+      - quote_frontier
+      - quote_scope_completeness
+      - quote_transparency_score
+      - quote_outlier_flags
+    outputs:
+      - quote_quality_factor
+      - quote_transparency_score
+  "3.3":
+    theme: compliance_readiness
+    planned_upgrades:
+      - time_to_market_risk
+      - compliance_buffer_days
+      - compliance_cost_stress
+      - blocker_probability
+    outputs:
+      - compliance_readiness_factor
+      - blocker_probability
+  "3.4":
+    theme: logistics_reliability
+    planned_upgrades:
+      - otif_proxy
+      - delay_severity_distribution
+      - route_bottleneck_ranking
+      - stage_hazard_score
+    outputs:
+      - logistics_reliability_factor
+      - delay_severity_score
+  "3.5":
+    theme: landed_cost_margin
+    planned_upgrades:
+      - margin_var_95
+      - margin_es_95
+      - tail_shortfall_probability
+      - cost_transparency_score
+      - scenario_pareto_frontier
+    outputs:
+      - margin_safety_factor
+      - margin_es_95
+      - tail_shortfall_probability
+  "3.6":
+    theme: risk_matrix
+    planned_upgrades:
+      - weighted_risk_budget_fit
+      - tail_risk_gate
+      - dual_sourcing_trigger
+      - execution_risk_factor
+    outputs:
+      - execution_risk_factor
+      - risk_budget_fit_status
+  "3.7":
+    theme: entry_strategy
+    planned_upgrades:
+      - constraint_optimized_path
+      - feasible_set_count
+      - capital_fit_status
+      - risk_budget_fit_status
+    outputs:
+      - optimized_path
+      - capital_fit_status
+      - risk_budget_fit_status
+
+validation:
+  required_reports:
+    - golden_scenario_regression
+    - margin_band_regression
+    - var_es_consistency
+    - optimizer_feasibility_report
+    - stress_suite_summary
+    - gate_flip_report
+
+tooling:
+  recommended_modules:
+    - part3_risk_metrics
+    - part3_optimizer
+    - part3_validation
+    - part3_stress_suite
+    - part3_tail_risk_report
+    - part3_optimizer_runs
+
+delivery_phases:
+  - phase: governance
+    tasks:
+      - finalize_part3_source_registry
+      - finalize_part3_threshold_registry
+      - finalize_part3_scenario_registry
+      - finalize_part3_optimizer_registry
+  - phase: risk_metrics
+    tasks:
+      - add_var_es_tail_metrics
+      - add_tail_shortfall_probability
+      - add_confidence_band_and_scenario_confidence
+  - phase: optimization
+    tasks:
+      - build_part3_optimizer
+      - connect_capital_and_risk_constraints
+      - output_optimizer_decision_records
+  - phase: validation
+    tasks:
+      - add_stress_suite
+      - add_golden_scenario_regression
+      - add_gate_flip_report

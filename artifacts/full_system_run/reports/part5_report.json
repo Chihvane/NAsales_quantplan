@@ -1,0 +1,3152 @@
+{
+  "metadata": {
+    "report_id": "part5_quant_report",
+    "report_version": "2026.03",
+    "generated_at": "2026-03-15T00:47:13.046018+00:00",
+    "section_order": [
+      "5.1",
+      "5.2",
+      "5.3",
+      "5.4",
+      "5.5",
+      "5.6",
+      "5.7"
+    ],
+    "section_structure": {
+      "5.1": {
+        "title": "运营目标与门禁指标设计",
+        "required_tables": [
+          "kpi_daily_snapshots",
+          "sold_transactions",
+          "returns_claims"
+        ],
+        "metric_ids": [
+          "operating_goals_gates"
+        ],
+        "quality_targets": {
+          "kpi_daily_snapshots": 14,
+          "sold_transactions": 10,
+          "returns_claims": 6
+        },
+        "analysis_grain": "channel x day",
+        "entity_grain": "channel",
+        "time_grain": "day",
+        "channel_scope": [
+          "DTC",
+          "Amazon",
+          "TikTok Shop",
+          "eBay",
+          "Walmart",
+          "B2B"
+        ],
+        "master_data_refs": [
+          "mdm.channel",
+          "mdm.sku",
+          "mdm.price_metric"
+        ],
+        "evidence_refs": [
+          "evidence.kpi_daily_snapshots",
+          "evidence.sold_transactions",
+          "evidence.returns_claims"
+        ],
+        "rule_refs": [
+          "gate.contribution_margin_guardrail",
+          "gate.return_dispute_band",
+          "gate.scale_stop_exit"
+        ]
+      },
+      "5.2": {
+        "title": "数据体系与持续监控机制",
+        "required_tables": [
+          "kpi_daily_snapshots",
+          "marketing_spend",
+          "traffic_sessions",
+          "policy_change_log",
+          "channel_rate_cards"
+        ],
+        "metric_ids": [
+          "data_monitoring_system"
+        ],
+        "quality_targets": {
+          "kpi_daily_snapshots": 14,
+          "marketing_spend": 8,
+          "traffic_sessions": 8,
+          "policy_change_log": 2,
+          "channel_rate_cards": 6
+        },
+        "analysis_grain": "channel x day / week",
+        "entity_grain": "channel x fee version",
+        "time_grain": "day / week",
+        "channel_scope": [
+          "DTC",
+          "Amazon",
+          "TikTok Shop",
+          "eBay",
+          "Walmart",
+          "B2B"
+        ],
+        "master_data_refs": [
+          "mdm.channel",
+          "mdm.fee_version",
+          "mdm.policy_version"
+        ],
+        "evidence_refs": [
+          "evidence.kpi_daily_snapshots",
+          "evidence.channel_rate_cards",
+          "evidence.policy_change_log"
+        ],
+        "rule_refs": [
+          "gate.data_contract",
+          "gate.version_gate",
+          "gate.monitoring_completeness"
+        ]
+      },
+      "5.3": {
+        "title": "获客、转化与留存增长机制",
+        "required_tables": [
+          "traffic_sessions",
+          "marketing_spend",
+          "customer_cohorts",
+          "kpi_daily_snapshots"
+        ],
+        "metric_ids": [
+          "growth_loop"
+        ],
+        "quality_targets": {
+          "traffic_sessions": 8,
+          "marketing_spend": 8,
+          "customer_cohorts": 4,
+          "kpi_daily_snapshots": 14
+        },
+        "analysis_grain": "channel x source x cohort",
+        "entity_grain": "channel x traffic source",
+        "time_grain": "day / cohort month",
+        "channel_scope": [
+          "DTC",
+          "Amazon",
+          "TikTok Shop",
+          "eBay",
+          "Walmart",
+          "B2B"
+        ],
+        "master_data_refs": [
+          "mdm.channel",
+          "mdm.customer_segment",
+          "mdm.traffic_source"
+        ],
+        "evidence_refs": [
+          "evidence.traffic_sessions",
+          "evidence.marketing_spend",
+          "evidence.customer_cohorts"
+        ],
+        "rule_refs": [
+          "gate.growth_quality",
+          "gate.payback_control"
+        ]
+      },
+      "5.4": {
+        "title": "定价、促销与利润保护策略",
+        "required_tables": [
+          "pricing_actions",
+          "sold_transactions",
+          "kpi_daily_snapshots"
+        ],
+        "metric_ids": [
+          "pricing_profit_protection"
+        ],
+        "quality_targets": {
+          "pricing_actions": 6,
+          "sold_transactions": 10,
+          "kpi_daily_snapshots": 14
+        },
+        "analysis_grain": "sku x channel x pricing action",
+        "entity_grain": "sku x channel",
+        "time_grain": "pricing action date",
+        "channel_scope": [
+          "DTC",
+          "Amazon",
+          "TikTok Shop",
+          "eBay",
+          "Walmart",
+          "B2B"
+        ],
+        "master_data_refs": [
+          "mdm.sku",
+          "mdm.channel",
+          "mdm.price_metric"
+        ],
+        "evidence_refs": [
+          "evidence.pricing_actions",
+          "evidence.sold_transactions",
+          "evidence.kpi_daily_snapshots"
+        ],
+        "rule_refs": [
+          "gate.margin_protection",
+          "gate.promo_dependency"
+        ]
+      },
+      "5.5": {
+        "title": "履约、库存与现金周转管理",
+        "required_tables": [
+          "inventory_positions",
+          "reorder_plan",
+          "cash_flow_snapshots"
+        ],
+        "metric_ids": [
+          "inventory_cash_control"
+        ],
+        "quality_targets": {
+          "inventory_positions": 8,
+          "reorder_plan": 4,
+          "cash_flow_snapshots": 8
+        },
+        "analysis_grain": "sku x warehouse x day",
+        "entity_grain": "sku x warehouse",
+        "time_grain": "day",
+        "channel_scope": [
+          "DTC",
+          "Amazon",
+          "TikTok Shop",
+          "eBay",
+          "Walmart",
+          "B2B"
+        ],
+        "master_data_refs": [
+          "mdm.sku",
+          "mdm.warehouse",
+          "mdm.channel"
+        ],
+        "evidence_refs": [
+          "evidence.inventory_positions",
+          "evidence.reorder_plan",
+          "evidence.cash_flow_snapshots"
+        ],
+        "rule_refs": [
+          "gate.inventory_risk",
+          "gate.cash_burn_control"
+        ]
+      },
+      "5.6": {
+        "title": "增量实验与持续优化机制",
+        "required_tables": [
+          "experiment_registry",
+          "experiment_assignments",
+          "experiment_metrics",
+          "traffic_sessions"
+        ],
+        "metric_ids": [
+          "experimentation_system"
+        ],
+        "quality_targets": {
+          "experiment_registry": 4,
+          "experiment_assignments": 8,
+          "experiment_metrics": 8,
+          "traffic_sessions": 8
+        },
+        "analysis_grain": "experiment x variant x day",
+        "entity_grain": "experiment",
+        "time_grain": "experiment day",
+        "channel_scope": [
+          "DTC",
+          "Amazon",
+          "TikTok Shop",
+          "eBay",
+          "Walmart",
+          "B2B"
+        ],
+        "master_data_refs": [
+          "mdm.experiment_registry",
+          "mdm.channel"
+        ],
+        "evidence_refs": [
+          "evidence.experiment_registry",
+          "evidence.experiment_assignments",
+          "evidence.experiment_metrics"
+        ],
+        "rule_refs": [
+          "gate.experiment_readiness",
+          "gate.incrementality_control"
+        ]
+      },
+      "5.7": {
+        "title": "风险监控、复盘机制与扩张节奏",
+        "required_tables": [
+          "policy_change_log",
+          "kpi_daily_snapshots",
+          "cash_flow_snapshots",
+          "returns_claims"
+        ],
+        "metric_ids": [
+          "risk_scale_loop"
+        ],
+        "quality_targets": {
+          "policy_change_log": 2,
+          "kpi_daily_snapshots": 14,
+          "cash_flow_snapshots": 8,
+          "returns_claims": 6
+        },
+        "analysis_grain": "channel x risk event",
+        "entity_grain": "channel",
+        "time_grain": "day / week",
+        "channel_scope": [
+          "DTC",
+          "Amazon",
+          "TikTok Shop",
+          "eBay",
+          "Walmart",
+          "B2B"
+        ],
+        "master_data_refs": [
+          "mdm.channel",
+          "mdm.policy_version"
+        ],
+        "evidence_refs": [
+          "evidence.policy_change_log",
+          "evidence.kpi_daily_snapshots",
+          "evidence.cash_flow_snapshots",
+          "evidence.returns_claims"
+        ],
+        "rule_refs": [
+          "gate.scale_stop_exit",
+          "gate.policy_blocker",
+          "gate.rollback_runbook"
+        ],
+        "gate_status_key": "expansion_gate_status"
+      }
+    },
+    "metric_specs": [
+      {
+        "section_id": "5.1",
+        "metric_id": "operating_goals_gates",
+        "label": "运营目标与门禁指标",
+        "required_tables": [
+          "kpi_daily_snapshots",
+          "sold_transactions",
+          "returns_claims"
+        ],
+        "formula": "按日经营快照与渠道利润、退款、争议、库存信号计算 operating_health_score 与 gate breach rate。",
+        "output_note": "用于判断当前项目处于健康、观察还是暂停状态。"
+      },
+      {
+        "section_id": "5.2",
+        "metric_id": "data_monitoring_system",
+        "label": "数据体系与持续监控",
+        "required_tables": [
+          "kpi_daily_snapshots",
+          "marketing_spend",
+          "traffic_sessions",
+          "policy_change_log"
+        ],
+        "formula": "基于表覆盖、刷新延迟、费率版本覆盖和政策监控完整度计算 data_coverage_score。",
+        "output_note": "用于判断上线后经营数据是否足以支持稳定决策。"
+      },
+      {
+        "section_id": "5.3",
+        "metric_id": "growth_loop",
+        "label": "获客、转化与留存增长",
+        "required_tables": [
+          "traffic_sessions",
+          "marketing_spend",
+          "customer_cohorts",
+          "kpi_daily_snapshots"
+        ],
+        "formula": "按流量来源、漏斗、复购和收入趋势计算 growth_leverage_score。",
+        "output_note": "用于判断增长动作是否可复制而不是只靠一次性投放。"
+      },
+      {
+        "section_id": "5.4",
+        "metric_id": "pricing_profit_protection",
+        "label": "定价、促销与利润保护",
+        "required_tables": [
+          "pricing_actions",
+          "sold_transactions",
+          "kpi_daily_snapshots"
+        ],
+        "formula": "跟踪价格动作、促销占比、价格实现率与利润地板 breach 数量，计算 promo_dependency_score。",
+        "output_note": "用于识别价格战、促销依赖和利润侵蚀。"
+      },
+      {
+        "section_id": "5.5",
+        "metric_id": "inventory_cash_control",
+        "label": "履约、库存与现金周转",
+        "required_tables": [
+          "inventory_positions",
+          "reorder_plan",
+          "cash_flow_snapshots"
+        ],
+        "formula": "基于 days of cover、reorder readiness、inventory cash lock 与 payable/receivable 构建库存现金控制评分。",
+        "output_note": "用于判断业务放量后会不会被库存和现金流拖垮。"
+      },
+      {
+        "section_id": "5.6",
+        "metric_id": "experimentation_system",
+        "label": "增量实验与持续优化",
+        "required_tables": [
+          "experiment_registry",
+          "traffic_sessions"
+        ],
+        "formula": "统计实验覆盖率、测试速度、MDE 可达性和样本量建议，输出 causal_confidence_score。",
+        "output_note": "用于判断优化动作是否能被系统化验证。"
+      },
+      {
+        "section_id": "5.7",
+        "metric_id": "risk_scale_loop",
+        "label": "风险监控、复盘与扩张节奏",
+        "required_tables": [
+          "policy_change_log",
+          "kpi_daily_snapshots",
+          "cash_flow_snapshots",
+          "returns_claims"
+        ],
+        "formula": "综合 alerts、预算燃烧率、库存与实验 readiness 输出 scale_readiness_score 和 expansion gate。",
+        "output_note": "用于形成继续投放、试点维持或回滚的经营建议。"
+      }
+    ],
+    "assumptions": {
+      "target_health_score": 0.65,
+      "min_contribution_margin_rate": 0.08,
+      "max_refund_rate": 0.1,
+      "max_dispute_rate": 0.03,
+      "target_inventory_days": 45.0,
+      "target_repeat_rate": 0.18,
+      "min_experiment_weeks": 1,
+      "max_budget_burn_ratio": 0.4,
+      "budget_allocation_max_share": 0.55,
+      "experiment_ship_threshold": 0.97,
+      "experiment_loss_threshold": 0.05,
+      "experiment_futility_lower": 0.35,
+      "experiment_futility_upper": 0.65,
+      "experiment_effect_floor_share_of_mde": 0.5,
+      "max_fee_version_age_days": 180,
+      "max_policy_age_days": 180,
+      "change_signal_relative_threshold": 0.2,
+      "min_change_signal_points": 2
+    },
+    "table_inventory": {
+      "listing_snapshots": {
+        "record_count": 12,
+        "available": true
+      },
+      "sold_transactions": {
+        "record_count": 12,
+        "available": true
+      },
+      "product_catalog": {
+        "record_count": 2,
+        "available": true
+      },
+      "landed_cost_scenarios": {
+        "record_count": 12,
+        "available": true
+      },
+      "channel_rate_cards": {
+        "record_count": 18,
+        "available": true
+      },
+      "marketing_spend": {
+        "record_count": 12,
+        "available": true
+      },
+      "traffic_sessions": {
+        "record_count": 14,
+        "available": true
+      },
+      "returns_claims": {
+        "record_count": 8,
+        "available": true
+      },
+      "customer_cohorts": {
+        "record_count": 6,
+        "available": true
+      },
+      "inventory_positions": {
+        "record_count": 12,
+        "available": true
+      },
+      "experiment_registry": {
+        "record_count": 6,
+        "available": true
+      },
+      "experiment_assignments": {
+        "record_count": 10,
+        "available": true
+      },
+      "experiment_metrics": {
+        "record_count": 20,
+        "available": true
+      },
+      "b2b_accounts": {
+        "record_count": 3,
+        "available": true
+      },
+      "kpi_daily_snapshots": {
+        "record_count": 14,
+        "available": true
+      },
+      "pricing_actions": {
+        "record_count": 6,
+        "available": true
+      },
+      "reorder_plan": {
+        "record_count": 6,
+        "available": true
+      },
+      "policy_change_log": {
+        "record_count": 2,
+        "available": true
+      },
+      "cash_flow_snapshots": {
+        "record_count": 8,
+        "available": true
+      }
+    }
+  },
+  "overview": {
+    "section_count": 7,
+    "average_confidence_score": 1.0,
+    "confidence_mix": {
+      "high": 7,
+      "medium": 0,
+      "low": 0
+    },
+    "connected_channel_scope": [
+      "Amazon",
+      "B2B",
+      "DTC",
+      "TikTok Shop",
+      "Walmart",
+      "eBay"
+    ],
+    "control_tower_binding": {
+      "master_data_ref_coverage_ratio": 1.0,
+      "evidence_ref_coverage_ratio": 1.0,
+      "rule_ref_coverage_ratio": 1.0,
+      "gate_status_mix": {
+        "pass": 0,
+        "review": 0,
+        "fail": 2,
+        "not_applicable": 5
+      }
+    },
+    "data_contract": {
+      "data_availability_flags": {
+        "customer_identity_available": false,
+        "new_customer_identification_available": false,
+        "return_reason_available": true,
+        "inventory_eta_available": true,
+        "policy_change_log_available": true,
+        "policy_source_url_available": true,
+        "fee_version_available": true,
+        "experiment_assignment_available": true,
+        "experiment_metric_available": true,
+        "landed_cost_available": true
+      },
+      "proxy_usage_flags": [
+        "cohort_repeat_rate_proxy_for_ltv",
+        "platform_level_customer_acquisition_proxy"
+      ],
+      "confidence_downgrade_reason": [
+        "缺少 customer_id，LTV 与生命周期模型降级为 cohort 粒度。",
+        "缺少新客识别字段，CAC 仅能按平台或会话口径近似。"
+      ],
+      "model_blockers": [
+        "customer_level_ltv"
+      ]
+    },
+    "decision_summary": {
+      "decision_signal": "rollback_risk",
+      "decision_score": 0.6464,
+      "scorecard": {
+        "operating_stability": {
+          "score": 0.4935,
+          "level": "low"
+        },
+        "monitoring_readiness": {
+          "score": 0.775,
+          "level": "high"
+        },
+        "growth_quality": {
+          "score": 0.5482,
+          "level": "medium"
+        },
+        "scale_safety": {
+          "score": 0.8168,
+          "level": "high"
+        }
+      },
+      "key_findings": [
+        "当前经营健康分为 65.1%，扩张状态为 rollback。",
+        "增长杠杆分为 60.8%，利润保护分为 70.0%。",
+        "当前预算建议优先投向 Amazon，系统共识别 9 条经营预警，其中变点信号 1 条。"
+      ],
+      "risk_flags": [
+        "门禁突破率偏高，经营稳定性不足以支持直接放量。",
+        "促销依赖度偏高，利润保护能力仍然偏弱。",
+        "近期经营序列已出现变点信号，放量前需要先完成根因排查和回滚动作。",
+        "当前存在高优先级预警，扩张建议已降级为回滚或止损。"
+      ],
+      "recommended_next_step": "暂停扩张，先处理高优先级预警和回滚触发项。"
+    },
+    "decision_signal": "rollback_risk",
+    "decision_score": 0.6464,
+    "headline_metrics": [
+      {
+        "key": "operating_health_score",
+        "label": "经营健康分",
+        "value": 0.6515,
+        "unit": "score"
+      },
+      {
+        "key": "growth_leverage_score",
+        "label": "增长杠杆分",
+        "value": 0.6081,
+        "unit": "score"
+      },
+      {
+        "key": "margin_protection_score",
+        "label": "利润保护分",
+        "value": 0.7,
+        "unit": "score"
+      },
+      {
+        "key": "scale_readiness_score",
+        "label": "扩张准备度",
+        "value": 0.6857,
+        "unit": "score"
+      },
+      {
+        "key": "expansion_gate_status",
+        "label": "扩张状态",
+        "value": "rollback",
+        "unit": "enum"
+      }
+    ],
+    "validation_summary": {
+      "pass_count": 14,
+      "review_count": 0,
+      "fail_count": 0
+    },
+    "uncertainty_keys": [
+      "daily_contribution_margin_rate",
+      "inventory_cash_lock",
+      "refund_cash_out",
+      "channel_health_score",
+      "forecast_snapshot"
+    ],
+    "factor_snapshot_count": 7,
+    "confidence_band": "high",
+    "proxy_usage_flag_count": 4
+  },
+  "sections": {
+    "5.1": {
+      "id": "5.1",
+      "title": "运营目标与门禁指标设计",
+      "required_tables": [
+        "kpi_daily_snapshots",
+        "sold_transactions",
+        "returns_claims"
+      ],
+      "metric_ids": [
+        "operating_goals_gates"
+      ],
+      "granularity": {
+        "analysis_grain": "channel x day",
+        "entity_grain": "channel",
+        "time_grain": "day"
+      },
+      "channel_scope": [
+        "DTC",
+        "Amazon",
+        "TikTok Shop",
+        "eBay",
+        "Walmart",
+        "B2B"
+      ],
+      "master_data_ref": [
+        "mdm.channel",
+        "mdm.sku",
+        "mdm.price_metric"
+      ],
+      "evidence_ref": [
+        "evidence.kpi_daily_snapshots",
+        "evidence.sold_transactions",
+        "evidence.returns_claims"
+      ],
+      "rule_ref": [
+        "gate.contribution_margin_guardrail",
+        "gate.return_dispute_band",
+        "gate.scale_stop_exit"
+      ],
+      "gate_result": {
+        "status": "fail",
+        "source": "gate_results",
+        "raw_value": {
+          "health_gate": true,
+          "margin_gate": false,
+          "refund_gate": false,
+          "dispute_gate": false,
+          "alert_gate": false
+        },
+        "failed_items": [
+          "margin_gate",
+          "refund_gate",
+          "dispute_gate",
+          "alert_gate"
+        ]
+      },
+      "data_quality": {
+        "record_counts": {
+          "kpi_daily_snapshots": 14,
+          "sold_transactions": 12,
+          "returns_claims": 8
+        },
+        "available_tables": [
+          "kpi_daily_snapshots",
+          "sold_transactions",
+          "returns_claims"
+        ],
+        "missing_tables": [],
+        "completeness_ratio": 1.0,
+        "richness_ratio": 1.0,
+        "quality_score": 1.0,
+        "quality_level": "high"
+      },
+      "confidence": {
+        "score": 1.0,
+        "level": "high"
+      },
+      "metrics": {
+        "operating_health_score": 0.6515,
+        "operating_health_level": "medium",
+        "channel_health_rows": [
+          {
+            "channel": "Amazon",
+            "health_score": 0.6657,
+            "health_level": "medium",
+            "contribution_margin_rate": 0.1358,
+            "return_rate": 1.0,
+            "dispute_rate": 0.0,
+            "inventory_days": 26.03
+          },
+          {
+            "channel": "B2B",
+            "health_score": 0.7039,
+            "health_level": "medium",
+            "contribution_margin_rate": 0.3217,
+            "return_rate": 0.5,
+            "dispute_rate": 0.0,
+            "inventory_days": 34.62
+          },
+          {
+            "channel": "TikTok Shop",
+            "health_score": 0.6824,
+            "health_level": "medium",
+            "contribution_margin_rate": 0.1812,
+            "return_rate": 0.5,
+            "dispute_rate": 0.0,
+            "inventory_days": 29.8
+          },
+          {
+            "channel": "DTC",
+            "health_score": 0.6508,
+            "health_level": "medium",
+            "contribution_margin_rate": 0.0735,
+            "return_rate": 1.0,
+            "dispute_rate": 0.0,
+            "inventory_days": 30.0
+          },
+          {
+            "channel": "Walmart",
+            "health_score": 0.6833,
+            "health_level": "medium",
+            "contribution_margin_rate": 0.1399,
+            "return_rate": 0.5,
+            "dispute_rate": 0.0,
+            "inventory_days": 30.0
+          },
+          {
+            "channel": "eBay",
+            "health_score": 0.523,
+            "health_level": "medium",
+            "contribution_margin_rate": 0.1167,
+            "return_rate": 0.5,
+            "dispute_rate": 0.5,
+            "inventory_days": 27.67
+          }
+        ],
+        "gate_results": {
+          "health_gate": true,
+          "margin_gate": false,
+          "refund_gate": false,
+          "dispute_gate": false,
+          "alert_gate": false
+        },
+        "gate_breach_rate": 0.8,
+        "status_mix": {
+          "healthy": 0.7857,
+          "warning": 0.2143
+        },
+        "primary_kpi_set": [
+          "revenue",
+          "contribution_profit",
+          "return_rate",
+          "inventory_days",
+          "ad_spend"
+        ],
+        "guardrail_kpi_set": [
+          "contribution_margin_rate",
+          "refund_rate",
+          "dispute_rate",
+          "cash_lock"
+        ]
+      }
+    },
+    "5.2": {
+      "id": "5.2",
+      "title": "数据体系与持续监控机制",
+      "required_tables": [
+        "kpi_daily_snapshots",
+        "marketing_spend",
+        "traffic_sessions",
+        "policy_change_log",
+        "channel_rate_cards"
+      ],
+      "metric_ids": [
+        "data_monitoring_system"
+      ],
+      "granularity": {
+        "analysis_grain": "channel x day / week",
+        "entity_grain": "channel x fee version",
+        "time_grain": "day / week"
+      },
+      "channel_scope": [
+        "DTC",
+        "Amazon",
+        "TikTok Shop",
+        "eBay",
+        "Walmart",
+        "B2B"
+      ],
+      "master_data_ref": [
+        "mdm.channel",
+        "mdm.fee_version",
+        "mdm.policy_version"
+      ],
+      "evidence_ref": [
+        "evidence.kpi_daily_snapshots",
+        "evidence.channel_rate_cards",
+        "evidence.policy_change_log"
+      ],
+      "rule_ref": [
+        "gate.data_contract",
+        "gate.version_gate",
+        "gate.monitoring_completeness"
+      ],
+      "gate_result": {
+        "status": "not_applicable",
+        "source": "",
+        "raw_value": "",
+        "failed_items": []
+      },
+      "data_quality": {
+        "record_counts": {
+          "kpi_daily_snapshots": 14,
+          "marketing_spend": 12,
+          "traffic_sessions": 14,
+          "policy_change_log": 2,
+          "channel_rate_cards": 18
+        },
+        "available_tables": [
+          "kpi_daily_snapshots",
+          "marketing_spend",
+          "traffic_sessions",
+          "policy_change_log",
+          "channel_rate_cards"
+        ],
+        "missing_tables": [],
+        "completeness_ratio": 1.0,
+        "richness_ratio": 1.0,
+        "quality_score": 1.0,
+        "quality_level": "high"
+      },
+      "confidence": {
+        "score": 1.0,
+        "level": "high"
+      },
+      "metrics": {
+        "record_counts": {
+          "kpi_daily_snapshots": 14,
+          "marketing_spend": 12,
+          "traffic_sessions": 14,
+          "inventory_positions": 12,
+          "returns_claims": 8,
+          "policy_change_log": 2
+        },
+        "data_coverage_score": 0.8333,
+        "data_coverage_level": "high",
+        "fee_version_coverage": 1.0,
+        "fee_source_ref_coverage": 1.0,
+        "policy_monitoring_completeness": 0.3333,
+        "policy_source_url_coverage": 1.0,
+        "latest_fee_effective_date": "2026-01-01",
+        "latest_policy_effective_date": "2026-02-18",
+        "stale_fee_version_ratio": 0.0,
+        "stale_policy_monitoring_ratio": 0.6667,
+        "fee_version_binding_rows": [
+          {
+            "channel": "Amazon",
+            "fee_type_count": 3,
+            "latest_effective_date": "2026-01-01",
+            "fee_version_age_days": 44,
+            "source_ref_coverage": 1.0,
+            "stale_flag": false
+          },
+          {
+            "channel": "B2B",
+            "fee_type_count": 3,
+            "latest_effective_date": "2026-01-01",
+            "fee_version_age_days": 44,
+            "source_ref_coverage": 1.0,
+            "stale_flag": false
+          },
+          {
+            "channel": "DTC",
+            "fee_type_count": 3,
+            "latest_effective_date": "2026-01-01",
+            "fee_version_age_days": 44,
+            "source_ref_coverage": 1.0,
+            "stale_flag": false
+          },
+          {
+            "channel": "TikTok Shop",
+            "fee_type_count": 3,
+            "latest_effective_date": "2026-01-01",
+            "fee_version_age_days": 44,
+            "source_ref_coverage": 1.0,
+            "stale_flag": false
+          },
+          {
+            "channel": "Walmart",
+            "fee_type_count": 3,
+            "latest_effective_date": "2026-01-01",
+            "fee_version_age_days": 44,
+            "source_ref_coverage": 1.0,
+            "stale_flag": false
+          },
+          {
+            "channel": "eBay",
+            "fee_type_count": 3,
+            "latest_effective_date": "2026-01-01",
+            "fee_version_age_days": 44,
+            "source_ref_coverage": 1.0,
+            "stale_flag": false
+          }
+        ],
+        "policy_monitoring_rows": [
+          {
+            "platform": "Amazon",
+            "policy_event_count": 1,
+            "latest_effective_date": "2026-02-15",
+            "policy_age_days": -1,
+            "high_impact_count": 0,
+            "stale_flag": false
+          },
+          {
+            "platform": "B2B",
+            "policy_event_count": 0,
+            "latest_effective_date": "",
+            "policy_age_days": null,
+            "high_impact_count": 0,
+            "stale_flag": true
+          },
+          {
+            "platform": "DTC",
+            "policy_event_count": 0,
+            "latest_effective_date": "",
+            "policy_age_days": null,
+            "high_impact_count": 0,
+            "stale_flag": true
+          },
+          {
+            "platform": "TikTok Shop",
+            "policy_event_count": 1,
+            "latest_effective_date": "2026-02-18",
+            "policy_age_days": -4,
+            "high_impact_count": 0,
+            "stale_flag": false
+          },
+          {
+            "platform": "Walmart",
+            "policy_event_count": 0,
+            "latest_effective_date": "",
+            "policy_age_days": null,
+            "high_impact_count": 0,
+            "stale_flag": true
+          },
+          {
+            "platform": "eBay",
+            "policy_event_count": 0,
+            "latest_effective_date": "",
+            "policy_age_days": null,
+            "high_impact_count": 0,
+            "stale_flag": true
+          }
+        ],
+        "weekly_channel_pnl": [
+          {
+            "week": "2026-W05",
+            "channel": "DTC",
+            "revenue": 4520.0,
+            "contribution_profit": 760.0,
+            "ad_spend": 220.0,
+            "refunds": 0.0,
+            "days_observed": 1,
+            "contribution_margin_rate": 0.1681
+          },
+          {
+            "week": "2026-W06",
+            "channel": "Amazon",
+            "revenue": 13900.0,
+            "contribution_profit": 2390.0,
+            "ad_spend": 650.0,
+            "refunds": 0.0,
+            "days_observed": 2,
+            "contribution_margin_rate": 0.1719
+          },
+          {
+            "week": "2026-W06",
+            "channel": "B2B",
+            "revenue": 8120.0,
+            "contribution_profit": 1520.0,
+            "ad_spend": 60.0,
+            "refunds": 0.0,
+            "days_observed": 1,
+            "contribution_margin_rate": 0.1872
+          },
+          {
+            "week": "2026-W06",
+            "channel": "DTC",
+            "revenue": 4380.0,
+            "contribution_profit": 690.0,
+            "ad_spend": 210.0,
+            "refunds": 120.0,
+            "days_observed": 1,
+            "contribution_margin_rate": 0.1575
+          },
+          {
+            "week": "2026-W06",
+            "channel": "TikTok Shop",
+            "revenue": 5210.0,
+            "contribution_profit": 870.0,
+            "ad_spend": 260.0,
+            "refunds": 0.0,
+            "days_observed": 1,
+            "contribution_margin_rate": 0.167
+          },
+          {
+            "week": "2026-W06",
+            "channel": "Walmart",
+            "revenue": 3410.0,
+            "contribution_profit": 520.0,
+            "ad_spend": 140.0,
+            "refunds": 0.0,
+            "days_observed": 1,
+            "contribution_margin_rate": 0.1525
+          },
+          {
+            "week": "2026-W06",
+            "channel": "eBay",
+            "revenue": 3180.0,
+            "contribution_profit": 410.0,
+            "ad_spend": 120.0,
+            "refunds": 0.0,
+            "days_observed": 1,
+            "contribution_margin_rate": 0.1289
+          },
+          {
+            "week": "2026-W07",
+            "channel": "Amazon",
+            "revenue": 7140.0,
+            "contribution_profit": 1245.0,
+            "ad_spend": 340.0,
+            "refunds": 0.0,
+            "days_observed": 1,
+            "contribution_margin_rate": 0.1744
+          },
+          {
+            "week": "2026-W07",
+            "channel": "B2B",
+            "revenue": 7980.0,
+            "contribution_profit": 1460.0,
+            "ad_spend": 58.0,
+            "refunds": 0.0,
+            "days_observed": 1,
+            "contribution_margin_rate": 0.183
+          },
+          {
+            "week": "2026-W07",
+            "channel": "DTC",
+            "revenue": 4650.0,
+            "contribution_profit": 735.0,
+            "ad_spend": 225.0,
+            "refunds": 90.0,
+            "days_observed": 1,
+            "contribution_margin_rate": 0.1581
+          },
+          {
+            "week": "2026-W07",
+            "channel": "TikTok Shop",
+            "revenue": 5480.0,
+            "contribution_profit": 930.0,
+            "ad_spend": 275.0,
+            "refunds": 0.0,
+            "days_observed": 1,
+            "contribution_margin_rate": 0.1697
+          },
+          {
+            "week": "2026-W07",
+            "channel": "Walmart",
+            "revenue": 3520.0,
+            "contribution_profit": 560.0,
+            "ad_spend": 150.0,
+            "refunds": 0.0,
+            "days_observed": 1,
+            "contribution_margin_rate": 0.1591
+          },
+          {
+            "week": "2026-W07",
+            "channel": "eBay",
+            "revenue": 3290.0,
+            "contribution_profit": 430.0,
+            "ad_spend": 118.0,
+            "refunds": 0.0,
+            "days_observed": 1,
+            "contribution_margin_rate": 0.1307
+          }
+        ],
+        "weekly_contribution_profit": {
+          "2026-W05": 760.0,
+          "2026-W06": 6400.0,
+          "2026-W07": 5360.0
+        },
+        "refresh_latency_proxy_days": 1,
+        "metric_consistency_score": 1.0,
+        "data_contract": {
+          "data_availability_flags": {
+            "customer_identity_available": false,
+            "new_customer_identification_available": false,
+            "return_reason_available": true,
+            "inventory_eta_available": true,
+            "policy_change_log_available": true,
+            "policy_source_url_available": true,
+            "fee_version_available": true,
+            "experiment_assignment_available": true,
+            "experiment_metric_available": true,
+            "landed_cost_available": true
+          },
+          "proxy_usage_flags": [
+            "cohort_repeat_rate_proxy_for_ltv",
+            "platform_level_customer_acquisition_proxy"
+          ],
+          "confidence_downgrade_reason": [
+            "缺少 customer_id，LTV 与生命周期模型降级为 cohort 粒度。",
+            "缺少新客识别字段，CAC 仅能按平台或会话口径近似。"
+          ],
+          "model_blockers": [
+            "customer_level_ltv"
+          ]
+        }
+      }
+    },
+    "5.3": {
+      "id": "5.3",
+      "title": "获客、转化与留存增长机制",
+      "required_tables": [
+        "traffic_sessions",
+        "marketing_spend",
+        "customer_cohorts",
+        "kpi_daily_snapshots"
+      ],
+      "metric_ids": [
+        "growth_loop"
+      ],
+      "granularity": {
+        "analysis_grain": "channel x source x cohort",
+        "entity_grain": "channel x traffic source",
+        "time_grain": "day / cohort month"
+      },
+      "channel_scope": [
+        "DTC",
+        "Amazon",
+        "TikTok Shop",
+        "eBay",
+        "Walmart",
+        "B2B"
+      ],
+      "master_data_ref": [
+        "mdm.channel",
+        "mdm.customer_segment",
+        "mdm.traffic_source"
+      ],
+      "evidence_ref": [
+        "evidence.traffic_sessions",
+        "evidence.marketing_spend",
+        "evidence.customer_cohorts"
+      ],
+      "rule_ref": [
+        "gate.growth_quality",
+        "gate.payback_control"
+      ],
+      "gate_result": {
+        "status": "not_applicable",
+        "source": "",
+        "raw_value": "",
+        "failed_items": []
+      },
+      "data_quality": {
+        "record_counts": {
+          "traffic_sessions": 14,
+          "marketing_spend": 12,
+          "customer_cohorts": 6,
+          "kpi_daily_snapshots": 14
+        },
+        "available_tables": [
+          "traffic_sessions",
+          "marketing_spend",
+          "customer_cohorts",
+          "kpi_daily_snapshots"
+        ],
+        "missing_tables": [],
+        "completeness_ratio": 1.0,
+        "richness_ratio": 1.0,
+        "quality_score": 1.0,
+        "quality_level": "high"
+      },
+      "confidence": {
+        "score": 1.0,
+        "level": "high"
+      },
+      "metrics": {
+        "traffic_mix": {
+          "paid_search": 0.1301,
+          "paid_social": 0.107,
+          "email": 0.0315,
+          "direct": 0.0529,
+          "amazon_ads": 0.1721,
+          "organic_search": 0.1045,
+          "tiktok_ads": 0.2056,
+          "organic_social": 0.0713,
+          "ebay_promoted": 0.0525,
+          "walmart_ads": 0.0671,
+          "affiliate": 0.0055
+        },
+        "funnel_conversion_matrix": {
+          "page_view_rate": 0.7639,
+          "add_to_cart_rate": 0.1277,
+          "checkout_rate": 0.4978,
+          "order_rate": 0.0333
+        },
+        "new_customer_efficiency": {
+          "total_sessions": 47660,
+          "total_orders": 77,
+          "session_to_order_rate": 0.0016
+        },
+        "repeat_rate": 0.1848,
+        "retention_curve": {
+          "DTC": 0.2833,
+          "Amazon": 0.14,
+          "TikTok Shop": 0.1375,
+          "eBay": 0.1,
+          "Walmart": 0.1146,
+          "B2B": 0.3333
+        },
+        "forecast_summary": {
+          "daily_revenue": {
+            "2026-02-01": 4520.0,
+            "2026-02-02": 6890.0,
+            "2026-02-03": 5210.0,
+            "2026-02-04": 3180.0,
+            "2026-02-05": 3410.0,
+            "2026-02-06": 8120.0,
+            "2026-02-07": 4380.0,
+            "2026-02-08": 7010.0,
+            "2026-02-09": 5480.0,
+            "2026-02-10": 3290.0,
+            "2026-02-11": 3520.0,
+            "2026-02-12": 7980.0,
+            "2026-02-13": 4650.0,
+            "2026-02-14": 7140.0
+          },
+          "daily_contribution_profit": {
+            "2026-02-01": 760.0,
+            "2026-02-02": 1180.0,
+            "2026-02-03": 870.0,
+            "2026-02-04": 410.0,
+            "2026-02-05": 520.0,
+            "2026-02-06": 1520.0,
+            "2026-02-07": 690.0,
+            "2026-02-08": 1210.0,
+            "2026-02-09": 930.0,
+            "2026-02-10": 430.0,
+            "2026-02-11": 560.0,
+            "2026-02-12": 1460.0,
+            "2026-02-13": 735.0,
+            "2026-02-14": 1245.0
+          },
+          "revenue_ma_7d": {
+            "2026-02-01": 4520.0,
+            "2026-02-02": 5705.0,
+            "2026-02-03": 5540.0,
+            "2026-02-04": 4950.0,
+            "2026-02-05": 4642.0,
+            "2026-02-06": 5221.67,
+            "2026-02-07": 5101.43,
+            "2026-02-08": 5457.14,
+            "2026-02-09": 5255.71,
+            "2026-02-10": 4981.43,
+            "2026-02-11": 5030.0,
+            "2026-02-12": 5682.86,
+            "2026-02-13": 5187.14,
+            "2026-02-14": 5581.43
+          },
+          "profit_ma_7d": {
+            "2026-02-01": 760.0,
+            "2026-02-02": 970.0,
+            "2026-02-03": 936.67,
+            "2026-02-04": 805.0,
+            "2026-02-05": 748.0,
+            "2026-02-06": 876.67,
+            "2026-02-07": 850.0,
+            "2026-02-08": 914.29,
+            "2026-02-09": 878.57,
+            "2026-02-10": 815.71,
+            "2026-02-11": 837.14,
+            "2026-02-12": 971.43,
+            "2026-02-13": 859.29,
+            "2026-02-14": 938.57
+          },
+          "trend_direction": "up",
+          "average_daily_revenue_7d": 5581.43,
+          "average_daily_profit_7d": 938.57,
+          "forecast_next_7d_revenue": 39070.0,
+          "forecast_next_7d_profit": 6570.0
+        },
+        "growth_leverage_score": 0.6081,
+        "growth_leverage_level": "medium"
+      }
+    },
+    "5.4": {
+      "id": "5.4",
+      "title": "定价、促销与利润保护策略",
+      "required_tables": [
+        "pricing_actions",
+        "sold_transactions",
+        "kpi_daily_snapshots"
+      ],
+      "metric_ids": [
+        "pricing_profit_protection"
+      ],
+      "granularity": {
+        "analysis_grain": "sku x channel x pricing action",
+        "entity_grain": "sku x channel",
+        "time_grain": "pricing action date"
+      },
+      "channel_scope": [
+        "DTC",
+        "Amazon",
+        "TikTok Shop",
+        "eBay",
+        "Walmart",
+        "B2B"
+      ],
+      "master_data_ref": [
+        "mdm.sku",
+        "mdm.channel",
+        "mdm.price_metric"
+      ],
+      "evidence_ref": [
+        "evidence.pricing_actions",
+        "evidence.sold_transactions",
+        "evidence.kpi_daily_snapshots"
+      ],
+      "rule_ref": [
+        "gate.margin_protection",
+        "gate.promo_dependency"
+      ],
+      "gate_result": {
+        "status": "not_applicable",
+        "source": "",
+        "raw_value": "",
+        "failed_items": []
+      },
+      "data_quality": {
+        "record_counts": {
+          "pricing_actions": 6,
+          "sold_transactions": 12,
+          "kpi_daily_snapshots": 14
+        },
+        "available_tables": [
+          "pricing_actions",
+          "sold_transactions",
+          "kpi_daily_snapshots"
+        ],
+        "missing_tables": [],
+        "completeness_ratio": 1.0,
+        "richness_ratio": 1.0,
+        "quality_score": 1.0,
+        "quality_level": "high"
+      },
+      "confidence": {
+        "score": 1.0,
+        "level": "high"
+      },
+      "metrics": {
+        "pricing_action_count": 6,
+        "promo_action_share": 0.6667,
+        "bundle_action_share": 0.3333,
+        "average_price_change_rate": -0.0129,
+        "discount_depth_band": {
+          "p10": -0.0295,
+          "p50": -0.0129,
+          "p90": 0.0
+        },
+        "promo_dependency_score": 0.6667,
+        "price_realization_rate": 1.0034,
+        "margin_floor_breach_count": 0,
+        "margin_protection_score": 0.7,
+        "margin_protection_level": "medium"
+      }
+    },
+    "5.5": {
+      "id": "5.5",
+      "title": "履约、库存与现金周转管理",
+      "required_tables": [
+        "inventory_positions",
+        "reorder_plan",
+        "cash_flow_snapshots"
+      ],
+      "metric_ids": [
+        "inventory_cash_control"
+      ],
+      "granularity": {
+        "analysis_grain": "sku x warehouse x day",
+        "entity_grain": "sku x warehouse",
+        "time_grain": "day"
+      },
+      "channel_scope": [
+        "DTC",
+        "Amazon",
+        "TikTok Shop",
+        "eBay",
+        "Walmart",
+        "B2B"
+      ],
+      "master_data_ref": [
+        "mdm.sku",
+        "mdm.warehouse",
+        "mdm.channel"
+      ],
+      "evidence_ref": [
+        "evidence.inventory_positions",
+        "evidence.reorder_plan",
+        "evidence.cash_flow_snapshots"
+      ],
+      "rule_ref": [
+        "gate.inventory_risk",
+        "gate.cash_burn_control"
+      ],
+      "gate_result": {
+        "status": "not_applicable",
+        "source": "",
+        "raw_value": "",
+        "failed_items": []
+      },
+      "data_quality": {
+        "record_counts": {
+          "inventory_positions": 12,
+          "reorder_plan": 6,
+          "cash_flow_snapshots": 8
+        },
+        "available_tables": [
+          "inventory_positions",
+          "reorder_plan",
+          "cash_flow_snapshots"
+        ],
+        "missing_tables": [],
+        "completeness_ratio": 1.0,
+        "richness_ratio": 1.0,
+        "quality_score": 1.0,
+        "quality_level": "high"
+      },
+      "confidence": {
+        "score": 1.0,
+        "level": "high"
+      },
+      "metrics": {
+        "inventory_days": 29.69,
+        "stockout_risk": 0.0,
+        "overstock_risk": 0.0,
+        "cash_lock_days": 2.2421,
+        "receivable_mean": 6767.5,
+        "payable_mean": 2074.38,
+        "reorder_readiness_score": 1.0,
+        "reorder_readiness_level": "high"
+      }
+    },
+    "5.6": {
+      "id": "5.6",
+      "title": "增量实验与持续优化机制",
+      "required_tables": [
+        "experiment_registry",
+        "experiment_assignments",
+        "experiment_metrics",
+        "traffic_sessions"
+      ],
+      "metric_ids": [
+        "experimentation_system"
+      ],
+      "granularity": {
+        "analysis_grain": "experiment x variant x day",
+        "entity_grain": "experiment",
+        "time_grain": "experiment day"
+      },
+      "channel_scope": [
+        "DTC",
+        "Amazon",
+        "TikTok Shop",
+        "eBay",
+        "Walmart",
+        "B2B"
+      ],
+      "master_data_ref": [
+        "mdm.experiment_registry",
+        "mdm.channel"
+      ],
+      "evidence_ref": [
+        "evidence.experiment_registry",
+        "evidence.experiment_assignments",
+        "evidence.experiment_metrics"
+      ],
+      "rule_ref": [
+        "gate.experiment_readiness",
+        "gate.incrementality_control"
+      ],
+      "gate_result": {
+        "status": "not_applicable",
+        "source": "",
+        "raw_value": "",
+        "failed_items": []
+      },
+      "data_quality": {
+        "record_counts": {
+          "experiment_registry": 6,
+          "experiment_assignments": 10,
+          "experiment_metrics": 20,
+          "traffic_sessions": 14
+        },
+        "available_tables": [
+          "experiment_registry",
+          "experiment_assignments",
+          "experiment_metrics",
+          "traffic_sessions"
+        ],
+        "missing_tables": [],
+        "completeness_ratio": 1.0,
+        "richness_ratio": 1.0,
+        "quality_score": 1.0,
+        "quality_level": "high"
+      },
+      "confidence": {
+        "score": 1.0,
+        "level": "high"
+      },
+      "metrics": {
+        "experiment_count": 6,
+        "completed_count": 5,
+        "active_count": 1,
+        "draft_count": 0,
+        "coverage_ratio": 0.8333,
+        "test_velocity_per_30d": 6.0,
+        "average_mde": 0.0583,
+        "minimum_duration_pass_rate": 1.0,
+        "baseline_conversion_rate": 0.0016,
+        "sample_size_guidance": {
+          "baseline_rate": 0.0016,
+          "target_rate": 0.0599,
+          "mde_absolute": 0.0583,
+          "alpha": 0.05,
+          "power": 0.8,
+          "sample_size_per_variant": 91
+        },
+        "platform_hard_constraints": {
+          "minimum_runtime_days": 7,
+          "minimum_runtime_pass_rate": 1.0,
+          "audience_threshold_status": "unavailable_without_assignment_or_platform_audience_table",
+          "auto_stop_rules_enabled": true,
+          "preferred_method_order": [
+            "platform_ab_or_lift",
+            "holdout_or_split_test",
+            "did_or_ipw_if_randomization_unavailable"
+          ]
+        },
+        "readouts": {
+          "readout_count": 5,
+          "readout_coverage_ratio": 1.0,
+          "assignment_coverage_ratio": 0.8333,
+          "win_count": 2,
+          "loss_count": 0,
+          "inconclusive_count": 3,
+          "bayesian_win_count": 2,
+          "bayesian_loss_count": 0,
+          "hierarchical_win_count": 2,
+          "hierarchical_loss_count": 0,
+          "winning_experiment_share": 0.4,
+          "average_posterior_win_probability": 0.7163,
+          "average_hierarchical_win_probability": 0.7172,
+          "average_relative_uplift": 0.1187,
+          "average_hierarchical_relative_uplift": 0.1199,
+          "temporal_consistency_score": 1.0,
+          "auto_stop_summary": {
+            "ship_winner_count": 2,
+            "stop_for_loss_count": 0,
+            "stop_for_futility_count": 0,
+            "prepare_rollout_count": 1,
+            "watch_for_loss_count": 0,
+            "continue_collecting_count": 2
+          },
+          "auto_stop_enabled": true,
+          "hierarchical_prior_mix": {
+            "channel_metric_blend": 5
+          },
+          "experiments_without_readouts": [
+            {
+              "experiment_id": "EXP-002",
+              "channel": "DTC",
+              "status": "active",
+              "reason": "缺少 primary metric 读数或无法形成 control/treatment 对比。"
+            }
+          ],
+          "experiment_readouts": [
+            {
+              "experiment_id": "EXP-004",
+              "channel": "TikTok Shop",
+              "primary_metric": "add_to_cart_rate",
+              "control_variant": "control",
+              "treatment_variants": [
+                "treatment"
+              ],
+              "control_exposures": 3600,
+              "treatment_exposures": 3550,
+              "control_rate": 0.1167,
+              "treatment_rate": 0.1408,
+              "absolute_uplift": 0.0242,
+              "relative_uplift": 0.2072,
+              "p_value": 0.0023,
+              "z_stat": 3.0529,
+              "ci_low": 0.0087,
+              "ci_high": 0.0397,
+              "frequentist_status": "win",
+              "readout_status": "win",
+              "slice_name": "full_window",
+              "assignment_count": 2,
+              "temporal_consistency_score": 1.0,
+              "slice_readouts": [
+                {
+                  "experiment_id": "EXP-004",
+                  "channel": "TikTok Shop",
+                  "primary_metric": "add_to_cart_rate",
+                  "control_variant": "control",
+                  "treatment_variants": [
+                    "treatment"
+                  ],
+                  "control_exposures": 1800,
+                  "treatment_exposures": 1775,
+                  "control_rate": 0.1139,
+                  "treatment_rate": 0.1375,
+                  "absolute_uplift": 0.0236,
+                  "relative_uplift": 0.207,
+                  "p_value": 0.0334,
+                  "z_stat": 2.1268,
+                  "ci_low": 0.0018,
+                  "ci_high": 0.0453,
+                  "frequentist_status": "win",
+                  "readout_status": "win",
+                  "slice_name": "early_window",
+                  "assignment_count": 2,
+                  "temporal_consistency_score": 0.5,
+                  "slice_readouts": [],
+                  "posterior_probability_treatment_best": 0.9818,
+                  "posterior_expected_control_rate": 0.1143,
+                  "posterior_expected_treatment_rate": 0.1379,
+                  "posterior_expected_absolute_uplift": 0.0236,
+                  "posterior_expected_relative_uplift": 0.2121,
+                  "posterior_ci_low": 0.0013,
+                  "posterior_ci_high": 0.0454,
+                  "posterior_relative_ci_low": 0.0111,
+                  "posterior_relative_ci_high": 0.4414,
+                  "bayesian_status": "win",
+                  "hierarchical_prior_level": "channel_metric_blend",
+                  "hierarchical_prior_rate": 0.1287,
+                  "hierarchical_prior_strength": 84.56,
+                  "hierarchical_probability_treatment_best": 0.9788,
+                  "hierarchical_expected_control_rate": 0.1152,
+                  "hierarchical_expected_treatment_rate": 0.1376,
+                  "hierarchical_expected_absolute_uplift": 0.0224,
+                  "hierarchical_expected_relative_uplift": 0.1997,
+                  "hierarchical_ci_low": 0.0006,
+                  "hierarchical_ci_high": 0.0434,
+                  "hierarchical_relative_ci_low": 0.0046,
+                  "hierarchical_relative_ci_high": 0.4139,
+                  "hierarchical_status": "win",
+                  "auto_stop_decision": "continue_collecting",
+                  "auto_stop_reason": "当前证据不足以触发自动止损或放量。",
+                  "sample_target_per_variant": 401,
+                  "sample_ratio_to_target": 4.4264,
+                  "runtime_days": 12,
+                  "minimum_runtime_days": 7,
+                  "runtime_gate_pass": true,
+                  "sample_gate_pass": true,
+                  "effect_floor_absolute": 0.035,
+                  "auto_stop_confidence": 1.0
+                },
+                {
+                  "experiment_id": "EXP-004",
+                  "channel": "TikTok Shop",
+                  "primary_metric": "add_to_cart_rate",
+                  "control_variant": "control",
+                  "treatment_variants": [
+                    "treatment"
+                  ],
+                  "control_exposures": 1800,
+                  "treatment_exposures": 1775,
+                  "control_rate": 0.1194,
+                  "treatment_rate": 0.1442,
+                  "absolute_uplift": 0.0248,
+                  "relative_uplift": 0.2075,
+                  "p_value": 0.0285,
+                  "z_stat": 2.1904,
+                  "ci_low": 0.0026,
+                  "ci_high": 0.047,
+                  "frequentist_status": "win",
+                  "readout_status": "win",
+                  "slice_name": "late_window",
+                  "assignment_count": 2,
+                  "temporal_consistency_score": 0.5,
+                  "slice_readouts": [],
+                  "posterior_probability_treatment_best": 0.9818,
+                  "posterior_expected_control_rate": 0.1199,
+                  "posterior_expected_treatment_rate": 0.1444,
+                  "posterior_expected_absolute_uplift": 0.0245,
+                  "posterior_expected_relative_uplift": 0.2091,
+                  "posterior_ci_low": 0.0015,
+                  "posterior_ci_high": 0.0471,
+                  "posterior_relative_ci_low": 0.0116,
+                  "posterior_relative_ci_high": 0.4317,
+                  "bayesian_status": "win",
+                  "hierarchical_prior_level": "channel_metric_blend",
+                  "hierarchical_prior_rate": 0.1287,
+                  "hierarchical_prior_strength": 84.56,
+                  "hierarchical_probability_treatment_best": 0.9858,
+                  "hierarchical_expected_control_rate": 0.1201,
+                  "hierarchical_expected_treatment_rate": 0.1438,
+                  "hierarchical_expected_absolute_uplift": 0.0237,
+                  "hierarchical_expected_relative_uplift": 0.2016,
+                  "hierarchical_ci_low": 0.0023,
+                  "hierarchical_ci_high": 0.0453,
+                  "hierarchical_relative_ci_low": 0.0178,
+                  "hierarchical_relative_ci_high": 0.4101,
+                  "hierarchical_status": "win",
+                  "auto_stop_decision": "continue_collecting",
+                  "auto_stop_reason": "当前证据不足以触发自动止损或放量。",
+                  "sample_target_per_variant": 413,
+                  "sample_ratio_to_target": 4.2978,
+                  "runtime_days": 12,
+                  "minimum_runtime_days": 7,
+                  "runtime_gate_pass": true,
+                  "sample_gate_pass": true,
+                  "effect_floor_absolute": 0.035,
+                  "auto_stop_confidence": 1.0
+                }
+              ],
+              "posterior_probability_treatment_best": 0.9992,
+              "posterior_expected_control_rate": 0.117,
+              "posterior_expected_treatment_rate": 0.1411,
+              "posterior_expected_absolute_uplift": 0.0241,
+              "posterior_expected_relative_uplift": 0.2087,
+              "posterior_ci_low": 0.0088,
+              "posterior_ci_high": 0.0393,
+              "posterior_relative_ci_low": 0.0702,
+              "posterior_relative_ci_high": 0.3581,
+              "bayesian_status": "win",
+              "hierarchical_prior_level": "channel_metric_blend",
+              "hierarchical_prior_rate": 0.1287,
+              "hierarchical_prior_strength": 84.56,
+              "hierarchical_probability_treatment_best": 0.9982,
+              "hierarchical_expected_control_rate": 0.117,
+              "hierarchical_expected_treatment_rate": 0.1408,
+              "hierarchical_expected_absolute_uplift": 0.0237,
+              "hierarchical_expected_relative_uplift": 0.2053,
+              "hierarchical_ci_low": 0.0076,
+              "hierarchical_ci_high": 0.0389,
+              "hierarchical_relative_ci_low": 0.0607,
+              "hierarchical_relative_ci_high": 0.3544,
+              "hierarchical_status": "win",
+              "auto_stop_decision": "ship_winner",
+              "auto_stop_reason": "后验胜率、样本量与时间切片一致性同时满足上线阈值。",
+              "sample_target_per_variant": 407,
+              "sample_ratio_to_target": 8.7224,
+              "runtime_days": 12,
+              "minimum_runtime_days": 7,
+              "runtime_gate_pass": true,
+              "sample_gate_pass": true,
+              "effect_floor_absolute": 0.035,
+              "auto_stop_confidence": 1.0
+            },
+            {
+              "experiment_id": "EXP-005",
+              "channel": "Walmart",
+              "primary_metric": "conversion_rate",
+              "control_variant": "control",
+              "treatment_variants": [
+                "treatment"
+              ],
+              "control_exposures": 2400,
+              "treatment_exposures": 2450,
+              "control_rate": 0.05,
+              "treatment_rate": 0.0637,
+              "absolute_uplift": 0.0137,
+              "relative_uplift": 0.2735,
+              "p_value": 0.0399,
+              "z_stat": 2.0551,
+              "ci_low": 0.0006,
+              "ci_high": 0.0267,
+              "frequentist_status": "win",
+              "readout_status": "win",
+              "slice_name": "full_window",
+              "assignment_count": 2,
+              "temporal_consistency_score": 1.0,
+              "slice_readouts": [
+                {
+                  "experiment_id": "EXP-005",
+                  "channel": "Walmart",
+                  "primary_metric": "conversion_rate",
+                  "control_variant": "control",
+                  "treatment_variants": [
+                    "treatment"
+                  ],
+                  "control_exposures": 1200,
+                  "treatment_exposures": 1225,
+                  "control_rate": 0.0483,
+                  "treatment_rate": 0.0612,
+                  "absolute_uplift": 0.0129,
+                  "relative_uplift": 0.2667,
+                  "p_value": 0.1633,
+                  "z_stat": 1.394,
+                  "ci_low": -0.0052,
+                  "ci_high": 0.031,
+                  "frequentist_status": "inconclusive",
+                  "readout_status": "inconclusive",
+                  "slice_name": "early_window",
+                  "assignment_count": 2,
+                  "temporal_consistency_score": 0.5,
+                  "slice_readouts": [],
+                  "posterior_probability_treatment_best": 0.9233,
+                  "posterior_expected_control_rate": 0.0491,
+                  "posterior_expected_treatment_rate": 0.062,
+                  "posterior_expected_absolute_uplift": 0.0129,
+                  "posterior_expected_relative_uplift": 0.2825,
+                  "posterior_ci_low": -0.0047,
+                  "posterior_ci_high": 0.031,
+                  "posterior_relative_ci_low": -0.0792,
+                  "posterior_relative_ci_high": 0.7535,
+                  "bayesian_status": "inconclusive",
+                  "hierarchical_prior_level": "channel_metric_blend",
+                  "hierarchical_prior_rate": 0.0522,
+                  "hierarchical_prior_strength": 98.86,
+                  "hierarchical_probability_treatment_best": 0.912,
+                  "hierarchical_expected_control_rate": 0.0493,
+                  "hierarchical_expected_treatment_rate": 0.0612,
+                  "hierarchical_expected_absolute_uplift": 0.0119,
+                  "hierarchical_expected_relative_uplift": 0.2598,
+                  "hierarchical_ci_low": -0.005,
+                  "hierarchical_ci_high": 0.03,
+                  "hierarchical_relative_ci_low": -0.0849,
+                  "hierarchical_relative_ci_high": 0.7235,
+                  "hierarchical_status": "inconclusive",
+                  "auto_stop_decision": "continue_collecting",
+                  "auto_stop_reason": "当前证据不足以触发自动止损或放量。",
+                  "sample_target_per_variant": 414,
+                  "sample_ratio_to_target": 2.8986,
+                  "runtime_days": 11,
+                  "minimum_runtime_days": 7,
+                  "runtime_gate_pass": true,
+                  "sample_gate_pass": true,
+                  "effect_floor_absolute": 0.025,
+                  "auto_stop_confidence": 1.0
+                },
+                {
+                  "experiment_id": "EXP-005",
+                  "channel": "Walmart",
+                  "primary_metric": "conversion_rate",
+                  "control_variant": "control",
+                  "treatment_variants": [
+                    "treatment"
+                  ],
+                  "control_exposures": 1200,
+                  "treatment_exposures": 1225,
+                  "control_rate": 0.0517,
+                  "treatment_rate": 0.0661,
+                  "absolute_uplift": 0.0145,
+                  "relative_uplift": 0.2798,
+                  "p_value": 0.1308,
+                  "z_stat": 1.5109,
+                  "ci_low": -0.0043,
+                  "ci_high": 0.0332,
+                  "frequentist_status": "inconclusive",
+                  "readout_status": "inconclusive",
+                  "slice_name": "late_window",
+                  "assignment_count": 2,
+                  "temporal_consistency_score": 0.5,
+                  "slice_readouts": [],
+                  "posterior_probability_treatment_best": 0.9307,
+                  "posterior_expected_control_rate": 0.0526,
+                  "posterior_expected_treatment_rate": 0.0668,
+                  "posterior_expected_absolute_uplift": 0.0143,
+                  "posterior_expected_relative_uplift": 0.2903,
+                  "posterior_ci_low": -0.0041,
+                  "posterior_ci_high": 0.0329,
+                  "posterior_relative_ci_low": -0.0688,
+                  "posterior_relative_ci_high": 0.7405,
+                  "bayesian_status": "inconclusive",
+                  "hierarchical_prior_level": "channel_metric_blend",
+                  "hierarchical_prior_rate": 0.0522,
+                  "hierarchical_prior_strength": 98.86,
+                  "hierarchical_probability_treatment_best": 0.9265,
+                  "hierarchical_expected_control_rate": 0.0525,
+                  "hierarchical_expected_treatment_rate": 0.0659,
+                  "hierarchical_expected_absolute_uplift": 0.0133,
+                  "hierarchical_expected_relative_uplift": 0.2709,
+                  "hierarchical_ci_low": -0.0047,
+                  "hierarchical_ci_high": 0.0308,
+                  "hierarchical_relative_ci_low": -0.0754,
+                  "hierarchical_relative_ci_high": 0.6939,
+                  "hierarchical_status": "inconclusive",
+                  "auto_stop_decision": "continue_collecting",
+                  "auto_stop_reason": "当前证据不足以触发自动止损或放量。",
+                  "sample_target_per_variant": 433,
+                  "sample_ratio_to_target": 2.7714,
+                  "runtime_days": 11,
+                  "minimum_runtime_days": 7,
+                  "runtime_gate_pass": true,
+                  "sample_gate_pass": true,
+                  "effect_floor_absolute": 0.025,
+                  "auto_stop_confidence": 1.0
+                }
+              ],
+              "posterior_probability_treatment_best": 0.98,
+              "posterior_expected_control_rate": 0.0503,
+              "posterior_expected_treatment_rate": 0.064,
+              "posterior_expected_absolute_uplift": 0.0137,
+              "posterior_expected_relative_uplift": 0.2828,
+              "posterior_ci_low": 0.0006,
+              "posterior_ci_high": 0.027,
+              "posterior_relative_ci_low": 0.0091,
+              "posterior_relative_ci_high": 0.618,
+              "bayesian_status": "win",
+              "hierarchical_prior_level": "channel_metric_blend",
+              "hierarchical_prior_rate": 0.0522,
+              "hierarchical_prior_strength": 98.86,
+              "hierarchical_probability_treatment_best": 0.9755,
+              "hierarchical_expected_control_rate": 0.0504,
+              "hierarchical_expected_treatment_rate": 0.0636,
+              "hierarchical_expected_absolute_uplift": 0.0132,
+              "hierarchical_expected_relative_uplift": 0.2725,
+              "hierarchical_ci_low": 0.0001,
+              "hierarchical_ci_high": 0.0262,
+              "hierarchical_relative_ci_low": 0.0015,
+              "hierarchical_relative_ci_high": 0.583,
+              "hierarchical_status": "win",
+              "auto_stop_decision": "ship_winner",
+              "auto_stop_reason": "后验胜率、样本量与时间切片一致性同时满足上线阈值。",
+              "sample_target_per_variant": 424,
+              "sample_ratio_to_target": 5.6604,
+              "runtime_days": 11,
+              "minimum_runtime_days": 7,
+              "runtime_gate_pass": true,
+              "sample_gate_pass": true,
+              "effect_floor_absolute": 0.025,
+              "auto_stop_confidence": 1.0
+            },
+            {
+              "experiment_id": "EXP-001",
+              "channel": "DTC",
+              "primary_metric": "conversion_rate",
+              "control_variant": "control",
+              "treatment_variants": [
+                "treatment"
+              ],
+              "control_exposures": 4200,
+              "treatment_exposures": 4300,
+              "control_rate": 0.04,
+              "treatment_rate": 0.0477,
+              "absolute_uplift": 0.0077,
+              "relative_uplift": 0.1919,
+              "p_value": 0.0842,
+              "z_stat": 1.727,
+              "ci_low": -0.001,
+              "ci_high": 0.0164,
+              "frequentist_status": "inconclusive",
+              "readout_status": "inconclusive",
+              "slice_name": "full_window",
+              "assignment_count": 2,
+              "temporal_consistency_score": 1.0,
+              "slice_readouts": [
+                {
+                  "experiment_id": "EXP-001",
+                  "channel": "DTC",
+                  "primary_metric": "conversion_rate",
+                  "control_variant": "control",
+                  "treatment_variants": [
+                    "treatment"
+                  ],
+                  "control_exposures": 2100,
+                  "treatment_exposures": 2150,
+                  "control_rate": 0.04,
+                  "treatment_rate": 0.0465,
+                  "absolute_uplift": 0.0065,
+                  "relative_uplift": 0.1628,
+                  "p_value": 0.297,
+                  "z_stat": 1.0428,
+                  "ci_low": -0.0057,
+                  "ci_high": 0.0188,
+                  "frequentist_status": "inconclusive",
+                  "readout_status": "inconclusive",
+                  "slice_name": "early_window",
+                  "assignment_count": 2,
+                  "temporal_consistency_score": 0.5,
+                  "slice_readouts": [],
+                  "posterior_probability_treatment_best": 0.8488,
+                  "posterior_expected_control_rate": 0.0405,
+                  "posterior_expected_treatment_rate": 0.0469,
+                  "posterior_expected_absolute_uplift": 0.0064,
+                  "posterior_expected_relative_uplift": 0.1718,
+                  "posterior_ci_low": -0.0062,
+                  "posterior_ci_high": 0.0184,
+                  "posterior_relative_ci_low": -0.1358,
+                  "posterior_relative_ci_high": 0.5287,
+                  "bayesian_status": "inconclusive",
+                  "hierarchical_prior_level": "channel_metric_blend",
+                  "hierarchical_prior_rate": 0.0475,
+                  "hierarchical_prior_strength": 113.53,
+                  "hierarchical_probability_treatment_best": 0.8482,
+                  "hierarchical_expected_control_rate": 0.0408,
+                  "hierarchical_expected_treatment_rate": 0.047,
+                  "hierarchical_expected_absolute_uplift": 0.0062,
+                  "hierarchical_expected_relative_uplift": 0.1636,
+                  "hierarchical_ci_low": -0.0053,
+                  "hierarchical_ci_high": 0.0181,
+                  "hierarchical_relative_ci_low": -0.1134,
+                  "hierarchical_relative_ci_high": 0.5199,
+                  "hierarchical_status": "inconclusive",
+                  "auto_stop_decision": "continue_collecting",
+                  "auto_stop_reason": "当前证据不足以触发自动止损或放量。",
+                  "sample_target_per_variant": 169,
+                  "sample_ratio_to_target": 12.426,
+                  "runtime_days": 12,
+                  "minimum_runtime_days": 7,
+                  "runtime_gate_pass": true,
+                  "sample_gate_pass": true,
+                  "effect_floor_absolute": 0.04,
+                  "auto_stop_confidence": 1.0
+                },
+                {
+                  "experiment_id": "EXP-001",
+                  "channel": "DTC",
+                  "primary_metric": "conversion_rate",
+                  "control_variant": "control",
+                  "treatment_variants": [
+                    "treatment"
+                  ],
+                  "control_exposures": 2100,
+                  "treatment_exposures": 2150,
+                  "control_rate": 0.04,
+                  "treatment_rate": 0.0488,
+                  "absolute_uplift": 0.0088,
+                  "relative_uplift": 0.2209,
+                  "p_value": 0.1623,
+                  "z_stat": 1.3973,
+                  "ci_low": -0.0036,
+                  "ci_high": 0.0212,
+                  "frequentist_status": "inconclusive",
+                  "readout_status": "inconclusive",
+                  "slice_name": "late_window",
+                  "assignment_count": 2,
+                  "temporal_consistency_score": 0.5,
+                  "slice_readouts": [],
+                  "posterior_probability_treatment_best": 0.9155,
+                  "posterior_expected_control_rate": 0.0404,
+                  "posterior_expected_treatment_rate": 0.0492,
+                  "posterior_expected_absolute_uplift": 0.0088,
+                  "posterior_expected_relative_uplift": 0.2327,
+                  "posterior_ci_low": -0.0037,
+                  "posterior_ci_high": 0.0214,
+                  "posterior_relative_ci_low": -0.0811,
+                  "posterior_relative_ci_high": 0.6078,
+                  "bayesian_status": "inconclusive",
+                  "hierarchical_prior_level": "channel_metric_blend",
+                  "hierarchical_prior_rate": 0.0475,
+                  "hierarchical_prior_strength": 113.53,
+                  "hierarchical_probability_treatment_best": 0.9147,
+                  "hierarchical_expected_control_rate": 0.0408,
+                  "hierarchical_expected_treatment_rate": 0.0493,
+                  "hierarchical_expected_absolute_uplift": 0.0085,
+                  "hierarchical_expected_relative_uplift": 0.2201,
+                  "hierarchical_ci_low": -0.0033,
+                  "hierarchical_ci_high": 0.0211,
+                  "hierarchical_relative_ci_low": -0.0705,
+                  "hierarchical_relative_ci_high": 0.6054,
+                  "hierarchical_status": "inconclusive",
+                  "auto_stop_decision": "continue_collecting",
+                  "auto_stop_reason": "当前证据不足以触发自动止损或放量。",
+                  "sample_target_per_variant": 169,
+                  "sample_ratio_to_target": 12.426,
+                  "runtime_days": 12,
+                  "minimum_runtime_days": 7,
+                  "runtime_gate_pass": true,
+                  "sample_gate_pass": true,
+                  "effect_floor_absolute": 0.04,
+                  "auto_stop_confidence": 1.0
+                }
+              ],
+              "posterior_probability_treatment_best": 0.9543,
+              "posterior_expected_control_rate": 0.0402,
+              "posterior_expected_treatment_rate": 0.0479,
+              "posterior_expected_absolute_uplift": 0.0077,
+              "posterior_expected_relative_uplift": 0.1995,
+              "posterior_ci_low": -0.0011,
+              "posterior_ci_high": 0.0165,
+              "posterior_relative_ci_low": -0.0258,
+              "posterior_relative_ci_high": 0.4565,
+              "bayesian_status": "inconclusive",
+              "hierarchical_prior_level": "channel_metric_blend",
+              "hierarchical_prior_rate": 0.0475,
+              "hierarchical_prior_strength": 113.53,
+              "hierarchical_probability_treatment_best": 0.9567,
+              "hierarchical_expected_control_rate": 0.0405,
+              "hierarchical_expected_treatment_rate": 0.0479,
+              "hierarchical_expected_absolute_uplift": 0.0074,
+              "hierarchical_expected_relative_uplift": 0.1887,
+              "hierarchical_ci_low": -0.0009,
+              "hierarchical_ci_high": 0.0157,
+              "hierarchical_relative_ci_low": -0.0202,
+              "hierarchical_relative_ci_high": 0.4321,
+              "hierarchical_status": "inconclusive",
+              "auto_stop_decision": "prepare_rollout",
+              "auto_stop_reason": "方向明确但尚未完全满足放量阈值，可准备扩量方案。",
+              "sample_target_per_variant": 169,
+              "sample_ratio_to_target": 24.8521,
+              "runtime_days": 12,
+              "minimum_runtime_days": 7,
+              "runtime_gate_pass": true,
+              "sample_gate_pass": true,
+              "effect_floor_absolute": 0.04,
+              "auto_stop_confidence": 1.0
+            },
+            {
+              "experiment_id": "EXP-006",
+              "channel": "eBay",
+              "primary_metric": "checkout_completion_rate",
+              "control_variant": "control",
+              "treatment_variants": [
+                "treatment"
+              ],
+              "control_exposures": 1600,
+              "treatment_exposures": 1580,
+              "control_rate": 0.1313,
+              "treatment_rate": 0.1259,
+              "absolute_uplift": -0.0053,
+              "relative_uplift": -0.0404,
+              "p_value": 0.6553,
+              "z_stat": -0.4464,
+              "ci_low": -0.0286,
+              "ci_high": 0.018,
+              "frequentist_status": "inconclusive",
+              "readout_status": "inconclusive",
+              "slice_name": "full_window",
+              "assignment_count": 2,
+              "temporal_consistency_score": 1.0,
+              "slice_readouts": [
+                {
+                  "experiment_id": "EXP-006",
+                  "channel": "eBay",
+                  "primary_metric": "checkout_completion_rate",
+                  "control_variant": "control",
+                  "treatment_variants": [
+                    "treatment"
+                  ],
+                  "control_exposures": 800,
+                  "treatment_exposures": 790,
+                  "control_rate": 0.13,
+                  "treatment_rate": 0.1253,
+                  "absolute_uplift": -0.0047,
+                  "relative_uplift": -0.036,
+                  "p_value": 0.7796,
+                  "z_stat": -0.2798,
+                  "ci_low": -0.0375,
+                  "ci_high": 0.0281,
+                  "frequentist_status": "inconclusive",
+                  "readout_status": "inconclusive",
+                  "slice_name": "early_window",
+                  "assignment_count": 2,
+                  "temporal_consistency_score": 0.5,
+                  "slice_readouts": [],
+                  "posterior_probability_treatment_best": 0.3835,
+                  "posterior_expected_control_rate": 0.1311,
+                  "posterior_expected_treatment_rate": 0.126,
+                  "posterior_expected_absolute_uplift": -0.005,
+                  "posterior_expected_relative_uplift": -0.0305,
+                  "posterior_ci_low": -0.0379,
+                  "posterior_ci_high": 0.0265,
+                  "posterior_relative_ci_low": -0.2565,
+                  "posterior_relative_ci_high": 0.2308,
+                  "bayesian_status": "inconclusive",
+                  "hierarchical_prior_level": "channel_metric_blend",
+                  "hierarchical_prior_rate": 0.1286,
+                  "hierarchical_prior_strength": 56.39,
+                  "hierarchical_probability_treatment_best": 0.3772,
+                  "hierarchical_expected_control_rate": 0.1311,
+                  "hierarchical_expected_treatment_rate": 0.1263,
+                  "hierarchical_expected_absolute_uplift": -0.0048,
+                  "hierarchical_expected_relative_uplift": -0.0293,
+                  "hierarchical_ci_low": -0.0365,
+                  "hierarchical_ci_high": 0.0272,
+                  "hierarchical_relative_ci_low": -0.2503,
+                  "hierarchical_relative_ci_high": 0.2346,
+                  "hierarchical_status": "inconclusive",
+                  "auto_stop_decision": "continue_collecting",
+                  "auto_stop_reason": "当前证据不足以触发自动止损或放量。",
+                  "sample_target_per_variant": 1246,
+                  "sample_ratio_to_target": 0.634,
+                  "runtime_days": 11,
+                  "minimum_runtime_days": 7,
+                  "runtime_gate_pass": true,
+                  "sample_gate_pass": false,
+                  "effect_floor_absolute": 0.02,
+                  "auto_stop_confidence": 0.5722
+                },
+                {
+                  "experiment_id": "EXP-006",
+                  "channel": "eBay",
+                  "primary_metric": "checkout_completion_rate",
+                  "control_variant": "control",
+                  "treatment_variants": [
+                    "treatment"
+                  ],
+                  "control_exposures": 800,
+                  "treatment_exposures": 790,
+                  "control_rate": 0.1325,
+                  "treatment_rate": 0.1266,
+                  "absolute_uplift": -0.0059,
+                  "relative_uplift": -0.0447,
+                  "p_value": 0.7253,
+                  "z_stat": -0.3513,
+                  "ci_low": -0.0389,
+                  "ci_high": 0.0271,
+                  "frequentist_status": "inconclusive",
+                  "readout_status": "inconclusive",
+                  "slice_name": "late_window",
+                  "assignment_count": 2,
+                  "temporal_consistency_score": 0.5,
+                  "slice_readouts": [],
+                  "posterior_probability_treatment_best": 0.364,
+                  "posterior_expected_control_rate": 0.1333,
+                  "posterior_expected_treatment_rate": 0.1275,
+                  "posterior_expected_absolute_uplift": -0.0058,
+                  "posterior_expected_relative_uplift": -0.0358,
+                  "posterior_ci_low": -0.0394,
+                  "posterior_ci_high": 0.0259,
+                  "posterior_relative_ci_low": -0.261,
+                  "posterior_relative_ci_high": 0.22,
+                  "bayesian_status": "inconclusive",
+                  "hierarchical_prior_level": "channel_metric_blend",
+                  "hierarchical_prior_rate": 0.1286,
+                  "hierarchical_prior_strength": 56.39,
+                  "hierarchical_probability_treatment_best": 0.3603,
+                  "hierarchical_expected_control_rate": 0.1333,
+                  "hierarchical_expected_treatment_rate": 0.1276,
+                  "hierarchical_expected_absolute_uplift": -0.0057,
+                  "hierarchical_expected_relative_uplift": -0.0352,
+                  "hierarchical_ci_low": -0.0384,
+                  "hierarchical_ci_high": 0.0268,
+                  "hierarchical_relative_ci_low": -0.2527,
+                  "hierarchical_relative_ci_high": 0.2302,
+                  "hierarchical_status": "inconclusive",
+                  "auto_stop_decision": "continue_collecting",
+                  "auto_stop_reason": "当前证据不足以触发自动止损或放量。",
+                  "sample_target_per_variant": 1263,
+                  "sample_ratio_to_target": 0.6255,
+                  "runtime_days": 11,
+                  "minimum_runtime_days": 7,
+                  "runtime_gate_pass": true,
+                  "sample_gate_pass": false,
+                  "effect_floor_absolute": 0.02,
+                  "auto_stop_confidence": 0.5734
+                }
+              ],
+              "posterior_probability_treatment_best": 0.3175,
+              "posterior_expected_control_rate": 0.1318,
+              "posterior_expected_treatment_rate": 0.1264,
+              "posterior_expected_absolute_uplift": -0.0055,
+              "posterior_expected_relative_uplift": -0.0375,
+              "posterior_ci_low": -0.0284,
+              "posterior_ci_high": 0.0176,
+              "posterior_relative_ci_low": -0.1986,
+              "posterior_relative_ci_high": 0.1473,
+              "bayesian_status": "inconclusive",
+              "hierarchical_prior_level": "channel_metric_blend",
+              "hierarchical_prior_rate": 0.1286,
+              "hierarchical_prior_strength": 56.39,
+              "hierarchical_probability_treatment_best": 0.3282,
+              "hierarchical_expected_control_rate": 0.1316,
+              "hierarchical_expected_treatment_rate": 0.1266,
+              "hierarchical_expected_absolute_uplift": -0.005,
+              "hierarchical_expected_relative_uplift": -0.0343,
+              "hierarchical_ci_low": -0.0276,
+              "hierarchical_ci_high": 0.0177,
+              "hierarchical_relative_ci_low": -0.1934,
+              "hierarchical_relative_ci_high": 0.1471,
+              "hierarchical_status": "inconclusive",
+              "auto_stop_decision": "continue_collecting",
+              "auto_stop_reason": "当前证据不足以触发自动止损或放量。",
+              "sample_target_per_variant": 1254,
+              "sample_ratio_to_target": 1.26,
+              "runtime_days": 11,
+              "minimum_runtime_days": 7,
+              "runtime_gate_pass": true,
+              "sample_gate_pass": true,
+              "effect_floor_absolute": 0.02,
+              "auto_stop_confidence": 0.9185
+            },
+            {
+              "experiment_id": "EXP-003",
+              "channel": "Amazon",
+              "primary_metric": "conversion_rate",
+              "control_variant": "control",
+              "treatment_variants": [
+                "treatment"
+              ],
+              "control_exposures": 5000,
+              "treatment_exposures": 5100,
+              "control_rate": 0.052,
+              "treatment_rate": 0.05,
+              "absolute_uplift": -0.002,
+              "relative_uplift": -0.0385,
+              "p_value": 0.6478,
+              "z_stat": -0.4568,
+              "ci_low": -0.0106,
+              "ci_high": 0.0066,
+              "frequentist_status": "inconclusive",
+              "readout_status": "inconclusive",
+              "slice_name": "full_window",
+              "assignment_count": 2,
+              "temporal_consistency_score": 1.0,
+              "slice_readouts": [
+                {
+                  "experiment_id": "EXP-003",
+                  "channel": "Amazon",
+                  "primary_metric": "conversion_rate",
+                  "control_variant": "control",
+                  "treatment_variants": [
+                    "treatment"
+                  ],
+                  "control_exposures": 2500,
+                  "treatment_exposures": 2550,
+                  "control_rate": 0.0512,
+                  "treatment_rate": 0.0494,
+                  "absolute_uplift": -0.0018,
+                  "relative_uplift": -0.0349,
+                  "p_value": 0.7713,
+                  "z_stat": -0.2907,
+                  "ci_low": -0.0138,
+                  "ci_high": 0.0103,
+                  "frequentist_status": "inconclusive",
+                  "readout_status": "inconclusive",
+                  "slice_name": "early_window",
+                  "assignment_count": 2,
+                  "temporal_consistency_score": 0.5,
+                  "slice_readouts": [],
+                  "posterior_probability_treatment_best": 0.3957,
+                  "posterior_expected_control_rate": 0.0515,
+                  "posterior_expected_treatment_rate": 0.0498,
+                  "posterior_expected_absolute_uplift": -0.0017,
+                  "posterior_expected_relative_uplift": -0.0259,
+                  "posterior_ci_low": -0.0139,
+                  "posterior_ci_high": 0.0101,
+                  "posterior_relative_ci_low": -0.2401,
+                  "posterior_relative_ci_high": 0.2231,
+                  "bayesian_status": "inconclusive",
+                  "hierarchical_prior_level": "channel_metric_blend",
+                  "hierarchical_prior_rate": 0.0502,
+                  "hierarchical_prior_strength": 118.92,
+                  "hierarchical_probability_treatment_best": 0.3917,
+                  "hierarchical_expected_control_rate": 0.0515,
+                  "hierarchical_expected_treatment_rate": 0.0498,
+                  "hierarchical_expected_absolute_uplift": -0.0017,
+                  "hierarchical_expected_relative_uplift": -0.0257,
+                  "hierarchical_ci_low": -0.0133,
+                  "hierarchical_ci_high": 0.0104,
+                  "hierarchical_relative_ci_low": -0.2314,
+                  "hierarchical_relative_ci_high": 0.225,
+                  "hierarchical_status": "inconclusive",
+                  "auto_stop_decision": "stop_for_futility",
+                  "auto_stop_reason": "已达到足够样本，但 uplift 仍落在无效区间内。",
+                  "sample_target_per_variant": 430,
+                  "sample_ratio_to_target": 5.814,
+                  "runtime_days": 12,
+                  "minimum_runtime_days": 7,
+                  "runtime_gate_pass": true,
+                  "sample_gate_pass": true,
+                  "effect_floor_absolute": 0.025,
+                  "auto_stop_confidence": 1.0
+                },
+                {
+                  "experiment_id": "EXP-003",
+                  "channel": "Amazon",
+                  "primary_metric": "conversion_rate",
+                  "control_variant": "control",
+                  "treatment_variants": [
+                    "treatment"
+                  ],
+                  "control_exposures": 2500,
+                  "treatment_exposures": 2550,
+                  "control_rate": 0.0528,
+                  "treatment_rate": 0.0506,
+                  "absolute_uplift": -0.0022,
+                  "relative_uplift": -0.0419,
+                  "p_value": 0.7226,
+                  "z_stat": -0.355,
+                  "ci_low": -0.0144,
+                  "ci_high": 0.01,
+                  "frequentist_status": "inconclusive",
+                  "readout_status": "inconclusive",
+                  "slice_name": "late_window",
+                  "assignment_count": 2,
+                  "temporal_consistency_score": 0.5,
+                  "slice_readouts": [],
+                  "posterior_probability_treatment_best": 0.3603,
+                  "posterior_expected_control_rate": 0.0531,
+                  "posterior_expected_treatment_rate": 0.0509,
+                  "posterior_expected_absolute_uplift": -0.0022,
+                  "posterior_expected_relative_uplift": -0.0352,
+                  "posterior_ci_low": -0.0144,
+                  "posterior_ci_high": 0.0098,
+                  "posterior_relative_ci_low": -0.2424,
+                  "posterior_relative_ci_high": 0.2134,
+                  "bayesian_status": "inconclusive",
+                  "hierarchical_prior_level": "channel_metric_blend",
+                  "hierarchical_prior_rate": 0.0502,
+                  "hierarchical_prior_strength": 118.92,
+                  "hierarchical_probability_treatment_best": 0.3603,
+                  "hierarchical_expected_control_rate": 0.0529,
+                  "hierarchical_expected_treatment_rate": 0.0509,
+                  "hierarchical_expected_absolute_uplift": -0.0021,
+                  "hierarchical_expected_relative_uplift": -0.0333,
+                  "hierarchical_ci_low": -0.0135,
+                  "hierarchical_ci_high": 0.0096,
+                  "hierarchical_relative_ci_low": -0.232,
+                  "hierarchical_relative_ci_high": 0.2018,
+                  "hierarchical_status": "inconclusive",
+                  "auto_stop_decision": "stop_for_futility",
+                  "auto_stop_reason": "已达到足够样本，但 uplift 仍落在无效区间内。",
+                  "sample_target_per_variant": 439,
+                  "sample_ratio_to_target": 5.6948,
+                  "runtime_days": 12,
+                  "minimum_runtime_days": 7,
+                  "runtime_gate_pass": true,
+                  "sample_gate_pass": true,
+                  "effect_floor_absolute": 0.025,
+                  "auto_stop_confidence": 1.0
+                }
+              ],
+              "posterior_probability_treatment_best": 0.3305,
+              "posterior_expected_control_rate": 0.0521,
+              "posterior_expected_treatment_rate": 0.0503,
+              "posterior_expected_absolute_uplift": -0.0018,
+              "posterior_expected_relative_uplift": -0.0314,
+              "posterior_ci_low": -0.0103,
+              "posterior_ci_high": 0.0069,
+              "posterior_relative_ci_low": -0.1832,
+              "posterior_relative_ci_high": 0.1416,
+              "bayesian_status": "inconclusive",
+              "hierarchical_prior_level": "channel_metric_blend",
+              "hierarchical_prior_rate": 0.0502,
+              "hierarchical_prior_strength": 118.92,
+              "hierarchical_probability_treatment_best": 0.3272,
+              "hierarchical_expected_control_rate": 0.0521,
+              "hierarchical_expected_treatment_rate": 0.0502,
+              "hierarchical_expected_absolute_uplift": -0.0019,
+              "hierarchical_expected_relative_uplift": -0.0329,
+              "hierarchical_ci_low": -0.0106,
+              "hierarchical_ci_high": 0.0067,
+              "hierarchical_relative_ci_low": -0.1854,
+              "hierarchical_relative_ci_high": 0.1405,
+              "hierarchical_status": "inconclusive",
+              "auto_stop_decision": "continue_collecting",
+              "auto_stop_reason": "当前证据不足以触发自动止损或放量。",
+              "sample_target_per_variant": 435,
+              "sample_ratio_to_target": 11.4943,
+              "runtime_days": 12,
+              "minimum_runtime_days": 7,
+              "runtime_gate_pass": true,
+              "sample_gate_pass": true,
+              "effect_floor_absolute": 0.025,
+              "auto_stop_confidence": 1.0
+            }
+          ]
+        },
+        "auto_stop_policy": {
+          "ship_threshold": 0.97,
+          "loss_threshold": 0.05,
+          "futility_lower": 0.35,
+          "futility_upper": 0.65,
+          "effect_floor_share_of_mde": 0.5
+        },
+        "incrementality_score": 0.7901,
+        "causal_confidence_score": 0.9386,
+        "causal_confidence_level": "high"
+      }
+    },
+    "5.7": {
+      "id": "5.7",
+      "title": "风险监控、复盘机制与扩张节奏",
+      "required_tables": [
+        "policy_change_log",
+        "kpi_daily_snapshots",
+        "cash_flow_snapshots",
+        "returns_claims"
+      ],
+      "metric_ids": [
+        "risk_scale_loop"
+      ],
+      "granularity": {
+        "analysis_grain": "channel x risk event",
+        "entity_grain": "channel",
+        "time_grain": "day / week"
+      },
+      "channel_scope": [
+        "DTC",
+        "Amazon",
+        "TikTok Shop",
+        "eBay",
+        "Walmart",
+        "B2B"
+      ],
+      "master_data_ref": [
+        "mdm.channel",
+        "mdm.policy_version"
+      ],
+      "evidence_ref": [
+        "evidence.policy_change_log",
+        "evidence.kpi_daily_snapshots",
+        "evidence.cash_flow_snapshots",
+        "evidence.returns_claims"
+      ],
+      "rule_ref": [
+        "gate.scale_stop_exit",
+        "gate.policy_blocker",
+        "gate.rollback_runbook"
+      ],
+      "gate_result": {
+        "status": "fail",
+        "source": "expansion_gate_status",
+        "raw_value": "rollback",
+        "failed_items": []
+      },
+      "data_quality": {
+        "record_counts": {
+          "policy_change_log": 2,
+          "kpi_daily_snapshots": 14,
+          "cash_flow_snapshots": 8,
+          "returns_claims": 8
+        },
+        "available_tables": [
+          "policy_change_log",
+          "kpi_daily_snapshots",
+          "cash_flow_snapshots",
+          "returns_claims"
+        ],
+        "missing_tables": [],
+        "completeness_ratio": 1.0,
+        "richness_ratio": 1.0,
+        "quality_score": 1.0,
+        "quality_level": "high"
+      },
+      "confidence": {
+        "score": 1.0,
+        "level": "high"
+      },
+      "metrics": {
+        "risk_alert_count": 9,
+        "rollback_trigger_rate": 0.7778,
+        "scale_readiness_score": 0.6857,
+        "scale_readiness_level": "medium",
+        "expansion_gate_status": "rollback",
+        "budget_allocation": {
+          "Amazon": 0.02,
+          "B2B": 0.55,
+          "TikTok Shop": 0.3526,
+          "DTC": 0.02,
+          "Walmart": 0.0374,
+          "eBay": 0.02
+        },
+        "budget_allocation_method": "cvxpy_scs",
+        "policy_high_impact_count": 0,
+        "change_signal_count": 1,
+        "channels_with_change_signals": [
+          "DTC"
+        ],
+        "runbook_actions": {
+          "audit_returns_and_pause_promo": 6,
+          "freeze_scale_and_review_fee_stack": 1,
+          "review_claims_and_payment_risk": 1,
+          "inspect_recent_orders_and_returns": 1
+        },
+        "alerts": {
+          "alerts": [
+            {
+              "alert_type": "refund_spike",
+              "severity": "high",
+              "channel": "Amazon",
+              "message": "退货率高于预设阈值。",
+              "alert_family": "guardrail",
+              "runbook_action": "audit_returns_and_pause_promo"
+            },
+            {
+              "alert_type": "refund_spike",
+              "severity": "high",
+              "channel": "B2B",
+              "message": "退货率高于预设阈值。",
+              "alert_family": "guardrail",
+              "runbook_action": "audit_returns_and_pause_promo"
+            },
+            {
+              "alert_type": "refund_spike",
+              "severity": "high",
+              "channel": "TikTok Shop",
+              "message": "退货率高于预设阈值。",
+              "alert_family": "guardrail",
+              "runbook_action": "audit_returns_and_pause_promo"
+            },
+            {
+              "alert_type": "margin_floor_breach",
+              "severity": "high",
+              "channel": "DTC",
+              "message": "贡献毛利率低于最小保护阈值。",
+              "alert_family": "guardrail",
+              "runbook_action": "freeze_scale_and_review_fee_stack"
+            },
+            {
+              "alert_type": "refund_spike",
+              "severity": "high",
+              "channel": "DTC",
+              "message": "退货率高于预设阈值。",
+              "alert_family": "guardrail",
+              "runbook_action": "audit_returns_and_pause_promo"
+            },
+            {
+              "alert_type": "refund_spike",
+              "severity": "high",
+              "channel": "Walmart",
+              "message": "退货率高于预设阈值。",
+              "alert_family": "guardrail",
+              "runbook_action": "audit_returns_and_pause_promo"
+            },
+            {
+              "alert_type": "refund_spike",
+              "severity": "high",
+              "channel": "eBay",
+              "message": "退货率高于预设阈值。",
+              "alert_family": "guardrail",
+              "runbook_action": "audit_returns_and_pause_promo"
+            },
+            {
+              "alert_type": "dispute_spike",
+              "severity": "medium",
+              "channel": "eBay",
+              "message": "争议率高于预设阈值。",
+              "alert_family": "guardrail",
+              "runbook_action": "review_claims_and_payment_risk"
+            },
+            {
+              "alert_type": "refund_change_point",
+              "severity": "medium",
+              "channel": "DTC",
+              "message": "最新退款额显著高于历史均值，触发售后变点预警。",
+              "alert_family": "change_point",
+              "runbook_action": "inspect_recent_orders_and_returns"
+            }
+          ],
+          "alert_count": 9,
+          "alert_type_mix": {
+            "refund_spike": 6,
+            "margin_floor_breach": 1,
+            "dispute_spike": 1,
+            "refund_change_point": 1
+          },
+          "severity_mix": {
+            "high": 7,
+            "medium": 2
+          },
+          "alert_family_mix": {
+            "guardrail": 8,
+            "change_point": 1
+          },
+          "rollback_trigger_count": 7,
+          "change_signal_count": 1,
+          "channels_with_change_signals": [
+            "DTC"
+          ],
+          "runbook_actions": {
+            "audit_returns_and_pause_promo": 6,
+            "freeze_scale_and_review_fee_stack": 1,
+            "review_claims_and_payment_risk": 1,
+            "inspect_recent_orders_and_returns": 1
+          }
+        }
+      }
+    }
+  },
+  "uncertainty": {
+    "daily_contribution_margin_rate": {
+      "statistic": "mean",
+      "point_estimate": 0.1629,
+      "ci_lower": 0.1543,
+      "ci_upper": 0.1704,
+      "iterations": 600,
+      "alpha": 0.05
+    },
+    "inventory_cash_lock": {
+      "statistic": "median",
+      "point_estimate": 14430.0,
+      "ci_lower": 12170.0,
+      "ci_upper": 18570.0,
+      "iterations": 600,
+      "alpha": 0.05
+    },
+    "refund_cash_out": {
+      "statistic": "mean",
+      "point_estimate": 26.25,
+      "ci_lower": 0.0,
+      "ci_upper": 60.0,
+      "iterations": 600,
+      "alpha": 0.05
+    },
+    "channel_health_score": {
+      "statistic": "mean",
+      "point_estimate": 0.6515,
+      "ci_lower": 0.5976,
+      "ci_upper": 0.688,
+      "iterations": 600,
+      "alpha": 0.05
+    },
+    "forecast_snapshot": {
+      "trend_direction": "up",
+      "forecast_next_7d_revenue": 39070.0,
+      "forecast_next_7d_profit": 6570.0
+    }
+  },
+  "validation": {
+    "summary": {
+      "pass_count": 14,
+      "review_count": 0,
+      "fail_count": 0
+    },
+    "checks": [
+      {
+        "check_id": "operating_health_and_gate_range",
+        "status": "pass",
+        "source": {
+          "label": "Part 5 Operating Gate Design",
+          "url": ""
+        },
+        "method": "Operating health and gate breach rate are normalized to a 0-1 range for cross-channel comparability.",
+        "evidence": {
+          "operating_health_score": 0.6515,
+          "gate_breach_rate": 0.8
+        }
+      },
+      {
+        "check_id": "monitoring_coverage_range",
+        "status": "pass",
+        "source": {
+          "label": "Part 5 Monitoring and Data Reliability",
+          "url": ""
+        },
+        "method": "Coverage-style monitoring metrics remain bounded between 0 and 1.",
+        "evidence": {
+          "data_coverage_score": 0.8333,
+          "fee_version_coverage": 1.0,
+          "policy_source_url_coverage": 1.0
+        }
+      },
+      {
+        "check_id": "weekly_pnl_reconciliation",
+        "status": "pass",
+        "source": {
+          "label": "Part 5 Monitoring and Data Reliability",
+          "url": ""
+        },
+        "method": "Weekly contribution-profit totals should reconcile between weekly rollup rows and chart-ready week totals.",
+        "evidence": {
+          "weekly_profit_sum": 12520.0,
+          "weekly_row_profit_sum": 12520.0,
+          "weekly_row_count": 13
+        }
+      },
+      {
+        "check_id": "data_contract_presence",
+        "status": "pass",
+        "source": {
+          "label": "Part 5 Monitoring and Data Reliability",
+          "url": ""
+        },
+        "method": "When key inputs are missing, the report must explicitly declare availability, proxy usage, downgrade reasons, and blockers.",
+        "evidence": {
+          "data_contract_present": true,
+          "availability_flag_count": 10,
+          "proxy_usage_count": 2
+        }
+      },
+      {
+        "check_id": "growth_funnel_range",
+        "status": "pass",
+        "source": {
+          "label": "Part 5 Growth Loop",
+          "url": ""
+        },
+        "method": "Funnel rates are modeled as conditional conversion rates and should remain within a 0-1 range.",
+        "evidence": {
+          "funnel_conversion_matrix": {
+            "page_view_rate": 0.7639,
+            "add_to_cart_rate": 0.1277,
+            "checkout_rate": 0.4978,
+            "order_rate": 0.0333
+          },
+          "missing_input": false
+        }
+      },
+      {
+        "check_id": "pricing_control_range",
+        "status": "pass",
+        "source": {
+          "label": "Part 5 Pricing and Margin Protection",
+          "url": ""
+        },
+        "method": "Promotion, bundle, and price realization ratios should stay within realistic retail ranges.",
+        "evidence": {
+          "promo_action_share": 0.6667,
+          "bundle_action_share": 0.3333,
+          "price_realization_rate": 1.0034
+        }
+      },
+      {
+        "check_id": "inventory_cash_range",
+        "status": "pass",
+        "source": {
+          "label": "Part 5 Inventory and Cash Control",
+          "url": ""
+        },
+        "method": "Inventory and reorder readiness metrics are normalized risk scores and should remain within a 0-1 range.",
+        "evidence": {
+          "stockout_risk": 0.0,
+          "overstock_risk": 0.0,
+          "reorder_readiness_score": 1.0
+        }
+      },
+      {
+        "check_id": "experiment_design_integrity",
+        "status": "pass",
+        "source": {
+          "label": "Part 5 Experimentation System",
+          "url": ""
+        },
+        "method": "Experimentation output requires positive sample size guidance and a bounded confidence score.",
+        "evidence": {
+          "sample_size_per_variant": 91,
+          "causal_confidence_score": 0.9386,
+          "minimum_runtime_days": 7
+        }
+      },
+      {
+        "check_id": "experiment_readout_range",
+        "status": "pass",
+        "source": {
+          "label": "Part 5 Experimentation System",
+          "url": ""
+        },
+        "method": "Experiment readout coverage, assignment coverage, and incrementality score are normalized to a 0-1 range.",
+        "evidence": {
+          "readout_coverage_ratio": 1.0,
+          "assignment_coverage_ratio": 0.8333,
+          "incrementality_score": 0.7901
+        }
+      },
+      {
+        "check_id": "experiment_posterior_range",
+        "status": "pass",
+        "source": {
+          "label": "Part 5 Experimentation System",
+          "url": ""
+        },
+        "method": "Posterior win probability and temporal consistency score are normalized to a 0-1 range.",
+        "evidence": {
+          "average_posterior_win_probability": 0.7163,
+          "average_hierarchical_win_probability": 0.7172,
+          "temporal_consistency_score": 1.0
+        }
+      },
+      {
+        "check_id": "experiment_auto_stop_integrity",
+        "status": "pass",
+        "source": {
+          "label": "Part 5 Experimentation System",
+          "url": ""
+        },
+        "method": "Auto-stop bucket counts should reconcile to the number of readable experiments.",
+        "evidence": {
+          "auto_stop_summary": {
+            "ship_winner_count": 2,
+            "stop_for_loss_count": 0,
+            "stop_for_futility_count": 0,
+            "prepare_rollout_count": 1,
+            "watch_for_loss_count": 0,
+            "continue_collecting_count": 2
+          },
+          "readout_count": 5
+        }
+      },
+      {
+        "check_id": "scale_gate_integrity",
+        "status": "pass",
+        "source": {
+          "label": "Part 5 Scale Gate",
+          "url": ""
+        },
+        "method": "Scale-gate output uses a fixed enum, normalized rollback rate, and budget shares that reconcile back to 100%.",
+        "evidence": {
+          "expansion_gate_status": "rollback",
+          "budget_sum": 1.0,
+          "rollback_trigger_rate": 0.7778
+        }
+      },
+      {
+        "check_id": "alert_mix_consistency",
+        "status": "pass",
+        "source": {
+          "label": "Part 5 Scale Gate",
+          "url": ""
+        },
+        "method": "Alert type counts should reconcile back to the total alert count.",
+        "evidence": {
+          "alert_count": 9,
+          "alert_type_sum": 9
+        }
+      },
+      {
+        "check_id": "alert_runbook_coverage",
+        "status": "pass",
+        "source": {
+          "label": "Part 5 Scale Gate",
+          "url": ""
+        },
+        "method": "Each operational alert should carry a runbook action so risk signals can be executed, not just reported.",
+        "evidence": {
+          "alert_count": 9,
+          "alerts_missing_runbook": 0
+        }
+      }
+    ]
+  },
+  "audit_pack": {
+    "table_batches": {
+      "kpi_daily_snapshots": 14,
+      "pricing_actions": 6,
+      "reorder_plan": 6,
+      "policy_change_log": 2,
+      "cash_flow_snapshots": 8
+    },
+    "fee_version_audit": {
+      "latest_versions": [
+        {
+          "channel": "DTC",
+          "effective_date": "2026-01-01",
+          "fee_type": "fulfillment_fee",
+          "source_ref": "3pl-v1"
+        },
+        {
+          "channel": "Amazon",
+          "effective_date": "2026-01-01",
+          "fee_type": "storage_fee",
+          "source_ref": "amazon-v1"
+        },
+        {
+          "channel": "TikTok Shop",
+          "effective_date": "2026-01-01",
+          "fee_type": "fulfillment_fee",
+          "source_ref": "tiktok-v1"
+        },
+        {
+          "channel": "eBay",
+          "effective_date": "2026-01-01",
+          "fee_type": "shipping_fulfillment",
+          "source_ref": "ebay-v1"
+        },
+        {
+          "channel": "Walmart",
+          "effective_date": "2026-01-01",
+          "fee_type": "storage_fee",
+          "source_ref": "walmart-v1"
+        },
+        {
+          "channel": "B2B",
+          "effective_date": "2026-01-01",
+          "fee_type": "pallet_fulfillment",
+          "source_ref": "b2b-v1"
+        }
+      ],
+      "source_ref_coverage": {
+        "DTC": [
+          "3pl-v1",
+          "shopify-v1",
+          "stripe-v1"
+        ],
+        "Amazon": [
+          "amazon-v1"
+        ],
+        "TikTok Shop": [
+          "tiktok-v1"
+        ],
+        "eBay": [
+          "ebay-v1"
+        ],
+        "Walmart": [
+          "walmart-v1"
+        ],
+        "B2B": [
+          "b2b-v1"
+        ]
+      }
+    },
+    "policy_change_audit": {
+      "latest_changes": [
+        {
+          "platform": "Amazon",
+          "policy_type": "fee_update",
+          "effective_date": "2026-02-15",
+          "source_url": "https://sellercentral.amazon.com",
+          "impact_level": "medium"
+        },
+        {
+          "platform": "TikTok Shop",
+          "policy_type": "content_policy",
+          "effective_date": "2026-02-18",
+          "source_url": "https://seller-us.tiktok.com",
+          "impact_level": "low"
+        }
+      ],
+      "source_url_count": 2
+    },
+    "experiment_audit": {
+      "experiment_count": 6,
+      "assignment_count": 10,
+      "metric_row_count": 20,
+      "channels_covered": [
+        "Amazon",
+        "DTC",
+        "TikTok Shop",
+        "Walmart",
+        "eBay"
+      ],
+      "completed_count": 5,
+      "active_count": 1
+    },
+    "data_contract": {
+      "data_availability_flags": {
+        "customer_identity_available": false,
+        "new_customer_identification_available": false,
+        "return_reason_available": true,
+        "inventory_eta_available": true,
+        "policy_change_log_available": true,
+        "policy_source_url_available": true,
+        "fee_version_available": true,
+        "experiment_assignment_available": true,
+        "experiment_metric_available": true,
+        "landed_cost_available": true
+      },
+      "proxy_usage_flags": [
+        "cohort_repeat_rate_proxy_for_ltv",
+        "platform_level_customer_acquisition_proxy"
+      ],
+      "confidence_downgrade_reason": [
+        "缺少 customer_id，LTV 与生命周期模型降级为 cohort 粒度。",
+        "缺少新客识别字段，CAC 仅能按平台或会话口径近似。"
+      ],
+      "model_blockers": [
+        "customer_level_ltv"
+      ]
+    }
+  },
+  "factor_snapshots": {
+    "FAC-OPERATING-HEALTH": {
+      "label": "经营健康因子",
+      "value": 0.6515,
+      "source_section": "5.1"
+    },
+    "FAC-DATA-CONTRACT": {
+      "label": "数据契约因子",
+      "value": 0.825,
+      "source_section": "5.2"
+    },
+    "FAC-GROWTH-LEVERAGE": {
+      "label": "增长杠杆因子",
+      "value": 0.6081,
+      "source_section": "5.3"
+    },
+    "FAC-MARGIN-PROTECTION": {
+      "label": "利润保护因子",
+      "value": 0.7,
+      "source_section": "5.4"
+    },
+    "FAC-CASH-DISCIPLINE": {
+      "label": "库存现金纪律因子",
+      "value": 0.9552,
+      "source_section": "5.5"
+    },
+    "FAC-EXPERIMENT-CONFIDENCE": {
+      "label": "实验可信度因子",
+      "value": 0.8792,
+      "source_section": "5.6"
+    },
+    "FAC-SCALE-CONTROL": {
+      "label": "扩张控制因子",
+      "value": 0.5235,
+      "source_section": "5.7"
+    }
+  },
+  "confidence_band": {
+    "score": 0.8531,
+    "label": "high",
+    "proxy_usage_flags": [
+      "cohort_repeat_rate_proxy_for_ltv",
+      "platform_level_customer_acquisition_proxy",
+      "policy_monitoring_thin",
+      "rollback_pressure_high"
+    ]
+  },
+  "proxy_usage_flags": [
+    "cohort_repeat_rate_proxy_for_ltv",
+    "platform_level_customer_acquisition_proxy",
+    "policy_monitoring_thin",
+    "rollback_pressure_high"
+  ]
+}

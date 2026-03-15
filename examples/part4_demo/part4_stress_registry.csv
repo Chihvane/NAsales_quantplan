@@ -1,0 +1,4 @@
+scenario_id,scenario_name,shock_target,shock_multiplier,severity,channel_scope,active_flag,notes
+P4STR001,CPC Shock,acquisition_cost,1.4,high,all,1,Stress paid traffic inflation
+P4STR002,Landed Cost Shock,landed_cost,1.15,medium,all,1,Stress freight and cost inputs
+P4STR003,Revenue Compression,revenue,0.92,high,all,1,Stress price cuts and weak conversion

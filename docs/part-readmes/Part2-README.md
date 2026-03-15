@@ -7,6 +7,8 @@
 ## Core Documents
 
 - Quant structure: [Part2-Quantitative-Structure.md](/Users/zhiwenxiang/Documents/Playground/北美市场量化报告/Part2-Quantitative-Structure.md)
+- Optimization plan: [Part2-Quantitative-Optimization-Plan.md](/Users/zhiwenxiang/Documents/Playground/北美市场量化报告/Part2-Quantitative-Optimization-Plan.md)
+- Decision OS plan config: [part2_quant_plan.yaml](/Users/zhiwenxiang/Documents/Playground/北美市场量化报告/decision-os/config/part2_quant_plan.yaml)
 
 ## Code Entry
 

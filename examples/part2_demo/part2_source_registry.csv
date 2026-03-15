@@ -1,0 +1,4 @@
+source_id,topic,source_name,source_type,confidence_grade,collected_at,freshness_days,version,status,owner_role
+P2SRC001,listing_snapshots,Marketplace listing scrape,platform_export,A,2025-11-30,7,v1,active,market_analyst
+P2SRC002,sold_transactions,Sold transaction bundle,platform_export,A,2025-11-30,7,v1,active,market_analyst
+P2SRC003,reviews,Review text export,ugc_export,B,2025-11-30,7,v1,active,voc_analyst

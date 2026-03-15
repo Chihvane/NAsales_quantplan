@@ -4,10 +4,13 @@ from pathlib import Path
 
 from .loaders import (
     load_approval_chain,
+    load_consumer_habit_vectors,
     load_decision_nodes,
     load_evidence_sources,
     load_field_dictionary,
     load_gate_thresholds,
+    load_market_destination_registry,
+    load_region_weight_profiles,
     load_strategy_assumptions,
     load_update_policies,
 )
@@ -35,4 +38,19 @@ def build_part0_dataset_from_directory(data_dir: str | Path) -> Part0Dataset:
         approval_chain=load_approval_chain(data_dir / "approval_chain.csv"),
         update_policies=load_update_policies(data_dir / "update_policies.csv"),
         field_dictionary=load_field_dictionary(data_dir / "field_dictionary.csv"),
+        market_destination_registry=(
+            load_market_destination_registry(data_dir / "market_destination_registry.csv")
+            if (data_dir / "market_destination_registry.csv").exists()
+            else []
+        ),
+        consumer_habit_vectors=(
+            load_consumer_habit_vectors(data_dir / "consumer_habit_vectors.csv")
+            if (data_dir / "consumer_habit_vectors.csv").exists()
+            else []
+        ),
+        region_weight_profiles=(
+            load_region_weight_profiles(data_dir / "region_weight_profiles.csv")
+            if (data_dir / "region_weight_profiles.csv").exists()
+            else []
+        ),
     )

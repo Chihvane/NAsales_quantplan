@@ -751,12 +751,25 @@ def compute_landed_cost_metrics(
             supplier = supplier_lookup.get(quote.supplier_id)
             route_freshness = 0.75 if route is None else _route_freshness_score(route, route_anchor)
             route_volatility = 0.2 if route is None else route.volatility_score
+            lead_time_days = (
+                route.lead_time_days
+                if route is not None and route.lead_time_days
+                else quote.lead_time_days
+            )
             scenario_confidence_score = min(
                 1.0,
                 quote_confidence * 0.55
                 + route_freshness * 0.15
                 + (1 - min(route_volatility, 1.0)) * 0.15
                 + (1.0 if quote.incoterm != "DDP" else 0.8) * 0.15,
+            )
+            capital_required = landed_cost * min(quote.moq_tier or assumptions.target_order_units, assumptions.target_order_units)
+            scenario_loss_proxy = min(
+                1.0,
+                max(0.0, assumptions.target_margin_floor - net_margin_rate)
+                / max(assumptions.target_margin_floor, 0.01)
+                + route_volatility * 0.35
+                + max(0.0, 1 - scenario_confidence_score) * 0.2,
             )
             assumption_flags = []
             if warehousing_cost == 0:
@@ -775,6 +788,8 @@ def compute_landed_cost_metrics(
                 "shipping_mode": route.shipping_mode if route is not None else "included_in_quote",
                 "route_id": route.route_id if route is not None else "included",
                 "moq_tier": quote.moq_tier,
+                "lead_time_days": lead_time_days,
+                "route_volatility_score": round(route_volatility, 4),
                 "procurement_cost": round(procurement_cost, 2),
                 "china_inland_cost": logistics_components["china_inland_cost"],
                 "export_fees": logistics_components["export_fees"],
@@ -800,6 +815,8 @@ def compute_landed_cost_metrics(
                 "net_margin": round(net_margin, 2),
                 "net_margin_rate": round(net_margin_rate, 4),
                 "break_even_price": round(break_even_price, 2),
+                "capital_required": round(capital_required, 2),
+                "scenario_loss_proxy": round(scenario_loss_proxy, 4),
                 "scenario_confidence_score": round(scenario_confidence_score, 4),
                 "scenario_confidence_level": _level_from_score(scenario_confidence_score),
                 "assumption_flags": assumption_flags,
@@ -833,6 +850,7 @@ def compute_landed_cost_metrics(
         "scenarios_evaluated": len(scenarios),
         "best_scenario": best_scenario,
         "top_scenarios": scenarios[:5],
+        "scenario_table": scenarios,
         "scenario_summary_by_incoterm": scenario_summary_by_incoterm,
         "margin_safety_level": _level_from_score(max(margin_safety_score, 0.0)),
         "cost_breakdown": {
@@ -954,8 +972,10 @@ def compute_entry_strategy_metrics(
     landed_cost_metrics: dict,
     risk_metrics: dict,
     supply_metrics: dict,
+    optimizer_metrics: dict | None = None,
 ) -> dict:
-    best_scenario = landed_cost_metrics.get("best_scenario", {})
+    optimized_best = (optimizer_metrics or {}).get("best_feasible_scenario", {})
+    best_scenario = optimized_best or landed_cost_metrics.get("best_scenario", {})
     if not best_scenario:
         return {}
 
@@ -976,6 +996,12 @@ def compute_entry_strategy_metrics(
         if recommendation == "recommended_entry":
             recommendation = "pilot_first"
         recommendation_reason = "ddp_path_requires_real_order_validation"
+    elif optimizer_metrics and optimizer_metrics.get("optimizer_gate_result") == "fail":
+        if recommendation == "recommended_entry":
+            recommendation = "pilot_first"
+        if not optimizer_metrics.get("best_feasible_scenario"):
+            recommendation = "hold"
+        recommendation_reason = "optimizer_constraints_not_satisfied"
 
     return {
         "recommendation": recommendation,
@@ -995,6 +1021,11 @@ def compute_entry_strategy_metrics(
         "recommendation_reason": recommendation_reason,
         "execution_confidence_score": best_scenario.get("scenario_confidence_score", 0.0),
         "execution_confidence_level": best_scenario.get("scenario_confidence_level", "low"),
+        "optimizer_binding": {
+            "optimizer_id": (optimizer_metrics or {}).get("optimizer_id", ""),
+            "optimizer_gate_result": (optimizer_metrics or {}).get("optimizer_gate_result", ""),
+            "feasible_scenarios_count": (optimizer_metrics or {}).get("feasible_scenarios_count", 0),
+        },
         "next_90_day_actions": [
             "完成必需认证的时间表与预算锁定。",
             "与首选供应商完成样品确认和首批 MOQ 谈判。",

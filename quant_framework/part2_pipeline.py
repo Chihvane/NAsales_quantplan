@@ -3,6 +3,10 @@ from __future__ import annotations
 from pathlib import Path
 
 from .loaders import (
+    load_channel_benchmarks,
+    load_evidence_sources,
+    load_event_library,
+    load_gate_thresholds,
     load_listing_snapshots,
     load_product_catalog,
     load_reviews,
@@ -27,4 +31,24 @@ def build_part2_dataset_from_directory(data_dir: str | Path) -> Part2Dataset:
         sold_transactions=load_sold_transactions(data_dir / "sold_transactions.csv"),
         product_catalog=load_product_catalog(data_dir / "product_catalog.csv"),
         reviews=load_reviews(data_dir / "reviews.csv"),
+        part2_source_registry=(
+            load_evidence_sources(data_dir / "part2_source_registry.csv")
+            if (data_dir / "part2_source_registry.csv").exists()
+            else []
+        ),
+        part2_threshold_registry=(
+            load_gate_thresholds(data_dir / "part2_threshold_registry.csv")
+            if (data_dir / "part2_threshold_registry.csv").exists()
+            else []
+        ),
+        part2_benchmark_registry=(
+            load_channel_benchmarks(data_dir / "part2_benchmark_registry.csv")
+            if (data_dir / "part2_benchmark_registry.csv").exists()
+            else []
+        ),
+        voc_event_registry=(
+            load_event_library(data_dir / "voc_event_registry.csv")
+            if (data_dir / "voc_event_registry.csv").exists()
+            else []
+        ),
     )

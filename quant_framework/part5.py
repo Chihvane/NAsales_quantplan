@@ -16,6 +16,7 @@ from .part5_metrics import (
 )
 from .registry import PART5_METRICS
 from .reporting import attach_decision_summary, attach_headline_metrics, build_standard_report, finalize_report_overview
+from .stats_utils import clip
 from .uncertainty import build_part5_uncertainty_snapshot
 from .validation import build_part5_methodology_validation
 
@@ -116,6 +117,118 @@ PART5_SECTION_STRUCTURE = {
 }
 
 
+def _build_part5_factor_snapshots(section_metrics: dict[str, dict]) -> dict[str, dict]:
+    operating = section_metrics.get("5.1", {})
+    data_metrics = section_metrics.get("5.2", {})
+    growth = section_metrics.get("5.3", {})
+    pricing = section_metrics.get("5.4", {})
+    inventory = section_metrics.get("5.5", {})
+    experiments = section_metrics.get("5.6", {})
+    risk_scale = section_metrics.get("5.7", {})
+    cash_lock_score = clip(1 - float(inventory.get("cash_lock_days", 0.0)) / 10.0, 0.0, 1.0)
+    data_contract_factor = clip(
+        float(data_metrics.get("data_coverage_score", 0.0)) * 0.45
+        + float(data_metrics.get("metric_consistency_score", 0.0)) * 0.2
+        + float(data_metrics.get("fee_version_coverage", 0.0)) * 0.2
+        + float(data_metrics.get("policy_monitoring_completeness", 0.0)) * 0.15,
+        0.0,
+        1.0,
+    )
+    cash_discipline_factor = clip(
+        float(inventory.get("reorder_readiness_score", 0.0)) * 0.4
+        + max(0.0, 1 - float(inventory.get("stockout_risk", 1.0))) * 0.2
+        + max(0.0, 1 - float(inventory.get("overstock_risk", 1.0))) * 0.2
+        + cash_lock_score * 0.2,
+        0.0,
+        1.0,
+    )
+    experiment_confidence_factor = clip(
+        float(experiments.get("causal_confidence_score", 0.0)) * 0.6
+        + float(experiments.get("incrementality_score", 0.0)) * 0.4,
+        0.0,
+        1.0,
+    )
+    scale_control_factor = clip(
+        float(risk_scale.get("scale_readiness_score", 0.0)) * 0.65
+        + max(0.0, 1 - float(risk_scale.get("rollback_trigger_rate", 1.0))) * 0.35,
+        0.0,
+        1.0,
+    )
+    return {
+        "FAC-OPERATING-HEALTH": {
+            "label": "经营健康因子",
+            "value": round(float(operating.get("operating_health_score", 0.0)), 4),
+            "source_section": "5.1",
+        },
+        "FAC-DATA-CONTRACT": {
+            "label": "数据契约因子",
+            "value": round(data_contract_factor, 4),
+            "source_section": "5.2",
+        },
+        "FAC-GROWTH-LEVERAGE": {
+            "label": "增长杠杆因子",
+            "value": round(float(growth.get("growth_leverage_score", 0.0)), 4),
+            "source_section": "5.3",
+        },
+        "FAC-MARGIN-PROTECTION": {
+            "label": "利润保护因子",
+            "value": round(float(pricing.get("margin_protection_score", 0.0)), 4),
+            "source_section": "5.4",
+        },
+        "FAC-CASH-DISCIPLINE": {
+            "label": "库存现金纪律因子",
+            "value": round(cash_discipline_factor, 4),
+            "source_section": "5.5",
+        },
+        "FAC-EXPERIMENT-CONFIDENCE": {
+            "label": "实验可信度因子",
+            "value": round(experiment_confidence_factor, 4),
+            "source_section": "5.6",
+        },
+        "FAC-SCALE-CONTROL": {
+            "label": "扩张控制因子",
+            "value": round(scale_control_factor, 4),
+            "source_section": "5.7",
+        },
+    }
+
+
+def _part5_confidence_band(report: dict, section_metrics: dict[str, dict]) -> dict[str, str | float | list[str]]:
+    data_contract = report.get("overview", {}).get("data_contract", {})
+    proxy_usage_flags = list(data_contract.get("proxy_usage_flags", []))
+    model_blockers = data_contract.get("model_blockers", [])
+    data_metrics = section_metrics.get("5.2", {})
+    experiments = section_metrics.get("5.6", {})
+    risk_scale = section_metrics.get("5.7", {})
+    if float(data_metrics.get("policy_monitoring_completeness", 0.0)) < 0.5:
+        proxy_usage_flags.append("policy_monitoring_thin")
+    if float(experiments.get("coverage_ratio", 0.0)) < 0.6:
+        proxy_usage_flags.append("experiment_coverage_thin")
+    if float(risk_scale.get("rollback_trigger_rate", 0.0)) > 0.5:
+        proxy_usage_flags.append("rollback_pressure_high")
+    blocker_penalty = min(len(model_blockers) / 4, 1.0)
+    confidence_score = clip(
+        float(data_metrics.get("data_coverage_score", 0.0)) * 0.3
+        + float(data_metrics.get("metric_consistency_score", 0.0)) * 0.2
+        + float(experiments.get("causal_confidence_score", 0.0)) * 0.2
+        + float(risk_scale.get("scale_readiness_score", 0.0)) * 0.15
+        + max(0.0, 1 - blocker_penalty) * 0.15,
+        0.0,
+        1.0,
+    )
+    if confidence_score >= 0.75:
+        label = "high"
+    elif confidence_score >= 0.55:
+        label = "medium"
+    else:
+        label = "low"
+    return {
+        "score": round(confidence_score, 4),
+        "label": label,
+        "proxy_usage_flags": sorted(set(proxy_usage_flags)),
+    }
+
+
 def build_part5_quant_report(
     dataset: Part5Dataset,
     assumptions: Part5Assumptions,
@@ -171,4 +284,12 @@ def build_part5_quant_report(
             {"key": "expansion_gate_status", "label": "扩张状态", "value": risk_scale_metrics.get("expansion_gate_status", ""), "unit": "enum"},
         ],
     )
-    return finalize_report_overview(report)
+    factor_snapshots = _build_part5_factor_snapshots(section_metrics)
+    report["factor_snapshots"] = factor_snapshots
+    report["confidence_band"] = _part5_confidence_band(report, section_metrics)
+    report["proxy_usage_flags"] = report["confidence_band"]["proxy_usage_flags"]
+    report = finalize_report_overview(report)
+    report["overview"]["factor_snapshot_count"] = len(factor_snapshots)
+    report["overview"]["confidence_band"] = report["confidence_band"]["label"]
+    report["overview"]["proxy_usage_flag_count"] = len(report["proxy_usage_flags"])
+    return report

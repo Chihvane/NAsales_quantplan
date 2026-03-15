@@ -23,6 +23,23 @@ class BacktestTests(unittest.TestCase):
         self.assertGreater(result["summary"]["decision_count"], 50)
         self.assertIn("alpha", result["summary"])
         self.assertIn("gate_breakdown", result["summary"])
+        self.assertIn("average_forecast_backtest_score", result["summary"])
+        self.assertIn("average_signal_regime_score", result["summary"])
+        self.assertIn("average_signal_seasonality_confidence_score", result["summary"])
+        self.assertIn("average_drift_score", result["summary"])
+        self.assertIn("average_calibration_brier_score", result["summary"])
+        self.assertIn("average_governance_readiness_score", result["summary"])
+        self.assertIn("average_control_tower_score", result["summary"])
+        self.assertIn("average_supply_tail_risk_score", result["summary"])
+        self.assertIn("average_supply_optimizer_feasible_ratio", result["summary"])
+        self.assertIn("average_supply_execution_confidence_score", result["summary"])
+        self.assertIn("average_channel_portfolio_resilience_score", result["summary"])
+        self.assertIn("average_channel_optimizer_feasible_ratio", result["summary"])
+        self.assertIn("average_channel_stress_robustness_score", result["summary"])
+        self.assertIn("average_channel_margin_rate_var_95", result["summary"])
+        self.assertIn("average_channel_tail_shortfall_severity", result["summary"])
+        self.assertIn("average_operating_system_readiness_score", result["summary"])
+        self.assertIn("average_scale_control_score", result["summary"])
 
 
 if __name__ == "__main__":

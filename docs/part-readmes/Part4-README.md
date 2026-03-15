@@ -8,6 +8,8 @@
 
 - Strategy draft: [Part4-North-America-Go-To-Market-Strategy.md](/Users/zhiwenxiang/Documents/Playground/北美市场量化报告/Part4-North-America-Go-To-Market-Strategy.md)
 - Quant structure: [Part4-Quantitative-Structure.md](/Users/zhiwenxiang/Documents/Playground/北美市场量化报告/Part4-Quantitative-Structure.md)
+- Optimization plan: [Part4-Quantitative-Optimization-Plan.md](/Users/zhiwenxiang/Documents/Playground/北美市场量化报告/Part4-Quantitative-Optimization-Plan.md)
+- Deep optimization crosswalk: [Part4-Deep-Optimization-Crosswalk.md](/Users/zhiwenxiang/Documents/Playground/北美市场量化报告/Part4-Deep-Optimization-Crosswalk.md)
 
 ## Code Entry
 
@@ -40,6 +42,7 @@
 
 - Strategy draft: yes
 - Quantitative structure: yes
+- Optimization plan: yes
 - Monte Carlo ROI: yes
 - Validation: yes
 - Decision summary: yes

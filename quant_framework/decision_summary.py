@@ -27,6 +27,7 @@ def build_part0_decision_summary(section_metrics: dict[str, dict]) -> dict:
     approvals = section_metrics.get("0.5", {})
     updates = section_metrics.get("0.6", {})
     dictionary = section_metrics.get("0.7", {})
+    localization = section_metrics.get("0.8", {})
 
     operating_system_readiness = (
         tree.get("decision_tree_score", 0.0) * 0.25
@@ -34,7 +35,8 @@ def build_part0_decision_summary(section_metrics: dict[str, dict]) -> dict:
         + gates.get("strategic_gate_score", 0.0) * 0.05
         + approvals.get("signature_chain_score", 0.0) * 0.2
         + updates.get("refresh_policy_score", 0.0) * 0.15
-        + dictionary.get("dictionary_reuse_score", 0.0) * 0.15
+        + dictionary.get("dictionary_reuse_score", 0.0) * 0.1
+        + localization.get("localization_governance_score", 0.0) * 0.05
     )
     evidence_rigour = (
         governance.get("auditability_score", 0.0) * 0.55
@@ -67,6 +69,7 @@ def build_part0_decision_summary(section_metrics: dict[str, dict]) -> dict:
         f"当前决策树覆盖率为 {_format_pct(tree.get('gate_coverage_ratio', 0.0))}，决策操作系统分为 {_format_pct(operating_system_readiness)}。",
         f"数据治理审计分为 {_format_pct(governance.get('auditability_score', 0.0))}，假设治理分为 {_format_pct(assumptions.get('assumption_governance_score', 0.0))}。",
         f"Gate 可执行性为 {_format_pct(gates.get('gate_operability_score', 0.0))}，战略 Gate 覆盖为 {_format_pct(gates.get('strategic_metric_family_coverage_ratio', 0.0))}。",
+        f"本地化治理分为 {_format_pct(localization.get('localization_governance_score', 0.0))}，当前已覆盖 {localization.get('active_market_count', 0)} 个可进入市场。",
     ]
 
     risk_flags = []
@@ -82,6 +85,10 @@ def build_part0_decision_summary(section_metrics: dict[str, dict]) -> dict:
         risk_flags.append("并非所有 Gate 都具备完整签字链，问责与否决权定义还不够硬。")
     if updates.get("refresh_expiry_alignment_ratio", 0.0) < 0.8:
         risk_flags.append("更新周期与失效窗口未充分对齐，存在过期结论继续流转的风险。")
+    if localization.get("weight_profile_coverage_ratio", 0.0) < 1.0:
+        risk_flags.append("并非所有目标市场都具备独立权重 profile，仍存在跨区域模型混用风险。")
+    if localization.get("consumer_habit_distance_score", 0.0) < 0.2:
+        risk_flags.append("市场间消费习惯向量分离度偏低，需检查是否错误复用了同一消费模型。")
 
     return {
         "decision_signal": decision_signal,
@@ -167,6 +174,7 @@ def build_horizontal_system_decision_summary(section_metrics: dict[str, dict]) -
 
 def build_part1_decision_summary(section_metrics: dict[str, dict]) -> dict:
     demand = section_metrics.get("1.1", {})
+    customer = section_metrics.get("1.2", {})
     market = section_metrics.get("1.3", {})
     channels = section_metrics.get("1.4", {})
     pricing = section_metrics.get("1.5", {})
@@ -194,31 +202,45 @@ def build_part1_decision_summary(section_metrics: dict[str, dict]) -> dict:
     size_reference = market.get("market_size_inputs", {})
     size_reference_gap = size_reference.get("assumption_vs_reference_gap_ratio", 1.0)
 
-    demand_strength = (
-        _clamp01((growth_rate + 0.05) / 0.2) * 0.45
-        + _clamp01((cagr + 0.02) / 0.18) * 0.35
-        + _clamp01(1 - heat_volatility / 0.25) * 0.2
-    )
-    market_accessibility = (
-        _clamp01(1 - max(hhi - 1000, 0) / 2600) * 0.45
-        + _clamp01(1 - gap_ratio / 0.15) * 0.35
-        + _clamp01(1 - size_reference_gap / 0.2) * 0.2
-    )
-    channel_efficiency = (
-        _clamp01(overall_conversion / 0.1) * 0.45
-        + _clamp01(overall_roas / 8.0) * 0.35
-        + _clamp01(benchmark_coverage) * 0.1
-        + _clamp01(over_benchmark_ratio) * 0.1
-    )
-    pricing_power = (
-        _clamp01((price_realization - 0.8) / 0.18) * 0.55
-        + _clamp01((strongest_brand_premium + 0.1) / 0.8) * 0.45
+    demand_strength = demand.get("demand_strength_score")
+    if demand_strength is None:
+        demand_strength = (
+            _clamp01((growth_rate + 0.05) / 0.2) * 0.45
+            + _clamp01((cagr + 0.02) / 0.18) * 0.35
+            + _clamp01(1 - heat_volatility / 0.25) * 0.2
+        )
+    market_accessibility = size_reference.get("market_attractiveness_factor")
+    if market_accessibility is None:
+        market_accessibility = (
+            _clamp01(1 - max(hhi - 1000, 0) / 2600) * 0.45
+            + _clamp01(1 - gap_ratio / 0.15) * 0.35
+            + _clamp01(1 - size_reference_gap / 0.2) * 0.2
+        )
+    channel_efficiency = channels.get("channel_efficiency_factor")
+    if channel_efficiency is None:
+        channel_efficiency = (
+            _clamp01(overall_conversion / 0.1) * 0.45
+            + _clamp01(overall_roas / 8.0) * 0.35
+            + _clamp01(benchmark_coverage) * 0.1
+            + _clamp01(over_benchmark_ratio) * 0.1
+        )
+    pricing_power = transactions.get("price_realization_factor")
+    if pricing_power is None:
+        pricing_power = (
+            _clamp01((price_realization - 0.8) / 0.18) * 0.55
+            + _clamp01((strongest_brand_premium + 0.1) / 0.8) * 0.45
+        )
+    customer_fit = (
+        float(customer.get("customer_fit_score", 0.0)) * 0.6
+        + float(customer.get("persona_confidence_score", 0.0)) * 0.25
+        + float(customer.get("persona_concentration_score", 0.0)) * 0.15
     )
     decision_score = round(
         demand_strength * 0.35
-        + market_accessibility * 0.25
-        + channel_efficiency * 0.2
-        + pricing_power * 0.2,
+        + market_accessibility * 0.2
+        + customer_fit * 0.15
+        + channel_efficiency * 0.15
+        + pricing_power * 0.15,
         4,
     )
 
@@ -267,6 +289,7 @@ def build_part1_decision_summary(section_metrics: dict[str, dict]) -> dict:
         "scorecard": {
             "demand_strength": _score_row(demand_strength),
             "market_accessibility": _score_row(market_accessibility),
+            "customer_fit": _score_row(customer_fit),
             "channel_efficiency": _score_row(channel_efficiency),
             "pricing_power": _score_row(pricing_power),
         },
@@ -474,11 +497,12 @@ def build_part4_decision_summary(section_metrics: dict[str, dict]) -> dict:
     )
 
     traffic_mix = traffic.get("paid_vs_owned", {})
-    paid_share = traffic_mix.get("paid_share", entry.get("traffic_paid_share", 1.0)) or 0.0
+    paid_share = traffic_mix.get("paid_share", traffic_mix.get("paid", entry.get("traffic_paid_share", 1.0))) or 0.0
+    owned_share = traffic_mix.get("owned_share", traffic_mix.get("owned", 0.0)) or 0.0
     traffic_quality = (
         _clamp01(1 - paid_share / 0.8) * 0.45
         + _clamp01(traffic.get("funnel", {}).get("session_to_order_rate", 0.0) / 0.04) * 0.3
-        + _clamp01(traffic.get("paid_vs_owned", {}).get("owned_share", 0.0) / 0.4) * 0.25
+        + _clamp01(owned_share / 0.4) * 0.25
     )
 
     blended = roi.get("blended", {})

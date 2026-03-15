@@ -9,6 +9,7 @@ from .part0_metrics import (
     compute_decision_tree_metrics,
     compute_field_dictionary_metrics,
     compute_gate_threshold_metrics,
+    compute_market_localization_metrics,
     compute_update_policy_metrics,
 )
 from .registry import PART0_METRICS
@@ -109,6 +110,19 @@ PART0_SECTION_STRUCTURE = {
         "evidence_refs": ["evidence.field_dictionary"],
         "rule_refs": ["gate.naming_compliance"],
     },
+    "0.8": {
+        "title": "全球市场去向与本地化治理",
+        "required_tables": ["market_destination_registry", "consumer_habit_vectors", "region_weight_profiles"],
+        "metric_ids": ["market_localization_governance"],
+        "quality_targets": {"market_destination_registry": 8, "consumer_habit_vectors": 8, "region_weight_profiles": 8},
+        "analysis_grain": "market profile",
+        "entity_grain": "market_code",
+        "time_grain": "profile version",
+        "channel_scope": ["governance", "market_selection"],
+        "master_data_refs": ["mdm.market_destination", "mdm.consumer_habit_vector", "mdm.region_weight_profile"],
+        "evidence_refs": ["evidence.market_destination_registry", "evidence.consumer_habit_vectors", "evidence.region_weight_profiles"],
+        "rule_refs": ["gate.geo_fit", "gate.habit_fit", "gate.market_destination"],
+    },
 }
 
 
@@ -124,6 +138,7 @@ def build_part0_quant_report(
         "0.5": compute_approval_chain_metrics(dataset, assumptions),
         "0.6": compute_update_policy_metrics(dataset, assumptions),
         "0.7": compute_field_dictionary_metrics(dataset, assumptions),
+        "0.8": compute_market_localization_metrics(dataset, assumptions),
     }
     report = build_standard_report(
         report_id="part0_quant_report",
@@ -173,6 +188,12 @@ def build_part0_quant_report(
                 "key": "refresh_policy_score",
                 "label": "更新失效规则分",
                 "value": section_metrics["0.6"].get("refresh_policy_score", 0.0),
+                "unit": "score",
+            },
+            {
+                "key": "localization_governance_score",
+                "label": "本地化治理分",
+                "value": section_metrics["0.8"].get("localization_governance_score", 0.0),
                 "unit": "score",
             },
         ],

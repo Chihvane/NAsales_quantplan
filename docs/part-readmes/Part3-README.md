@@ -8,6 +8,8 @@
 
 - Strategy draft: [Part3-China-Supply-Chain-Export-Strategy.md](/Users/zhiwenxiang/Documents/Playground/北美市场量化报告/Part3-China-Supply-Chain-Export-Strategy.md)
 - Quant structure: [Part3-Quantitative-Structure.md](/Users/zhiwenxiang/Documents/Playground/北美市场量化报告/Part3-Quantitative-Structure.md)
+- Optimization plan: [Part3-Quantitative-Optimization-Plan.md](/Users/zhiwenxiang/Documents/Playground/北美市场量化报告/Part3-Quantitative-Optimization-Plan.md)
+- Decision OS plan config: [part3_quant_plan.yaml](/Users/zhiwenxiang/Documents/Playground/北美市场量化报告/decision-os/config/part3_quant_plan.yaml)
 
 ## Code Entry
 

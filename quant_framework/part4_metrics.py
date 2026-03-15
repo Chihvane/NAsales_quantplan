@@ -752,6 +752,10 @@ def compute_roi_metrics(
     total_profit = sum(row["contribution_profit"] for row in channel_rows)
     total_spend = sum(row["acquisition_cost_total"] for row in channel_rows)
     blended_margin_rate = _safe_divide(total_profit, total_revenue)
+    weighted_payback = _safe_divide(
+        sum(row["payback_period_months"] * max(row["orders"], 1) for row in channel_rows),
+        sum(max(row["orders"], 1) for row in channel_rows),
+    )
     best_channel = max(channel_rows, key=lambda row: row["contribution_margin_rate"])
     return {
         "channel_pnl": channel_rows,
@@ -761,6 +765,7 @@ def compute_roi_metrics(
             "contribution_margin_rate": round(blended_margin_rate, 4),
             "acquisition_cost_total": round(total_spend, 2),
             "roi": round(_safe_divide(total_profit, max(total_spend, 1)), 4),
+            "payback_period_months": round(weighted_payback, 2),
         },
         "best_channel": {
             "channel": best_channel["channel"],

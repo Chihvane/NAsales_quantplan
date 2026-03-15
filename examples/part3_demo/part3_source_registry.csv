@@ -1,0 +1,4 @@
+source_id,topic,source_name,source_type,confidence_grade,collected_at,freshness_days,version,status,owner_role
+P3SRC001,rfq_quotes,Alibaba RFQ batch,platform_export,A,2026-03-04,11,v1,active,procurement_manager
+P3SRC002,logistics_quotes,Freight forwarder quote pack,forwarder_quote,A,2026-03-03,12,v1,active,logistics_manager
+P3SRC003,tariff_tax,US tariff schedule,regulatory_table,A,2026-03-01,14,v1,active,trade_compliance

@@ -1,0 +1,3 @@
+gate_id,gate_name,metric_name,operator,threshold_value,unit,source_grade_min,approver_role,decision_if_fail
+P3GATE001,Margin Safety Gate,net_margin_rate,>=,0.15,ratio,B,strategy_director,pilot_first
+P3GATE002,Supply Risk Gate,loss_probability,<=,0.25,ratio,B,risk_officer,hold

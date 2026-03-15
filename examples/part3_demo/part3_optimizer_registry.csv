@@ -1,0 +1,2 @@
+optimizer_id,objective_name,objective_type,risk_measure,max_loss_probability,min_net_margin_rate,min_confidence_score,max_lead_time_days,max_landed_cost,capital_limit,active_flag
+P3OPT001,maximize_margin_confidence,constraint_rank,loss_probability,0.25,0.15,0.65,35,520,250000,1

@@ -1,0 +1,3 @@
+event_id,event_date,event_type,market_scope,event_name,severity,expected_direction,source_ref
+VOC001,2025-10-15,review_theme,portable_generators,shipping_damage_complaints,0.7,negative,P2SRC003
+VOC002,2025-11-05,review_theme,portable_generators,reliability_failures_cluster,0.9,negative,P2SRC003
