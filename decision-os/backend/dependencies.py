@@ -10,10 +10,11 @@ from backend.gate_engine.gate_engine import evaluate_market_gate
 from backend.integrations.quant_bridge import load_quant_bridge_bundle
 from backend.model_layer.monte_carlo import run_profit_simulation
 from backend.portfolio_engine.portfolio_optimizer import rank_portfolio_rows
-from database.connection import session_scope
 
 
 def get_db_session() -> Generator:
+    from database.connection import session_scope
+
     with session_scope() as session:
         yield session
 
